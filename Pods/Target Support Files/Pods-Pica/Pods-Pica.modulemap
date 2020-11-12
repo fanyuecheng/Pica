@@ -1,0 +1,6 @@
+framework module Pods_Pica {
+  umbrella header "Pods-Pica-umbrella.h"
+
+  export *
+  module * { export * }
+}
