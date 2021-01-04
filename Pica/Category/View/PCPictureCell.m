@@ -21,6 +21,7 @@
 - (void)prepareForReuse {
     [super prepareForReuse];
     self.titleLabel.text = nil;
+    [self.imageView sd_cancelCurrentImageLoad];
     self.imageView.image = nil;
 }
 

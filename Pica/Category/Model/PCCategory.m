@@ -16,7 +16,7 @@
 }
 
 - (BOOL)modelCustomTransformFromDictionary:(NSDictionary *)dic {
-    BOOL isWeb = dic[@"isWeb"];
+    BOOL isWeb = [dic[@"isWeb"] boolValue];
     
     return !isWeb;
 }

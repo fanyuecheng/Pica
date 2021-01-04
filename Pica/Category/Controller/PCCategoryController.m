@@ -28,6 +28,12 @@
 
 @implementation PCCategoryController
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    [self.view endEditing:YES];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     
@@ -50,7 +56,7 @@
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     
-    self.collectionView.frame = CGRectMake(0, self.qmui_navigationBarMaxYInViewCoordinator, SCREEN_WIDTH, SCREEN_HEIGHT - self.qmui_navigationBarMaxYInViewCoordinator - SafeAreaInsetsConstantForDeviceWithNotch.bottom);
+    self.collectionView.frame = CGRectMake(0, self.qmui_navigationBarMaxYInViewCoordinator, SCREEN_WIDTH, SCREEN_HEIGHT - self.qmui_navigationBarMaxYInViewCoordinator);
 }
 
 #pragma mark - Request
@@ -167,7 +173,7 @@
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
         layout.minimumLineSpacing = 10;
         layout.minimumInteritemSpacing = 10;
-        layout.sectionInset = UIEdgeInsetsMake(10, 10, 10, 10);
+        layout.sectionInset = UIEdgeInsetsMake(10, 10, 10 + SafeAreaInsetsConstantForDeviceWithNotch.bottom, 10);
         layout.scrollDirection = UICollectionViewScrollDirectionVertical;
  
         _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
