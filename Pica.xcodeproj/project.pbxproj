@@ -38,6 +38,8 @@
 		334EAE13255BD39000B0231C /* PCComment.m in Sources */ = {isa = PBXBuildFile; fileRef = 334EAE12255BD39000B0231C /* PCComment.m */; };
 		334EAE17255BDA8E00B0231C /* PCCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 334EAE16255BDA8E00B0231C /* PCCommentCell.m */; };
 		33669FFF2553E18C00AEC598 /* PCComicsDetailRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 33669FFE2553E18C00AEC598 /* PCComicsDetailRequest.m */; };
+		33828E4025E6577C00967957 /* PCRegistRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 33828E3F25E6577C00967957 /* PCRegistRequest.m */; };
+		33828E4425E65CB600967957 /* PCRegistController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33828E4325E65CB600967957 /* PCRegistController.m */; };
 		33AD93C7255017160079DFAE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AD93C6255017160079DFAE /* AppDelegate.m */; };
 		33AD93CD255017160079DFAE /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AD93CC255017160079DFAE /* ViewController.m */; };
 		33AD93D0255017160079DFAE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33AD93CE255017160079DFAE /* Main.storyboard */; };
@@ -132,6 +134,10 @@
 		334EAE16255BDA8E00B0231C /* PCCommentCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCCommentCell.m; sourceTree = "<group>"; };
 		33669FFD2553E18C00AEC598 /* PCComicsDetailRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCComicsDetailRequest.h; sourceTree = "<group>"; };
 		33669FFE2553E18C00AEC598 /* PCComicsDetailRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCComicsDetailRequest.m; sourceTree = "<group>"; };
+		33828E3E25E6577C00967957 /* PCRegistRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCRegistRequest.h; sourceTree = "<group>"; };
+		33828E3F25E6577C00967957 /* PCRegistRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCRegistRequest.m; sourceTree = "<group>"; };
+		33828E4225E65CB600967957 /* PCRegistController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCRegistController.h; sourceTree = "<group>"; };
+		33828E4325E65CB600967957 /* PCRegistController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCRegistController.m; sourceTree = "<group>"; };
 		33AD93C2255017160079DFAE /* Pica.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pica.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		33AD93C5255017160079DFAE /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		33AD93C6255017160079DFAE /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -395,6 +401,8 @@
 			children = (
 				33AD940B255019DC0079DFAE /* PCLoginController.h */,
 				33AD940C255019DC0079DFAE /* PCLoginController.m */,
+				33828E4225E65CB600967957 /* PCRegistController.h */,
+				33828E4325E65CB600967957 /* PCRegistController.m */,
 				33AD9406255019B70079DFAE /* PCTabBarViewController.h */,
 				33AD9407255019B70079DFAE /* PCTabBarViewController.m */,
 			);
@@ -415,6 +423,8 @@
 			children = (
 				33AD941F25501D2B0079DFAE /* PCLoginRequest.h */,
 				33AD942025501D2B0079DFAE /* PCLoginRequest.m */,
+				33828E3E25E6577C00967957 /* PCRegistRequest.h */,
+				33828E3F25E6577C00967957 /* PCRegistRequest.m */,
 			);
 			path = Request;
 			sourceTree = "<group>";
@@ -661,6 +671,7 @@
 				33AD9408255019B70079DFAE /* PCTabBarViewController.m in Sources */,
 				33AD9438255107C70079DFAE /* PCCategoryController.m in Sources */,
 				334EAE17255BDA8E00B0231C /* PCCommentCell.m in Sources */,
+				33828E4425E65CB600967957 /* PCRegistController.m in Sources */,
 				334EAE01255AA83D00B0231C /* PCPictureCell.m in Sources */,
 				33AD93F9255019760079DFAE /* PCTableViewController.m in Sources */,
 				334EAE0B255BD11900B0231C /* PCCommentRequest.m in Sources */,
@@ -680,6 +691,7 @@
 				334EAD89255A545200B0231C /* PCUser.m in Sources */,
 				334EAD85255A522700B0231C /* PCComicsDetailController.m in Sources */,
 				334EAD6F25593E8800B0231C /* PCComicsListCell.m in Sources */,
+				33828E4025E6577C00967957 /* PCRegistRequest.m in Sources */,
 				33AD9404255019A80079DFAE /* PCNavigationController.m in Sources */,
 				33AD944F255123D20079DFAE /* PCKeywordCell.m in Sources */,
 				33AD940D255019DC0079DFAE /* PCLoginController.m in Sources */,
@@ -838,6 +850,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 0.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.pica.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -858,6 +871,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
+				MARKETING_VERSION = 0.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.pica.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;

@@ -5,8 +5,11 @@
 //  Created by fancy on 2020/11/2.
 //  Copyright © 2020 fancy. All rights reserved.
 //
+//  test id = @"sdwojcudd" password = @"12312312321313";
 
-#import "PCLoginController.h" 
+#import "PCLoginController.h"
+#import "PCRegistController.h"
+#import "PCNavigationController.h"
 #import "AppDelegate.h"
 
 @interface PCLoginController ()
@@ -14,16 +17,21 @@
 @property (nonatomic, strong) QMUITextField *accountTextField;
 @property (nonatomic, strong) QMUITextField *passwordTextField;
 @property (nonatomic, strong) QMUIButton    *loginButton;
+@property (nonatomic, strong) QMUIButton    *registButton;
 
 @end
 
 @implementation PCLoginController
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
      
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(registSuccess:) name:PCRegistSuccessNotification object:nil];
 }
-
 
 - (void)initSubviews {
     [super initSubviews];
@@ -31,6 +39,7 @@
     [self.view addSubview:self.accountTextField];
     [self.view addSubview:self.passwordTextField];
     [self.view addSubview:self.loginButton];
+    [self.view addSubview:self.registButton];
 }
  
 - (void)viewDidLayoutSubviews {
@@ -39,6 +48,14 @@
     self.accountTextField.frame = CGRectMake(15, 150, SCREEN_WIDTH - 30, 50);
     self.passwordTextField.frame = CGRectMake(15, 210, SCREEN_WIDTH - 30, 50);
     self.loginButton.frame = CGRectMake(15, 300, SCREEN_WIDTH - 30, 50);
+    self.registButton.frame = CGRectMake((SCREEN_WIDTH - 60) * 0.5, self.loginButton.qmui_bottom + 20, 60, 20);
+}
+
+- (void)registSuccess:(NSNotification *)notification {
+    NSDictionary *data = notification.object;
+    
+    self.accountTextField.text = data[@"email"];
+    self.passwordTextField.text = data[@"password"];
 }
 
 #pragma mark - Action
@@ -55,6 +72,12 @@
     } else {
         [QMUITips showError:@"请输入账号或者密码"];
     }
+}
+
+- (void)registAction:(QMUIButton *)sender {
+    PCRegistController *regist = [[PCRegistController alloc] init];
+    PCNavigationController *navi = [[PCNavigationController alloc] initWithRootViewController:regist];
+    [self presentViewController:navi animated:YES completion:nil];
 }
 
 #pragma mark - Get
@@ -86,6 +109,15 @@
         [_loginButton addTarget:self action:@selector(loginAction:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _loginButton;
+}
+
+- (QMUIButton *)registButton {
+    if (!_registButton) {
+        _registButton = [QMUIButton buttonWithType:UIButtonTypeSystem];
+        [_registButton setTitle:@"注册" forState:UIControlStateNormal];
+        [_registButton addTarget:self action:@selector(registAction:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _registButton;
 }
 
 
