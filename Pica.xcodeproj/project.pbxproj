@@ -277,12 +277,12 @@
 		33AD93C4255017160079DFAE /* Pica */ = {
 			isa = PBXGroup;
 			children = (
+				33AD93EA255018C00079DFAE /* Application */,
+				33AD93EF255018FA0079DFAE /* Header */,
 				334EAD8F255A6D6600B0231C /* Resource */,
 				33AD93EE255018EE0079DFAE /* Common */,
 				33AD9424255104C30079DFAE /* Category */,
-				33AD93EF255018FA0079DFAE /* Header */,
 				33AD93ED255018E60079DFAE /* Login */,
-				33AD93EA255018C00079DFAE /* Application */,
 				33AD93D1255017170079DFAE /* Assets.xcassets */,
 				33AD93D3255017170079DFAE /* LaunchScreen.storyboard */,
 				33AD93D6255017170079DFAE /* Info.plist */,
@@ -850,7 +850,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.0.2;
+				MARKETING_VERSION = 0.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.pica.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -871,7 +871,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.0.2;
+				MARKETING_VERSION = 0.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.pica.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;

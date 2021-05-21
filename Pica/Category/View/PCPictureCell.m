@@ -53,7 +53,7 @@
             self.imageView.image = image;
             picture.picture = image;
             self.titleLabel.text = nil;
-            !self.loadBlock ? : self.loadBlock(image);
+            !self.loadBlock ? : self.loadBlock(picture);
         }
     }];
 }

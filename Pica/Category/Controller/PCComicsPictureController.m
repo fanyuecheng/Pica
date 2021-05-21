@@ -103,10 +103,13 @@
 
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
     PCPictureCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"PCPictureCell" forIndexPath:indexPath];
-     
-    cell.picture = self.pictureArray[indexPath.section].docs[indexPath.item];
-    cell.loadBlock = ^(UIImage * _Nonnull image) {
-        [collectionView reloadItemsAtIndexPaths:@[indexPath]];
+    
+    NSArray *pictureArray = self.pictureArray[indexPath.section].docs;
+    
+    cell.picture = pictureArray[indexPath.item];
+    cell.loadBlock = ^(PCPicture * _Nonnull picture) {
+        NSIndexPath *reloadIndexPath = [NSIndexPath indexPathForItem:[pictureArray indexOfObject:picture] inSection:indexPath.section];
+        [collectionView reloadItemsAtIndexPaths:@[reloadIndexPath]];
     };
     
     @weakify(self)

@@ -13,7 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PCPictureCell : UICollectionViewCell
 
-@property(nonatomic, copy) void (^loadBlock)(UIImage *image);
+@property(nonatomic, copy) void (^loadBlock)(PCPicture *picture);
 @property(nonatomic, copy) void (^clickBlock)(void);
 
 @property (nonatomic, strong) PCPicture *picture;
