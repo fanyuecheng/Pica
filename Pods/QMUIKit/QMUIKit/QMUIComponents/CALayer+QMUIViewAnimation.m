@@ -1,6 +1,6 @@
 /**
  * Tencent is pleased to support the open source community by making QMUI_iOS available.
- * Copyright (C) 2016-2020 THL A29 Limited, a Tencent company. All rights reserved.
+ * Copyright (C) 2016-2021 THL A29 Limited, a Tencent company. All rights reserved.
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
  * http://opensource.org/licenses/MIT
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
@@ -59,7 +59,7 @@
     dispatch_once(&onceToken, ^{
         OverrideImplementation([CALayer class], @selector(addAnimation:forKey:), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
             return ^(CALayer *selfObject, CAAnimation *animation, NSString *key) {
-                if (selfObject.qmui_viewAnimaitonEnabled) {
+                if (selfObject.qmui_viewAnimationEnabled) {
                     BOOL isViewAnimtion = [animation isKindOfClass:CABasicAnimation.class] && [animation.delegate isKindOfClass:NSClassFromString(@"UIViewAnimationState")];
                     if (isViewAnimtion) {
                         // 这里需要清空 fromValue 和 toValue，后面会在 CAMediaTimingCopyRenderTiming 取到这个 animtion 的参数并设置到 CATransaction 中，让 Layer 改变属性时，运用上这些动画
@@ -79,11 +79,11 @@
 }
 
 
-static char kAssociatedObjectKey_qmuiviewAnimaitonEnabled;
-- (void)setQmui_viewAnimaitonEnabled:(BOOL)qmui_viewAnimaitonEnabled {
+static char kAssociatedObjectKey_qmuiviewAnimationEnabled;
+- (void)setQmui_viewAnimationEnabled:(BOOL)qmui_viewAnimationEnabled {
     NSAssert(!self.qmui_isRootLayerOfView, @"UIView 本身的 Layer 无须开启该属性");
-    objc_setAssociatedObject(self, &kAssociatedObjectKey_qmuiviewAnimaitonEnabled, @(qmui_viewAnimaitonEnabled), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    if (qmui_viewAnimaitonEnabled) {
+    objc_setAssociatedObject(self, &kAssociatedObjectKey_qmuiviewAnimationEnabled, @(qmui_viewAnimationEnabled), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    if (qmui_viewAnimationEnabled) {
         self.qmui_multipleDelegatesEnabled = YES;
         self.delegate = [_QMUICALayerDelegator sharedDelegator];
     } else {
@@ -91,8 +91,8 @@ static char kAssociatedObjectKey_qmuiviewAnimaitonEnabled;
     }
 }
 
-- (BOOL)qmui_viewAnimaitonEnabled {
-    return [((NSNumber *)objc_getAssociatedObject(self, &kAssociatedObjectKey_qmuiviewAnimaitonEnabled)) boolValue];
+- (BOOL)qmui_viewAnimationEnabled {
+    return [((NSNumber *)objc_getAssociatedObject(self, &kAssociatedObjectKey_qmuiviewAnimationEnabled)) boolValue];
 }
 
 @end

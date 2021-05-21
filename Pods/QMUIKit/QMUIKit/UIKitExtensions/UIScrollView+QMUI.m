@@ -1,6 +1,6 @@
 /**
  * Tencent is pleased to support the open source community by making QMUI_iOS available.
- * Copyright (C) 2016-2020 THL A29 Limited, a Tencent company. All rights reserved.
+ * Copyright (C) 2016-2021 THL A29 Limited, a Tencent company. All rights reserved.
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
  * http://opensource.org/licenses/MIT
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
@@ -33,13 +33,24 @@ QMUISynthesizeBOOLProperty(qmuiscroll_hasSetInitialContentInset, setQmuiscroll_h
 + (void)load {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        ExtendImplementationOfNonVoidMethodWithoutArguments([UIScrollView class], @selector(description), NSString *, ^NSString *(UIScrollView *selfObject, NSString *originReturnValue) {
-            originReturnValue = ([NSString stringWithFormat:@"%@, contentInset = %@", originReturnValue, NSStringFromUIEdgeInsets(selfObject.contentInset)]);
-            if (@available(iOS 13.0, *)) {
-                return originReturnValue.mutableCopy;
-            }
-            return originReturnValue;
+        
+        OverrideImplementation([UIScrollView class], @selector(description), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
+            return ^NSString *(UIScrollView *selfObject) {
+                // call super
+                NSString *(*originSelectorIMP)(id, SEL);
+                originSelectorIMP = (NSString *(*)(id, SEL))originalIMPProvider();
+                NSString *result = originSelectorIMP(selfObject, originCMD);
+                
+                if (NSThread.isMainThread) {
+                    result = ([NSString stringWithFormat:@"%@, contentInset = %@", result, NSStringFromUIEdgeInsets(selfObject.contentInset)]);
+                    if (@available(iOS 13.0, *)) {
+                        result = result.mutableCopy;
+                    }
+                }
+                return result;
+            };
         });
+        
         if (@available(iOS 13.0, *)) {
             if (QMUICMIActivated && AdjustScrollIndicatorInsetsByContentInsetAdjustment) {
                 OverrideImplementation([UIScrollView class], @selector(setContentInsetAdjustmentBehavior:), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {

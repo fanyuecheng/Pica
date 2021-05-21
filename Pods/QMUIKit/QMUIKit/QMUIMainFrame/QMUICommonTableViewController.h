@@ -1,6 +1,6 @@
 /**
  * Tencent is pleased to support the open source community by making QMUI_iOS available.
- * Copyright (C) 2016-2020 THL A29 Limited, a Tencent company. All rights reserved.
+ * Copyright (C) 2016-2021 THL A29 Limited, a Tencent company. All rights reserved.
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
  * http://opensource.org/licenses/MIT
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
@@ -51,7 +51,11 @@ extern NSString *const QMUICommonTableViewControllerSectionFooterIdentifier;
 
 /// 当前的 tableView，如果需要使用自定义的 tableView class，可重写 initTableView 并在里面通过 self.tableView = xxx 为 tableView 赋值，注意需要自行指定 dataSource 和 delegate 但不需要 add 到 self.view 上。
 /// @note 直接把自定义 tableView 赋值给 self.tableView 也可以，但 QMUI 将会多余地创建一次 QMUITableView，会造成浪费。
+#if !TARGET_INTERFACE_BUILDER
 @property(nonatomic, strong, null_resettable) IBOutlet __kindof QMUITableView *tableView;
+#else
+@property(nonatomic, strong, null_resettable) IBOutlet QMUITableView *tableView;
+#endif
 
 - (void)hideTableHeaderViewInitialIfCanWithAnimated:(BOOL)animated force:(BOOL)force;
 

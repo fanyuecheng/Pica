@@ -1,6 +1,6 @@
 /**
  * Tencent is pleased to support the open source community by making QMUI_iOS available.
- * Copyright (C) 2016-2020 THL A29 Limited, a Tencent company. All rights reserved.
+ * Copyright (C) 2016-2021 THL A29 Limited, a Tencent company. All rights reserved.
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
  * http://opensource.org/licenses/MIT
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
@@ -211,6 +211,10 @@ QMUISynthesizeIdCopyProperty(qmui_prefersHomeIndicatorAutoHiddenBlock, setQmui_p
 }
 
 - (NSString *)qmuivc_description {
+    if (![NSThread isMainThread]) {
+        return [self qmuivc_description];
+    }
+    
     NSString *result = [NSString stringWithFormat:@"%@\nsuperclass:\t\t\t\t%@\ntitle:\t\t\t\t\t%@\nview:\t\t\t\t\t%@", [self qmuivc_description], NSStringFromClass(self.superclass), self.title, [self isViewLoaded] ? self.view : nil];
     
     if ([self isKindOfClass:[UINavigationController class]]) {
@@ -253,9 +257,10 @@ static char kAssociatedObjectKey_visibleState;
 }
 
 - (UIViewController *)qmui_previousViewController {
-    if (self.navigationController.viewControllers && self.navigationController.viewControllers.count > 1 && self.navigationController.topViewController == self) {
-        NSUInteger count = self.navigationController.viewControllers.count;
-        return (UIViewController *)[self.navigationController.viewControllers objectAtIndex:count - 2];
+    NSArray<UIViewController *> *viewControllers = self.navigationController.viewControllers;
+    NSUInteger index = [viewControllers indexOfObject:self];
+    if (index != NSNotFound && index > 0) {
+        return viewControllers[index - 1];
     }
     return nil;
 }
@@ -263,7 +268,7 @@ static char kAssociatedObjectKey_visibleState;
 - (NSString *)qmui_previousViewControllerTitle {
     UIViewController *previousViewController = [self qmui_previousViewController];
     if (previousViewController) {
-        return previousViewController.title;
+        return previousViewController.title ?: previousViewController.navigationItem.title;
     }
     return nil;
 }
@@ -416,6 +421,10 @@ static char kAssociatedObjectKey_visibleState;
     if (!self.tabBarController.tabBar || self.tabBarController.tabBar.hidden) {
         return 0;
     }
+    if (self.hidesBottomBarWhenPushed && self.navigationController.qmui_rootViewController != self) {
+        return 0;
+    }
+    
     CGRect tabBarFrame = CGRectIntersection(self.view.bounds, [self.view convertRect:self.tabBarController.tabBar.frame fromView:self.tabBarController.tabBar.superview]);
     
     // 两个 rect 如果不存在交集，CGRectIntersection 计算结果可能为非法的 rect，所以这里做个保护
@@ -460,6 +469,17 @@ static char kAssociatedObjectKey_visibleState;
                 return previousViewController.qmui_prefersLargeTitleDisplayed == YES;
             }
         }
+    }
+    return NO;
+}
+
+- (BOOL)qmui_isDescendantOfViewController:(UIViewController *)viewController {
+    UIViewController *parentViewController = self;
+    while (parentViewController) {
+        if (parentViewController == viewController) {
+            return YES;
+        }
+        parentViewController = parentViewController.parentViewController;
     }
     return NO;
 }

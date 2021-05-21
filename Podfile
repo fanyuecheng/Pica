@@ -7,10 +7,10 @@ target 'Pica' do
 
   # Pods for Pica
 
-    pod 'YTKNetwork', '~> 3.0.4'
+    pod 'YTKNetwork', '~> 3.0.6'
     pod 'YYModel', '~> 1.0.4' 
-    pod 'SDWebImage', '~> 5.9.4'
-    pod 'QMUIKit', '~> 4.2.1'  
-    pod 'MJRefresh', '~> 3.5.0'
+    pod 'SDWebImage', '~> 5.11.1'
+    pod 'QMUIKit', '~> 4.2.3'  
+    pod 'MJRefresh', '~> 3.6.1'
 
 end

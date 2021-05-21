@@ -1,6 +1,6 @@
 /**
  * Tencent is pleased to support the open source community by making QMUI_iOS available.
- * Copyright (C) 2016-2020 THL A29 Limited, a Tencent company. All rights reserved.
+ * Copyright (C) 2016-2021 THL A29 Limited, a Tencent company. All rights reserved.
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
  * http://opensource.org/licenses/MIT
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
@@ -22,9 +22,12 @@
 #import "UIScrollView+QMUI.h"
 #import "QMUIButton.h"
 #import "QMUISlider.h"
-#import <MediaPlayer/MediaPlayer.h>
 #import "UILabel+QMUI.h"
 #import "QMUIPieProgressView.h"
+#import <QuartzCore/QuartzCore.h>
+#import <CoreMedia/CoreMedia.h>
+#import <AVFoundation/AVFoundation.h>
+#import <MediaPlayer/MediaPlayer.h>
 
 #define kIconsColor UIColorMakeWithRGBA(255, 255, 255, .75)
 
@@ -180,13 +183,15 @@ static NSUInteger const kTagForCenteredPlayButton = 1;
 - (void)setImage:(UIImage *)image {
     _image = image;
     
-    // 释放以节省资源
-    [_livePhotoView removeFromSuperview];
-    _livePhotoView = nil;
-    [self destroyVideoRelatedObjectsIfNeeded];
+    if (image) {
+        self.livePhoto = nil;
+        self.videoPlayerItem = nil;
+    }
     
     if (!image) {
         _imageView.image = nil;
+        [_imageView removeFromSuperview];
+        _imageView = nil;
         return;
     }
     self.imageView.image = image;
@@ -210,12 +215,15 @@ static NSUInteger const kTagForCenteredPlayButton = 1;
 - (void)setLivePhoto:(PHLivePhoto *)livePhoto {
     _livePhoto = livePhoto;
     
-    [_imageView removeFromSuperview];
-    _imageView = nil;
-    [self destroyVideoRelatedObjectsIfNeeded];
+    if (livePhoto) {
+        self.image = nil;
+        self.videoPlayerItem = nil;
+    }
     
     if (!livePhoto) {
         _livePhotoView.livePhoto = nil;
+        [_livePhotoView removeFromSuperview];
+        _livePhotoView = nil;
         return;
     }
     
@@ -402,13 +410,19 @@ static NSUInteger const kTagForCenteredPlayButton = 1;
 - (void)setVideoPlayerItem:(AVPlayerItem *)videoPlayerItem {
     _videoPlayerItem = videoPlayerItem;
     
-    [_livePhotoView removeFromSuperview];
-    _livePhotoView = nil;
-    [_imageView removeFromSuperview];
-    _imageView = nil;
+    if (videoPlayerItem) {
+        self.livePhoto = nil;
+        self.image = nil;
+        [self hideViews];
+    }
+    
+    // 移除旧的 videoPlayer 时，同时移除相应的 timeObserver
+    if (self.videoPlayer) {
+        [self removePlayerTimeObserver];
+    }
     
     if (!videoPlayerItem) {
-        [self hideViews];
+        [self destroyVideoRelatedObjectsIfNeeded];
         return;
     }
     
@@ -423,11 +437,6 @@ static NSUInteger const kTagForCenteredPlayButton = 1;
         }
     }
     
-    if (self.videoPlayer) {
-        // 移除旧的 videoPlayer 时，同时移除相应的 timeObserver
-        [self removePlayerTimeObserver];
-    }
-    
     self.videoPlayer = [AVPlayer playerWithPlayerItem:videoPlayerItem];
     [self initVideoRelatedViewsIfNeeded];
     _videoPlayerLayer.player = self.videoPlayer;
@@ -439,7 +448,6 @@ static NSUInteger const kTagForCenteredPlayButton = 1;
     
     [self configVideoProgressSlider];
     
-    [self hideViews];
     self.videoPlayerLayer.hidden = NO;
     self.videoCenteredPlayButton.hidden = NO;
     self.videoToolbar.playButton.hidden = NO;
@@ -651,6 +659,7 @@ static NSUInteger const kTagForCenteredPlayButton = 1;
     _videoCenteredPlayButton = nil;
     
     self.videoPlayer = nil;
+    _videoPlayerLayer.player = nil;
 }
 
 - (void)setVideoToolbarMargins:(UIEdgeInsets)videoToolbarMargins {

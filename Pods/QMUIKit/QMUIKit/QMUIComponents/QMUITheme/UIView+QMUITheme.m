@@ -1,6 +1,6 @@
 /**
  * Tencent is pleased to support the open source community by making QMUI_iOS available.
- * Copyright (C) 2016-2020 THL A29 Limited, a Tencent company. All rights reserved.
+ * Copyright (C) 2016-2021 THL A29 Limited, a Tencent company. All rights reserved.
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
  * http://opensource.org/licenses/MIT
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
@@ -33,17 +33,6 @@ QMUISynthesizeIdCopyProperty(qmui_themeDidChangeBlock, setQmui_themeDidChangeBlo
 + (void)load {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        
-        // iOS 12 及以下的版本，[UIView setBackgroundColor:] 并不会保存传进来的 color，所以要自己用个变量保存起来，不然 QMUIThemeColor 对象就会被丢弃
-        if (@available(iOS 13.0, *)) {
-        } else {
-            ExtendImplementationOfVoidMethodWithSingleArgument([UIView class], @selector(setBackgroundColor:), UIColor *, ^(UIView *selfObject, UIColor *color) {
-                selfObject.qmuiTheme_backgroundColor = color;
-            });
-            ExtendImplementationOfNonVoidMethodWithoutArguments([UIView class], @selector(backgroundColor), UIColor *, ^UIColor *(UIView *selfObject, UIColor *originReturnValue) {
-                return selfObject.qmuiTheme_backgroundColor ?: originReturnValue;
-            });
-        }
         
         OverrideImplementation([UIView class], @selector(setHidden:), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
             return ^(UIView *selfObject, BOOL firstArgv) {
@@ -136,6 +125,12 @@ QMUISynthesizeIdCopyProperty(qmui_themeDidChangeBlock, setQmui_themeDidChangeBlo
             if (!self.qmui_tintColorCustomized) return;
         }
         
+        // 如果某个 UITabBarItem 处于选中状态，此时发生了主题变化，执行了 UITabBarSwappableImageView.image = image 的动作，就会把 selectedImage 设置为 normal image，无法恢复。所以对 UITabBarSwappableImageView 屏蔽掉 setImage 的刷新操作
+        // https://github.com/Tencent/QMUI_iOS/issues/1122
+        if ([self isKindOfClass:NSClassFromString(@"UITabBarSwappableImageView")] && getter == @selector(image)) {
+            return;
+        }
+        
         // 注意，需要遍历的属性不一定都是 UIColor 类型，也有可能是 NSAttributedString，例如 UITextField.attributedText
         BeginIgnorePerformSelectorLeaksWarning
         id value = [self performSelector:getter];
@@ -200,7 +195,6 @@ QMUISynthesizeIdCopyProperty(qmui_themeDidChangeBlock, setQmui_themeDidChangeBlo
 
 @implementation UIView (QMUITheme_Private)
 
-QMUISynthesizeIdStrongProperty(qmuiTheme_backgroundColor, setQmuiTheme_backgroundColor)
 QMUISynthesizeIdStrongProperty(qmuiTheme_themeColorProperties, setQmuiTheme_themeColorProperties)
 
 - (BOOL)_qmui_visible {

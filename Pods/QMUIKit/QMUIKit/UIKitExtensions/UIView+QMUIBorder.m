@@ -1,6 +1,6 @@
 /**
  * Tencent is pleased to support the open source community by making QMUI_iOS available.
- * Copyright (C) 2016-2020 THL A29 Limited, a Tencent company. All rights reserved.
+ * Copyright (C) 2016-2021 THL A29 Limited, a Tencent company. All rights reserved.
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
  * http://opensource.org/licenses/MIT
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
@@ -11,7 +11,6 @@
 //  QMUIKit
 //
 //  Created by MoLice on 2020/6/28.
-//  Copyright © 2020 QMUI Team. All rights reserved.
 //
 
 #import "UIView+QMUIBorder.h"
@@ -40,20 +39,6 @@ QMUISynthesizeIdStrongProperty(qmui_borderLayer, setQmui_borderLayer)
             [selfObject _qmuibd_setDefaultStyle];
             return originReturnValue;
         });
-        
-        OverrideImplementation([UIView class], @selector(layoutSublayersOfLayer:), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
-            return ^(UIView *selfObject, CALayer *firstArgv) {
-                
-                // call super
-                void (*originSelectorIMP)(id, SEL, CALayer *);
-                originSelectorIMP = (void (*)(id, SEL, CALayer *))originalIMPProvider();
-                originSelectorIMP(selfObject, originCMD, firstArgv);
-                
-                if (!selfObject.qmui_borderLayer || selfObject.qmui_borderLayer.hidden) return;
-                selfObject.qmui_borderLayer.frame = selfObject.bounds;
-                [selfObject.qmui_borderLayer setNeedsLayout];// 把布局刷新逻辑剥离到 layer 内，方便在子线程里直接刷新 layer，如果放在 UIView 内，子线程里就无法主动请求刷新了
-            };
-        });
     });
 }
 
@@ -68,6 +53,23 @@ QMUISynthesizeIdStrongProperty(qmui_borderLayer, setQmui_borderLayer)
         self.qmui_borderLayer.hidden = YES;
         return;
     }
+    
+    [QMUIHelper executeBlock:^{
+        OverrideImplementation([UIView class], @selector(layoutSublayersOfLayer:), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
+            return ^(UIView *selfObject, CALayer *firstArgv) {
+                
+                // call super
+                void (*originSelectorIMP)(id, SEL, CALayer *);
+                originSelectorIMP = (void (*)(id, SEL, CALayer *))originalIMPProvider();
+                originSelectorIMP(selfObject, originCMD, firstArgv);
+                
+                if (!selfObject.qmui_borderLayer || selfObject.qmui_borderLayer.hidden) return;
+                selfObject.qmui_borderLayer.frame = selfObject.bounds;
+                [selfObject.layer qmui_bringSublayerToFront:selfObject.qmui_borderLayer];
+                [selfObject.qmui_borderLayer setNeedsLayout];// 把布局刷新逻辑剥离到 layer 内，方便在子线程里直接刷新 layer，如果放在 UIView 内，子线程里就无法主动请求刷新了
+            };
+        });
+    } oncePerIdentifier:@"UIView (QMUIBorder) layoutSublayers"];
     
     if (!self.qmui_borderLayer) {
         self.qmui_borderLayer = [CAShapeLayer layer];
