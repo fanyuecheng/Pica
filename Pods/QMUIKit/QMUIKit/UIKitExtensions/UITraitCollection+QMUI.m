@@ -1,6 +1,6 @@
 /**
  * Tencent is pleased to support the open source community by making QMUI_iOS available.
- * Copyright (C) 2016-2020 THL A29 Limited, a Tencent company. All rights reserved.
+ * Copyright (C) 2016-2021 THL A29 Limited, a Tencent company. All rights reserved.
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
  * http://opensource.org/licenses/MIT
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
@@ -14,7 +14,7 @@
 
 #import "UITraitCollection+QMUI.h"
 #import "QMUICore.h"
-
+#import <dlfcn.h>
 
 @implementation UITraitCollection (QMUI)
 
@@ -61,23 +61,54 @@ static NSString * const kQMUIUserInterfaceStyleWillChangeSelectorsKey = @"qmui_u
     }
 }
 
+
+#ifdef DEBUG
+static id (*directTraitCollectionIMP)(id, SEL) = NULL;
++ (void)load {
+    // 以下代码只会在 DEBUG 生效，主要是屏蔽 Main Thread Checker 对 QMUI swizzle traitCollection 的检测
+    // iOS 14 首次弹起键盘，UIKit 内部会在在子线程访问 -[UIWindow traitCollection]，该方法一旦被 swizzle，Main Thread Checker 就会误判为业务在子线程主动调用 UIKit 方法从而引发卡顿和警告。 https://github.com/Tencent/QMUI_iOS/issues/1087
+    // Main Thread Checker 的原理是在启动的时候替换相关方法的实现为 Main Thread Checker 自身的 trampoline，触发相关方法时会先在 trampoline 中实现线程检测逻辑并告警，所以这里唯一可行的屏蔽方法就是获取原始的 IMP 实现，并直接调用从而绕过 Main Thread Checker, 由于 QMUI 在 +load 到时候已经晚于这个时机，无法获取原始的实现方法，观察发现 -[UIWindow traitCollection] 内部会调用 -[UIWindow _updateWindowTraitsAndNotify:]，因此可以借助该方法回溯到 traitCollection 的真实地址。
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        if (qmui_exists_dyld_image("libMainThreadChecker.dylib")) {
+            OverrideImplementation([UIWindow class] , NSSelectorFromString(@"_updateWindowTraitsAndNotify:"), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
+                return ^void(UIWindow *selfObject, BOOL arg1) {
+                    if (directTraitCollectionIMP == NULL) {
+                        NSArray *address = [NSThread callStackReturnAddresses];
+                        Dl_info info;
+                        dladdr((void *)[address[1] longLongValue], &info);
+                        if (strncmp(info.dli_sname, "-[UIWindow traitCollection]", 27) == 0) {
+                            directTraitCollectionIMP = info.dli_saddr;
+                        }
+                    }
+                    id (*originSelectorIMP)(id, SEL, BOOL arg1);
+                    originSelectorIMP = (id (*)(id, SEL, BOOL))originalIMPProvider();
+                    originSelectorIMP(selfObject, originCMD, arg1);
+                };
+            });
+        }
+    });
+}
+#endif
+
+
 + (void)_qmui_overrideTraitCollectionMethodIfNeeded {
     if (@available(iOS 13.0, *)) {
         [QMUIHelper executeBlock:^{
             static BOOL _isOverridedMethodProcessing = NO;
             static UIUserInterfaceStyle qmui_lastNotifiedUserInterfaceStyle;
             qmui_lastNotifiedUserInterfaceStyle = [UITraitCollection currentTraitCollection].userInterfaceStyle;
-            
-            // 重写 -[UIWindow traitCollection] 会引发 Main Thread Checker 警告，从原理上无法解决，再加上系统本身也是如此，所以这里保持重写的逻辑。注意只有使用了 QMUITheme 组件的项目才有这个问题，不使用则不会重写方法。
-            // https://github.com/Tencent/QMUI_iOS/issues/1087
             OverrideImplementation([UIWindow class] , @selector(traitCollection), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
                 return ^UITraitCollection *(UIWindow *selfObject) {
                     id (*originSelectorIMP)(id, SEL);
+#ifdef DEBUG
+                    originSelectorIMP = directTraitCollectionIMP ? : (id (*)(id, SEL))originalIMPProvider();
+#else
                     originSelectorIMP = (id (*)(id, SEL))originalIMPProvider();
+#endif
                     UITraitCollection *traitCollection = originSelectorIMP(selfObject, originCMD);
-                    
                     if (_isOverridedMethodProcessing || !NSThread.isMainThread) {
-                        // +[UITraitCollection currentTraitCollection] 会触发 -[UIWindow traitCollection] 造成递归，这里屏蔽一下
+                        // 防止业务在接收到通知后，再次触发 traitCollection 造成递归
                         return traitCollection;
                     }
                     _isOverridedMethodProcessing = YES;
@@ -107,16 +138,10 @@ static NSString * const kQMUIUserInterfaceStyleWillChangeSelectorsKey = @"qmui_u
                                 [self _qmui_notifyUserInterfaceStyleWillChangeEvents:traitCollection];
                             }
                         } else if (!firstValidatedWindow) {
-                            // 没有 firstValidatedWindow 只能通过创建一个 window 来判断，这里不用 [UITraitCollection currentTraitCollection] 是因为在 becomeFirstResponder 的过程中，[UITraitCollection currentTraitCollection] 会得到错误的结果。
-                            static UIWindow *currentTraitCollectionWindow = nil;
-                            if (!currentTraitCollectionWindow) {
-                                currentTraitCollectionWindow = [[UIWindow alloc] init];
-                            }
-                            UITraitCollection *currentTraitCollection = [currentTraitCollectionWindow traitCollection];
-                            if (qmui_lastNotifiedUserInterfaceStyle != currentTraitCollection.userInterfaceStyle) {
-                                qmui_lastNotifiedUserInterfaceStyle = currentTraitCollection.userInterfaceStyle;
-                                [self _qmui_notifyUserInterfaceStyleWillChangeEvents:traitCollection];
-                            }
+                            // 没有 firstValidatedWindow 有以下方法来拿到当前的外观：
+                            // 1、创建一个 window 来判断，但是发现在某些场景下，traitCollection 会被频繁调用，导致短时间内创建大量 window 造成性能下降。
+                            // 2、 [UITraitCollection currentTraitCollection] 但是 becomeFirstResponder 的过程中该会得到错误的结果。
+                            // 终上，这种情况暂时不处理，因此当全部 window.overrideUserInterfaceStyle 都指定为非 UIUserInterfaceStyleUnspecified 的值，将无法获得当前系统的外观。
                         }
                     }
                     _isOverridedMethodProcessing = NO;

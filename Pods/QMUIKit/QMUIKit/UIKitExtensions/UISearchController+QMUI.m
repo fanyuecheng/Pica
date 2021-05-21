@@ -1,6 +1,6 @@
 /**
  * Tencent is pleased to support the open source community by making QMUI_iOS available.
- * Copyright (C) 2016-2020 THL A29 Limited, a Tencent company. All rights reserved.
+ * Copyright (C) 2016-2021 THL A29 Limited, a Tencent company. All rights reserved.
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
  * http://opensource.org/licenses/MIT
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
@@ -35,9 +35,12 @@
                     UISearchController *searchController = [selfObject qmui_viewController];
                     UIViewController *sourceViewController = [searchController valueForKey:@"_modalSourceViewController"];
                     UINavigationController *navigationController = sourceViewController.navigationController;
-                    if (navigationController.qmui_isPushing && navigationController.topViewController.qmui_previousViewController != sourceViewController) {
-                        // 系统内部错误地添加了这个 view，这里直接 remove 掉，系统内部在真正要显示的时候再次添加回来。
-                        [transitionView removeFromSuperview];
+                    if (navigationController.qmui_isPushing) {
+                        BOOL isFromPreviousViewController = [sourceViewController qmui_isDescendantOfViewController:navigationController.topViewController.qmui_previousViewController];
+                        if (!isFromPreviousViewController) {
+                            // 系统内部错误地添加了这个 view，这里直接 remove 掉，系统内部在真正要显示的时候再次添加回来。
+                            [transitionView removeFromSuperview];
+                        }
                     }
                 }
                 

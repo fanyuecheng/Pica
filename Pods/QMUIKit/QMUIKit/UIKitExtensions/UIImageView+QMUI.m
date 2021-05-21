@@ -1,6 +1,6 @@
 /**
  * Tencent is pleased to support the open source community by making QMUI_iOS available.
- * Copyright (C) 2016-2020 THL A29 Limited, a Tencent company. All rights reserved.
+ * Copyright (C) 2016-2021 THL A29 Limited, a Tencent company. All rights reserved.
  * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
  * http://opensource.org/licenses/MIT
  * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
@@ -33,10 +33,8 @@ QMUISynthesizeIdStrongProperty(qimgv_displayLink, setQimgv_displayLink)
 QMUISynthesizeIdStrongProperty(qimgv_animatedImage, setQimgv_animatedImage)
 QMUISynthesizeNSIntegerProperty(qimgv_currentAnimatedImageIndex, setQimgv_currentAnimatedImageIndex)
 
-+ (void)load {
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        
+- (void)qimgv_swizzleMethods {
+    [QMUIHelper executeBlock:^{
         OverrideImplementation([UIImageView class], @selector(setImage:), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
             return ^(UIImageView *selfObject, UIImage *image) {
                 
@@ -118,7 +116,7 @@ QMUISynthesizeNSIntegerProperty(qimgv_currentAnimatedImageIndex, setQimgv_curren
                 selfObject.qimgv_animatedImageLayer.contentsGravity = [QMUIHelper layerContentsGravityWithContentMode:firstArgv];
             }
         });
-    });
+    } oncePerIdentifier:@"UIImageView (QMUI) smoothAnimation"];
 }
 
 - (BOOL)qimgv_requestToStartAnimation {
@@ -175,6 +173,9 @@ QMUISynthesizeNSIntegerProperty(qimgv_currentAnimatedImageIndex, setQimgv_curren
 static char kAssociatedObjectKey_smoothAnimation;
 - (void)setQmui_smoothAnimation:(BOOL)qmui_smoothAnimation {
     objc_setAssociatedObject(self, &kAssociatedObjectKey_smoothAnimation, @(qmui_smoothAnimation), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    if (qmui_smoothAnimation) {
+        [self qimgv_swizzleMethods];
+    }
     if (qmui_smoothAnimation && self.image.images && self.image != self.qimgv_animatedImage) {
         self.image = self.image;// 重新设置图片，触发动画
     } else if (!qmui_smoothAnimation && self.qimgv_animatedImage) {

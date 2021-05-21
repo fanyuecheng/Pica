@@ -79,18 +79,20 @@
 }
 
 - (AFJSONResponseSerializer *)jsonResponseSerializer {
-    if (!_jsonResponseSerializer) {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
         _jsonResponseSerializer = [AFJSONResponseSerializer serializer];
         _jsonResponseSerializer.acceptableStatusCodes = _allStatusCodes;
-    }
+    });
     return _jsonResponseSerializer;
 }
 
 - (AFXMLParserResponseSerializer *)xmlParserResponseSerialzier {
-    if (!_xmlParserResponseSerialzier) {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
         _xmlParserResponseSerialzier = [AFXMLParserResponseSerializer serializer];
         _xmlParserResponseSerialzier.acceptableStatusCodes = _allStatusCodes;
-    }
+    });
     return _xmlParserResponseSerialzier;
 }
 
@@ -312,7 +314,8 @@
     BOOL result = [request statusCodeValidator];
     if (!result) {
         if (error) {
-            *error = [NSError errorWithDomain:YTKRequestValidationErrorDomain code:YTKRequestValidationErrorInvalidStatusCode userInfo:@{NSLocalizedDescriptionKey:@"Invalid status code"}];
+            NSString *desc = [NSString stringWithFormat:@"Invalid status code (%ld)", (long)[request responseStatusCode]];
+            *error = [NSError errorWithDomain:YTKRequestValidationErrorDomain code:YTKRequestValidationErrorInvalidStatusCode userInfo:@{NSLocalizedDescriptionKey:desc}];
         }
         return result;
     }
