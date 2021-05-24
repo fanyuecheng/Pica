@@ -80,9 +80,9 @@
             
 #if defined(DEBUG)
             if (request.error) {
-                NSLog(@"\n============ PCRequest Info] ============\nrequest url: %@\nrequest parameters: \n%@\nrequest error:\n%@\nresponse:\n%@\n==========================================\n", request.requestUrl, request.requestArgument, request.error, request.response);
+                NSLog(@"\n============ PCRequest Info] ============\nrequest method: %zd\nrequest url: %@\nrequest parameters: \n%@\nrequest error:\n%@\nresponse:\n%@\n==========================================\n", request.requestMethod, request.requestUrl, request.requestArgument, request.error, request.response);
             } else {
-                NSLog(@"\n============ [PCRequest Info] ============\nrequest url: %@\nrequest parameters: \n%@\nrequest response:\n%@\n==========================================\n", request.requestUrl, request.requestArgument, request.responseJSONObject);
+                NSLog(@"\n============ [PCRequest Info] ============\nrequest method: %zd\nrequest url: %@\nrequest parameters: \n%@\nrequest response:\n%@\n==========================================\n", request.requestMethod, request.requestUrl, request.requestArgument, request.responseJSONObject);
             }
 #endif
         };
@@ -98,7 +98,7 @@
 }
 
 - (NSString *)baseUrl {
-    return @"https://picaapi.picacomic.com/";
+    return PC_API_HOST;
 }
 
 - (YTKRequestSerializerType)requestSerializerType {
@@ -106,11 +106,11 @@
 }
 
 - (NSInteger)cacheTimeInSeconds {
-    return 60;
+    return 3600;
 }
 
 - (BOOL)ignoreCache {
-    return YES;
+    return NO;
 }
 
 @end

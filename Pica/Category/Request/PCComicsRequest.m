@@ -32,7 +32,7 @@
 }
 
 - (NSString *)requestUrl {
-    NSMutableString *requestUrl = [NSMutableString stringWithFormat:@"comics?page=%@&s=%@", @(self.page), self.s];
+    NSMutableString *requestUrl = [NSMutableString stringWithFormat:@"%@?page=%@&s=%@", PC_API_COMICS, @(self.page), self.s];
     if (self.c) {
         [requestUrl appendFormat:@"&c=%@", self.c];
     }

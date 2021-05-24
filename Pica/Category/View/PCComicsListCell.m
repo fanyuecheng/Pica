@@ -11,12 +11,6 @@
 
 @interface PCComicsListCell ()
 
-@property (nonatomic, strong) UIImageView *coverView;
-@property (nonatomic, strong) QMUILabel   *titleLabel;
-@property (nonatomic, strong) QMUILabel   *authorLabel;
-@property (nonatomic, strong) QMUILabel   *categoryLabel;
-@property (nonatomic, strong) QMUILabel   *likeLabel;
-
 @end
  
 @implementation PCComicsListCell
@@ -54,6 +48,25 @@
     }];
     self.categoryLabel.text = category;
     self.likeLabel.text = [NSString stringWithFormat:@"❤ %@", @(comics.likesCount)];
+}
+
+- (UIColor *)colorWithIndex:(NSInteger)index {
+    UIColor *color = nil;
+    switch (index) {
+        case 0:
+            color = UIColorMake(255, 215, 0);
+            break;
+        case 1:
+            color = UIColorMake(255, 182, 193);
+            break;
+        case 2:
+            color = UIColorMake(255, 105, 180);
+            break;
+        default:
+            color = UIColorMake(128, 128, 128);
+            break;
+    }
+    return color;
 }
 
 #pragma mark - Get

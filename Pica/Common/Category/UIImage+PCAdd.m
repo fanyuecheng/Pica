@@ -122,5 +122,18 @@
     return CGSizeMake(width, height);
 }
 
++ (UIImage *)pc_imageWithString:(NSString *)string
+                     attributes:(NSDictionary *)attributes
+                           size:(CGSize)size {
+    if (size.width <= 0 || size.height <= 0) {
+        return nil;
+    }
+    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
+    label.attributedText = [[NSAttributedString alloc] initWithString:string attributes:attributes];
+    label.textAlignment = NSTextAlignmentCenter;
+ 
+    return [label qmui_snapshotLayerImage];
+}
+ 
 @end
 

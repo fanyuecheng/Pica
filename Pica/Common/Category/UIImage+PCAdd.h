@@ -30,6 +30,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (CGSize)pc_sizeWithURL:(id)URL;
 
++ (UIImage *)pc_imageWithString:(NSString *)string
+                     attributes:(NSDictionary *)attributes
+                           size:(CGSize)size;
+
 @end
 
 NS_ASSUME_NONNULL_END

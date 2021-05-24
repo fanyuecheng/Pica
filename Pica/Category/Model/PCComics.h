@@ -93,6 +93,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) PCUser    *creator;
 @property (nonatomic, strong) PCThumb   *thumb;
 
+//rank
+@property (nonatomic, assign) NSInteger leaderboardCount;
 
 @end
 
