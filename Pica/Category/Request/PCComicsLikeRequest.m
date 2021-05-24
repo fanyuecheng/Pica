@@ -31,7 +31,7 @@
 }
 
 - (NSString *)requestUrl {
-    return [NSString stringWithFormat:@"comics/%@/like", self.comicsId];
+    return [NSString stringWithFormat:PC_API_COMICS_LIKE, self.comicsId];
 }
 
 - (NSDictionary<NSString *,NSString *> *)requestHeaderFieldValueDictionary {

@@ -10,6 +10,13 @@
 
 @implementation PCCategory
 
++ (PCCategory *)rankCategory {
+    PCCategory *category = [[PCCategory alloc] init];
+    category.title = @"哔咔排行榜";
+    category.active = YES;
+    return category;
+}
+
 + (NSDictionary *)modelCustomPropertyMapper {
     return @{@"categoryId" : @"_id",
              @"desc" : @"description"};

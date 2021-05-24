@@ -11,6 +11,9 @@
 @implementation PCThumb
 
 - (NSString *)imageURL {
+    if ([self.fileServer isEqualToString:@"https://wikawika.xyz/static/"]) {
+        self.fileServer = @"https://storage.wikawika.xyz";
+    }
     if (self.fileServer && self.path) {
         NSString *urlString = [NSString stringWithFormat:@"%@/static/%@", self.fileServer, self.path];
         return urlString;

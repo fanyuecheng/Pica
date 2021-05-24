@@ -8,6 +8,12 @@
 
 /* Begin PBXBuildFile section */
 		18A63853EA145CFC6CE2DE1A /* Pods_Pica.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29E5451C1009385AB025F91F /* Pods_Pica.framework */; };
+		3329FE44265B58110054F39B /* PCComicsRankRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3329FE43265B58110054F39B /* PCComicsRankRequest.m */; };
+		3329FE47265B78A90054F39B /* PCComicsRankController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3329FE46265B78A90054F39B /* PCComicsRankController.m */; };
+		3329FE4A265B7AC70054F39B /* PCRankListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3329FE49265B7AC70054F39B /* PCRankListController.m */; };
+		3329FE4D265B7BAA0054F39B /* PCKnightRankRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3329FE4C265B7BAA0054F39B /* PCKnightRankRequest.m */; };
+		3329FE50265B83F60054F39B /* PCComicsRankCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3329FE4F265B83F60054F39B /* PCComicsRankCell.m */; };
+		3329FE53265B90C40054F39B /* PCKnightRankCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3329FE52265B90C40054F39B /* PCKnightRankCell.m */; };
 		334EAD6725593BB400B0231C /* PCComics.m in Sources */ = {isa = PBXBuildFile; fileRef = 334EAD6625593BB400B0231C /* PCComics.m */; };
 		334EAD6B25593E7900B0231C /* PCTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 334EAD6A25593E7900B0231C /* PCTableViewCell.m */; };
 		334EAD6F25593E8800B0231C /* PCComicsListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 334EAD6E25593E8800B0231C /* PCComicsListCell.m */; };
@@ -72,6 +78,18 @@
 /* Begin PBXFileReference section */
 		0A673A4E0F1A1F8811FEF9AC /* Pods-Pica.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pica.release.xcconfig"; path = "Target Support Files/Pods-Pica/Pods-Pica.release.xcconfig"; sourceTree = "<group>"; };
 		29E5451C1009385AB025F91F /* Pods_Pica.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Pica.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3329FE42265B58110054F39B /* PCComicsRankRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCComicsRankRequest.h; sourceTree = "<group>"; };
+		3329FE43265B58110054F39B /* PCComicsRankRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCComicsRankRequest.m; sourceTree = "<group>"; };
+		3329FE45265B78A90054F39B /* PCComicsRankController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCComicsRankController.h; sourceTree = "<group>"; };
+		3329FE46265B78A90054F39B /* PCComicsRankController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCComicsRankController.m; sourceTree = "<group>"; };
+		3329FE48265B7AC70054F39B /* PCRankListController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCRankListController.h; sourceTree = "<group>"; };
+		3329FE49265B7AC70054F39B /* PCRankListController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCRankListController.m; sourceTree = "<group>"; };
+		3329FE4B265B7BAA0054F39B /* PCKnightRankRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCKnightRankRequest.h; sourceTree = "<group>"; };
+		3329FE4C265B7BAA0054F39B /* PCKnightRankRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCKnightRankRequest.m; sourceTree = "<group>"; };
+		3329FE4E265B83F60054F39B /* PCComicsRankCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCComicsRankCell.h; sourceTree = "<group>"; };
+		3329FE4F265B83F60054F39B /* PCComicsRankCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCComicsRankCell.m; sourceTree = "<group>"; };
+		3329FE51265B90C40054F39B /* PCKnightRankCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCKnightRankCell.h; sourceTree = "<group>"; };
+		3329FE52265B90C40054F39B /* PCKnightRankCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCKnightRankCell.m; sourceTree = "<group>"; };
 		334EAD6525593BB400B0231C /* PCComics.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCComics.h; sourceTree = "<group>"; };
 		334EAD6625593BB400B0231C /* PCComics.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCComics.m; sourceTree = "<group>"; };
 		334EAD6925593E7900B0231C /* PCTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCTableViewCell.h; sourceTree = "<group>"; };
@@ -453,6 +471,10 @@
 				334EADF3255A948400B0231C /* PCComicsPictureController.m */,
 				334EAE0D255BD1AA00B0231C /* PCComicsCommentController.h */,
 				334EAE0E255BD1AA00B0231C /* PCComicsCommentController.m */,
+				3329FE45265B78A90054F39B /* PCComicsRankController.h */,
+				3329FE46265B78A90054F39B /* PCComicsRankController.m */,
+				3329FE48265B7AC70054F39B /* PCRankListController.h */,
+				3329FE49265B7AC70054F39B /* PCRankListController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -489,6 +511,10 @@
 				33AD9557255169D00079DFAE /* PCComicsRequest.m */,
 				33AD956625524A000079DFAE /* PCSearchRequest.h */,
 				33AD956725524A000079DFAE /* PCSearchRequest.m */,
+				3329FE42265B58110054F39B /* PCComicsRankRequest.h */,
+				3329FE43265B58110054F39B /* PCComicsRankRequest.m */,
+				3329FE4B265B7BAA0054F39B /* PCKnightRankRequest.h */,
+				3329FE4C265B7BAA0054F39B /* PCKnightRankRequest.m */,
 				33669FFD2553E18C00AEC598 /* PCComicsDetailRequest.h */,
 				33669FFE2553E18C00AEC598 /* PCComicsDetailRequest.m */,
 				334EADCF255A865100B0231C /* PCComicsEpisodeRequest.h */,
@@ -524,6 +550,10 @@
 				334EAE05255BC9A100B0231C /* PCUserInfoView.m */,
 				334EAE15255BDA8E00B0231C /* PCCommentCell.h */,
 				334EAE16255BDA8E00B0231C /* PCCommentCell.m */,
+				3329FE4E265B83F60054F39B /* PCComicsRankCell.h */,
+				3329FE4F265B83F60054F39B /* PCComicsRankCell.m */,
+				3329FE51265B90C40054F39B /* PCKnightRankCell.h */,
+				3329FE52265B90C40054F39B /* PCKnightRankCell.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -654,6 +684,8 @@
 				334EADAE255A775D00B0231C /* PCThemeManager.m in Sources */,
 				334EADE5255A8F5300B0231C /* PCComicsFavouriteRequest.m in Sources */,
 				334EADEC255A939B00B0231C /* PCPicture.m in Sources */,
+				3329FE4A265B7AC70054F39B /* PCRankListController.m in Sources */,
+				3329FE44265B58110054F39B /* PCComicsRankRequest.m in Sources */,
 				334EADBC255A77FC00B0231C /* PCUIHelper.m in Sources */,
 				334EAD8D255A616000B0231C /* PCComicsInfoView.m in Sources */,
 				334EADB6255A77B500B0231C /* PCCommonUI.m in Sources */,
@@ -675,6 +707,7 @@
 				334EAE01255AA83D00B0231C /* PCPictureCell.m in Sources */,
 				33AD93F9255019760079DFAE /* PCTableViewController.m in Sources */,
 				334EAE0B255BD11900B0231C /* PCCommentRequest.m in Sources */,
+				3329FE47265B78A90054F39B /* PCComicsRankController.m in Sources */,
 				33AD9564255248EA0079DFAE /* NSDictionary+PCAdd.m in Sources */,
 				334EADD9255A88EB00B0231C /* PCComicsEpisodeView.m in Sources */,
 				334EAD6B25593E7900B0231C /* PCTableViewCell.m in Sources */,
@@ -687,15 +720,18 @@
 				334EADDD255A8A8500B0231C /* UIView+PCAdd.m in Sources */,
 				33AD93D8255017170079DFAE /* main.m in Sources */,
 				33669FFF2553E18C00AEC598 /* PCComicsDetailRequest.m in Sources */,
+				3329FE50265B83F60054F39B /* PCComicsRankCell.m in Sources */,
 				334EAE0F255BD1AA00B0231C /* PCComicsCommentController.m in Sources */,
 				334EAD89255A545200B0231C /* PCUser.m in Sources */,
 				334EAD85255A522700B0231C /* PCComicsDetailController.m in Sources */,
+				3329FE53265B90C40054F39B /* PCKnightRankCell.m in Sources */,
 				334EAD6F25593E8800B0231C /* PCComicsListCell.m in Sources */,
 				33828E4025E6577C00967957 /* PCRegistRequest.m in Sources */,
 				33AD9404255019A80079DFAE /* PCNavigationController.m in Sources */,
 				33AD944F255123D20079DFAE /* PCKeywordCell.m in Sources */,
 				33AD940D255019DC0079DFAE /* PCLoginController.m in Sources */,
 				334EAE13255BD39000B0231C /* PCComment.m in Sources */,
+				3329FE4D265B7BAA0054F39B /* PCKnightRankRequest.m in Sources */,
 				334EADF4255A948400B0231C /* PCComicsPictureController.m in Sources */,
 				33AD944125510C430079DFAE /* PCCategoryCell.m in Sources */,
 				33AD93FE255019950079DFAE /* PCViewController.m in Sources */,

@@ -41,7 +41,7 @@
 }
 
 - (NSString *)requestUrl {
-    return @"comics/advanced-search";
+    return PC_API_SEARCH_ADVANCED;
 }
 
 - (NSDictionary<NSString *,NSString *> *)requestHeaderFieldValueDictionary {
