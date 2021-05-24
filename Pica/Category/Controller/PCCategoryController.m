@@ -13,6 +13,7 @@
 #import "PCKeywordCell.h"
 #import "NSString+PCAdd.h"
 #import "PCComicsListController.h"
+#import "PCComicsRankController.h"
 #import "PCSearchRequest.h"
 #import "PCIconHeader.h"
 
@@ -75,7 +76,9 @@
     PCCategoryRequest *request = [[PCCategoryRequest alloc] init];
     [request sendRequest:^(NSArray *categoryArray) {
         [self hideEmptyView];
-        self.categoryArray = categoryArray;
+        NSMutableArray *array = [NSMutableArray arrayWithArray:categoryArray];
+        [array insertObject:[PCCategory rankCategory] atIndex:0];
+        self.categoryArray = array;
     } failure:^(NSError * _Nonnull error) {
         [self showEmptyViewWithText:@"网络错误" detailText:nil buttonTitle:@"重新请求" buttonAction:@selector(requestCategory)];
     }];
@@ -140,9 +143,14 @@
         PCComicsListController *list = [[PCComicsListController alloc] initWithKeyword:keyword];
         [self.navigationController pushViewController:list animated:YES];
     } else {
-        PCCategory *category = self.categoryArray[indexPath.item];
-        PCComicsListController *list = [[PCComicsListController alloc] initWithCategory: category.title];
-        [self.navigationController pushViewController:list animated:YES];
+        UIViewController *controller = nil;
+        if (indexPath.item == 0) {
+            controller = [[PCComicsRankController alloc] init];
+        } else {
+            PCCategory *category = self.categoryArray[indexPath.item];
+            controller = [[PCComicsListController alloc] initWithCategory:category.title];
+        }
+        [self.navigationController pushViewController:controller animated:YES];
     }
 }
 

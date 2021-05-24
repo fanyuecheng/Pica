@@ -38,7 +38,9 @@
 }
 
 - (NSString *)requestUrl {
-    return [NSString stringWithFormat:@"comics/%@/order/%@/pages?page=%@", self.comicsId, @(self.order), @(self.page)];
+    NSMutableString *requestUrl = [NSMutableString stringWithFormat:PC_API_COMICS_IMAGE, self.comicsId, @(self.order)];
+    [requestUrl appendFormat:@"?page=%@", @(self.page)];
+    return requestUrl;
 }
 
 - (NSDictionary<NSString *,NSString *> *)requestHeaderFieldValueDictionary {

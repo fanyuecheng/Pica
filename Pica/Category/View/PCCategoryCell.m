@@ -9,6 +9,7 @@
 #import "PCCategoryCell.h"
 #import "PCVendorHeader.h"
 #import "UIImageView+PCAdd.h"
+#import "UIImage+PCAdd.h"
  
 @interface PCCategoryCell ()
 
@@ -38,7 +39,15 @@
 - (void)setCategory:(PCCategory *)category {
     _category = category;
      
-    [self.imageView pc_setImageWithURL:category.thumb.imageURL];
+    if (category.thumb) {
+        [self.imageView pc_setImageWithURL:category.thumb.imageURL];
+    } else {
+        CGFloat itemWidth = floorf((SCREEN_WIDTH - 40) / 3);
+        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
+        style.alignment = NSTextAlignmentCenter;
+        self.imageView.image = [UIImage pc_imageWithString:category.title attributes:@{NSFontAttributeName:UIFontBoldMake(18), NSForegroundColorAttributeName:UIColorMake(255, 105, 180),      NSParagraphStyleAttributeName:style} size:CGSizeMake(itemWidth, itemWidth)];
+    }
+    
     self.titleLabel.text = category.title;
 }
 

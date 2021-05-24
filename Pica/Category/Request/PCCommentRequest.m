@@ -39,7 +39,9 @@
 }
 
 - (NSString *)requestUrl {
-    return [NSString stringWithFormat:@"comics/%@/comments?page=%@", self.comicsId, @(self.page)];
+    NSMutableString *requestUrl = [NSMutableString stringWithFormat:PC_API_COMICS_COMMENTS, self.comicsId];
+    [requestUrl appendFormat:@"?page=%@", @(self.page)];
+    return requestUrl;
 }
 
 - (NSDictionary<NSString *,NSString *> *)requestHeaderFieldValueDictionary {

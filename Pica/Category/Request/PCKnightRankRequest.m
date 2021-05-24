@@ -1,39 +1,35 @@
 //
-//  PCCategoryRequest.m
+//  PCKnightRankRequest.m
 //  Pica
 //
-//  Created by fancy on 2020/11/3.
-//  Copyright © 2020 fancy. All rights reserved.
+//  Created by 米画师 on 2021/5/24.
+//  Copyright © 2021 fancy. All rights reserved.
 //
 
-#import "PCCategoryRequest.h"
+#import "PCKnightRankRequest.h"
 #import <YYModel/YYModel.h>
+#import "PCUser.h"
 
-@implementation PCCategoryRequest
+@implementation PCKnightRankRequest
 
 - (void)sendRequest:(void (^)(id response))success
             failure:(void (^)(NSError *error))failure {
     [super sendRequest:success failure:failure];
     
     [self startWithCompletionBlockWithSuccess:^(__kindof YTKBaseRequest * _Nonnull request) {
-        NSArray *categories = request.responseJSONObject[@"data"][@"categories"];
-        NSArray <PCCategory *> *categoryArray = [NSArray yy_modelArrayWithClass:[PCCategory class] json:categories];
-        !success ? : success(categoryArray);
+        NSArray *list = [NSArray yy_modelArrayWithClass:[PCUser class] json:request.responseJSONObject[@"data"][@"users"]];
+        !success ? : success(list);
     } failure:^(__kindof YTKBaseRequest * _Nonnull request) {
         !failure ? : failure(request.error);
     }];
-}
-
-- (NSString *)requestUrl {
-    return PC_API_CATEGORIES;
 }
 
 - (NSDictionary<NSString *,NSString *> *)requestHeaderFieldValueDictionary {
     return [PCRequest headerWithUrl:[self requestUrl] method:@"GET" time:[NSDate date]];
 }
 
-- (YTKRequestMethod)requestMethod {
-    return YTKRequestMethodGET;
+- (NSString *)requestUrl { 
+    return PC_API_COMICS_KNIGHT;
 }
 
 @end
