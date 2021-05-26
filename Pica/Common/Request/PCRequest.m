@@ -106,11 +106,11 @@
 }
 
 - (NSInteger)cacheTimeInSeconds {
-    return 3600;
+    return -1;
 }
 
 - (BOOL)ignoreCache {
-    return NO;
+    return YES;
 }
 
 @end

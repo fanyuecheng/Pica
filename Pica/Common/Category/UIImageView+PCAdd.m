@@ -24,7 +24,7 @@ static char kAssociatedObjectKey_PC_noFadeAnimation;
 
 - (void)pc_setImageWithURL:(NSString *)url {
     [self pc_setImageWithURL:url
-            placeholderImage:[UIImage qmui_imageWithColor:UIColorMake(248, 248, 248)]
+            placeholderImage:[UIImage qmui_imageWithColor:UIColorMake(255, 192, 203)]
                    completed:nil];
 }
 
@@ -36,7 +36,7 @@ static char kAssociatedObjectKey_PC_noFadeAnimation;
 - (void)pc_setImageWithURL:(NSString *)url
                   completed:(void (^)(UIImage *image, NSError *error))completed {
     [self pc_setImageWithURL:url
-            placeholderImage:[UIImage qmui_imageWithColor:UIColorMake(248, 248, 248)]
+            placeholderImage:[UIImage qmui_imageWithColor:UIColorMake(255, 192, 203)]
                    completed:completed];
 }
 

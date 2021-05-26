@@ -32,4 +32,12 @@
     return PC_API_COMICS_KNIGHT;
 }
 
+- (NSInteger)cacheTimeInSeconds {
+    return 60 * 60;
+}
+
+- (BOOL)ignoreCache {
+    return NO;
+}
+
 @end
