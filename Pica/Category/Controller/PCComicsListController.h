@@ -10,10 +10,19 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+typedef NS_ENUM(NSUInteger, PCComicsListType) {
+    PCComicsListTypeRandom,
+    PCComicsListTypeSearch,
+    PCComicsListTypeCategory
+};
+
 @interface PCComicsListController : PCTableViewController
 
-- (instancetype)initWithCategory:(NSString *)category;
-- (instancetype)initWithKeyword:(NSString *)keyword;
+@property (nonatomic, assign, readonly) PCComicsListType type;
+@property (nonatomic, copy) NSString *keyword;
+ 
+- (instancetype)initWithType:(PCComicsListType)type;
+
 
 @end
 

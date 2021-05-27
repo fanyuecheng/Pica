@@ -98,6 +98,8 @@
     height += 10 + 130;
     if (self.comics.tags.count) {
         height += 10 + [self.tagView sizeThatFits:CGSizeMake(SCREEN_WIDTH - 30, CGFLOAT_MAX)].height + 10;
+    } else {
+        height += 10;
     }
     height += [self.descLabel sizeThatFits:CGSizeMake(SCREEN_WIDTH - 30, CGFLOAT_MAX)].height + 10 + 50 + 50; 
     
@@ -122,7 +124,8 @@
 }
 
 - (void)tagAction:(QMUIButton *)sender {
-    PCComicsListController *list = [[PCComicsListController alloc] initWithKeyword:sender.currentTitle];
+    PCComicsListController *list = [[PCComicsListController alloc] initWithType:PCComicsListTypeSearch];
+    list.keyword = sender.currentTitle;
     [[QMUIHelper visibleViewController].navigationController pushViewController:list animated:YES];
 }
 
@@ -290,7 +293,7 @@
 #pragma mark - Set
 - (void)setComics:(PCComics *)comics {
     _comics = comics;
-        
+    
     [self.coverView pc_setImageWithURL:comics.thumb.imageURL];
     self.titleLabel.text = comics.title;
     self.authorLabel.text = comics.author;

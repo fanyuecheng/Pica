@@ -33,7 +33,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL isWeb;
 @property (nonatomic, assign) BOOL active;
 
+//custom
+@property (nonatomic, assign) BOOL isCustom;
+@property (nonatomic, copy)   NSString *controllerClass;
+
 + (PCCategory *)rankCategory;
++ (PCCategory *)randomCategory;
 
 @end
 

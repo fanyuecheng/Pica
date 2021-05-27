@@ -43,6 +43,7 @@
 		334EAE0F255BD1AA00B0231C /* PCComicsCommentController.m in Sources */ = {isa = PBXBuildFile; fileRef = 334EAE0E255BD1AA00B0231C /* PCComicsCommentController.m */; };
 		334EAE13255BD39000B0231C /* PCComment.m in Sources */ = {isa = PBXBuildFile; fileRef = 334EAE12255BD39000B0231C /* PCComment.m */; };
 		334EAE17255BDA8E00B0231C /* PCCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 334EAE16255BDA8E00B0231C /* PCCommentCell.m */; };
+		3358C8A7265F50090000D17F /* PCRandomRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3358C8A6265F50090000D17F /* PCRandomRequest.m */; };
 		33669FFF2553E18C00AEC598 /* PCComicsDetailRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 33669FFE2553E18C00AEC598 /* PCComicsDetailRequest.m */; };
 		33828E4025E6577C00967957 /* PCRegistRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 33828E3F25E6577C00967957 /* PCRegistRequest.m */; };
 		33828E4425E65CB600967957 /* PCRegistController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33828E4325E65CB600967957 /* PCRegistController.m */; };
@@ -150,6 +151,8 @@
 		334EAE12255BD39000B0231C /* PCComment.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCComment.m; sourceTree = "<group>"; };
 		334EAE15255BDA8E00B0231C /* PCCommentCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCCommentCell.h; sourceTree = "<group>"; };
 		334EAE16255BDA8E00B0231C /* PCCommentCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCCommentCell.m; sourceTree = "<group>"; };
+		3358C8A5265F50090000D17F /* PCRandomRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCRandomRequest.h; sourceTree = "<group>"; };
+		3358C8A6265F50090000D17F /* PCRandomRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCRandomRequest.m; sourceTree = "<group>"; };
 		33669FFD2553E18C00AEC598 /* PCComicsDetailRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCComicsDetailRequest.h; sourceTree = "<group>"; };
 		33669FFE2553E18C00AEC598 /* PCComicsDetailRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCComicsDetailRequest.m; sourceTree = "<group>"; };
 		33828E3E25E6577C00967957 /* PCRegistRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCRegistRequest.h; sourceTree = "<group>"; };
@@ -511,6 +514,8 @@
 				33AD9557255169D00079DFAE /* PCComicsRequest.m */,
 				33AD956625524A000079DFAE /* PCSearchRequest.h */,
 				33AD956725524A000079DFAE /* PCSearchRequest.m */,
+				3358C8A5265F50090000D17F /* PCRandomRequest.h */,
+				3358C8A6265F50090000D17F /* PCRandomRequest.m */,
 				3329FE42265B58110054F39B /* PCComicsRankRequest.h */,
 				3329FE43265B58110054F39B /* PCComicsRankRequest.m */,
 				3329FE4B265B7BAA0054F39B /* PCKnightRankRequest.h */,
@@ -735,6 +740,7 @@
 				334EADF4255A948400B0231C /* PCComicsPictureController.m in Sources */,
 				33AD944125510C430079DFAE /* PCCategoryCell.m in Sources */,
 				33AD93FE255019950079DFAE /* PCViewController.m in Sources */,
+				3358C8A7265F50090000D17F /* PCRandomRequest.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -887,7 +893,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.0.4;
-				PRODUCT_BUNDLE_IDENTIFIER = com.pica.test;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yuecheng.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -908,7 +914,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.0.4;
-				PRODUCT_BUNDLE_IDENTIFIER = com.pica.test;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yuecheng.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};

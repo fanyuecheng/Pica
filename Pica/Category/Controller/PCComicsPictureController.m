@@ -109,7 +109,9 @@
     cell.picture = pictureArray[indexPath.item];
     cell.loadBlock = ^(PCPicture * _Nonnull picture) {
         NSIndexPath *reloadIndexPath = [NSIndexPath indexPathForItem:[pictureArray indexOfObject:picture] inSection:indexPath.section];
-        [collectionView reloadItemsAtIndexPaths:@[reloadIndexPath]];
+        if ([self.navigationController.viewControllers containsObject:self]) {
+            [collectionView reloadItemsAtIndexPaths:@[reloadIndexPath]];
+        }
     };
     
     @weakify(self)

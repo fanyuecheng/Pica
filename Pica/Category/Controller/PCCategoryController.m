@@ -16,6 +16,7 @@
 #import "PCComicsRankController.h"
 #import "PCSearchRequest.h"
 #import "PCIconHeader.h"
+#import <SafariServices/SafariServices.h>
 
 @interface PCCategoryController () <UICollectionViewDelegate, UICollectionViewDataSource, QMUITextFieldDelegate>
 
@@ -74,11 +75,13 @@
     [self showEmptyViewWithLoading];
     
     PCCategoryRequest *request = [[PCCategoryRequest alloc] init];
-    [request sendRequest:^(NSArray *categoryArray) {
+    [request sendRequest:^(NSArray *responseArray) {
         [self hideEmptyView];
-        NSMutableArray *array = [NSMutableArray arrayWithArray:categoryArray];
-        [array insertObject:[PCCategory rankCategory] atIndex:0];
-        self.categoryArray = array;
+        NSMutableArray *categoryArray = [NSMutableArray array];
+        [categoryArray addObject:[PCCategory rankCategory]];
+        [categoryArray addObject:[PCCategory randomCategory]];
+        [categoryArray addObjectsFromArray:responseArray];
+        self.categoryArray = categoryArray;
     } failure:^(NSError * _Nonnull error) {
         [self showEmptyViewWithText:@"网络错误" detailText:nil buttonTitle:@"重新请求" buttonAction:@selector(requestCategory)];
     }];
@@ -140,17 +143,27 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
         NSString *keyword = self.keywordArray[indexPath.item];
-        PCComicsListController *list = [[PCComicsListController alloc] initWithKeyword:keyword];
+        PCComicsListController *list = [[PCComicsListController alloc] initWithType:PCComicsListTypeSearch];
+        list.keyword = keyword;
         [self.navigationController pushViewController:list animated:YES];
     } else {
         UIViewController *controller = nil;
-        if (indexPath.item == 0) {
-            controller = [[PCComicsRankController alloc] init];
+        PCCategory *category = self.categoryArray[indexPath.item];
+        
+        if (category.isWeb) {
+            SFSafariViewController *safari = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:category.link]];
+            [self presentViewController:safari animated:YES completion:nil];
+            return;
+        } else if (category.isCustom) {
+            controller = [[NSClassFromString(category.controllerClass) alloc] init];
         } else {
-            PCCategory *category = self.categoryArray[indexPath.item];
-            controller = [[PCComicsListController alloc] initWithCategory:category.title];
+            PCComicsListController *list = [[PCComicsListController alloc] initWithType:PCComicsListTypeCategory];
+            list.keyword = category.title;
+            controller = list;
         }
-        [self.navigationController pushViewController:controller animated:YES];
+        if (controller) {
+            [self.navigationController pushViewController:controller animated:YES];
+        }
     }
 }
 
@@ -158,7 +171,8 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     if (textField.text.length) {
         [textField resignFirstResponder];
-        PCComicsListController *list = [[PCComicsListController alloc] initWithKeyword:textField.text];
+        PCComicsListController *list = [[PCComicsListController alloc] initWithType:PCComicsListTypeSearch];
+        list.keyword = textField.text;
         [self.navigationController pushViewController:list animated:YES];
     }
     return YES;

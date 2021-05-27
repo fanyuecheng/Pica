@@ -7,6 +7,7 @@
 //
 
 #import "PCComicsListController.h"
+#import "PCRandomRequest.h"
 #import "PCComicsRequest.h"
 #import "PCSearchRequest.h"
 #import "PCComicsListCell.h"
@@ -14,28 +15,19 @@
 
 @interface PCComicsListController ()
 
-@property (nonatomic, copy)   NSString *category;
-@property (nonatomic, copy)   NSString *keyword;
+@property (nonatomic, assign) PCComicsListType type;
 @property (nonatomic, strong) PCComicsRequest *categoryRequest;
 @property (nonatomic, strong) PCSearchRequest *searchRequest;
+@property (nonatomic, strong) PCRandomRequest *randomRequest;
 @property (nonatomic, strong) NSMutableArray <PCComicsList *>*comicsArray;
 
 @end
 
 @implementation PCComicsListController
 
-- (instancetype)initWithCategory:(NSString *)category {
+- (instancetype)initWithType:(PCComicsListType)type {
     if (self = [super init]) {
-        self.category = [category copy];
-        self.comicsArray = [NSMutableArray array];
-    }
-    return self;
-}
-
-- (instancetype)initWithKeyword:(NSString *)keyword {
-    if (self = [super init]) {
-        self.keyword = [keyword copy];
-        self.comicsArray = [NSMutableArray array];
+        self.type = type;
     }
     return self;
 }
@@ -45,13 +37,27 @@
      
     [self requestComics];
     
-    self.navigationItem.rightBarButtonItem = [UIBarButtonItem qmui_itemWithTitle:@"新到旧" target:self action:@selector(sortAction:)];
+    switch (self.type) {
+        case PCComicsListTypeRandom:
+            
+            break;
+        default:
+            self.navigationItem.rightBarButtonItem = [UIBarButtonItem qmui_itemWithTitle:@"新到旧" target:self action:@selector(sortAction:)];
+            break;
+    }
 }
 
 - (void)setupNavigationItems {
     [super setupNavigationItems];
     
-    self.title = self.category ? self.category : self.keyword;
+    switch (self.type) {
+        case PCComicsListTypeRandom:
+            self.title = @"随机本子";
+            break;
+        default:
+            self.title = self.keyword;
+            break;
+    }
 }
 
 - (void)initTableView {
@@ -59,21 +65,30 @@
     
     [self.tableView registerClass:[PCComicsListCell class] forCellReuseIdentifier:@"PCComicsListCell"];
     self.tableView.rowHeight = 130;
-    @weakify(self)
-    self.tableView.mj_footer = [MJRefreshBackStateFooter footerWithRefreshingBlock:^{
-        @strongify(self) 
-        PCComicsList *list = self.comicsArray.lastObject;
-        if (list.page < list.pages) {
-            if (self.keyword) {
-                self.searchRequest.page ++;
+     
+    if (self.type != PCComicsListTypeRandom) {
+        @weakify(self)
+        self.tableView.mj_footer = [MJRefreshBackStateFooter footerWithRefreshingBlock:^{
+            @strongify(self)
+            PCComicsList *list = self.comicsArray.lastObject;
+            if (list.page < list.pages) {
+                switch (self.type) {
+                    case PCComicsListTypeSearch:
+                        self.searchRequest.page ++;
+                        break;
+                    case PCComicsListTypeCategory:
+                        self.categoryRequest.page ++;
+                        break;
+                    default:
+                        break;
+                }
+               
+                [self requestComics];
             } else {
-                self.categoryRequest.page ++;
+                [self.tableView.mj_footer endRefreshingWithNoMoreData];
             }
-            [self requestComics];
-        } else {
-            [self.tableView.mj_footer endRefreshingWithNoMoreData];
-        }
-    }];
+        }];
+    }
 }
  
 #pragma mark - Action
@@ -95,12 +110,17 @@
         NSString *value = [sorts valueForKey:key];
         self.navigationItem.rightBarButtonItem = [UIBarButtonItem qmui_itemWithTitle:key target:self action:@selector(sortAction:)];
         
-        if (self.keyword) {
-            self.searchRequest.sort = value;
-            self.searchRequest.page = 1;
-        } else {
-            self.categoryRequest.s = value;
-            self.categoryRequest.page = 1;
+        switch (self.type) {
+            case PCComicsListTypeSearch:
+                self.searchRequest.sort = value;
+                self.searchRequest.page = 1;
+                break;
+            case PCComicsListTypeCategory:
+                self.categoryRequest.s = value;
+                self.categoryRequest.page = 1;
+                break;
+            default:
+                break;
         }
         [self requestComics];
         [controller hideWithAnimated:YES completion:nil];
@@ -110,10 +130,18 @@
 
 #pragma mark - Net
 - (void)requestComics {
-    if (self.keyword) {
-        [self requestSearchComics];
-    } else {
-        [self requestCategoryComics];
+    switch (self.type) {
+        case PCComicsListTypeRandom:
+            [self requestRandomComics];
+            break;
+        case PCComicsListTypeSearch:
+            [self requestSearchComics];
+            break;
+        case PCComicsListTypeCategory:
+            [self requestCategoryComics];
+            break;
+        default:
+            break;
     }
 }
 
@@ -123,15 +151,9 @@
     }
     
     [self.categoryRequest sendRequest:^(PCComicsList *list) {
-        [self hideEmptyView];
-        [self.tableView.mj_footer endRefreshing];
-        if (self.categoryRequest.page == 1) {
-            [self.comicsArray removeAllObjects];
-        }
-        [self.comicsArray addObject:list];
-        [self.tableView reloadData];
+        [self requestFinishedWithList:list];
     } failure:^(NSError * _Nonnull error) {
-        [self showEmptyViewWithText:@"网络错误" detailText:nil buttonTitle:@"重新请求" buttonAction:@selector(requestCategoryComics)];
+        [self requestFinishedWithError:error];
     }];
 }
 
@@ -141,17 +163,63 @@
     }
     
     [self.searchRequest sendRequest:^(PCComicsList *list) {
-        [self hideEmptyView];
-        [self.tableView.mj_footer endRefreshing];
-        if (self.searchRequest.page == 1) {
-            [self.comicsArray removeAllObjects];
-        }
-        [self.comicsArray addObject:list];
-        [self.tableView reloadData];
+        [self requestFinishedWithList:list];
     } failure:^(NSError * _Nonnull error) {
-        [self showEmptyViewWithText:@"网络错误" detailText:nil buttonTitle:@"重新请求" buttonAction:@selector(searchRequest)];
+        [self requestFinishedWithError:error];
     }];
 }
+
+- (void)requestRandomComics {
+    [self showEmptyViewWithLoading];
+    
+    [self.randomRequest sendRequest:^(PCComicsList *list) {
+        [self requestFinishedWithList:list];
+    } failure:^(NSError * _Nonnull error) {
+        [self requestFinishedWithError:error];
+    }];
+}
+
+- (void)requestFinishedWithList:(PCComicsList *)list {
+    switch (self.type) {
+        case PCComicsListTypeSearch:
+            if (self.searchRequest.page == 1) {
+                [self.comicsArray removeAllObjects];
+            }
+            break;
+        case PCComicsListTypeCategory:
+            if (self.categoryRequest.page == 1) {
+                [self.comicsArray removeAllObjects];
+            }
+            break;
+        default:
+            break;
+    }
+    
+    [self hideEmptyView];
+    [self.tableView.mj_footer endRefreshing];
+    [self.comicsArray addObject:list];
+    [self.tableView reloadData];
+}
+
+- (void)requestFinishedWithError:(NSError *)error {
+    SEL sel = NULL;
+    switch (self.type) {
+        case PCComicsListTypeRandom:
+            sel = @selector(requestRandomComics);
+            break;
+        case PCComicsListTypeSearch:
+            sel = @selector(searchRequest);
+            break;
+        case PCComicsListTypeCategory:
+            sel = @selector(requestCategoryComics);
+            break;
+        default:
+            break;
+    }
+    [self showEmptyViewWithText:@"网络错误" detailText:nil buttonTitle:@"重新请求" buttonAction:sel];
+}
+
+
 #pragma mark - Table
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return self.comicsArray.count;
@@ -178,10 +246,17 @@
 }
 
 #pragma mark - Get
+- (NSMutableArray<PCComicsList *> *)comicsArray {
+    if (!_comicsArray) {
+        _comicsArray = [NSMutableArray array];
+    }
+    return _comicsArray;
+}
+
 - (PCComicsRequest *)categoryRequest {
     if (!_categoryRequest) {
         _categoryRequest = [[PCComicsRequest alloc] init];
-        _categoryRequest.c = self.category;
+        _categoryRequest.c = self.keyword;
     }
     return _categoryRequest;
 }
@@ -192,6 +267,13 @@
         _searchRequest.keyword = self.keyword;
     }
     return _searchRequest;
+}
+
+- (PCRandomRequest *)randomRequest {
+    if (!_randomRequest) {
+        _randomRequest = [[PCRandomRequest alloc] init];
+    }
+    return _randomRequest;
 }
 
 @end
