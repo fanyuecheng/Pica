@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <SDWebImage/SDWebImage.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -28,6 +29,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)pc_setImageWithURL:(NSString *)url
           placeholderImage:(nullable UIImage *)placeholderImage
+                  progress:(nullable void (^)(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL))progress
+                 completed:(nullable void (^)(UIImage *image, NSError *error))completed;
+
+- (void)pc_setImageWithURL:(NSString *)url
+          placeholderImage:(nullable UIImage *)placeholderImage
+                   options:(SDWebImageOptions)options
+                   context:(nullable SDWebImageContext *)context 
                   progress:(nullable void (^)(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL))progress
                  completed:(nullable void (^)(UIImage *image, NSError *error))completed;
 

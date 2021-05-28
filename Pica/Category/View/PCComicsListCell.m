@@ -8,7 +8,8 @@
 
 #import "PCComicsListCell.h"
 #import "UIImageView+PCAdd.h"
-
+#import "PCCommonUI.h"
+ 
 @interface PCComicsListCell ()
 
 @end
@@ -54,16 +55,16 @@
     UIColor *color = nil;
     switch (index) {
         case 0:
-            color = UIColorMake(255, 215, 0);
+            color = PCColorGold;
             break;
         case 1:
-            color = UIColorMake(255, 182, 193);
+            color = PCColorLightPink;
             break;
         case 2:
-            color = UIColorMake(255, 105, 180);
+            color = PCColorHotPink;
             break;
         default:
-            color = UIColorMake(128, 128, 128);
+            color = UIColorDarkGray8;
             break;
     }
     return color;
@@ -91,7 +92,7 @@
 
 - (QMUILabel *)authorLabel {
     if (!_authorLabel) {
-        _authorLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(13) textColor:UIColorMake(255, 105, 180)];
+        _authorLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(13) textColor:PCColorHotPink];
     }
     return _authorLabel;
 }
@@ -105,7 +106,7 @@
 
 - (QMUILabel *)likeLabel {
     if (!_likeLabel) {
-        _likeLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(13) textColor:UIColorMake(255, 105, 180)];
+        _likeLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(13) textColor:PCColorHotPink];
     }
     return _likeLabel;
 }

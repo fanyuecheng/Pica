@@ -9,6 +9,7 @@
 #import "PCRequest.h"
 #import <QMUIKit/QMUIKit.h>
 #import "NSString+PCAdd.h"
+#import "AppDelegate.h"
 
 //2587EFC6F859B4E3A1D8B6D33B272  ios
 #define kApiKey        @"C69BAF41DA5ABD1FFEDC6D2FEA56B"
@@ -73,18 +74,21 @@
             dispatch_async(dispatch_get_main_queue(), ^{
                 [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
                 if (request.error) {
-                    [request.error qmui_bindObject:request.responseJSONObject forKey:PC_ERROR_DATA];
-                    [QMUITips showError:request.responseJSONObject[@"message"]];
+                    NSDictionary *response = request.responseJSONObject;
+                    [request.error qmui_bindObject:response forKey:PC_ERROR_DATA];
+                    [QMUITips showError:[NSString stringWithFormat:@"error:%@\nmessage:%@", response[@"error"], response[@"message"]] inView:DefaultTipsParentView];
+                    if ([response[@"error"] isEqualToString:@"1005"] &&
+                        [response[@"message"] isEqualToString:@"unauthorized"] &&
+                        [response[@"code"] integerValue] == 401) {
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                            [(AppDelegate *)[UIApplication sharedApplication].delegate setRootViewControllerToLogin];
+                        });
+                    }
+#if defined(DEBUG)
+                    NSLog(@"\n============ PCRequest Info] ============\nrequest method: %@  from cache: %@\nrequest url: %@\nrequest parameters: \n%@\nrequest error:\n%@\nresponse:\n%@\n==========================================\n", self.methodString, self.isDataFromCache ? @"YES" : @"NO", self.requestUrl, self.requestArgument, self.error, self.response);
+#endif
                 }
             });
-            
-#if defined(DEBUG)
-            if (request.error) {
-                NSLog(@"\n============ PCRequest Info] ============\nrequest method: %zd\nrequest url: %@\nrequest parameters: \n%@\nrequest error:\n%@\nresponse:\n%@\n==========================================\n", request.requestMethod, request.requestUrl, request.requestArgument, request.error, request.response);
-            } else {
-                NSLog(@"\n============ [PCRequest Info] ============\nrequest method: %zd\nrequest url: %@\nrequest parameters: \n%@\nrequest response:\n%@\n==========================================\n", request.requestMethod, request.requestUrl, request.requestArgument, request.responseJSONObject);
-            }
-#endif
         };
 
         [self addAccessory:accessory];
@@ -97,6 +101,40 @@
  
 }
 
+- (void)requestCompletePreprocessor {
+#if defined(DEBUG)
+    NSLog(@"\n============ [PCRequest Info] ============\nrequest method: %@  from cache: %@\nrequest url: %@\nrequest parameters: \n%@\nrequest response:\n%@\n==========================================\n", self.methodString, self.isDataFromCache ? @"YES" : @"NO", self.requestUrl, self.requestArgument, self.responseJSONObject);
+#endif
+}
+
+- (NSString *)methodString {
+    NSString *methodString = nil;
+    switch (self.requestMethod) {
+        case YTKRequestMethodGET:
+            methodString = @"GET";
+            break;
+        case YTKRequestMethodPOST:
+            methodString = @"POST";
+            break;
+        case YTKRequestMethodHEAD:
+            methodString = @"HEAD";
+            break;
+        case YTKRequestMethodPUT:
+            methodString = @"PUT";
+            break;
+        case YTKRequestMethodDELETE:
+            methodString = @"DELETE";
+            break;
+        case YTKRequestMethodPATCH:
+            methodString = @"PATCH";
+            break;
+        default:
+            methodString = @"UNKNOW";
+            break;
+    }
+    return methodString;
+}
+
 - (NSString *)baseUrl {
     return PC_API_HOST;
 }
@@ -106,11 +144,11 @@
 }
 
 - (NSInteger)cacheTimeInSeconds {
-    return 3600;
+    return -1;
 }
 
 - (BOOL)ignoreCache {
-    return NO;
+    return YES;
 }
 
 @end

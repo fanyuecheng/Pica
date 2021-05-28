@@ -13,6 +13,6 @@
 #import <MJRefresh/MJRefresh.h>
 #import <SDWebImage/SDWebImage.h>
 #import <YTKNetwork/YTKNetwork.h>
-#import <YTKNetwork/YTKNetwork.h> 
+#import <JXPagingView/JXPagerView.h>
 
 #endif /* PCVendorHeader_h */

@@ -49,6 +49,12 @@ NS_ASSUME_NONNULL_BEGIN
 //排行
 @property (nonatomic, assign) NSInteger comicsUploaded;
 
+//我的
+@property (nonatomic, strong) NSDate *created_at;
+@property (nonatomic, strong) NSDate *birthday;
+@property (nonatomic, assign) BOOL isPunched;
+@property (nonatomic, copy)   NSString *email;
+
 @end
 
 NS_ASSUME_NONNULL_END

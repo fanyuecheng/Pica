@@ -36,4 +36,12 @@
     return YTKRequestMethodGET;
 }
 
+- (NSInteger)cacheTimeInSeconds {
+    return 60 * 60;
+}
+
+- (BOOL)ignoreCache {
+    return NO;
+}
+
 @end

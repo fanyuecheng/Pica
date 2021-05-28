@@ -30,8 +30,6 @@
     [self startWithCompletionBlockWithSuccess:^(__kindof YTKBaseRequest * _Nonnull request) {
         PCComicsComment *comment = [PCComicsComment yy_modelWithJSON:request.responseJSONObject[@"data"]];
         
-        NSLog(@"%@", request.responseJSONObject);
-        
         !success ? : success(comment);
     } failure:^(__kindof YTKBaseRequest * _Nonnull request) {
         !failure ? : failure(request.error);
@@ -52,5 +50,13 @@
     return YTKRequestMethodGET;
 }
 
+
+- (NSInteger)cacheTimeInSeconds {
+    return 60 * 2;
+}
+
+- (BOOL)ignoreCache {
+    return NO;
+}
 
 @end
