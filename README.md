@@ -7,11 +7,14 @@
 API来自 [picacomic](https://github.com/AnkiKong/picacomic) 
 
 #### 截图  
-![1.png](https://i.loli.net/2020/11/12/cFfKHxb24kSPBop.png)  
-![2.png](https://i.loli.net/2020/11/12/REYKTvGmabOd7gI.png)  
-![3.png](https://i.loli.net/2020/11/12/MpYhbBVER6OaswN.png)  
-![4.png](https://i.loli.net/2020/11/12/OSPxCJMe1VXWsQF.png)  
- 
+![1](https://i.loli.net/2021/05/28/aibTuYkSwdhq3te.png)  
+![2](https://i.loli.net/2021/05/28/adI5F9orGhuTyq1.png)  
+![3](https://i.loli.net/2021/05/28/4MaYRzyXqbHIk5v.png)  
+![4](https://i.loli.net/2021/05/28/lAC6X7T8xvyGuKc.png)  
+
+#### 功能  
+  
+
 #### 免责声明  
 本项目仅供学习&个人使用，版权归原漫画作者及发行商所有。  
 本项目不承担任何由于内容的合法性及健康性所引起的争议和法律责任。

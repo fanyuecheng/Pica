@@ -14,8 +14,6 @@
 @interface AppDelegate ()
 
 @property (nonatomic, strong) PCLoginController      *loginController;
-@property (nonatomic, strong) PCNavigationController *categoryController;
-//TODO
 @property (nonatomic, strong) PCTabBarViewController *tabBarController;
 
 @end
@@ -29,7 +27,7 @@
     if (token) {
         SDWebImageDownloader *downloader = [SDWebImageManager sharedManager].imageLoader;
         [downloader setValue:token forHTTPHeaderField:@"authorization"];
-        self.window.rootViewController = self.categoryController;
+        self.window.rootViewController = self.tabBarController;
     } else {
         self.window.rootViewController = self.loginController;
     }
@@ -43,18 +41,17 @@
     if (self.window.rootViewController != self.loginController) {
         [UIView transitionFromView:self.window.rootViewController.view toView:self.loginController.view duration:0.65f options:UIViewAnimationOptionTransitionFlipFromRight completion:^(BOOL finished) {
             [self.window setRootViewController:self.loginController];
-            self.categoryController   = nil;
+            self.tabBarController   = nil;
         }];
     }
 }
 
 - (void)setRootViewControllerToTab {
-    if (self.window.rootViewController != self.categoryController) {
+    if (self.window.rootViewController != self.tabBarController) {
         UIView *currentView = [QMUIHelper visibleViewController].view;
-        QMUINavigationController *controller = self.categoryController;
         
-        [UIView transitionFromView:currentView toView:controller.topViewController.view duration:0.65f options:UIViewAnimationOptionTransitionFlipFromRight completion:^(BOOL finished) {
-            [self.window setRootViewController:self.categoryController];
+        [UIView transitionFromView:currentView toView:self.tabBarController.view duration:0.65f options:UIViewAnimationOptionTransitionFlipFromRight completion:^(BOOL finished) {
+            [self.window setRootViewController:self.tabBarController];
             self.loginController = nil; 
         }];
     }
@@ -75,13 +72,6 @@
         _loginController = [[PCLoginController alloc] init];
     }
     return _loginController;
-}
- 
-- (PCNavigationController *)categoryController {
-    if (!_categoryController) {
-        _categoryController = [[PCNavigationController alloc] initWithRootViewController:[[PCCategoryController alloc] init]];
-    }
-    return _categoryController;
 }
 
 - (PCTabBarViewController *)tabBarController {

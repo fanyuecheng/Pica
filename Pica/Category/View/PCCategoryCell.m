@@ -10,7 +10,8 @@
 #import "PCVendorHeader.h"
 #import "UIImageView+PCAdd.h"
 #import "UIImage+PCAdd.h"
- 
+#import "PCCommonUI.h"
+
 @interface PCCategoryCell ()
 
 @property (nonatomic, strong) SDAnimatedImageView *imageView;
@@ -45,7 +46,7 @@
         CGFloat itemWidth = floorf((SCREEN_WIDTH - 40) / 3);
         NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
         style.alignment = NSTextAlignmentCenter;
-        self.imageView.image = [UIImage pc_imageWithString:category.title attributes:@{NSFontAttributeName:UIFontBoldMake(18), NSForegroundColorAttributeName:UIColorMake(255, 105, 180),      NSParagraphStyleAttributeName:style} size:CGSizeMake(itemWidth, itemWidth)];
+        self.imageView.image = [UIImage pc_imageWithString:category.title attributes:@{NSFontAttributeName:UIFontBoldMake(18), NSForegroundColorAttributeName:PCColorHotPink,      NSParagraphStyleAttributeName:style} size:CGSizeMake(itemWidth, itemWidth)];
     }
     
     self.titleLabel.text = category.title;
@@ -57,6 +58,8 @@
         _imageView = [[SDAnimatedImageView alloc] init];
         _imageView.layer.cornerRadius = 4;
         _imageView.layer.masksToBounds = YES;
+        _imageView.layer.borderWidth = .3;
+        _imageView.layer.borderColor = UIColorSeparator.CGColor;
     }
     return _imageView;
 }

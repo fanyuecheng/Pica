@@ -10,6 +10,7 @@
 #import "PCRandomRequest.h"
 #import "PCComicsRequest.h"
 #import "PCSearchRequest.h"
+#import "PCFavouriteComicsRequest.h"
 #import "PCComicsListCell.h"
 #import "PCComicsDetailController.h"
 
@@ -19,6 +20,7 @@
 @property (nonatomic, strong) PCComicsRequest *categoryRequest;
 @property (nonatomic, strong) PCSearchRequest *searchRequest;
 @property (nonatomic, strong) PCRandomRequest *randomRequest;
+@property (nonatomic, strong) PCFavouriteComicsRequest *favouriteRequest;
 @property (nonatomic, strong) NSMutableArray <PCComicsList *>*comicsArray;
 
 @end
@@ -54,6 +56,9 @@
         case PCComicsListTypeRandom:
             self.title = @"随机本子";
             break;
+        case PCComicsListTypeFavourite:
+            self.title = @"我的收藏";
+            break;
         default:
             self.title = self.keyword;
             break;
@@ -79,6 +84,9 @@
                     case PCComicsListTypeCategory:
                         self.categoryRequest.page ++;
                         break;
+                    case PCComicsListTypeFavourite:
+                        self.favouriteRequest.page ++;
+                        break;
                     default:
                         break;
                 }
@@ -97,8 +105,21 @@
                              @"旧到新" : @"da",
                              @"爱心数" : @"ld",
                              @"翻牌数" : @"vd"};
-    NSString *sort = self.keyword ? self.searchRequest.sort : self.categoryRequest.s;
-     
+    NSString *sort = nil;
+    switch (self.type) {
+        case PCComicsListTypeSearch:
+            sort = self.searchRequest.sort;
+            break;
+        case PCComicsListTypeCategory:
+            sort = self.categoryRequest.s;
+            break;
+        case PCComicsListTypeFavourite:
+            sort = self.favouriteRequest.s;
+            break;
+        default:
+            break;
+    }
+    
     QMUIDialogSelectionViewController *dialogViewController = [[QMUIDialogSelectionViewController alloc] init];
     dialogViewController.selectedItemIndex = [sorts.allValues indexOfObject:sort];
     dialogViewController.title = @"排序方式";
@@ -118,6 +139,10 @@
             case PCComicsListTypeCategory:
                 self.categoryRequest.s = value;
                 self.categoryRequest.page = 1;
+                break;
+            case PCComicsListTypeFavourite:
+                self.favouriteRequest.s = value;
+                self.favouriteRequest.page = 1;
                 break;
             default:
                 break;
@@ -140,9 +165,24 @@
         case PCComicsListTypeCategory:
             [self requestCategoryComics];
             break;
+        case PCComicsListTypeFavourite:
+            [self requestFavouriteComics];
+            break;
         default:
             break;
     }
+}
+
+- (void)requestFavouriteComics {
+    if (self.favouriteRequest.page == 1) {
+        [self showEmptyViewWithLoading];
+    }
+    
+    [self.favouriteRequest sendRequest:^(PCComicsList *list) {
+        [self requestFinishedWithList:list];
+    } failure:^(NSError * _Nonnull error) {
+        [self requestFinishedWithError:error];
+    }];
 }
 
 - (void)requestCategoryComics {
@@ -274,6 +314,13 @@
         _randomRequest = [[PCRandomRequest alloc] init];
     }
     return _randomRequest;
+}
+
+- (PCFavouriteComicsRequest *)favouriteRequest {
+    if (!_favouriteRequest) {
+        _favouriteRequest = [[PCFavouriteComicsRequest alloc] init];
+    }
+    return _favouriteRequest;
 }
 
 @end

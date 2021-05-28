@@ -11,6 +11,12 @@
 
 #pragma mark - Colors
 
+#define PCColorPink      UIColorMake(255, 192, 203)
+#define PCColorHotPink   UIColorMake(255, 105, 180)
+#define PCColorLightPink UIColorMake(255, 182, 193)
+#define PCColorGold      UIColorMake(255, 215, 0);
+
+
 #define UIColorGray1 UIColorMake(53, 60, 70)
 #define UIColorGray2 UIColorMake(73, 80, 90)
 #define UIColorGray3 UIColorMake(93, 100, 110)

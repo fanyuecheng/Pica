@@ -16,6 +16,7 @@
 #import "PCComicsListController.h"
 #import "PCComicsCommentController.h"
 #import "PCUserInfoView.h"
+#import "PCCommonUI.h"
 
 @interface PCComicsInfoView ()
 
@@ -184,7 +185,7 @@
 
 - (QMUILabel *)authorLabel {
     if (!_authorLabel) {
-        _authorLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(13) textColor:UIColorMake(255, 105, 180)];
+        _authorLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(13) textColor:PCColorHotPink];
     }
     return _authorLabel;
 }

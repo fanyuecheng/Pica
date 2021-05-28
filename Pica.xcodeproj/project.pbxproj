@@ -44,6 +44,17 @@
 		334EAE13255BD39000B0231C /* PCComment.m in Sources */ = {isa = PBXBuildFile; fileRef = 334EAE12255BD39000B0231C /* PCComment.m */; };
 		334EAE17255BDA8E00B0231C /* PCCommentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 334EAE16255BDA8E00B0231C /* PCCommentCell.m */; };
 		3358C8A7265F50090000D17F /* PCRandomRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3358C8A6265F50090000D17F /* PCRandomRequest.m */; };
+		3358C8AC265F6E2F0000D17F /* PCProfileController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3358C8AB265F6E2F0000D17F /* PCProfileController.m */; };
+		3358C8B0265F75440000D17F /* PCProfileRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3358C8AF265F75440000D17F /* PCProfileRequest.m */; };
+		3358C8B4265F79AF0000D17F /* PCProfileHeaderView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3358C8B3265F79AF0000D17F /* PCProfileHeaderView.m */; };
+		3358C8B7265F88F30000D17F /* PCPunchInRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3358C8B6265F88F30000D17F /* PCPunchInRequest.m */; };
+		3358C8BB265F94970000D17F /* PCAvatarSetRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3358C8BA265F94970000D17F /* PCAvatarSetRequest.m */; };
+		3358C8C1265FB1DE0000D17F /* PCSloganSetRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3358C8BF265FB1DE0000D17F /* PCSloganSetRequest.m */; };
+		3358C8C426608D530000D17F /* PCProfileInfoController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3358C8C326608D530000D17F /* PCProfileInfoController.m */; };
+		3358C8C7266090B60000D17F /* PCFavouriteComicsRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3358C8C6266090B60000D17F /* PCFavouriteComicsRequest.m */; };
+		3358C8CA2660ABCF0000D17F /* PCUserCommentRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3358C8C92660ABCF0000D17F /* PCUserCommentRequest.m */; };
+		3358C8CF2660BC9F0000D17F /* PCSettingController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3358C8CE2660BC9F0000D17F /* PCSettingController.m */; };
+		3358C8D32660C0050000D17F /* PCPasswordSetRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3358C8D22660C0050000D17F /* PCPasswordSetRequest.m */; };
 		33669FFF2553E18C00AEC598 /* PCComicsDetailRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 33669FFE2553E18C00AEC598 /* PCComicsDetailRequest.m */; };
 		33828E4025E6577C00967957 /* PCRegistRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 33828E3F25E6577C00967957 /* PCRegistRequest.m */; };
 		33828E4425E65CB600967957 /* PCRegistController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33828E4325E65CB600967957 /* PCRegistController.m */; };
@@ -153,6 +164,28 @@
 		334EAE16255BDA8E00B0231C /* PCCommentCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCCommentCell.m; sourceTree = "<group>"; };
 		3358C8A5265F50090000D17F /* PCRandomRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCRandomRequest.h; sourceTree = "<group>"; };
 		3358C8A6265F50090000D17F /* PCRandomRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCRandomRequest.m; sourceTree = "<group>"; };
+		3358C8AA265F6E2F0000D17F /* PCProfileController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCProfileController.h; sourceTree = "<group>"; };
+		3358C8AB265F6E2F0000D17F /* PCProfileController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCProfileController.m; sourceTree = "<group>"; };
+		3358C8AE265F75440000D17F /* PCProfileRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCProfileRequest.h; sourceTree = "<group>"; };
+		3358C8AF265F75440000D17F /* PCProfileRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCProfileRequest.m; sourceTree = "<group>"; };
+		3358C8B2265F79AF0000D17F /* PCProfileHeaderView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCProfileHeaderView.h; sourceTree = "<group>"; };
+		3358C8B3265F79AF0000D17F /* PCProfileHeaderView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCProfileHeaderView.m; sourceTree = "<group>"; };
+		3358C8B5265F88F30000D17F /* PCPunchInRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCPunchInRequest.h; sourceTree = "<group>"; };
+		3358C8B6265F88F30000D17F /* PCPunchInRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCPunchInRequest.m; sourceTree = "<group>"; };
+		3358C8B9265F94970000D17F /* PCAvatarSetRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCAvatarSetRequest.h; sourceTree = "<group>"; };
+		3358C8BA265F94970000D17F /* PCAvatarSetRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCAvatarSetRequest.m; sourceTree = "<group>"; };
+		3358C8BF265FB1DE0000D17F /* PCSloganSetRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCSloganSetRequest.m; sourceTree = "<group>"; };
+		3358C8C0265FB1DE0000D17F /* PCSloganSetRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCSloganSetRequest.h; sourceTree = "<group>"; };
+		3358C8C226608D530000D17F /* PCProfileInfoController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCProfileInfoController.h; sourceTree = "<group>"; };
+		3358C8C326608D530000D17F /* PCProfileInfoController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCProfileInfoController.m; sourceTree = "<group>"; };
+		3358C8C5266090B60000D17F /* PCFavouriteComicsRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCFavouriteComicsRequest.h; sourceTree = "<group>"; };
+		3358C8C6266090B60000D17F /* PCFavouriteComicsRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCFavouriteComicsRequest.m; sourceTree = "<group>"; };
+		3358C8C82660ABCF0000D17F /* PCUserCommentRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCUserCommentRequest.h; sourceTree = "<group>"; };
+		3358C8C92660ABCF0000D17F /* PCUserCommentRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCUserCommentRequest.m; sourceTree = "<group>"; };
+		3358C8CD2660BC9F0000D17F /* PCSettingController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCSettingController.h; sourceTree = "<group>"; };
+		3358C8CE2660BC9F0000D17F /* PCSettingController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCSettingController.m; sourceTree = "<group>"; };
+		3358C8D12660C0050000D17F /* PCPasswordSetRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCPasswordSetRequest.h; sourceTree = "<group>"; };
+		3358C8D22660C0050000D17F /* PCPasswordSetRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCPasswordSetRequest.m; sourceTree = "<group>"; };
 		33669FFD2553E18C00AEC598 /* PCComicsDetailRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCComicsDetailRequest.h; sourceTree = "<group>"; };
 		33669FFE2553E18C00AEC598 /* PCComicsDetailRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCComicsDetailRequest.m; sourceTree = "<group>"; };
 		33828E3E25E6577C00967957 /* PCRegistRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCRegistRequest.h; sourceTree = "<group>"; };
@@ -277,6 +310,82 @@
 			path = Configuration;
 			sourceTree = "<group>";
 		};
+		3358C8A8265F6DEC0000D17F /* User */ = {
+			isa = PBXGroup;
+			children = (
+				3358C8B1265F79990000D17F /* View */,
+				3358C8AD265F75250000D17F /* Request */,
+				3358C8A9265F6E020000D17F /* Controller */,
+			);
+			path = User;
+			sourceTree = "<group>";
+		};
+		3358C8A9265F6E020000D17F /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				3358C8AA265F6E2F0000D17F /* PCProfileController.h */,
+				3358C8AB265F6E2F0000D17F /* PCProfileController.m */,
+				3358C8C226608D530000D17F /* PCProfileInfoController.h */,
+				3358C8C326608D530000D17F /* PCProfileInfoController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		3358C8AD265F75250000D17F /* Request */ = {
+			isa = PBXGroup;
+			children = (
+				3358C8AE265F75440000D17F /* PCProfileRequest.h */,
+				3358C8AF265F75440000D17F /* PCProfileRequest.m */,
+				3358C8B5265F88F30000D17F /* PCPunchInRequest.h */,
+				3358C8B6265F88F30000D17F /* PCPunchInRequest.m */,
+				3358C8B9265F94970000D17F /* PCAvatarSetRequest.h */,
+				3358C8BA265F94970000D17F /* PCAvatarSetRequest.m */,
+				3358C8C0265FB1DE0000D17F /* PCSloganSetRequest.h */,
+				3358C8BF265FB1DE0000D17F /* PCSloganSetRequest.m */,
+				3358C8C5266090B60000D17F /* PCFavouriteComicsRequest.h */,
+				3358C8C6266090B60000D17F /* PCFavouriteComicsRequest.m */,
+				3358C8C82660ABCF0000D17F /* PCUserCommentRequest.h */,
+				3358C8C92660ABCF0000D17F /* PCUserCommentRequest.m */,
+			);
+			path = Request;
+			sourceTree = "<group>";
+		};
+		3358C8B1265F79990000D17F /* View */ = {
+			isa = PBXGroup;
+			children = (
+				3358C8B2265F79AF0000D17F /* PCProfileHeaderView.h */,
+				3358C8B3265F79AF0000D17F /* PCProfileHeaderView.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		3358C8CB2660BC740000D17F /* Setting */ = {
+			isa = PBXGroup;
+			children = (
+				3358C8D02660BFDF0000D17F /* Request */,
+				3358C8CC2660BC8D0000D17F /* Controller */,
+			);
+			path = Setting;
+			sourceTree = "<group>";
+		};
+		3358C8CC2660BC8D0000D17F /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				3358C8CD2660BC9F0000D17F /* PCSettingController.h */,
+				3358C8CE2660BC9F0000D17F /* PCSettingController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		3358C8D02660BFDF0000D17F /* Request */ = {
+			isa = PBXGroup;
+			children = (
+				3358C8D12660C0050000D17F /* PCPasswordSetRequest.h */,
+				3358C8D22660C0050000D17F /* PCPasswordSetRequest.m */,
+			);
+			path = Request;
+			sourceTree = "<group>";
+		};
 		33AD93B9255017160079DFAE = {
 			isa = PBXGroup;
 			children = (
@@ -302,6 +411,8 @@
 				33AD93EF255018FA0079DFAE /* Header */,
 				334EAD8F255A6D6600B0231C /* Resource */,
 				33AD93EE255018EE0079DFAE /* Common */,
+				3358C8CB2660BC740000D17F /* Setting */,
+				3358C8A8265F6DEC0000D17F /* User */,
 				33AD9424255104C30079DFAE /* Category */,
 				33AD93ED255018E60079DFAE /* Login */,
 				33AD93D1255017170079DFAE /* Assets.xcassets */,
@@ -692,11 +803,13 @@
 				3329FE4A265B7AC70054F39B /* PCRankListController.m in Sources */,
 				3329FE44265B58110054F39B /* PCComicsRankRequest.m in Sources */,
 				334EADBC255A77FC00B0231C /* PCUIHelper.m in Sources */,
+				3358C8CF2660BC9F0000D17F /* PCSettingController.m in Sources */,
 				334EAD8D255A616000B0231C /* PCComicsInfoView.m in Sources */,
 				334EADB6255A77B500B0231C /* PCCommonUI.m in Sources */,
 				334EAD9C255A746000B0231C /* NSDate+PCAdd.m in Sources */,
 				334EAE06255BC9A100B0231C /* PCUserInfoView.m in Sources */,
 				33AD941C25501CA60079DFAE /* NSData+PCAdd.m in Sources */,
+				3358C8C7266090B60000D17F /* PCFavouriteComicsRequest.m in Sources */,
 				334EADF0255A93B800B0231C /* PCComicsPictureRequest.m in Sources */,
 				334EADE1255A8D8500B0231C /* PCComicsLikeRequest.m in Sources */,
 				33AD955C25516C120079DFAE /* PCComicsListController.m in Sources */,
@@ -706,6 +819,7 @@
 				33AD941325501C1F0079DFAE /* PCRequest.m in Sources */,
 				334EADD5255A873D00B0231C /* PCEpisode.m in Sources */,
 				33AD9408255019B70079DFAE /* PCTabBarViewController.m in Sources */,
+				3358C8D32660C0050000D17F /* PCPasswordSetRequest.m in Sources */,
 				33AD9438255107C70079DFAE /* PCCategoryController.m in Sources */,
 				334EAE17255BDA8E00B0231C /* PCCommentCell.m in Sources */,
 				33828E4425E65CB600967957 /* PCRegistController.m in Sources */,
@@ -714,6 +828,7 @@
 				334EAE0B255BD11900B0231C /* PCCommentRequest.m in Sources */,
 				3329FE47265B78A90054F39B /* PCComicsRankController.m in Sources */,
 				33AD9564255248EA0079DFAE /* NSDictionary+PCAdd.m in Sources */,
+				3358C8B4265F79AF0000D17F /* PCProfileHeaderView.m in Sources */,
 				334EADD9255A88EB00B0231C /* PCComicsEpisodeView.m in Sources */,
 				334EAD6B25593E7900B0231C /* PCTableViewCell.m in Sources */,
 				33AD93CD255017160079DFAE /* ViewController.m in Sources */,
@@ -722,10 +837,16 @@
 				334EAD6725593BB400B0231C /* PCComics.m in Sources */,
 				33AD93C7255017160079DFAE /* AppDelegate.m in Sources */,
 				33AD942A2551057D0079DFAE /* PCCategoryRequest.m in Sources */,
+				3358C8C1265FB1DE0000D17F /* PCSloganSetRequest.m in Sources */,
+				3358C8C426608D530000D17F /* PCProfileInfoController.m in Sources */,
+				3358C8BB265F94970000D17F /* PCAvatarSetRequest.m in Sources */,
 				334EADDD255A8A8500B0231C /* UIView+PCAdd.m in Sources */,
 				33AD93D8255017170079DFAE /* main.m in Sources */,
+				3358C8B7265F88F30000D17F /* PCPunchInRequest.m in Sources */,
 				33669FFF2553E18C00AEC598 /* PCComicsDetailRequest.m in Sources */,
 				3329FE50265B83F60054F39B /* PCComicsRankCell.m in Sources */,
+				3358C8AC265F6E2F0000D17F /* PCProfileController.m in Sources */,
+				3358C8CA2660ABCF0000D17F /* PCUserCommentRequest.m in Sources */,
 				334EAE0F255BD1AA00B0231C /* PCComicsCommentController.m in Sources */,
 				334EAD89255A545200B0231C /* PCUser.m in Sources */,
 				334EAD85255A522700B0231C /* PCComicsDetailController.m in Sources */,
@@ -736,6 +857,7 @@
 				33AD944F255123D20079DFAE /* PCKeywordCell.m in Sources */,
 				33AD940D255019DC0079DFAE /* PCLoginController.m in Sources */,
 				334EAE13255BD39000B0231C /* PCComment.m in Sources */,
+				3358C8B0265F75440000D17F /* PCProfileRequest.m in Sources */,
 				3329FE4D265B7BAA0054F39B /* PCKnightRankRequest.m in Sources */,
 				334EADF4255A948400B0231C /* PCComicsPictureController.m in Sources */,
 				33AD944125510C430079DFAE /* PCCategoryCell.m in Sources */,
@@ -893,7 +1015,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.0.4;
-				PRODUCT_BUNDLE_IDENTIFIER = com.yuecheng.test;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pica.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -914,7 +1036,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 0.0.4;
-				PRODUCT_BUNDLE_IDENTIFIER = com.yuecheng.test;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pica.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};

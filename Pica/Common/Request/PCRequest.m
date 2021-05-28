@@ -76,7 +76,7 @@
                 if (request.error) {
                     NSDictionary *response = request.responseJSONObject;
                     [request.error qmui_bindObject:response forKey:PC_ERROR_DATA];
-                    [QMUITips showError:response[@"message"] inView:DefaultTipsParentView hideAfterDelay:0.8];
+                    [QMUITips showError:[NSString stringWithFormat:@"error:%@\nmessage:%@", response[@"error"], response[@"message"]] inView:DefaultTipsParentView];
                     if ([response[@"error"] isEqualToString:@"1005"] &&
                         [response[@"message"] isEqualToString:@"unauthorized"] &&
                         [response[@"code"] integerValue] == 401) {
@@ -84,6 +84,9 @@
                             [(AppDelegate *)[UIApplication sharedApplication].delegate setRootViewControllerToLogin];
                         });
                     }
+#if defined(DEBUG)
+                    NSLog(@"\n============ PCRequest Info] ============\nrequest method: %@  from cache: %@\nrequest url: %@\nrequest parameters: \n%@\nrequest error:\n%@\nresponse:\n%@\n==========================================\n", self.methodString, self.isDataFromCache ? @"YES" : @"NO", self.requestUrl, self.requestArgument, self.error, self.response);
+#endif
                 }
             });
         };
@@ -100,11 +103,7 @@
 
 - (void)requestCompletePreprocessor {
 #if defined(DEBUG)
-    if (self.error) {
-        NSLog(@"\n============ PCRequest Info] ============\nrequest method: %@  from cache: %@\nrequest url: %@\nrequest parameters: \n%@\nrequest error:\n%@\nresponse:\n%@\n==========================================\n", self.methodString, self.isDataFromCache ? @"YES" : @"NO", self.requestUrl, self.requestArgument, self.error, self.response);
-    } else {
-        NSLog(@"\n============ [PCRequest Info] ============\nrequest method: %@  from cache: %@\nrequest url: %@\nrequest parameters: \n%@\nrequest response:\n%@\n==========================================\n", self.methodString, self.isDataFromCache ? @"YES" : @"NO", self.requestUrl, self.requestArgument, self.responseJSONObject);
-    }
+    NSLog(@"\n============ [PCRequest Info] ============\nrequest method: %@  from cache: %@\nrequest url: %@\nrequest parameters: \n%@\nrequest response:\n%@\n==========================================\n", self.methodString, self.isDataFromCache ? @"YES" : @"NO", self.requestUrl, self.requestArgument, self.responseJSONObject);
 #endif
 }
 

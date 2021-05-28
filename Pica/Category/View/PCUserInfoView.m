@@ -9,7 +9,8 @@
 #import "PCUserInfoView.h"
 #import "PCVendorHeader.h"
 #import "UIImageView+PCAdd.h"
-
+#import "PCCommonUI.h"
+ 
 @interface PCUserInfoView ()
 
 @property (nonatomic, strong) QMUILabel   *levelLabel;
@@ -96,7 +97,7 @@
         _avatarView.layer.cornerRadius = 40;
         _avatarView.layer.masksToBounds = YES;
         _avatarView.layer.borderWidth = .5;
-        _avatarView.layer.borderColor = UIColorMake(255, 105, 180).CGColor;
+        _avatarView.layer.borderColor = PCColorHotPink.CGColor;
     }
     return _avatarView;
 }
@@ -118,7 +119,7 @@
 
 - (QMUILabel *)titleLabel {
     if (!_titleLabel) {
-        _titleLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(15) textColor:UIColorMake(255, 105, 180)];
+        _titleLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(15) textColor:PCColorHotPink];
         _titleLabel.textAlignment = NSTextAlignmentCenter;
     }
     return _titleLabel;

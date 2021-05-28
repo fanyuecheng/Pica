@@ -6,6 +6,7 @@ PODS:
   - AFNetworking/Reachability (4.0.1)
   - AFNetworking/Security (4.0.1)
   - AFNetworking/Serialization (4.0.1)
+  - JXPagingView/Pager (2.1.0)
   - MJRefresh (3.6.1)
   - QMUIKit (4.2.3):
     - QMUIKit/QMUIComponents (= 4.2.3)
@@ -335,6 +336,7 @@ PODS:
   - YYModel (1.0.4)
 
 DEPENDENCIES:
+  - JXPagingView/Pager (~> 2.1.0)
   - MJRefresh (~> 3.6.1)
   - QMUIKit (~> 4.2.3)
   - SDWebImage (~> 5.11.1)
@@ -344,6 +346,7 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - AFNetworking
+    - JXPagingView
     - MJRefresh
     - QMUIKit
     - SDWebImage
@@ -352,12 +355,13 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
+  JXPagingView: ef48a5a2392252c68db7999de38f4761a2707e2a
   MJRefresh: d2c1970d1cf6e77fcfcdfe76c943dfab8dbfa5c1
   QMUIKit: c047f987b14be9f48df47cb934a2d21ccd7ef4b6
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   YTKNetwork: c16be90b06be003de9e9cd0d3b187cc8eaf35c04
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: a510664ccfce59b6398d530fd7747022541705d9
+PODFILE CHECKSUM: d3d54d65cea877419d2e62227270654abe23aadd
 
 COCOAPODS: 1.10.1

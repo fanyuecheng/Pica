@@ -10,6 +10,7 @@
 #import "PCVendorHeader.h"
 #import "UIImageView+PCAdd.h"
 #import "NSDate+PCAdd.h"
+#import "PCCommonUI.h"
  
 @interface PCCommentCell ()
 
@@ -91,7 +92,7 @@
         _avatarView.layer.cornerRadius = 40;
         _avatarView.layer.masksToBounds = YES;
         _avatarView.layer.borderWidth = .5;
-        _avatarView.layer.borderColor = UIColorMake(255, 105, 180).CGColor;
+        _avatarView.layer.borderColor = PCColorHotPink.CGColor;
     }
     return _avatarView;
 }
@@ -112,7 +113,7 @@
 
 - (QMUILabel *)levelLabel {
     if (!_levelLabel) {
-        _levelLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(12) textColor:UIColorMake(255, 105, 180)];
+        _levelLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(12) textColor:PCColorHotPink];
     }
     return _levelLabel;
 }

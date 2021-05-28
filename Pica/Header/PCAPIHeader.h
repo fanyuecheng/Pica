@@ -36,5 +36,19 @@
 #define PC_API_COMICS_KNIGHT    @"comics/knight-leaderboard"
 //随机本子
 #define PC_API_COMICS_RANDOOM   @"comics/random"
+//个人信息
+#define PC_API_USERS_PROFILE    @"users/profile"
+//签到
+#define PC_API_USERS_PUNCH_IN   @"users/punch-in"
+//头像
+#define PC_API_USERS_AVATAR     @"users/avatar"
+//slogan
+#define PC_API_USERS_SLOGAN     @"users/profile"
+//密码
+#define PC_API_USERS_PASSWORD   @"users/password"
+//我的收藏
+#define PC_API_USERS_FAVOURITE  @"users/favourite?s=%@&page=%@"
+//我的评论
+#define PC_API_USERS_COMMENT    @"users/my-comments?page=%@"
 
 #endif /* PCAPIHeader_h */

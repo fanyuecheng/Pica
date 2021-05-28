@@ -8,7 +8,7 @@
 
 #import "UIImageView+PCAdd.h"
 #import <QMUIKit/QMUIKit.h>
-#import <SDWebImage/SDWebImage.h>
+#import "PCCommonUI.h"
 
 @implementation UIImageView (PCAdd)
 
@@ -24,7 +24,7 @@ static char kAssociatedObjectKey_PC_noFadeAnimation;
 
 - (void)pc_setImageWithURL:(NSString *)url {
     [self pc_setImageWithURL:url
-            placeholderImage:[UIImage qmui_imageWithColor:UIColorMake(255, 192, 203)]
+            placeholderImage:[UIImage qmui_imageWithColor:PCColorPink]
                    completed:nil];
 }
 
@@ -36,7 +36,7 @@ static char kAssociatedObjectKey_PC_noFadeAnimation;
 - (void)pc_setImageWithURL:(NSString *)url
                   completed:(void (^)(UIImage *image, NSError *error))completed {
     [self pc_setImageWithURL:url
-            placeholderImage:[UIImage qmui_imageWithColor:UIColorMake(255, 192, 203)]
+            placeholderImage:[UIImage qmui_imageWithColor:PCColorPink]
                    completed:completed];
 }
 
@@ -53,31 +53,45 @@ static char kAssociatedObjectKey_PC_noFadeAnimation;
           placeholderImage:(UIImage *)placeholderImage
                   progress:(void (^)(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL))progress
                  completed:(void (^)(UIImage *image, NSError *error))completed {
+    [self pc_setImageWithURL:url
+            placeholderImage:placeholderImage
+                     options:0
+                     context:nil
+                    progress:progress
+                   completed:completed];
+}
+
+- (void)pc_setImageWithURL:(NSString *)url
+          placeholderImage:(UIImage *)placeholderImage
+                   options:(SDWebImageOptions)options
+                   context:(nullable SDWebImageContext *)context
+                  progress:(void (^)(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL))progress
+                 completed:(void (^)(UIImage *image, NSError *error))completed {
     NSURL *imageUrl = [NSURL URLWithString:url];
 
     [self sd_setImageWithURL:imageUrl
             placeholderImage:placeholderImage
-                     options:0
+                     options:options
+                     context:context
                     progress:progress
                    completed:^(UIImage * _Nullable image, NSError * _Nullable error, SDImageCacheType cacheType, NSURL * _Nullable imageURL) {
+        if (!image && error && error.code != SDWebImageErrorCancelled) {
+             
+        }
     
-                        if (!image && error && error.code != SDWebImageErrorCancelled) {
-                             
-                        }
-                    
-                        !completed ? : completed(image, error);
-                        if (image && !self.pc_noFadeAnimation) {
-                            BOOL showed = [image qmui_getBoundObjectForKey:@"kFadeAnimation"];
-                            if (!showed) {
-                                CATransition *animation       = [CATransition animation];
-                                animation.duration            = 0.5;
-                                animation.timingFunction      = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-                                animation.type                = kCATransitionFade;
-                                animation.removedOnCompletion = YES;
-                                [self.layer addAnimation:animation forKey:kCATransition];
-                                [image qmui_bindBOOL:YES forKey:@"kFadeAnimation"];
-                            }
-                        }
+        !completed ? : completed(image, error);
+        if (image && !self.pc_noFadeAnimation) {
+            BOOL showed = [image qmui_getBoundObjectForKey:@"kFadeAnimation"];
+            if (!showed) {
+                CATransition *animation       = [CATransition animation];
+                animation.duration            = 0.5;
+                animation.timingFunction      = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
+                animation.type                = kCATransitionFade;
+                animation.removedOnCompletion = YES;
+                [self.layer addAnimation:animation forKey:kCATransition];
+                [image qmui_bindBOOL:YES forKey:@"kFadeAnimation"];
+            }
+        }
     }];
 }
 

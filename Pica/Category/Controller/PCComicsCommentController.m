@@ -82,7 +82,7 @@
 #pragma mark - Net
 - (void)requestComment {
     if (self.request.page == 1) {
-        [self showEmptyView];
+        [self showEmptyViewWithLoading];
     }
     
     [self.request sendRequest:^(PCComicsComment *comment) {

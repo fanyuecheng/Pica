@@ -9,13 +9,13 @@
 #import "PCTabBarViewController.h"
 #import "PCNavigationController.h"
 #import "PCCategoryController.h"
+#import "PCProfileController.h"
 #import "UIImage+PCAdd.h"
  
 @interface PCTabBarViewController ()
 
 @property (nonatomic, strong) PCCategoryController *categoryController;
-@property (nonatomic, strong) PCViewController *meController;
-@property (nonatomic, strong) PCViewController *settingController;
+@property (nonatomic, strong) PCProfileController  *profileController;
 
 @end
 
@@ -35,19 +35,19 @@
                                       selectedImage:[UIImage pc_iconWithText:ICON_MODULAR size:22 color:UIColorBlue]
                                                 tag:0];
      
-    PCNavigationController *me = [[PCNavigationController alloc] initWithRootViewController:self.meController];
+    PCNavigationController *me = [[PCNavigationController alloc] initWithRootViewController:self.profileController];
     me.tabBarItem = [self tabBarItemWithTitle:@"我的"
                                         image:[UIImage pc_iconWithText:ICON_USER size:22 color:UIColorGrayLighten]
                                 selectedImage:[UIImage pc_iconWithText:ICON_USER size:22 color:UIColorBlue]
                                           tag:1];
     
-    PCNavigationController *setting = [[PCNavigationController alloc] initWithRootViewController:self.settingController];
-    setting.tabBarItem = [self tabBarItemWithTitle:@"设置"
-                                             image:[UIImage pc_iconWithText:ICON_SETTING size:22 color:UIColorGrayLighten]
-                                     selectedImage:[UIImage pc_iconWithText:ICON_SETTING size:22 color:UIColorBlue]
-                                               tag:2];
+//    PCNavigationController *setting = [[PCNavigationController alloc] initWithRootViewController:self.settingController];
+//    setting.tabBarItem = [self tabBarItemWithTitle:@"设置"
+//                                             image:[UIImage pc_iconWithText:ICON_SETTING size:22 color:UIColorGrayLighten]
+//                                     selectedImage:[UIImage pc_iconWithText:ICON_SETTING size:22 color:UIColorBlue]
+//                                               tag:2];
      
-    self.viewControllers = @[category, me, setting];
+    self.viewControllers = @[category, me];
 }
 
 #pragma mark - Method
@@ -70,20 +70,12 @@
     return _categoryController;
 }
  
-- (PCViewController *)meController {
-    if (!_meController) {
-        _meController = [[PCViewController alloc] init];
-        _meController.hidesBottomBarWhenPushed = NO;
+- (PCProfileController *)profileController {
+    if (!_profileController) {
+        _profileController = [[PCProfileController alloc] init];
+        _profileController.hidesBottomBarWhenPushed = NO;
     }
-    return _meController;
-}
-
-- (PCViewController *)settingController {
-    if (!_settingController) {
-        _settingController = [[PCViewController alloc] init];
-        _settingController.hidesBottomBarWhenPushed = NO;
-    }
-    return _settingController;
+    return _profileController;
 }
 
 @end
