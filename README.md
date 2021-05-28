@@ -13,7 +13,20 @@ API来自 [picacomic](https://github.com/AnkiKong/picacomic)
 ![4](https://i.loli.net/2021/05/28/lAC6X7T8xvyGuKc.png)  
 
 #### 功能  
-  
+* [x] 登录注册
+* [x] 排行榜
+* [x] 随机本子
+* [x] 分类
+* [x] 搜索
+* [x] 评论列表
+* [x] 上传头像
+* [x] 修改slogan
+* [x] 修改密码
+* [x] 我收藏的本子
+* [x] 我的评论
+* [ ] 评论本子
+* [ ] 下载本子
+* [ ] 浏览历史
 
 #### 免责声明  
 本项目仅供学习&个人使用，版权归原漫画作者及发行商所有。  
