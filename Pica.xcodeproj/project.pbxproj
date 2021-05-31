@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		18A63853EA145CFC6CE2DE1A /* Pods_Pica.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 29E5451C1009385AB025F91F /* Pods_Pica.framework */; };
+		330FA71B2664CFF000C146BE /* PCSearchRecordView.m in Sources */ = {isa = PBXBuildFile; fileRef = 330FA71A2664CFF000C146BE /* PCSearchRecordView.m */; };
 		3329FE44265B58110054F39B /* PCComicsRankRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3329FE43265B58110054F39B /* PCComicsRankRequest.m */; };
 		3329FE47265B78A90054F39B /* PCComicsRankController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3329FE46265B78A90054F39B /* PCComicsRankController.m */; };
 		3329FE4A265B7AC70054F39B /* PCRankListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3329FE49265B7AC70054F39B /* PCRankListController.m */; };
@@ -90,6 +91,8 @@
 /* Begin PBXFileReference section */
 		0A673A4E0F1A1F8811FEF9AC /* Pods-Pica.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pica.release.xcconfig"; path = "Target Support Files/Pods-Pica/Pods-Pica.release.xcconfig"; sourceTree = "<group>"; };
 		29E5451C1009385AB025F91F /* Pods_Pica.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Pica.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		330FA7192664CFF000C146BE /* PCSearchRecordView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCSearchRecordView.h; sourceTree = "<group>"; };
+		330FA71A2664CFF000C146BE /* PCSearchRecordView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCSearchRecordView.m; sourceTree = "<group>"; };
 		3329FE42265B58110054F39B /* PCComicsRankRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCComicsRankRequest.h; sourceTree = "<group>"; };
 		3329FE43265B58110054F39B /* PCComicsRankRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCComicsRankRequest.m; sourceTree = "<group>"; };
 		3329FE45265B78A90054F39B /* PCComicsRankController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCComicsRankController.h; sourceTree = "<group>"; };
@@ -670,6 +673,8 @@
 				3329FE4F265B83F60054F39B /* PCComicsRankCell.m */,
 				3329FE51265B90C40054F39B /* PCKnightRankCell.h */,
 				3329FE52265B90C40054F39B /* PCKnightRankCell.m */,
+				330FA7192664CFF000C146BE /* PCSearchRecordView.h */,
+				330FA71A2664CFF000C146BE /* PCSearchRecordView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -814,6 +819,7 @@
 				334EADE1255A8D8500B0231C /* PCComicsLikeRequest.m in Sources */,
 				33AD955C25516C120079DFAE /* PCComicsListController.m in Sources */,
 				33AD956825524A000079DFAE /* PCSearchRequest.m in Sources */,
+				330FA71B2664CFF000C146BE /* PCSearchRecordView.m in Sources */,
 				334EADB1255A775D00B0231C /* QMUIConfigurationTemplateDefault.m in Sources */,
 				33AD942F255106D80079DFAE /* PCCategory.m in Sources */,
 				33AD941325501C1F0079DFAE /* PCRequest.m in Sources */,
@@ -1014,7 +1020,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.0.5;
+				MARKETING_VERSION = 0.0.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.pica.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1035,7 +1041,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.0.5;
+				MARKETING_VERSION = 0.0.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.pica.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;

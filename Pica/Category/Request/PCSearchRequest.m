@@ -41,7 +41,7 @@
 }
 
 - (NSString *)requestUrl {
-    return PC_API_SEARCH_ADVANCED;
+    return [NSString stringWithFormat:PC_API_SEARCH_ADVANCED, @(self.page)];
 }
 
 - (NSDictionary<NSString *,NSString *> *)requestHeaderFieldValueDictionary {
@@ -53,8 +53,7 @@
 }
  
 - (id)requestArgument {
-    NSMutableDictionary *argument = @{@"page" : @(self.page),
-                                      @"keyword" : self.keyword}.mutableCopy;
+    NSMutableDictionary *argument = @{@"keyword" : self.keyword}.mutableCopy;
     
     if (self.categories) {
         [argument setObject:self.categories forKey:@"categories"];

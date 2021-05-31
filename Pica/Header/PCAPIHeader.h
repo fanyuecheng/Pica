@@ -29,7 +29,7 @@
 //漫画评论
 #define PC_API_COMICS_COMMENTS  @"comics/%@/comments"
 //高级搜索
-#define PC_API_SEARCH_ADVANCED  @"comics/advanced-search"
+#define PC_API_SEARCH_ADVANCED  @"comics/advanced-search?page=%@"
 //漫画排行
 #define PC_API_COMICS_RANK      @"comics/leaderboard"
 //骑士排行

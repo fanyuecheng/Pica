@@ -16,6 +16,7 @@
 #import "PCComicsRankController.h"
 #import "PCSearchRequest.h"
 #import "PCIconHeader.h"
+#import "PCSearchRecordView.h"
 #import <SafariServices/SafariServices.h>
 
 @interface PCCategoryController () <UICollectionViewDelegate, UICollectionViewDataSource, QMUITextFieldDelegate>
@@ -23,6 +24,7 @@
 @property (nonatomic, copy)   NSArray <NSString *>   *keywordArray;
 @property (nonatomic, copy)   NSArray <PCCategory *> *categoryArray;
 
+@property (nonatomic, strong) PCSearchRecordView *recordView;
 @property (nonatomic, strong) UICollectionView *collectionView;
 @property (nonatomic, strong) QMUITextField    *textField;
 
@@ -59,6 +61,9 @@
     [super viewDidLayoutSubviews];
     
     self.collectionView.frame = CGRectMake(0, self.qmui_navigationBarMaxYInViewCoordinator, SCREEN_WIDTH, SCREEN_HEIGHT - self.qmui_navigationBarMaxYInViewCoordinator - self.qmui_tabBarSpacingInViewCoordinator);
+    if (self.recordView.superview) {
+        self.recordView.frame = CGRectMake(0, self.qmui_navigationBarMaxYInViewCoordinator, SCREEN_WIDTH, SCREEN_HEIGHT - self.qmui_navigationBarMaxYInViewCoordinator - [QMUIKeyboardManager visibleKeyboardHeight]);
+    }
 }
 
 #pragma mark - Request
@@ -174,8 +179,21 @@
         PCComicsListController *list = [[PCComicsListController alloc] initWithType:PCComicsListTypeSearch];
         list.keyword = textField.text;
         [self.navigationController pushViewController:list animated:YES];
+        [self.recordView saveSearchKey:textField.text];
     }
     return YES;
+}
+
+- (void)textFieldDidBeginEditing:(UITextField *)textField {
+    if (self.recordView.recordCount) {
+        [self.view addSubview:self.recordView];
+    }
+}
+
+- (void)textFieldDidEndEditing:(UITextField *)textField {
+    if (self.recordView.superview) {
+        [self.recordView removeFromSuperview];
+    }
 }
 
 #pragma mark - Set
@@ -228,6 +246,13 @@
         _textField.delegate = self;
     }
     return _textField;
+}
+
+- (PCSearchRecordView *)recordView {
+    if (!_recordView) {
+        _recordView = [[PCSearchRecordView alloc] init];
+    }
+    return _recordView;
 }
 
 @end
