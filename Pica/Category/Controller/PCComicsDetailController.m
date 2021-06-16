@@ -16,7 +16,8 @@
 
 @property (nonatomic, copy)   NSString *comicsId;
 @property (nonatomic, strong) PCComics *comics;
-@property (nonatomic, strong) PCComicsEpisode *episode;
+@property (nonatomic, strong) PCComicsEpisodeRequest *episodeRequest;
+@property (nonatomic, strong) NSMutableArray <PCComicsEpisode *> *episodeArray;
  
 @end
 
@@ -36,6 +37,24 @@
     [self requestComicsEpisode];
 }
 
+- (void)initTableView {
+    [super initTableView];
+    
+    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"UITableViewCell"];
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    @weakify(self)
+    self.tableView.mj_footer = [MJRefreshBackStateFooter footerWithRefreshingBlock:^{
+        @strongify(self)
+        PCComicsEpisode *episode = self.episodeArray.firstObject;
+        if (self.episodeRequest.page < episode.pages) {
+            self.episodeRequest.page ++;
+            [self requestComicsEpisode];
+        } else {
+            [self.tableView.mj_footer endRefreshingWithNoMoreData];
+        }
+    }];
+}
+
 #pragma mark - Net
 - (void)requestComicsDetail {
     [self showEmptyViewWithLoading];
@@ -51,14 +70,46 @@
 }
 
 - (void)requestComicsEpisode {
-    PCComicsEpisodeRequest *request = [[PCComicsEpisodeRequest alloc] initWithComicsId:self.comicsId];
-    
-    [request sendRequest:^(PCComicsEpisode *episode) {
+    [self.episodeRequest sendRequest:^(PCComicsEpisode *episode) {
         [self hideEmptyView];
-        self.episode = episode;
+        [self.episodeArray addObject:episode];
+        [self.tableView reloadData];
+        [self.tableView.mj_footer endRefreshing];
     } failure:^(NSError * _Nonnull error) {
         [self showEmptyViewWithText:@"网络错误" detailText:nil buttonTitle:@"重新请求" buttonAction:@selector(requestComicsEpisode)];
     }];
+}
+
+#pragma mark - TableView
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
+    return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    return self.episodeArray.count;
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"UITableViewCell" forIndexPath:indexPath];
+    
+    PCComicsEpisodeView *episodeView = [cell.contentView viewWithTag:1000];
+    if (!episodeView) {
+        episodeView = [[PCComicsEpisodeView alloc] init];
+        episodeView.tag = 1000;
+        [cell.contentView addSubview:episodeView];
+    }
+    episodeView.episode = self.episodeArray[indexPath.row];
+    episodeView.frame = CGRectMake(0, 0, SCREEN_WIDTH, QMUIViewSelfSizingHeight);
+    
+    
+    return cell;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    PCComicsEpisodeView *episodeView = [[PCComicsEpisodeView alloc] init];
+    episodeView.episode = self.episodeArray[indexPath.row];
+    
+    return [episodeView sizeThatFits:CGSizeMake(SCREEN_WIDTH, CGFLOAT_MAX)].height;
 }
 
 #pragma mark - Method
@@ -72,16 +123,20 @@
     
     return header;
 }
+ 
+#pragma mark - Get
+- (NSMutableArray<PCComicsEpisode *> *)episodeArray {
+    if (!_episodeArray) {
+        _episodeArray = [NSMutableArray array];
+    }
+    return _episodeArray;
+}
 
-- (UIView *)tableFooterView {
-    PCComicsEpisodeView *episodeView = [[PCComicsEpisodeView alloc] init];
-    episodeView.episode = self.episode;
-    episodeView.frame = CGRectMake(0, 0, SCREEN_WIDTH, QMUIViewSelfSizingHeight);
-    
-    UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, episodeView.qmui_bottom + 44)];
-    [footer addSubview:episodeView];
-    
-    return footer;
+- (PCComicsEpisodeRequest *)episodeRequest {
+    if (!_episodeRequest) {
+        _episodeRequest = [[PCComicsEpisodeRequest alloc] initWithComicsId:self.comicsId];
+    }
+    return _episodeRequest;
 }
 
 #pragma mark - Set
@@ -90,11 +145,6 @@
     
     self.title = comics.title;
     self.tableView.tableHeaderView = [self tableHeaderView]; 
-}
- 
-- (void)setEpisode:(PCComicsEpisode *)episode {
-    _episode = episode;
-    self.tableView.tableFooterView = [self tableFooterView];
 }
 
 @end

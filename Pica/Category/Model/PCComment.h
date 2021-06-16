@@ -57,6 +57,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) NSInteger commentsCount;
 @property (nonatomic, assign) NSInteger likesCount;
 
+//custom
+@property (nonatomic, assign) BOOL     isChild;
+
 @end
 
 @interface PCComicsComment : NSObject

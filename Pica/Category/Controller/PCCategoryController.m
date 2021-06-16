@@ -14,6 +14,7 @@
 #import "NSString+PCAdd.h"
 #import "PCComicsListController.h"
 #import "PCComicsRankController.h"
+#import "PCComicsCommentController.h"
 #import "PCSearchRequest.h"
 #import "PCIconHeader.h"
 #import "PCSearchRecordView.h"
@@ -85,6 +86,7 @@
         NSMutableArray *categoryArray = [NSMutableArray array];
         [categoryArray addObject:[PCCategory rankCategory]];
         [categoryArray addObject:[PCCategory randomCategory]];
+        [categoryArray addObject:[PCCategory commentCategory]];
         [categoryArray addObjectsFromArray:responseArray];
         self.categoryArray = categoryArray;
     } failure:^(NSError * _Nonnull error) {
@@ -160,7 +162,13 @@
             [self presentViewController:safari animated:YES completion:nil];
             return;
         } else if (category.isCustom) {
-            controller = [[NSClassFromString(category.controllerClass) alloc] init];
+            if ([category.controllerClass isEqualToString:@"PCComicsRankController"] ||
+                [category.controllerClass isEqualToString:@"PCComicsListController"]) {
+                controller = [[NSClassFromString(category.controllerClass) alloc] init];
+            } else if ([category.controllerClass isEqualToString:@"PCComicsCommentController"]) {
+                PCComicsCommentController *comment = [[PCComicsCommentController alloc] initWithComicsId:PC_COMMENT_BOARD_ID];
+                controller = comment;
+            }
         } else {
             PCComicsListController *list = [[PCComicsListController alloc] initWithType:PCComicsListTypeCategory];
             list.keyword = category.title;

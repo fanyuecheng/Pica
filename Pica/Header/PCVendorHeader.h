@@ -14,5 +14,6 @@
 #import <SDWebImage/SDWebImage.h>
 #import <YTKNetwork/YTKNetwork.h>
 #import <JXPagingView/JXPagerView.h>
+#import <SocketRocket/SocketRocket.h>
 
 #endif /* PCVendorHeader_h */

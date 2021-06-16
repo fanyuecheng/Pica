@@ -10,9 +10,19 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+#define PC_COMMENT_BOARD_ID @"5822a6e3ad7ede654696e482"
+
+typedef NS_ENUM(NSUInteger, PCComicsCommentType) {
+    PCComicsCommentTypeMain,
+    PCComicsCommentTypeChild
+};
+
 @interface PCComicsCommentController : PCTableViewController
 
+@property (nonatomic, assign, readonly) PCComicsCommentType type;
+
 - (instancetype)initWithComicsId:(NSString *)comicsId;
+- (instancetype)initWithCommentId:(NSString *)commentId;
 
 @end
 

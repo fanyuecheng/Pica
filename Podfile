@@ -13,5 +13,6 @@ target 'Pica' do
     pod 'QMUIKit', '~> 4.2.3'  
     pod 'MJRefresh', '~> 3.6.1'
     pod 'JXPagingView/Pager', '~> 2.1.0'
+    pod 'SocketRocket', '~> 0.5.1'
 
 end

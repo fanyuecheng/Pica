@@ -11,8 +11,6 @@
 
 @interface PCComicsEpisodeRequest ()
 
-@property (nonatomic, assign) NSInteger page;
-
 @end
 
 @implementation PCComicsEpisodeRequest

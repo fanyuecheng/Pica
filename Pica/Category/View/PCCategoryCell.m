@@ -16,14 +16,25 @@
 
 @property (nonatomic, strong) SDAnimatedImageView *imageView;
 @property (nonatomic, strong) QMUILabel           *titleLabel;
+@property (nonatomic, strong) QMUILabel           *iconLabel;
 
 @end
 
 @implementation PCCategoryCell
 
+- (void)prepareForReuse {
+    [super prepareForReuse];
+    
+    [self.imageView sd_cancelCurrentImageLoad];
+    self.imageView.image = nil;
+    self.titleLabel.text = nil;
+    self.iconLabel.text = nil;
+}
+
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         [self.contentView addSubview:self.imageView];
+        [self.contentView addSubview:self.iconLabel];
         [self.contentView addSubview:self.titleLabel];
     }
     return self;
@@ -33,6 +44,7 @@
     [super layoutSubviews];
     
     self.imageView.frame = CGRectMake(0, 0, self.contentView.qmui_width, self.contentView.qmui_width);
+    self.iconLabel.frame = CGRectMake(0, 0, self.contentView.qmui_width, self.contentView.qmui_width);
     self.titleLabel.frame = CGRectMake(0, self.contentView.qmui_width, self.contentView.qmui_width, 20);
 }
 
@@ -41,12 +53,11 @@
     _category = category;
      
     if (category.thumb) {
+        self.iconLabel.text = nil;
         [self.imageView pc_setImageWithURL:category.thumb.imageURL];
     } else {
-        CGFloat itemWidth = floorf((SCREEN_WIDTH - 40) / 3);
-        NSMutableParagraphStyle *style = [[NSMutableParagraphStyle alloc] init];
-        style.alignment = NSTextAlignmentCenter;
-        self.imageView.image = [UIImage pc_imageWithString:category.title attributes:@{NSFontAttributeName:UIFontBoldMake(18), NSForegroundColorAttributeName:PCColorHotPink,      NSParagraphStyleAttributeName:style} size:CGSizeMake(itemWidth, itemWidth)];
+        self.iconLabel.text = category.desc;
+        self.imageView.image = nil;
     }
     
     self.titleLabel.text = category.title;
@@ -70,6 +81,14 @@
         _titleLabel.textAlignment = NSTextAlignmentCenter;
     }
     return _titleLabel;
+}
+
+- (QMUILabel *)iconLabel {
+    if (!_iconLabel) {
+        _iconLabel = [[QMUILabel alloc] qmui_initWithFont:[UIFont fontWithName:@"iconfont" size:45] textColor:PCColorPink];
+        _iconLabel.textAlignment = NSTextAlignmentCenter;
+    }
+    return _iconLabel;
 }
 
 @end

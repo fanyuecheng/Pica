@@ -8,7 +8,8 @@
 
 #import "NSString+PCAdd.h"
 #import "NSData+PCAdd.h"
- 
+#import <QMUIKit/UIImage+QMUI.h>
+
 @implementation NSString (PCAdd)
 
 - (NSString *)pc_hmacSHA256StringWithKey:(NSString *)key {
@@ -46,4 +47,15 @@
     return size.height;
 }
  
+- (UIImage *)pc_imageWithTextColor:(UIColor *)color
+                              font:(UIFont *)font {
+    UILabel *label = [[UILabel alloc] init];
+    label.text = self;
+    label.textColor = color;
+    label.font = font;
+    [label sizeToFit];
+    
+    return [UIImage qmui_imageWithView:label];
+}
+
 @end

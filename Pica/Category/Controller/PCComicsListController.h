@@ -13,8 +13,9 @@ NS_ASSUME_NONNULL_BEGIN
 typedef NS_ENUM(NSUInteger, PCComicsListType) {
     PCComicsListTypeRandom,
     PCComicsListTypeSearch,
+    PCComicsListTypeHistory,
     PCComicsListTypeCategory,
-    PCComicsListTypeFavourite,
+    PCComicsListTypeFavourite
 };
 
 @interface PCComicsListController : PCTableViewController

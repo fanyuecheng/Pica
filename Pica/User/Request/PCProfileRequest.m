@@ -19,6 +19,7 @@
     [self startWithCompletionBlockWithSuccess:^(__kindof YTKBaseRequest * _Nonnull request) {
         PCUser *user = [PCUser yy_modelWithJSON:request.responseObject[@"data"][@"user"]];
         !success ? : success(user);
+        [[NSUserDefaults standardUserDefaults] setObject:request.responseObject[@"data"][@"user"] forKey:PC_LOCAL_USER];
     } failure:^(__kindof YTKBaseRequest * _Nonnull request) {
         !failure ? : failure(request.error);
     }];

@@ -9,6 +9,7 @@
 #import "PCComicsPictureController.h"
 #import "PCComicsPictureRequest.h"
 #import "PCPictureCell.h"
+#import "PCEpisode.h"
 
 #define PC_READ_DIRECTION  @"PC_READ_DIRECTION"
 
@@ -25,12 +26,13 @@
 
 @implementation PCComicsPictureController
 
-- (instancetype)initWithComicsId:(NSString *)comicsId
-                           order:(NSInteger)order {
+- (void)dealloc {
+    [[SDImageCache sharedImageCache] clearMemory];
+}
+
+- (instancetype)initWithComicsId:(NSString *)comicsId {
     if (self = [super init]) {
         _comicsId = [comicsId copy];
-        _order = order;
-        _pictureArray = [NSMutableArray array];
         _navigationBarHidden = YES;
     }
     return self;
@@ -40,6 +42,16 @@
     [super viewDidLoad];
      
     [self requestPicture];
+}
+
+- (void)setupToolbarItems {
+    [super setupToolbarItems];
+    
+    UIBarButtonItem *flexibleItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:NULL];
+    
+    UIBarButtonItem *item1 = [QMUIToolbarButton barButtonItemWithType:QMUIToolbarButtonTypeNormal title:@"上一话" target:self action:@selector(lastEpisode:)];
+    UIBarButtonItem *item2 = [QMUIToolbarButton barButtonItemWithType:QMUIToolbarButtonTypeNormal title:@"下一话" target:self action:@selector(nextEpisode:)];
+    self.toolbarItems = @[item1, flexibleItem, item2];
 }
 
 - (void)setupNavigationItems {
@@ -92,6 +104,37 @@
     }];
 }
 
+#pragma mark - Action
+- (void)lastEpisode:(id)sender {
+    self.index --;
+    if (self.index < 0) {
+        self.index ++;
+        [QMUITips showInfo:@"已经是最后一话啦"];
+        return;
+    }
+    
+    [self requestNewEpisode];
+}
+ 
+- (void)nextEpisode:(id)sender {
+    self.index ++;
+    if (self.index >= self.episodeArray.count) {
+        self.index --;
+        [QMUITips showInfo:@"已经是最新话啦"];
+        return;
+    }
+    
+    [self requestNewEpisode];
+}
+
+- (void)requestNewEpisode {
+    self.request = nil;
+    [self.pictureArray removeAllObjects];
+    [self.collectionView reloadData];
+    [self.collectionView qmui_scrollToTop];
+    [self requestPicture];
+}
+
 #pragma mark - CollectionView
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     return self.pictureArray.count;
@@ -110,7 +153,7 @@
     cell.loadBlock = ^(PCPicture * _Nonnull picture) {
         NSIndexPath *reloadIndexPath = [NSIndexPath indexPathForItem:[pictureArray indexOfObject:picture] inSection:indexPath.section];
         if ([self.navigationController.viewControllers containsObject:self]) {
-            [collectionView reloadItemsAtIndexPaths:@[reloadIndexPath]];
+            [collectionView reloadItemsAtIndexPaths:@[reloadIndexPath]]; 
         }
     };
     
@@ -119,6 +162,9 @@
         @strongify(self)
         self.navigationBarHidden = !self.navigationBarHidden;
         [self.navigationController setNavigationBarHidden:self.navigationBarHidden animated:YES];
+        if (self.episodeArray.count > 1) {
+            [self.navigationController setToolbarHidden:self.navigationBarHidden animated:YES];
+        }
         [self setNeedsStatusBarAppearanceUpdate];
     };
     
@@ -143,15 +189,16 @@
         self.onRequest == NO) {
         self.request.page ++;
         [self requestPicture];
-        NSLog(@"新加一页");
     }
 }
-
-
+ 
 #pragma mark - Get
 - (PCComicsPictureRequest *)request {
     if (!_request) {
-        _request = [[PCComicsPictureRequest alloc] initWithComicsId:self.comicsId order:self.order];
+        if (self.episodeArray) {
+            PCEpisode *ep = self.episodeArray[self.index];
+            _request = [[PCComicsPictureRequest alloc] initWithComicsId:self.comicsId order:ep.order];
+        }
     }
     return _request;
 }
@@ -179,6 +226,14 @@
     return _collectionView;
 }
 
+- (NSMutableArray<PCEpisodePicture *> *)pictureArray {
+    if (!_pictureArray) {
+        _pictureArray = [NSMutableArray array];
+    }
+    return _pictureArray;
+}
+
+#pragma mark - NavigationBar
 - (BOOL)prefersStatusBarHidden {
     return self.navigationBarHidden;
 }
@@ -189,6 +244,12 @@
 
 - (BOOL)forceEnableInteractivePopGestureRecognizer {
     return YES;
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    
+    [[SDImageCache sharedImageCache] clearMemory];
 }
 
 @end

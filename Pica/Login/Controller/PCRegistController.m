@@ -110,16 +110,16 @@
     NSString *answer2 = self.answer2.text;
     NSString *answer3 = self.answer3.text;
     
-    if (!name.length) {
-        [QMUITips showError:@"请输入昵称"];
+    if (name.length < 2 || name.length > 50) {
+        [QMUITips showError:@"请输入正确昵称（2-50字）"];
         return;
     }
-    if (!email.length) {
-        [QMUITips showError:@"请输入ID"];
+    if (email.length < 2 || name.length > 30) {
+        [QMUITips showError:@"请输入正确ID（0-9，a-z，2-30字）"];
         return;
     }
-    if (!password.length) {
-        [QMUITips showError:@"请输入密码"];
+    if (password.length < 8) {
+        [QMUITips showError:@"请输入正确密码（8字以上）"];
         return;
     }
     if ([birthday isEqualToString:@"生日"]) {
@@ -323,7 +323,6 @@
         };
         if (@available(iOS 13.4, *)) {
             _datePicker.preferredDatePickerStyle = UIDatePickerStyleWheels;
-            _datePicker.datePickerMode = UIDatePickerStyleWheels;
         }
     }
     return _datePicker;

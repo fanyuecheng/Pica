@@ -1,5 +1,5 @@
 //
-//  PCCommentRequest.h
+//  PCCommentMainRequest.h
 //  Pica
 //
 //  Created by fancy on 2020/11/11.
@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface PCCommentRequest : PCRequest
+@interface PCCommentMainRequest : PCRequest
 
 @property (nonatomic, copy)   NSString  *comicsId;
 @property (nonatomic, assign) NSInteger page;

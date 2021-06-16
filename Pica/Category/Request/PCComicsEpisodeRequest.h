@@ -13,7 +13,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PCComicsEpisodeRequest : PCRequest
 
-@property (nonatomic, copy) NSString *comicsId;
+@property (nonatomic, copy)   NSString *comicsId;
+@property (nonatomic, assign) NSInteger page;
+
 - (instancetype)initWithComicsId:(NSString *)comicsId;
 
 @end

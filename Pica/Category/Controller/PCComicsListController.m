@@ -13,6 +13,7 @@
 #import "PCFavouriteComicsRequest.h"
 #import "PCComicsListCell.h"
 #import "PCComicsDetailController.h"
+#import "PCDatabase.h"
 
 @interface PCComicsListController ()
 
@@ -40,8 +41,8 @@
     [self requestComics];
     
     switch (self.type) {
-        case PCComicsListTypeRandom:
-            
+        case PCComicsListTypeHistory:
+            self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(deleteAction:)];
             break;
         default:
             self.navigationItem.rightBarButtonItem = [UIBarButtonItem qmui_itemWithTitle:@"新到旧" target:self action:@selector(sortAction:)];
@@ -53,6 +54,9 @@
     [super setupNavigationItems];
     
     switch (self.type) {
+        case PCComicsListTypeHistory:
+            self.title = @"浏览历史";
+            break;
         case PCComicsListTypeRandom:
             self.title = @"随机本子";
             break;
@@ -100,6 +104,26 @@
 }
  
 #pragma mark - Action
+- (void)deleteAction:(id)sender {
+    if (self.comicsArray.firstObject.docs.count == 0) {
+        return;
+    }
+    QMUIAlertAction *action1 = [QMUIAlertAction actionWithTitle:@"确定" style:QMUIAlertActionStyleDefault handler:^(__kindof QMUIAlertController *aAlertController, QMUIAlertAction *action) {
+        [[PCDatabase sharedInstance] clearAllComic];
+        self.comicsArray.firstObject.docs = @[];
+        [self.tableView reloadData];
+        [self showEmptyViewWithText:@"没有任何本子" detailText:nil buttonTitle:nil buttonAction:NULL];
+    }];
+    
+    QMUIAlertAction *action2 = [QMUIAlertAction actionWithTitle:@"取消" style:QMUIAlertActionStyleCancel handler:nil];
+    
+    QMUIAlertController *alertController = [QMUIAlertController alertControllerWithTitle:@"确认清除浏览记录?" message:nil preferredStyle:QMUIAlertControllerStyleAlert];
+    
+    [alertController addAction:action1];
+    [alertController addAction:action2];
+    [alertController showWithAnimated:YES];
+}
+
 - (void)sortAction:(id)sender {
     NSDictionary *sorts = @{ @"新到旧" : @"dd",
                              @"旧到新" : @"da",
@@ -156,6 +180,9 @@
 #pragma mark - Net
 - (void)requestComics {
     switch (self.type) {
+        case PCComicsListTypeHistory:
+            [self requestHistoryComics];
+            break;
         case PCComicsListTypeRandom:
             [self requestRandomComics];
             break;
@@ -171,6 +198,15 @@
         default:
             break;
     }
+}
+
+- (void)requestHistoryComics {
+    PCComicsList *list = [[PCComicsList alloc] init];
+    list.page = 1;
+    list.pages = 1;
+    list.docs = [[PCDatabase sharedInstance] allComic];
+    list.total = list.docs.count;
+    [self requestFinishedWithList:list];
 }
 
 - (void)requestFavouriteComics {
@@ -239,6 +275,9 @@
     [self.tableView.mj_footer endRefreshing];
     [self.comicsArray addObject:list];
     [self.tableView reloadData];
+    if (list.page == 1 && list.docs.count == 0) {
+        [self showEmptyViewWithText:@"没有任何本子" detailText:nil buttonTitle:nil buttonAction:NULL];
+    }
 }
 
 - (void)requestFinishedWithError:(NSError *)error {
@@ -283,6 +322,7 @@
     
     PCComicsDetailController *detail = [[PCComicsDetailController alloc] initWithComicsId:comics.comicsId];
     [self.navigationController pushViewController:detail animated:YES];
+    [[PCDatabase sharedInstance] saveComic:comics];
 }
 
 #pragma mark - Get

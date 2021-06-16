@@ -7,6 +7,7 @@
 //
 
 #import "PCLoginRequest.h"
+#import "PCUser.h"
 
 @implementation PCLoginRequest
 
@@ -27,6 +28,7 @@
         NSString *token = request.responseJSONObject[@"data"][@"token"];
         [[NSUserDefaults standardUserDefaults] setObject:token forKey:PC_AUTHORIZATION_TOKEN];
         !success ? : success(token);
+        [PCUser requsetMyself:nil];
     } failure:^(__kindof YTKBaseRequest * _Nonnull request) {
         !failure ? : failure(request.error);
     }];

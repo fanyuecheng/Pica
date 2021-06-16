@@ -41,19 +41,15 @@
     if (self.window.rootViewController != self.loginController) {
         [UIView transitionFromView:self.window.rootViewController.view toView:self.loginController.view duration:0.65f options:UIViewAnimationOptionTransitionFlipFromRight completion:^(BOOL finished) {
             [self.window setRootViewController:self.loginController];
-            self.tabBarController   = nil;
+            self.tabBarController = nil;
         }];
     }
 }
 
 - (void)setRootViewControllerToTab {
     if (self.window.rootViewController != self.tabBarController) {
-        UIView *currentView = [QMUIHelper visibleViewController].view;
-        
-        [UIView transitionFromView:currentView toView:self.tabBarController.view duration:0.65f options:UIViewAnimationOptionTransitionFlipFromRight completion:^(BOOL finished) {
-            [self.window setRootViewController:self.tabBarController];
-            self.loginController = nil; 
-        }];
+        [self.window setRootViewController:self.tabBarController];
+        self.loginController = nil; 
     }
 }
 

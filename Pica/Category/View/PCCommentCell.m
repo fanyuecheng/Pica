@@ -10,7 +10,10 @@
 #import "PCVendorHeader.h"
 #import "UIImageView+PCAdd.h"
 #import "NSDate+PCAdd.h"
+#import "NSString+PCAdd.h"
 #import "PCCommonUI.h"
+#import "PCCommentLikeRequest.h"
+#import "PCComicsCommentController.h"
  
 @interface PCCommentCell ()
 
@@ -21,8 +24,11 @@
 @property (nonatomic, strong) QMUILabel   *titleLabel;
 @property (nonatomic, strong) QMUILabel   *contentLabel;
 @property (nonatomic, strong) QMUILabel   *timeLabel;
-@property (nonatomic, strong) QMUILabel   *likeLabel;
-@property (nonatomic, strong) QMUILabel   *countLabel;
+@property (nonatomic, strong) QMUIButton  *likeButton;
+@property (nonatomic, strong) QMUIButton  *childButton;
+@property (nonatomic, strong) QMUILabel   *topLabel;
+
+@property (nonatomic, strong) PCCommentLikeRequest *likeRequest;
 
 @end
 
@@ -37,8 +43,9 @@
         [self.contentView addSubview:self.titleLabel];
         [self.contentView addSubview:self.contentLabel];
         [self.contentView addSubview:self.timeLabel];
-        [self.contentView addSubview:self.likeLabel];
-        [self.contentView addSubview:self.countLabel];
+        [self.contentView addSubview:self.likeButton];
+        [self.contentView addSubview:self.childButton];
+        [self.contentView addSubview:self.topLabel];
     }
     return self;
 }
@@ -46,6 +53,7 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     
+    self.topLabel.frame = CGRectMake(self.qmui_width - 50, 0, 50, 20);
     self.avatarView.frame = CGRectMake(15, 20, 80, 80);
     self.characterView.frame = CGRectMake(5, 10, 100, 100);
     [self.nameLabel sizeToFit];
@@ -57,10 +65,14 @@
     self.contentLabel.frame = CGRectMake(110, 80, SCREEN_WIDTH - 125, QMUIViewSelfSizingHeight);
     [self.timeLabel sizeToFit];
     self.timeLabel.frame = CGRectSetXY(self.timeLabel.bounds, 15, self.qmui_height -  self.timeLabel.qmui_height - 10);
-    [self.countLabel sizeToFit];
-    self.countLabel.frame = CGRectSetXY(self.countLabel.bounds, SCREEN_WIDTH - self.countLabel.qmui_width - 15, self.qmui_height - self.countLabel.qmui_height - 10);
-    [self.likeLabel sizeToFit];
-    self.likeLabel.frame = CGRectSetXY(self.likeLabel.bounds, self.countLabel.qmui_left - self.likeLabel.qmui_width - 10, self.countLabel.qmui_top);
+    [self.childButton sizeToFit];
+    if (self.comment.isChild) {
+        self.childButton.frame = CGRectMake(self.qmui_width - 10, self.qmui_height - self.childButton.qmui_height - 10, 0, 0);
+    } else {
+        self.childButton.frame = CGRectSetXY(self.childButton.bounds, SCREEN_WIDTH - self.childButton.qmui_width - 15, self.qmui_height - self.childButton.qmui_height - 10);
+    }
+    [self.likeButton sizeToFit];
+    self.likeButton.frame = CGRectSetXY(self.likeButton.bounds, self.childButton.qmui_left - self.likeButton.qmui_width - 10, self.childButton.qmui_top);
 }
 
 - (void)setComment:(PCComment *)comment {
@@ -73,16 +85,39 @@
     self.nameLabel.text = comment.user.name;
     self.titleLabel.text = comment.user.title;
     self.levelLabel.text = [NSString stringWithFormat:@"Lv.%@", @(comment.user.level)];
-    self.contentLabel.text = comment.content;
+    self.contentLabel.text = [comment.content qmui_trim];
     self.timeLabel.text = [comment.created_at pc_stringWithFormat:@"yyyy年MM月dd日"];
-    self.likeLabel.text = [NSString stringWithFormat:@"❤ %@", @(comment.likesCount)];
-    self.countLabel.text = [NSString stringWithFormat:@"子评论 %@", @(comment.commentsCount)];
+    [self.likeButton setTitle:[@(comment.likesCount) stringValue] forState:UIControlStateNormal];
+    self.likeButton.selected = comment.isLiked;
+    [self.childButton setTitle:[NSString stringWithFormat:@"子评论 %@", @(comment.commentsCount)] forState:UIControlStateNormal];
+    self.topLabel.hidden = !comment.isTop;
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
     CGFloat height = 0;
     height += 110 + [self.contentLabel sizeThatFits:CGSizeMake(SCREEN_WIDTH - 125, CGFLOAT_MAX)].height + 20;
     return CGSizeMake(SCREEN_WIDTH, height);
+}
+
+#pragma mark - Action
+- (void)likeAction:(QMUIButton *)sender {
+    [self.likeRequest sendRequest:^(NSNumber *isLike) {
+        sender.selected = [isLike boolValue];
+        [QMUITips showSucceed:[isLike boolValue] ? @"已点赞" : @"点赞取消"];
+        [isLike boolValue] ? self.comment.likesCount ++ : self.comment.likesCount --;
+        [sender setTitle:[@(self.comment.likesCount) stringValue] forState:UIControlStateNormal];
+        [sender sizeToFit];
+        sender.frame = CGRectSetX(sender.frame, self.childButton.qmui_left - self.likeButton.qmui_width - 10);
+    } failure:^(NSError * _Nonnull error) {
+        
+    }];
+}
+ 
+- (void)childAction:(QMUIButton *)sender {
+    if (self.comment) {
+        PCComicsCommentController *comment = [[PCComicsCommentController alloc] initWithCommentId:self.comment.commentId];
+        [[QMUIHelper visibleViewController].navigationController pushViewController:comment animated:YES];
+    }
 }
 
 #pragma mark - Get
@@ -144,18 +179,52 @@
     return _timeLabel;
 }
 
-- (QMUILabel *)likeLabel {
-    if (!_likeLabel) {
-        _likeLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(12) textColor:UIColorGray];
+- (QMUIButton *)likeButton {
+    if (!_likeButton) {
+        _likeButton = [[QMUIButton alloc] init];
+        _likeButton.qmui_outsideEdge = UIEdgeInsetsMake(-10, 0, -10, 0);
+        _likeButton.spacingBetweenImageAndTitle = 5;
+        [_likeButton setImage:[@"🖤" pc_imageWithTextColor:UIColorWhite font:UIFontMake(12)] forState:UIControlStateNormal];
+        [_likeButton setImage:[@"❤️" pc_imageWithTextColor:UIColorWhite font:UIFontMake(12)] forState:UIControlStateSelected];
+        _likeButton.titleLabel.font = UIFontMake(12);
+        [_likeButton setTitleColor:UIColorGray forState:UIControlStateNormal];
+        [_likeButton addTarget:self action:@selector(likeAction:) forControlEvents:UIControlEventTouchUpInside];
     }
-    return _likeLabel;
+    return _likeButton;
 }
 
-- (QMUILabel *)countLabel {
-    if (!_countLabel) {
-        _countLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(12) textColor:UIColorGray];
+- (QMUIButton *)childButton {
+    if (!_childButton) {
+        _childButton = [[QMUIButton alloc] init];
+        _childButton.qmui_outsideEdge = UIEdgeInsetsMake(-10, 0, -10, 0);
+        _childButton.titleLabel.font = UIFontMake(12);
+        [_childButton setTitleColor:UIColorGray forState:UIControlStateNormal];
+        [_childButton addTarget:self action:@selector(childAction:) forControlEvents:UIControlEventTouchUpInside];
     }
-    return _countLabel;
+    return _childButton;
+}
+
+- (QMUILabel *)topLabel {
+    if (!_topLabel) {
+        _topLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(12) textColor:UIColorWhite];
+        _topLabel.textAlignment = NSTextAlignmentCenter;
+        _topLabel.text = @"置顶";
+        _topLabel.backgroundColor = PCColorPink;
+        _topLabel.layer.cornerRadius = 4;
+        _topLabel.layer.masksToBounds = YES;
+        _topLabel.hidden = YES;
+        _topLabel.layer.qmui_maskedCorners = QMUILayerMinXMaxYCorner;
+    }
+    return _topLabel;
+}
+
+- (PCCommentLikeRequest *)likeRequest {
+    if (!_likeRequest) {
+        if (self.comment.commentId) {
+            _likeRequest = [[PCCommentLikeRequest alloc] initWithCommentId:self.comment.commentId];
+        }
+    }
+    return _likeRequest;
 }
 
 @end

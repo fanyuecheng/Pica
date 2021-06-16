@@ -13,10 +13,10 @@ NS_ASSUME_NONNULL_BEGIN
 @interface PCComicsPictureController : PCViewController
 
 @property (nonatomic, copy)   NSString *comicsId;
-@property (nonatomic, assign) NSInteger order;
+@property (nonatomic, copy)   NSArray *episodeArray;
+@property (nonatomic, assign) NSInteger index;
 
-- (instancetype)initWithComicsId:(NSString *)comicsId
-                           order:(NSInteger)order;
+- (instancetype)initWithComicsId:(NSString *)comicsId;
 
 @end
 
