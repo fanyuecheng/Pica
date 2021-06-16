@@ -1,45 +1,31 @@
 //
-//  PCCommentRequest.m
+//  PCChatListRequest.m
 //  Pica
 //
-//  Created by fancy on 2020/11/11.
-//  Copyright © 2020 fancy. All rights reserved.
+//  Created by Fancy on 2021/6/11.
+//  Copyright © 2021 fancy. All rights reserved.
 //
 
-#import "PCCommentRequest.h"
+#import "PCChatListRequest.h"
+#import "PCChatList.h"
 #import <YYModel/YYModel.h>
 
-@interface PCCommentRequest ()
+@implementation PCChatListRequest
  
-@end
-
-@implementation PCCommentRequest
-
-- (instancetype)initWithComicsId:(NSString *)comicsId {
-    if (self = [super init]) {
-        _comicsId = [comicsId copy];
-        _page = 1;
-    }
-    return self;
-}
-
 - (void)sendRequest:(void (^)(id response))success
             failure:(void (^)(NSError *error))failure {
     [super sendRequest:success failure:failure];
     
     [self startWithCompletionBlockWithSuccess:^(__kindof YTKBaseRequest * _Nonnull request) {
-        PCComicsComment *comment = [PCComicsComment yy_modelWithJSON:request.responseJSONObject[@"data"]];
-        
-        !success ? : success(comment);
+        NSArray *list = [NSArray yy_modelArrayWithClass:[PCChatList class] json:request.responseJSONObject[@"data"][@"chatList"]];
+        !success ? : success(list);
     } failure:^(__kindof YTKBaseRequest * _Nonnull request) {
         !failure ? : failure(request.error);
     }];
 }
 
 - (NSString *)requestUrl {
-    NSMutableString *requestUrl = [NSMutableString stringWithFormat:PC_API_COMICS_COMMENTS, self.comicsId];
-    [requestUrl appendFormat:@"?page=%@", @(self.page)];
-    return requestUrl;
+    return PC_API_CHAT;
 }
 
 - (NSDictionary<NSString *,NSString *> *)requestHeaderFieldValueDictionary {
@@ -50,9 +36,8 @@
     return YTKRequestMethodGET;
 }
 
-
 - (NSInteger)cacheTimeInSeconds {
-    return 60 * 2;
+    return 60 * 60;
 }
 
 - (BOOL)ignoreCache {

@@ -64,11 +64,15 @@
     NSString *password = self.passwordTextField.text;
     
     if (account.length && password.length) {
+        QMUITips *loading = [QMUITips showLoadingInView:DefaultTipsParentView];
         PCLoginRequest *request = [[PCLoginRequest alloc] initWithAccount:account password:password];
         [request sendRequest:^(id  _Nonnull response) {
+            [loading hideAnimated:NO];
             AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
             [appDelegate setRootViewControllerToTab];
-        } failure:nil];
+        } failure:^(NSError * _Nonnull error) {
+            [loading hideAnimated:NO];
+        }];
     } else {
         [QMUITips showError:@"请输入账号或者密码"];
     }

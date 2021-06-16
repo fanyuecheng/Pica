@@ -16,7 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (CGSize)pc_sizeForFont:(UIFont *)font size:(CGSize)size;
 - (CGFloat)pc_widthForFont:(UIFont *)font;
 - (CGFloat)pc_heightForFont:(UIFont *)font width:(CGFloat)width; 
-
+- (UIImage *)pc_imageWithTextColor:(UIColor *)color
+                              font:(UIFont *)font;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -39,6 +39,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (PCCategory *)rankCategory;
 + (PCCategory *)randomCategory;
++ (PCCategory *)commentCategory;
 
 @end
 

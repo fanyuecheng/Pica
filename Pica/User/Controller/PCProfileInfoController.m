@@ -133,7 +133,11 @@
     } else {
         PCCommentCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PCCommentCell" forIndexPath:indexPath];
         PCComicsComment *comment = self.dataSource[indexPath.section];
-        cell.comment = comment.docs[indexPath.row];
+        PCComment *commentObject = comment.docs[indexPath.row];
+        if (!commentObject.user) {
+            commentObject.user = [PCUser localUser];
+        }
+        cell.comment = commentObject;
         return cell;
     }
 }
@@ -153,7 +157,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     if (self.type == PCProfileInfoTypeComic) {
-        PCComicsListController *comicsList = [[PCComicsListController alloc] initWithType:PCComicsListTypeFavourite];
+        PCComicsListController *comicsList = [[PCComicsListController alloc] initWithType:indexPath.row == 0 ? PCComicsListTypeFavourite : PCComicsListTypeHistory];
         
         [[QMUIHelper visibleViewController].navigationController pushViewController:comicsList animated:YES];
     }
@@ -184,6 +188,7 @@
         _dataSource = [NSMutableArray array];
         if (self.type == PCProfileInfoTypeComic) {
             [_dataSource addObject:@"我收藏的本子"];
+            [_dataSource addObject:@"我浏览的本子"];
         }
     }
     return _dataSource;

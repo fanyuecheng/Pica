@@ -31,6 +31,8 @@ NS_ASSUME_NONNULL_BEGIN
  gender = "m";
  name = "复活的炎头队长";
  */
+#define PC_LOCAL_USER @"PC_LOCAL_USER"
+
 @interface PCUser : NSObject
 
 @property (nonatomic, copy)   NSString *userId;
@@ -54,6 +56,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) NSDate *birthday;
 @property (nonatomic, assign) BOOL isPunched;
 @property (nonatomic, copy)   NSString *email;
+
++ (PCUser *)localUser;
++ (void)requsetMyself:(nullable void (^)(PCUser *user, NSError *error))finished;
 
 @end
 

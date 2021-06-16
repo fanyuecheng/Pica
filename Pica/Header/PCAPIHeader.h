@@ -28,6 +28,11 @@
 #define PC_API_COMICS_IMAGE     @"comics/%@/order/%@/pages"
 //漫画评论
 #define PC_API_COMICS_COMMENTS  @"comics/%@/comments"
+//漫画子评论
+#define PC_API_COMICS_COMMENTS_CHILD @"comments/%@/childrens?page=%@"
+#define PC_API_COMICS_COMMENTS_CHILD_REPLY @"comments/%@"
+//漫画评论点赞
+#define PC_API_COMICS_COMMENTS_LIKE  @"comments/%@/like"
 //高级搜索
 #define PC_API_SEARCH_ADVANCED  @"comics/advanced-search?page=%@"
 //漫画排行
@@ -50,5 +55,9 @@
 #define PC_API_USERS_FAVOURITE  @"users/favourite?s=%@&page=%@"
 //我的评论
 #define PC_API_USERS_COMMENT    @"users/my-comments?page=%@"
+//聊天
+#define PC_API_CHAT             @"chat"
+
+//"https://picaapi.picacomic.com/comics/{bookId}/recommendation"
 
 #endif /* PCAPIHeader_h */

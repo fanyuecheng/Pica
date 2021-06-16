@@ -11,9 +11,9 @@
 #import "UIView+PCAdd.h"
 #import "PCComicsPictureController.h"
 
-@interface PCComicsEpisodeView ()
+@interface PCComicsEpisodeView () <UICollectionViewDelegate, UICollectionViewDataSource>
 
-@property (nonatomic, strong) QMUIFloatLayoutView *episodeView;
+@property (nonatomic, strong) UICollectionView *episodeView;
 
 @end
 
@@ -44,27 +44,67 @@
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
-    return CGSizeMake(SCREEN_WIDTH, [self.episodeView sizeThatFits:CGSizeMake(SCREEN_WIDTH, CGFLOAT_MAX)].height);
+    NSInteger row = self.episode.docs.count % 4 == 0 ? self.episode.docs.count / 4 : self.episode.docs.count / 4 + 1;
+    return CGSizeMake(SCREEN_WIDTH, row * 44 + (row - 1) * 10 + 10);
 }
 
-#pragma mark - Action
-- (void)buttonAction:(QMUIButton *)sender {
-    NSInteger index = sender.tag - 1000;
-    PCEpisode *ep = self.episode.docs[index];
+#pragma mark - UICollectionView
+- (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
+    return 1;
+}
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
+    return self.episode.docs.count;
+}
+
+- (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
+    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"UICollectionViewCell" forIndexPath:indexPath];
     
-    PCComicsPictureController *picture = [[PCComicsPictureController alloc] initWithComicsId:self.episode.comicsId order:ep.order];
+    QMUILabel *label = [cell.contentView viewWithTag:1000];
+    if (!label) {
+        label = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(12) textColor:UIColorBlue];
+        label.textAlignment = NSTextAlignmentCenter;
+        label.tag = 1000;
+        label.layer.cornerRadius = 4;
+        label.layer.borderWidth = .5;
+        label.layer.borderColor = UIColorBlue.CGColor;
+        label.backgroundColor = UIColorWhite;
+ 
+        [cell.contentView addSubview:label];
+    }
+    PCEpisode *ep = self.episode.docs[indexPath.item];
+    label.text = ep.title;
+    label.frame = cell.bounds;
+    
+    return cell;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+    [collectionView deselectItemAtIndexPath:indexPath animated:YES]; 
+    PCComicsPictureController *picture = [[PCComicsPictureController alloc] initWithComicsId:self.episode.comicsId];
+    picture.episodeArray = self.episode.docs;
+    picture.index = indexPath.item;
     [[QMUIHelper visibleViewController].navigationController pushViewController:picture animated:YES];
 }
-
+ 
 #pragma mark - Get
-- (QMUIFloatLayoutView *)episodeView {
+- (UICollectionView *)episodeView {
     if (!_episodeView) {
-        _episodeView = [[QMUIFloatLayoutView alloc] init];
-        _episodeView.padding = UIEdgeInsetsMake(10, 15, 10, 15);
-        _episodeView.itemMargins = UIEdgeInsetsMake(0, 0, 10, 10);
-        CGFloat itemWidth = floorf((SCREEN_WIDTH - 60) * 0.25);
-        _episodeView.minimumItemSize = CGSizeMake(itemWidth, 44);
-        _episodeView.maximumItemSize = CGSizeMake(itemWidth, 44);
+        UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+        layout.minimumLineSpacing = 10;
+        layout.minimumInteritemSpacing = 10;
+        layout.sectionInset = UIEdgeInsetsMake(5, 15, 5, 15);
+        layout.scrollDirection = UICollectionViewScrollDirectionVertical;
+        layout.itemSize = CGSizeMake(floor((SCREEN_WIDTH - 60) * 0.25) , 44);
+ 
+        _episodeView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
+        _episodeView.backgroundColor = UIColorWhite;
+        _episodeView.delegate = self;
+        _episodeView.dataSource = self;
+        [_episodeView registerClass:[UICollectionViewCell class] forCellWithReuseIdentifier:@"UICollectionViewCell"];
+        if (@available(iOS 11, *)) {
+            _episodeView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+        }
     }
     return _episodeView;
 }
@@ -72,20 +112,7 @@
 - (void)setEpisode:(PCComicsEpisode *)episode {
     _episode = episode;
     
-    CGFloat itemWidth = floorf((SCREEN_WIDTH - 60) * 0.25);
-    
-    [episode.docs enumerateObjectsUsingBlock:^(PCEpisode * _Nonnull ep, NSUInteger idx, BOOL * _Nonnull stop) {
-        QMUIButton *button = [[QMUIButton alloc] initWithFrame:CGRectMake(0, 0, itemWidth, 44)];
-        button.tag = idx + 1000;
-        button.titleLabel.font = UIFontMake(12);
-        button.layer.cornerRadius = 4;
-        button.backgroundColor = UIColorWhite;
-        [button pc_setShadowWithOpacity:1 radius:4 offset:CGSizeZero color:UIColorSeparator];
-        [button setTitle:ep.title forState:UIControlStateNormal];
-        [button addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
-        [self.episodeView addSubview:button];
-    }];
-     
+    [self.episodeView reloadData];
 }
 
 @end

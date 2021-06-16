@@ -59,7 +59,8 @@
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     
-    self.pagerView.frame = CGRectMake(0, self.qmui_navigationBarMaxYInViewCoordinator, SCREEN_WIDTH, SCREEN_HEIGHT - self.qmui_navigationBarMaxYInViewCoordinator - self.qmui_tabBarSpacingInViewCoordinator);
+    CGFloat navigationBarMaxY = self.qmui_navigationBarMaxYInViewCoordinator;
+    self.pagerView.frame = CGRectMake(0, navigationBarMaxY, SCREEN_WIDTH, SCREEN_HEIGHT - navigationBarMaxY - self.qmui_tabBarSpacingInViewCoordinator);
 }
 
 #pragma mark - Net
@@ -121,7 +122,7 @@
 }
 
 - (void)settingAction:(id)sender {
-    PCSettingController *setting = [[PCSettingController alloc] init];
+    PCSettingController *setting = [[PCSettingController alloc] initWithStyle:UITableViewStyleGrouped];
     [self.navigationController pushViewController:setting animated:YES];
 }
 

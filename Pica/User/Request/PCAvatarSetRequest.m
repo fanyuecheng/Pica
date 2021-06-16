@@ -7,7 +7,7 @@
 //
 
 #import "PCAvatarSetRequest.h"
-#import <UIKit/UIKit.h>
+#import <QMUIKit/QMUIKit.h>
 
 @implementation PCAvatarSetRequest
 
@@ -50,6 +50,11 @@
 
 - (BOOL)ignoreCache {
     return YES;
+}
+
+#pragma mark - Set
+- (void)setAvatar:(UIImage *)avatar {
+    _avatar = [avatar qmui_imageResizedInLimitedSize:CGSizeMake(200, 200)];
 }
 
 @end

@@ -7,6 +7,7 @@
 //
 
 #import "PCCategory.h"
+#import "PCIconHeader.h"
 
 @implementation PCCategory
 
@@ -16,6 +17,7 @@
     category.active = YES;
     category.isCustom = YES;
     category.controllerClass = @"PCComicsRankController";
+    category.desc = ICON_RANK;
     return category;
 }
 
@@ -25,6 +27,17 @@
     category.active = YES;
     category.isCustom = YES;
     category.controllerClass = @"PCComicsListController";
+    category.desc = ICON_PICTURE;
+    return category;
+}
+
++ (PCCategory *)commentCategory {
+    PCCategory *category = [[PCCategory alloc] init];
+    category.title = @"哔咔留言板";
+    category.active = YES;
+    category.isCustom = YES;
+    category.controllerClass = @"PCComicsCommentController";
+    category.desc = ICON_COMMENT;
     return category;
 }
 

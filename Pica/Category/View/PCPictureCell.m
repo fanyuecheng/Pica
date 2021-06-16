@@ -42,25 +42,49 @@
 
 - (void)setPicture:(PCPicture *)picture {
     _picture = picture;
-    
-    self.titleLabel.text = picture.media.originalName;
-    self.imageView.image = nil;
-    [[SDWebImageManager sharedManager] loadImageWithURL:[NSURL URLWithString:picture.media.imageURL]
-                                                options:kNilOptions
-                                               progress:nil
-                                              completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
-        if (image) {
-            self.imageView.image = image;
-            picture.picture = image;
-            self.titleLabel.text = nil;
-            !self.loadBlock ? : self.loadBlock(picture);
-        }
-    }];
+     
+    if (picture.picture) {
+        self.imageView.image = picture.picture;
+        self.titleLabel.text = nil;
+    } else {
+        self.imageView.image = nil;
+        self.titleLabel.text = picture.media.originalName;
+        [[SDWebImageManager sharedManager] loadImageWithURL:[NSURL URLWithString:picture.media.imageURL]
+                                                    options:kNilOptions
+                                                   progress:nil
+                                                  completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
+            if (image) {
+                picture.picture = image; 
+                !self.loadBlock ? : self.loadBlock(picture);
+            }
+        }];
+    }
 }
 
 #pragma mark - QMUIZoomImageViewDelegate
 - (void)singleTouchInZoomingImageView:(QMUIZoomImageView *)zoomImageView location:(CGPoint)location {
     !self.clickBlock ? : self.clickBlock();
+}
+
+- (void)longPressInZoomingImageView:(QMUIZoomImageView *)zoomImageView {
+    if (zoomImageView.image == nil) {
+        return;
+    }
+    QMUIAlertAction *action1 = [QMUIAlertAction actionWithTitle:@"确定" style:QMUIAlertActionStyleDefault handler:^(__kindof QMUIAlertController *aAlertController, QMUIAlertAction *action) {
+        QMUIImageWriteToSavedPhotosAlbumWithAlbumAssetsGroup(zoomImageView.image, nil, ^(QMUIAsset *asset, NSError *error) {
+            if (asset) {
+                [QMUITips showSucceed:@"已保存到相册"];
+            }
+        });
+    }];
+  
+    QMUIAlertAction *action2 = [QMUIAlertAction actionWithTitle:@"取消" style:QMUIAlertActionStyleCancel handler:nil];
+    
+    QMUIAlertController *alertController = [QMUIAlertController alertControllerWithTitle:@"保存图片到相册" message:nil preferredStyle:QMUIAlertControllerStyleActionSheet];
+    
+    [alertController addAction:action1];
+    [alertController addAction:action2];
+    [alertController showWithAnimated:YES];
 }
 
 #pragma mark - Get
