@@ -17,6 +17,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) QMUILabel *replyTextLabel;
 @property (nonatomic, strong) QMUILabel *messageLabel;
 
+@property (nonatomic, copy)   void (^atBlock)(PCChatMessage *message);
+@property (nonatomic, copy)   void (^replayBlock)(PCChatMessage *message);
+
 @end
 
 NS_ASSUME_NONNULL_END

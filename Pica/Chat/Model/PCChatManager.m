@@ -11,7 +11,7 @@
 #import "PCDefineHeader.h"
 #import "PCChatMessage.h"
 #import "PCUser.h"
-#import <YYModel/YYModel.h>
+#import "PCVendorHeader.h"
 
 @interface PCChatManager ()
 
@@ -49,12 +49,38 @@
     [self.socket sendData:data];
 }
 
-- (void)sendText:(NSString *)text {
-    
+- (PCChatMessage *)sendText:(NSString *)text
+               replyMessage:(PCChatMessage *)replyMessage
+                         at:(NSString *)at {
+    if (text) {
+        PCChatMessage *message = [PCChatMessage textMessageDataWithText:text replyMessage:replyMessage at:at];
+        [self sendData:message.messageData];
+        return message;
+    } else {
+        return nil;
+    }
 }
 
-- (void)sendImage:(UIImage *)image {
-    
+- (PCChatMessage *)sendImage:(NSData *)image {
+    if (image) {
+        PCChatMessage *message = [PCChatMessage imageMessageDataWithData:image];
+        [self sendData:message.messageData];
+        return message;
+    } else {
+        return nil;
+    }
+}
+
+- (PCChatMessage *)sendAudio:(NSString *)path {
+    NSData *data = [NSData dataWithContentsOfFile:path];
+    if (data) {
+        PCChatMessage *message = [PCChatMessage voiceMessageDataWithData:data];
+        [self sendData:message.messageData];
+        [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
+        return message;
+    } else {
+        return nil;
+    }
 }
 
 #pragma mark - Private Method

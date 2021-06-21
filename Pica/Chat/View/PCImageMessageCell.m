@@ -30,7 +30,9 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
 
-    self.messageView.frame = CGRectMake(0, 0, 200, 200 * (self.message.picture.size.height / self.message.picture.size.width));
+    if (self.message.picture) {
+        self.messageView.frame = CGRectMake(0, 0, 200, 200 * (self.message.picture.size.height / self.message.picture.size.width));
+    }
     
     if ([self messageOwnerIsMyself]) {
         self.messageContentView.frame = CGRectMake(self.qmui_width - self.messageView.qmui_width - 70, self.nameLabel.qmui_bottom + 5, self.messageView.qmui_width, self.messageView.qmui_height);
@@ -47,9 +49,13 @@
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
-    CGFloat height = 10 + [self.levelLabel sizeThatFits:CGSizeMax].height + 5 + [self.nameLabel sizeThatFits:CGSizeMax].height + 5;
-    height += 200 * (self.message.picture.size.height / self.message.picture.size.width) + 10;
-    return CGSizeMake(SCREEN_WIDTH, height);
+    if (self.message.picture) {
+        CGFloat height = 10 + [self.levelLabel sizeThatFits:CGSizeMax].height + 5 + [self.nameLabel sizeThatFits:CGSizeMax].height + 5;
+        height += 200 * (self.message.picture.size.height / self.message.picture.size.width) + 10;
+        return CGSizeMake(SCREEN_WIDTH, height);
+    } else {
+        return CGSizeMake(SCREEN_WIDTH, 200);
+    }
 }
 
 #pragma mark - Get
