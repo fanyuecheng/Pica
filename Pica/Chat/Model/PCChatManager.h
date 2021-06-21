@@ -22,8 +22,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)connect;
 - (void)disconnect;
 - (void)sendData:(id)data;
-- (void)sendText:(NSString *)text;
-- (void)sendImage:(UIImage *)image;
+- (PCChatMessage *)sendText:(NSString *)text
+               replyMessage:(nullable PCChatMessage *)replyMessage
+                         at:(nullable NSString *)at;
+- (PCChatMessage *)sendImage:(NSData *)image;
+- (PCChatMessage *)sendAudio:(NSString *)path;
 
 @end
 

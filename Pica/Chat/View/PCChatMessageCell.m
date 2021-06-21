@@ -84,7 +84,13 @@
     self.messageBubbleView.fillColor = isMeself ? UIColorBlue : PCColorLightPink;
     [self.avatarView pc_setImageWithURL:message.avatar placeholderImage:nil];
     [self.characterView pc_setImageWithURL:message.character placeholderImage:nil];
-    self.levelLabel.text = [NSString stringWithFormat:@"Lv.%@", @(message.level)];
+    NSString *gender = @"⚧";
+    if ([message.gender isEqualToString:@"m"]) {
+        gender = @"♂";
+    } else if ([message.gender isEqualToString:@"f"]) {
+        gender = @"♀";
+    }
+    self.levelLabel.text = [NSString stringWithFormat:@"%@ Lv.%@", gender, @(message.level)];
     self.titleLabel.text = message.title;
     self.nameLabel.text = message.name;
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
@@ -152,9 +158,9 @@
     return _nameLabel;
 }
 
-- (UIView *)messageContentView {
+- (UIControl *)messageContentView {
     if (!_messageContentView) {
-        _messageContentView = [[UIView alloc] init];
+        _messageContentView = [[UIControl alloc] init];
     }
     return _messageContentView;
 }

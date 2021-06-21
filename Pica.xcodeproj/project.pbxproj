@@ -63,7 +63,6 @@
 		337AD6AA26737150009EA2D1 /* PCChatListRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 337AD6A926737150009EA2D1 /* PCChatListRequest.m */; };
 		337AD6AE267376D4009EA2D1 /* PCChatList.m in Sources */ = {isa = PBXBuildFile; fileRef = 337AD6AD267376D4009EA2D1 /* PCChatList.m */; };
 		337AD6B126737878009EA2D1 /* PCChatMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 337AD6B026737878009EA2D1 /* PCChatMessage.m */; };
-		337AD6B3267848B0009EA2D1 /* iconfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 337AD6B2267848B0009EA2D1 /* iconfont.ttf */; };
 		337AD6B826784BD3009EA2D1 /* PCChatListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 337AD6B726784BD3009EA2D1 /* PCChatListController.m */; };
 		337AD6BB26784E52009EA2D1 /* PCChatListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 337AD6BA26784E52009EA2D1 /* PCChatListCell.m */; };
 		337AD6BE26785199009EA2D1 /* PCSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 337AD6BD26785199009EA2D1 /* PCSocket.m */; };
@@ -75,6 +74,12 @@
 		33828E4025E6577C00967957 /* PCRegistRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 33828E3F25E6577C00967957 /* PCRegistRequest.m */; };
 		33828E4425E65CB600967957 /* PCRegistController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33828E4325E65CB600967957 /* PCRegistController.m */; };
 		33AB826E2679E0BA00A2FD3F /* PCImageMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AB826D2679E0BA00A2FD3F /* PCImageMessageCell.m */; };
+		33AB8273267B374900A2FD3F /* iconfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 33AB8272267B374900A2FD3F /* iconfont.ttf */; };
+		33AB8276267B377300A2FD3F /* PCVoiceMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AB8275267B377300A2FD3F /* PCVoiceMessageCell.m */; };
+		33AB827A267C3BFC00A2FD3F /* PCMessageNotificationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AB8279267C3BFC00A2FD3F /* PCMessageNotificationView.m */; };
+		33AB827F267C4A9600A2FD3F /* PCRecordView.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AB827E267C4A9600A2FD3F /* PCRecordView.m */; };
+		33AB8283267C4D5900A2FD3F /* PCChatInputBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AB8282267C4D5900A2FD3F /* PCChatInputBar.m */; };
+		33AB8286267C4F9B00A2FD3F /* image.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33AB8285267C4F9B00A2FD3F /* image.xcassets */; };
 		33AD93C7255017160079DFAE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AD93C6255017160079DFAE /* AppDelegate.m */; };
 		33AD93CD255017160079DFAE /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AD93CC255017160079DFAE /* ViewController.m */; };
 		33AD93D0255017160079DFAE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 33AD93CE255017160079DFAE /* Main.storyboard */; };
@@ -220,7 +225,6 @@
 		337AD6AD267376D4009EA2D1 /* PCChatList.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCChatList.m; sourceTree = "<group>"; };
 		337AD6AF26737878009EA2D1 /* PCChatMessage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCChatMessage.h; sourceTree = "<group>"; };
 		337AD6B026737878009EA2D1 /* PCChatMessage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCChatMessage.m; sourceTree = "<group>"; };
-		337AD6B2267848B0009EA2D1 /* iconfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = iconfont.ttf; sourceTree = "<group>"; };
 		337AD6B626784BD3009EA2D1 /* PCChatListController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCChatListController.h; sourceTree = "<group>"; };
 		337AD6B726784BD3009EA2D1 /* PCChatListController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCChatListController.m; sourceTree = "<group>"; };
 		337AD6B926784E52009EA2D1 /* PCChatListCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCChatListCell.h; sourceTree = "<group>"; };
@@ -243,6 +247,16 @@
 		33828E4325E65CB600967957 /* PCRegistController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCRegistController.m; sourceTree = "<group>"; };
 		33AB826C2679E0BA00A2FD3F /* PCImageMessageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCImageMessageCell.h; sourceTree = "<group>"; };
 		33AB826D2679E0BA00A2FD3F /* PCImageMessageCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCImageMessageCell.m; sourceTree = "<group>"; };
+		33AB8272267B374900A2FD3F /* iconfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = iconfont.ttf; sourceTree = "<group>"; };
+		33AB8274267B377300A2FD3F /* PCVoiceMessageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCVoiceMessageCell.h; sourceTree = "<group>"; };
+		33AB8275267B377300A2FD3F /* PCVoiceMessageCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCVoiceMessageCell.m; sourceTree = "<group>"; };
+		33AB8278267C3BFC00A2FD3F /* PCMessageNotificationView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCMessageNotificationView.h; sourceTree = "<group>"; };
+		33AB8279267C3BFC00A2FD3F /* PCMessageNotificationView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCMessageNotificationView.m; sourceTree = "<group>"; };
+		33AB827D267C4A9600A2FD3F /* PCRecordView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCRecordView.h; sourceTree = "<group>"; };
+		33AB827E267C4A9600A2FD3F /* PCRecordView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCRecordView.m; sourceTree = "<group>"; };
+		33AB8281267C4D5900A2FD3F /* PCChatInputBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCChatInputBar.h; sourceTree = "<group>"; };
+		33AB8282267C4D5900A2FD3F /* PCChatInputBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCChatInputBar.m; sourceTree = "<group>"; };
+		33AB8285267C4F9B00A2FD3F /* image.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = image.xcassets; sourceTree = "<group>"; };
 		33AD93C2255017160079DFAE /* Pica.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pica.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		33AD93C5255017160079DFAE /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		33AD93C6255017160079DFAE /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -343,6 +357,7 @@
 		334EAD8F255A6D6600B0231C /* Resource */ = {
 			isa = PBXGroup;
 			children = (
+				33AB8284267C4F8700A2FD3F /* image */,
 				334EAD90255A6D6E00B0231C /* font */,
 			);
 			path = Resource;
@@ -351,7 +366,7 @@
 		334EAD90255A6D6E00B0231C /* font */ = {
 			isa = PBXGroup;
 			children = (
-				337AD6B2267848B0009EA2D1 /* iconfont.ttf */,
+				33AB8272267B374900A2FD3F /* iconfont.ttf */,
 			);
 			path = font;
 			sourceTree = "<group>";
@@ -451,6 +466,7 @@
 		337AD6A62673710B009EA2D1 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
+				33AB8280267C4D4400A2FD3F /* Input */,
 				337AD6B526784BBC009EA2D1 /* View */,
 				337AD6B426784BB5009EA2D1 /* Controller */,
 				337AD6AB26737246009EA2D1 /* Model */,
@@ -495,6 +511,8 @@
 		337AD6B526784BBC009EA2D1 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				33AB827D267C4A9600A2FD3F /* PCRecordView.h */,
+				33AB827E267C4A9600A2FD3F /* PCRecordView.m */,
 				337AD6B926784E52009EA2D1 /* PCChatListCell.h */,
 				337AD6BA26784E52009EA2D1 /* PCChatListCell.m */,
 				337AD6CC2678B45E009EA2D1 /* PCMessageBubbleView.h */,
@@ -505,8 +523,29 @@
 				337AD6D32678BD42009EA2D1 /* PCTextMessageCell.m */,
 				33AB826C2679E0BA00A2FD3F /* PCImageMessageCell.h */,
 				33AB826D2679E0BA00A2FD3F /* PCImageMessageCell.m */,
+				33AB8274267B377300A2FD3F /* PCVoiceMessageCell.h */,
+				33AB8275267B377300A2FD3F /* PCVoiceMessageCell.m */,
+				33AB8278267C3BFC00A2FD3F /* PCMessageNotificationView.h */,
+				33AB8279267C3BFC00A2FD3F /* PCMessageNotificationView.m */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		33AB8280267C4D4400A2FD3F /* Input */ = {
+			isa = PBXGroup;
+			children = (
+				33AB8281267C4D5900A2FD3F /* PCChatInputBar.h */,
+				33AB8282267C4D5900A2FD3F /* PCChatInputBar.m */,
+			);
+			path = Input;
+			sourceTree = "<group>";
+		};
+		33AB8284267C4F8700A2FD3F /* image */ = {
+			isa = PBXGroup;
+			children = (
+				33AB8285267C4F9B00A2FD3F /* image.xcassets */,
+			);
+			path = image;
 			sourceTree = "<group>";
 		};
 		33AD93B9255017160079DFAE = {
@@ -859,8 +898,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				337AD6B3267848B0009EA2D1 /* iconfont.ttf in Resources */,
+				33AB8273267B374900A2FD3F /* iconfont.ttf in Resources */,
 				33AD93D5255017170079DFAE /* LaunchScreen.storyboard in Resources */,
+				33AB8286267C4F9B00A2FD3F /* image.xcassets in Resources */,
 				33AD93D2255017170079DFAE /* Assets.xcassets in Resources */,
 				33AD93D0255017160079DFAE /* Main.storyboard in Resources */,
 			);
@@ -916,6 +956,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				334EAD97255A6EFA00B0231C /* UIImage+PCAdd.m in Sources */,
+				33AB8276267B377300A2FD3F /* PCVoiceMessageCell.m in Sources */,
 				334EADD1255A865100B0231C /* PCComicsEpisodeRequest.m in Sources */,
 				337AD6CE2678B45E009EA2D1 /* PCMessageBubbleView.m in Sources */,
 				337AD6D42678BD42009EA2D1 /* PCTextMessageCell.m in Sources */,
@@ -969,7 +1010,9 @@
 				3358C8B4265F79AF0000D17F /* PCProfileHeaderView.m in Sources */,
 				337AD6B826784BD3009EA2D1 /* PCChatListController.m in Sources */,
 				334EADD9255A88EB00B0231C /* PCComicsEpisodeView.m in Sources */,
+				33AB8283267C4D5900A2FD3F /* PCChatInputBar.m in Sources */,
 				334EAD6B25593E7900B0231C /* PCTableViewCell.m in Sources */,
+				33AB827A267C3BFC00A2FD3F /* PCMessageNotificationView.m in Sources */,
 				33AD93CD255017160079DFAE /* ViewController.m in Sources */,
 				33AD941825501C8B0079DFAE /* NSString+PCAdd.m in Sources */,
 				33AD943C255109DC0079DFAE /* PCKeywordRequest.m in Sources */,
@@ -984,6 +1027,7 @@
 				3358C8B7265F88F30000D17F /* PCPunchInRequest.m in Sources */,
 				33669FFF2553E18C00AEC598 /* PCComicsDetailRequest.m in Sources */,
 				3329FE50265B83F60054F39B /* PCComicsRankCell.m in Sources */,
+				33AB827F267C4A9600A2FD3F /* PCRecordView.m in Sources */,
 				3358C8AC265F6E2F0000D17F /* PCProfileController.m in Sources */,
 				3358C8CA2660ABCF0000D17F /* PCUserCommentRequest.m in Sources */,
 				334EAE0F255BD1AA00B0231C /* PCComicsCommentController.m in Sources */,
@@ -1156,7 +1200,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.0.7;
+				MARKETING_VERSION = 0.0.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.pica.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1177,7 +1221,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.0.7;
+				MARKETING_VERSION = 0.0.8;
 				PRODUCT_BUNDLE_IDENTIFIER = com.pica.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;

@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface NSData (PCAdd)
 
 - (NSString *)pc_hmacSHA256StringWithKey:(NSString *)key;
+- (NSString *)pc_MD5String;
 
 @end
 

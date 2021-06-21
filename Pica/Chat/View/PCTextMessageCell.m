@@ -12,6 +12,53 @@
 #import "PCChatMessage.h"
 #import "PCMessageBubbleView.h"
 #import "PCUser.h"
+#import "PCDefineHeader.h"
+
+@interface PCPopupContainerView : QMUIPopupContainerView
+
+@property (nonatomic, strong) NSMutableArray *buttonArray;
+@property (nonatomic, copy)   void (^actionBlock)(PCPopupContainerView *view, NSInteger index);
+
+@end
+
+@implementation PCPopupContainerView
+
+- (instancetype)initWithFrame:(CGRect)frame {
+    if (self = [super initWithFrame:frame]) {
+        self.contentEdgeInsets = UIEdgeInsetsZero;
+        self.buttonArray = [NSMutableArray array];
+        NSArray *array = @[@"复制", @"回复", @"@"];
+        [array enumerateObjectsUsingBlock:^(NSString *title, NSUInteger idx, BOOL * _Nonnull stop) {
+            QMUIButton *button = [[QMUIButton alloc] init];
+            button.tag = idx + 1000;
+            [button setTitle:title forState:UIControlStateNormal];
+            [button setTitleColor:UIColorBlue forState:UIControlStateNormal];
+            [button addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
+            [self.contentView addSubview:button];
+            [self.buttonArray addObject:button];
+        }];
+    } 
+    return self;
+}
+
+- (CGSize)sizeThatFitsInContentView:(CGSize)size {
+    return CGSizeMake(180, 40);
+}
+
+- (void)layoutSubviews {
+    [super layoutSubviews];
+        
+    [self.buttonArray enumerateObjectsUsingBlock:^(QMUIButton *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        obj.frame = CGRectMake(60 * idx, 0, 60, 40);
+    }];
+}
+
+- (void)buttonAction:(QMUIButton *)sender {
+    !self.actionBlock ? : self.actionBlock(self, sender.tag - 1000);
+}
+
+@end
+
   
 @implementation PCTextMessageCell
 
@@ -22,6 +69,7 @@
         [self.replyView addSubview:self.replyNameLabel];
         [self.replyView addSubview:self.replyTextLabel];
         [self.messageContentView addSubview:self.messageLabel];
+        [self.messageContentView addTarget:self action:@selector(menuAction:) forControlEvents:UIControlEventTouchUpInside];
     }
     return self;
 }
@@ -103,14 +151,53 @@
     [super setMessage:message];
     
     if (message.at.length) {
-        NSString *atString = [message.at stringByReplacingOccurrencesOfString:@"嗶咔_" withString:@""];
-        self.messageLabel.text = [NSString stringWithFormat:@"@%@\n%@", atString, message.message];
+        NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] init];
+        
+        NSAttributedString *atString = [[NSAttributedString alloc] initWithString:[message.at stringByReplacingOccurrencesOfString:@"嗶咔_" withString:@"@"] attributes:@{NSFontAttributeName: UIFontMake(14), NSForegroundColorAttributeName: PCColorHotPink}];
+        
+        NSAttributedString *messageString = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"\n%@", message.message] attributes:@{NSFontAttributeName: UIFontMake(15), NSForegroundColorAttributeName: UIColorBlack}];
+        
+        [attributedText appendAttributedString:atString];
+        [attributedText appendAttributedString:messageString];
+        
+        self.messageLabel.attributedText = attributedText;
     } else {
-        self.messageLabel.text = message.message;
+        self.messageLabel.attributedText = [[NSAttributedString alloc] initWithString:message.message attributes:@{NSFontAttributeName: UIFontMake(15), NSForegroundColorAttributeName: UIColorBlack}];
     }
     self.replyNameLabel.text = message.reply_name;
     self.replyTextLabel.text = message.reply;
     self.replyView.hidden = message.reply.length == 0;
+}
+
+#pragma mark - Action
+- (void)menuAction:(UIControl *)sender {
+    if (!self.message || [self messageOwnerIsMyself]) {
+        return;
+    }
+    PCPopupContainerView *popupView = [[PCPopupContainerView alloc] init];
+    popupView.preferLayoutDirection = QMUIPopupContainerViewLayoutDirectionAbove;
+    popupView.automaticallyHidesWhenUserTap = YES;
+    popupView.sourceView = sender;
+    @weakify(self)
+    popupView.actionBlock = ^(PCPopupContainerView *view, NSInteger index) {
+        @strongify(self)
+        switch (index) {
+            case 0:{
+                UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+                pasteboard.string = self.message.message;
+                break;}
+            case 1:
+                !self.replayBlock ? : self.replayBlock(self.message);
+                break;
+            case 2:
+                !self.atBlock ? : self.atBlock(self.message);
+                break;
+            default:
+                break;
+        }
+        [view hideWithAnimated:YES];
+    };
+    [popupView showWithAnimated:YES];
 }
 
 #pragma mark - Get
@@ -141,7 +228,7 @@
 
 - (QMUILabel *)messageLabel {
     if (!_messageLabel) {
-        _messageLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(14) textColor:UIColorBlack];
+        _messageLabel = [[QMUILabel alloc] init];
         _messageLabel.numberOfLines = 0;
     }
     return _messageLabel;

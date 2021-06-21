@@ -21,7 +21,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) QMUILabel   *titleLabel;
 @property (nonatomic, strong) QMUILabel   *nameLabel;
 @property (nonatomic, strong) QMUILabel   *timeLabel;
-@property (nonatomic, strong) UIView      *messageContentView;
+@property (nonatomic, strong) UIControl   *messageContentView;
 @property (nonatomic, strong) PCMessageBubbleView *messageBubbleView;
 
 - (BOOL)messageOwnerIsMyself;

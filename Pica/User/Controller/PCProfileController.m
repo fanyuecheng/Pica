@@ -29,7 +29,7 @@
 
 @property (nonatomic, strong) JXPagerView *pagerView;
 @property (nonatomic, strong) UISegmentedControl *segmentedControl;
-@property (nonatomic, strong) UIImagePickerController *cameraController;
+@property (nonatomic, strong) UIImagePickerController *imagePickerController;
 @property (nonatomic, strong) PCProfileInfoController *comicController;
 @property (nonatomic, strong) PCProfileInfoController *commentController;
 
@@ -171,7 +171,7 @@
             if (!granted) {
                 //第一次不允许的操作
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.cameraController dismissViewControllerAnimated:YES completion:nil];
+                    [self.imagePickerController dismissViewControllerAnimated:YES completion:nil];
                 });
                 return ;
             }
@@ -200,8 +200,8 @@
         return;
     }
     
-    self.cameraController.sourceType = UIImagePickerControllerSourceTypeCamera;
-    [self presentViewController:self.cameraController animated:YES completion:nil];
+    self.imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
+    [self presentViewController:self.imagePickerController animated:YES completion:nil];
 }
 
 - (void)pickImage {
@@ -217,8 +217,8 @@
 }
 
 - (void)presentAlbumViewController {
-    self.cameraController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
-    [self presentViewController:self.cameraController animated:YES completion:nil];
+    self.imagePickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
+    [self presentViewController:self.imagePickerController animated:YES completion:nil];
 }
 
 #pragma mark - UIImagePickerControllerDelegate
@@ -316,16 +316,16 @@
     return _headerView;
 }
 
-- (UIImagePickerController *)cameraController {
-    if (!_cameraController) {
-        _cameraController = [[UIImagePickerController alloc] init];
-        _cameraController.delegate = self;
-        _cameraController.allowsEditing = YES;
+- (UIImagePickerController *)imagePickerController {
+    if (!_imagePickerController) {
+        _imagePickerController = [[UIImagePickerController alloc] init];
+        _imagePickerController.delegate = self;
+        _imagePickerController.allowsEditing = YES;
         if (@available(iOS 13.0, *)) {
-            _cameraController.modalPresentationStyle = UIModalPresentationFullScreen;
+            _imagePickerController.modalPresentationStyle = UIModalPresentationFullScreen;
         }
     }
-    return _cameraController;
+    return _imagePickerController;
 }
 
 - (JXPagerView *)pagerView {
