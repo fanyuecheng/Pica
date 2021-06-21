@@ -7,10 +7,11 @@
 API来自 [picacomic](https://github.com/AnkiKong/picacomic) 
 
 #### 截图  
-![1](https://i.loli.net/2021/05/28/aibTuYkSwdhq3te.png)  
-![2](https://i.loli.net/2021/05/28/adI5F9orGhuTyq1.png)  
-![3](https://i.loli.net/2021/05/28/4MaYRzyXqbHIk5v.png)  
-![4](https://i.loli.net/2021/05/28/lAC6X7T8xvyGuKc.png)  
+![png](https://imgtu.com/i/Rkq538)
+![png](https://imgtu.com/i/Rkq49f)  
+![png](https://imgtu.com/i/RkqWNt)  
+![png](https://imgtu.com/i/Rkqf4P) 
+
 
 #### 功能  
 * [x] 登录注册
@@ -27,13 +28,8 @@ API来自 [picacomic](https://github.com/AnkiKong/picacomic)
 * [x] 评论本子&回复评论
 * [x] 浏览历史
 * [x] 留言板
+*   [x] 聊天室接收发送图片，文字，声音
 * [ ] 下载本子
-
-#### 聊天室 仅显示 无发送 TODO
-* [x] 不显示广告，推送等无关消息
-* [x] 接收图片，文字
-* [ ] 接收声音
-* [ ] 发送文字，图片，声音
 
 #### 免责声明  
 本项目仅供学习&个人使用，版权归原漫画作者及发行商所有。  
