@@ -6,14 +6,13 @@
 所以抽空搞了这个极简版的iOSApp，旨在实用，不整那么多花里胡哨的。  
 API来自 [picacomic](https://github.com/AnkiKong/picacomic) 
 
-#### 截图  
-![png](https://imgtu.com/i/Rkq538)
-![png](https://imgtu.com/i/Rkq49f)  
-![png](https://imgtu.com/i/RkqWNt)  
-![png](https://imgtu.com/i/Rkqf4P) 
+#### 软件截图  
+![1.png](https://z3.ax1x.com/2021/06/22/RZ47rj.png)  
+![2.png](https://z3.ax1x.com/2021/06/22/RZ4Hqs.png)  
+![3.png](https://z3.ax1x.com/2021/06/22/RZ4TMQ.png)  
+![4.png](https://z3.ax1x.com/2021/06/22/RZ4qZn.png)  
 
-
-#### 功能  
+#### 软件功能  
 * [x] 登录注册
 * [x] 排行榜
 * [x] 随机本子
@@ -28,7 +27,7 @@ API来自 [picacomic](https://github.com/AnkiKong/picacomic)
 * [x] 评论本子&回复评论
 * [x] 浏览历史
 * [x] 留言板
-*   [x] 聊天室接收发送图片，文字，声音
+* [x] 聊天室接收发送图片，文字，声音
 * [ ] 下载本子
 
 #### 免责声明  

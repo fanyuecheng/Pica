@@ -109,7 +109,7 @@ static NSMutableArray <PCMessageNotificationView *> *kMessageNotificationViewArr
     notificationView.frame = CGRectMake(0, 0, SCREEN_WIDTH, QMUIViewSelfSizingHeight);
      
     [notificationView showAnimated:animated];
-    [notificationView hideAnimated:YES afterDelay:2];
+    [notificationView hideAnimated:YES afterDelay:4];
 
     return notificationView;
 }

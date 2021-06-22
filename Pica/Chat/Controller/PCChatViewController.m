@@ -317,7 +317,7 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
     }
 }
 
-- (void)insertMessage:(PCChatMessage *)message scrollToBottom:(BOOL)scroll {
+- (void) insertMessage:(PCChatMessage *)message scrollToBottom:(BOOL)scroll {
     [self.messageArray addObject:message];
     [self.tableView reloadData];
     
@@ -560,6 +560,8 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
     // 监听 @ 字符的输入
     else if ([text isEqualToString:@"@"]) {
          
+    } else if ([text isEqualToString:@"\n"]) {
+        return NO;
     }
     return YES;
 }
@@ -591,7 +593,7 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
             if (message) {
                 if (message.messageType == PCChatMessageTypeDefault || message.messageType == PCChatMessageTypeImage ||
                     message.messageType == PCChatMessageTypeAudio) {
-                    [self insertMessage:message scrollToBottom:NO];
+                    [self insertMessage:message scrollToBottom:YES];
                 } else if (message.messageType == PCChatMessageTypeConnectionCount) { 
                     self.navigationItem.rightBarButtonItem = [UIBarButtonItem qmui_itemWithTitle:[NSString stringWithFormat:@"在线人数:%@", @(message.connections)] target:nil action:NULL];
                     self.navigationItem.rightBarButtonItem.enabled = NO;

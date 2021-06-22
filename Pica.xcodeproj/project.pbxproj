@@ -78,7 +78,6 @@
 		33AB8276267B377300A2FD3F /* PCVoiceMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AB8275267B377300A2FD3F /* PCVoiceMessageCell.m */; };
 		33AB827A267C3BFC00A2FD3F /* PCMessageNotificationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AB8279267C3BFC00A2FD3F /* PCMessageNotificationView.m */; };
 		33AB827F267C4A9600A2FD3F /* PCRecordView.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AB827E267C4A9600A2FD3F /* PCRecordView.m */; };
-		33AB8283267C4D5900A2FD3F /* PCChatInputBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AB8282267C4D5900A2FD3F /* PCChatInputBar.m */; };
 		33AB8286267C4F9B00A2FD3F /* image.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 33AB8285267C4F9B00A2FD3F /* image.xcassets */; };
 		33AD93C7255017160079DFAE /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AD93C6255017160079DFAE /* AppDelegate.m */; };
 		33AD93CD255017160079DFAE /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AD93CC255017160079DFAE /* ViewController.m */; };
@@ -254,8 +253,6 @@
 		33AB8279267C3BFC00A2FD3F /* PCMessageNotificationView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCMessageNotificationView.m; sourceTree = "<group>"; };
 		33AB827D267C4A9600A2FD3F /* PCRecordView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCRecordView.h; sourceTree = "<group>"; };
 		33AB827E267C4A9600A2FD3F /* PCRecordView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCRecordView.m; sourceTree = "<group>"; };
-		33AB8281267C4D5900A2FD3F /* PCChatInputBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCChatInputBar.h; sourceTree = "<group>"; };
-		33AB8282267C4D5900A2FD3F /* PCChatInputBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCChatInputBar.m; sourceTree = "<group>"; };
 		33AB8285267C4F9B00A2FD3F /* image.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = image.xcassets; sourceTree = "<group>"; };
 		33AD93C2255017160079DFAE /* Pica.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Pica.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		33AD93C5255017160079DFAE /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -466,7 +463,6 @@
 		337AD6A62673710B009EA2D1 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
-				33AB8280267C4D4400A2FD3F /* Input */,
 				337AD6B526784BBC009EA2D1 /* View */,
 				337AD6B426784BB5009EA2D1 /* Controller */,
 				337AD6AB26737246009EA2D1 /* Model */,
@@ -529,15 +525,6 @@
 				33AB8279267C3BFC00A2FD3F /* PCMessageNotificationView.m */,
 			);
 			path = View;
-			sourceTree = "<group>";
-		};
-		33AB8280267C4D4400A2FD3F /* Input */ = {
-			isa = PBXGroup;
-			children = (
-				33AB8281267C4D5900A2FD3F /* PCChatInputBar.h */,
-				33AB8282267C4D5900A2FD3F /* PCChatInputBar.m */,
-			);
-			path = Input;
 			sourceTree = "<group>";
 		};
 		33AB8284267C4F8700A2FD3F /* image */ = {
@@ -1010,7 +997,6 @@
 				3358C8B4265F79AF0000D17F /* PCProfileHeaderView.m in Sources */,
 				337AD6B826784BD3009EA2D1 /* PCChatListController.m in Sources */,
 				334EADD9255A88EB00B0231C /* PCComicsEpisodeView.m in Sources */,
-				33AB8283267C4D5900A2FD3F /* PCChatInputBar.m in Sources */,
 				334EAD6B25593E7900B0231C /* PCTableViewCell.m in Sources */,
 				33AB827A267C3BFC00A2FD3F /* PCMessageNotificationView.m in Sources */,
 				33AD93CD255017160079DFAE /* ViewController.m in Sources */,
@@ -1200,7 +1186,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.0.8;
+				MARKETING_VERSION = 0.0.9;
 				PRODUCT_BUNDLE_IDENTIFIER = com.pica.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1221,7 +1207,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 0.0.8;
+				MARKETING_VERSION = 0.0.9;
 				PRODUCT_BUNDLE_IDENTIFIER = com.pica.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;

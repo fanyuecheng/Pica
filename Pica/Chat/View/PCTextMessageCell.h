@@ -12,9 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PCTextMessageCell : PCChatMessageCell
 
-@property (nonatomic, strong) UIView    *replyView;
-@property (nonatomic, strong) QMUILabel *replyNameLabel;
-@property (nonatomic, strong) QMUILabel *replyTextLabel;
+@property (nonatomic, strong) QMUILabel *replyLabel;
 @property (nonatomic, strong) QMUILabel *messageLabel;
 
 @property (nonatomic, copy)   void (^atBlock)(PCChatMessage *message);
