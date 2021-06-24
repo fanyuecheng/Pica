@@ -42,7 +42,8 @@
 //随机本子
 #define PC_API_COMICS_RANDOOM   @"comics/random"
 //个人信息
-#define PC_API_USERS_PROFILE    @"users/profile"
+#define PC_API_USERS_PROFILE_ME @"users/profile"
+#define PC_API_USERS_PROFILE    @"users/%@/profile"
 //签到
 #define PC_API_USERS_PUNCH_IN   @"users/punch-in"
 //头像

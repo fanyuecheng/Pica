@@ -12,7 +12,8 @@
 
 + (NSDictionary *)modelCustomPropertyMapper {
     return @{@"commentId" : @"_id",
-             @"user" : @"_user"};
+             @"user" : @"_user",
+             @"comic" : @"_comic"};
 }
  
 @end

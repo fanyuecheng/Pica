@@ -8,6 +8,7 @@
 
 #import "PCRegistController.h"
 #import "PCRegistRequest.h"
+#import "NSString+PCAdd.h"
 
 @interface PCRegistController ()
 
@@ -25,8 +26,14 @@
 @property (nonatomic, strong) QMUITextField *question2;
 @property (nonatomic, strong) QMUITextField *question3;
 
+@property (nonatomic, strong) QMUIButton    *autoButton;
+
 @property (nonatomic, strong) UIDatePicker *datePicker;
 @property (nonatomic, strong) QMUIModalPresentationViewController *modalController;
+
+@property (nonatomic, strong) NSMutableArray *autoRegistArray;
+@property (nonatomic, assign) NSInteger      autoFinishedCount;
+@property (nonatomic, assign) NSInteger      autoTotalCount;
 
 @end
 
@@ -46,6 +53,7 @@
     [self.contentView addSubview:self.birthdayButton];
     [self.contentView addSubview:self.genderControl];
     [self.contentView addSubview:self.questionButton];
+    [self.contentView addSubview:self.autoButton];
     
     [self.contentView addSubview:self.question1];
     [self.contentView addSubview:self.answer1];
@@ -59,8 +67,8 @@
     [super setupNavigationItems];
     
     self.title = @"注册";
-    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemCancel target:self action:@selector(cancelAction:)];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone target:self action:@selector(doneAction:)];
+    self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"取消" style:UIBarButtonItemStylePlain target:self action:@selector(cancelAction:)];
+    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"完成" style:UIBarButtonItemStylePlain target:self action:@selector(doneAction:)];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -73,6 +81,7 @@
     self.birthdayButton.frame = CGRectMake(15, self.passwordTextField.qmui_bottom + 5, SCREEN_WIDTH - 30, 50);
     self.genderControl.frame = CGRectMake(15, self.birthdayButton.qmui_bottom + 5, SCREEN_WIDTH - 30, 50);
     self.questionButton.frame = CGRectMake(15, self.genderControl.qmui_bottom + 5, SCREEN_WIDTH - 30, 40);
+    self.autoButton.frame = CGRectMake(15, self.contentView.qmui_height - 45, SCREEN_WIDTH - 30, 40);
     self.question1.frame = CGRectMake(SCREEN_WIDTH + 15, self.nameTextField.qmui_top, SCREEN_WIDTH - 30, 50);
     self.answer1.frame = CGRectMake(SCREEN_WIDTH + 15, self.question1.qmui_bottom + 5, SCREEN_WIDTH - 30, 50);
     self.question2.frame = CGRectMake(SCREEN_WIDTH + 15, self.answer1.qmui_bottom + 5, SCREEN_WIDTH - 30, 50);
@@ -193,6 +202,70 @@
     };
      
     [modal showWithAnimated:YES completion:nil];
+}
+
+- (void)autoAction:(QMUIButton *)sender {
+    if (!self.autoRegistArray) {
+        self.autoRegistArray = [NSMutableArray array];
+        //只注册一个账号 
+        self.autoTotalCount = 1;
+        self.autoFinishedCount = 0;
+    }
+    
+    for (NSInteger i = 0; i < self.autoTotalCount; i++) {
+        [self autoRegist];
+    }
+}
+
+- (void)autoRegist {
+    PCRegistRequest *request = [[PCRegistRequest alloc] init];
+    request.name = [NSString pc_randomTextWithLength:arc4random()%(50-2+1)+2];
+    request.email = [NSString pc_randomTextWithLength:arc4random()%(30-1+1)+1];
+    request.password = [NSString pc_randomTextWithLength:arc4random()%(15-8+1)+8];
+    request.birthday = [self randomBirthday];
+    
+    NSArray *genderArray = @[@"m", @"f", @"bot"];
+    request.gender = genderArray[arc4random()%3];
+    request.question1 = [NSString pc_randomTextWithLength:20];
+    request.question2 = [NSString pc_randomTextWithLength:20];
+    request.question3 = [NSString pc_randomTextWithLength:20];
+    request.answer1 = [NSString pc_randomTextWithLength:20];
+    request.answer2 = [NSString pc_randomTextWithLength:20];
+    request.answer3 = [NSString pc_randomTextWithLength:20];
+    
+    QMUITips *loading = [QMUITips showLoadingInView:DefaultTipsParentView];
+    NSDictionary *arg = [request requestArgument];
+
+    [request sendRequest:^(id  _Nonnull response) {
+        [loading hideAnimated:NO];
+        [[NSNotificationCenter defaultCenter] postNotificationName:PCRegistSuccessNotification object:arg];
+        [self dismissViewControllerAnimated:YES completion:nil];
+        
+        [self.autoRegistArray addObject:arg];
+        self.autoFinishedCount ++;
+    } failure:^(NSError * _Nonnull error) {
+        [loading hideAnimated:NO];
+        
+        self.autoFinishedCount ++;
+    }];
+}
+
+#pragma mark - Method 
+- (NSString *)randomBirthday {
+    NSInteger year = arc4random()%(2009-1980+1)+1980;
+    NSInteger month = arc4random()%(13-1+1)+1;
+    NSInteger day = arc4random()%(29-1+1)+1;
+    
+    NSDateComponents *comps = [[NSDateComponents alloc] init];
+    comps.year = year;
+    comps.month = month;
+    comps.day = day;
+    NSDate *date = [[NSCalendar autoupdatingCurrentCalendar] dateFromComponents:comps];
+    
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateFormat:@"yyyy-MM-dd"];
+    [formatter setLocale:[NSLocale currentLocale]];
+    return [formatter stringFromDate:date];
 }
 
 #pragma mark - Get
@@ -337,4 +410,21 @@
     return _questionButton;
 }
 
+- (QMUIButton *)autoButton {
+    if (!_autoButton) {
+        _autoButton = [QMUIButton buttonWithType:UIButtonTypeSystem];
+        [_autoButton setTitle:@"注册机" forState:UIControlStateNormal];
+        [_autoButton addTarget:self action:@selector(autoAction:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _autoButton;
+}
+
+- (void)setAutoFinishedCount:(NSInteger)autoFinishedCount {
+    _autoFinishedCount = autoFinishedCount;
+    
+    if (autoFinishedCount >= self.autoTotalCount) {
+        [self.autoRegistArray writeToFile:[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES)[0] stringByAppendingPathComponent:@"PC_USER_AUTO.json"] atomically:YES];
+    }
+}
+  
 @end

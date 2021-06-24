@@ -125,6 +125,7 @@ NSString * const kWebSocketDidCloseNotification = @"kWebSocketDidCloseNotificati
             // 只有 SR_OPEN 开启状态才能调 send 方法
             if (self.socket.readyState == SR_OPEN) {
                 [self.socket send:data];
+                QMUILogInfo(@"SOCKET_发送data", @"%@", data);
             } else if (self.socket.readyState == SR_CONNECTING) {
                 [self reconnect];
             } else if (self.socket.readyState == SR_CLOSING ||

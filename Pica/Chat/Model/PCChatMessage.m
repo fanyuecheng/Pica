@@ -43,6 +43,8 @@
             message.messageType = PCChatMessageTypeNotification;
         } else if ([messageType isEqualToString:@"broadcast_audio"]) {
             message.messageType = PCChatMessageTypeAudio;
+        } else if ([messageType isEqualToString:@"kick"]) {
+            return nil;
         }
 
         return message;
@@ -115,7 +117,7 @@
     info[@"avatar"] = myself.avatar.imageURL;
     info[@"audio"] = @"";
     info[@"block_user_id"] = @"";
-    info[@"platform"] = @"Pica_iOS";
+    info[@"platform"] = @"android";//@"Pica_iOS"
     info[@"reply_name"] = replyMessage ? replyMessage.name : @"";
     info[@"reply"] = replyMessage ? replyMessage.message : @"";
     info[@"at"] = at ? [NSString stringWithFormat:@"嗶咔_%@", at] : @"";
@@ -132,21 +134,6 @@
     return message;
 }
 
-- (void)setIsPlaying:(BOOL)isPlaying {
-    _isPlaying = isPlaying;
-    !self.playStateBlock ? : self.playStateBlock(isPlaying);
-}
-
-#pragma mark - AVAudioPlayerDelegate
-- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
-    self.isPlaying = NO;
-}
-
-- (void)audioPlayerDecodeErrorDidOccur:(AVAudioPlayer *)player error:(NSError * __nullable)error {
-    self.isPlaying = NO;
-    [QMUITips showError:error.domain];
-}
-
 + (PCChatMessage *)imageMessageDataWithData:(NSData *)data {
     PCUser *myself = [PCUser localUser];
     
@@ -154,7 +141,7 @@
     info[@"avatar"] = myself.avatar.imageURL;
     info[@"audio"] = @"";
     info[@"block_user_id"] = @"";
-    info[@"platform"] = @"Pica_iOS";
+    info[@"platform"] = @"android";//@"Pica_iOS"
     info[@"reply_name"] = @"";
     info[@"reply"] = @"";
     info[@"at"] = @"";
@@ -198,7 +185,7 @@
     info[@"avatar"] = myself.avatar.imageURL;
     info[@"image"] = @"";
     info[@"block_user_id"] = @"";
-    info[@"platform"] = @"Pica_iOS";
+    info[@"platform"] = @"android";//@"Pica_iOS"
     info[@"reply_name"] = @"";
     info[@"reply"] = @"";
     info[@"at"] = @"";
@@ -215,6 +202,21 @@
     message.audioData = data;
     
     return message;
+}
+
+- (void)setIsPlaying:(BOOL)isPlaying {
+    _isPlaying = isPlaying;
+    !self.playStateBlock ? : self.playStateBlock(isPlaying);
+}
+
+#pragma mark - AVAudioPlayerDelegate
+- (void)audioPlayerDidFinishPlaying:(AVAudioPlayer *)player successfully:(BOOL)flag {
+    self.isPlaying = NO;
+}
+
+- (void)audioPlayerDecodeErrorDidOccur:(AVAudioPlayer *)player error:(NSError * __nullable)error {
+    self.isPlaying = NO;
+    [QMUITips showError:error.domain];
 }
 
 @end

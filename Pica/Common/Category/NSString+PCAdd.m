@@ -8,7 +8,7 @@
 
 #import "NSString+PCAdd.h"
 #import "NSData+PCAdd.h"
-#import <QMUIKit/UIImage+QMUI.h>
+#import <QMUIKit/QMUIKit.h>
 
 @implementation NSString (PCAdd)
 
@@ -56,6 +56,22 @@
     [label sizeToFit];
     
     return [UIImage qmui_imageWithView:label];
+}
+
++ (NSString *)pc_randomTextWithLength:(NSUInteger)length {
+    NSString *parentString = @"0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIGKLMNOPQRSTUVWXYZ";
+    NSArray *parentArray = [parentString qmui_toArray];
+    if (length) {
+        NSMutableString *nameString = [NSMutableString string];
+        
+        for (NSInteger i = 0; i < length; i++) {
+            NSInteger index = arc4random() % parentString.length;
+            [nameString appendString:[parentArray objectAtIndex:index]];
+        }
+        return nameString;
+    } else {
+        return @"";
+    }
 }
 
 @end

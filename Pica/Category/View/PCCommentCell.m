@@ -13,8 +13,9 @@
 #import "NSString+PCAdd.h"
 #import "PCCommonUI.h"
 #import "PCCommentLikeRequest.h"
+#import "PCUserInfoView.h"
 #import "PCComicsCommentController.h"
- 
+
 @interface PCCommentCell ()
 
 @property (nonatomic, strong) UIImageView *avatarView;
@@ -120,6 +121,16 @@
     }
 }
 
+- (void)avatarAction:(UITapGestureRecognizer *)sender {
+    if (self.comment.user) {
+        QMUIModalPresentationViewController *controller = [[QMUIModalPresentationViewController alloc] init];
+        PCUserInfoView *infoView = [[PCUserInfoView alloc] init];
+        infoView.user = self.comment.user;
+        controller.contentView = infoView;
+        [controller showWithAnimated:YES completion:nil];
+    }
+}
+
 #pragma mark - Get
 - (UIImageView *)avatarView {
     if (!_avatarView) {
@@ -128,6 +139,8 @@
         _avatarView.layer.masksToBounds = YES;
         _avatarView.layer.borderWidth = .5;
         _avatarView.layer.borderColor = PCColorHotPink.CGColor;
+        _avatarView.userInteractionEnabled = YES;
+        [_avatarView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(avatarAction:)]];
     }
     return _avatarView;
 }

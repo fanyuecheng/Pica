@@ -76,7 +76,7 @@
                 if (request.error) {
                     NSDictionary *response = request.responseJSONObject;
                     [request.error qmui_bindObject:response forKey:PC_ERROR_DATA];
-                    [QMUITips showError:[NSString stringWithFormat:@"error:%@\nmessage:%@", response[@"error"], response[@"message"]] inView:DefaultTipsParentView];
+                    [QMUITips showError:[NSString stringWithFormat:@"error:%@\nmessage:%@\ndetail:%@", response[@"error"], response[@"message"], response[@"detail"]] inView:DefaultTipsParentView];
                     if ([response[@"error"] isEqualToString:@"1005"] &&
                         [response[@"message"] isEqualToString:@"unauthorized"] &&
                         [response[@"code"] integerValue] == 401) {
