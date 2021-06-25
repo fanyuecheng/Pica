@@ -13,10 +13,14 @@
 #import "PCMessageBubbleView.h"
 #import "PCUser.h"
 #import "UIImageView+PCAdd.h"
+#import "PCProfileRequest.h"
+#import "PCDefineHeader.h"
+#import "PCUserInfoView.h"
 
 @interface PCChatMessageCell ()
 
 @property (nonatomic, strong) PCUser *myself;
+@property (nonatomic, strong) PCProfileRequest *request;
 
 @end
 
@@ -70,9 +74,34 @@
     }
 }
 
+#pragma mark - Action
+- (void)avatarAction:(UITapGestureRecognizer *)sender {
+    if (self.message && ![self messageOwnerIsMyself]) {
+        if (self.message.user) {
+            [self showUserInfo:self.message.user];
+        } else {
+            self.request.userId = self.message.user_id;
+            @weakify(self)
+            [self.request sendRequest:^(PCUser *user) {
+                @strongify(self)
+                self.message.user = user;
+                [self showUserInfo:user];
+            } failure:nil];
+        }
+    }
+}
+
 #pragma mark - Method
 - (BOOL)messageOwnerIsMyself {
     return [self.message.user_id isEqualToString:self.myself.userId];
+}
+
+- (void)showUserInfo:(PCUser *)user {
+    QMUIModalPresentationViewController *controller = [[QMUIModalPresentationViewController alloc] init];
+    PCUserInfoView *infoView = [[PCUserInfoView alloc] init];
+    infoView.user = user;
+    controller.contentView = infoView;
+    [controller showWithAnimated:YES completion:nil];
 }
 
 #pragma mark - Set
@@ -110,6 +139,8 @@
 - (UIImageView *)characterView {
     if (!_characterView) {
         _characterView = [[UIImageView alloc] init];
+        _characterView.userInteractionEnabled = YES;
+        [_characterView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(avatarAction:)]];
     }
     return _characterView;
 }
@@ -170,6 +201,13 @@
         _messageBubbleView = [[PCMessageBubbleView alloc] init];
     }
     return _messageBubbleView;
+}
+
+- (PCProfileRequest *)request {
+    if (!_request) {
+        _request = [[PCProfileRequest alloc] init];
+    }
+    return _request;
 }
 
 @end

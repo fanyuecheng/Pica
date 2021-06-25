@@ -214,7 +214,7 @@
     self.levelLabel.text = [NSString stringWithFormat:@"Lv.%zd exp:%zd", user.level, user.exp];
     self.nameLabel.text = user.name;
     self.titleLabel.text = user.title;
-    self.sloganLabel.text = user.slogan;
+    self.sloganLabel.text = user.slogan ? user.slogan : @"no slogan";
     self.signButton.hidden = user.isPunched;
 }
 

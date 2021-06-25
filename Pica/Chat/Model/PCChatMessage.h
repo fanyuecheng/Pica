@@ -51,7 +51,7 @@ typedef NS_ENUM(NSUInteger, PCChatMessageType) {
     PCChatMessageTypeNotification
 };
 
-@class UIImage, AVAudioPlayer;
+@class UIImage, AVAudioPlayer, PCUser;
 @interface PCChatMessage : NSObject
 
 @property (nonatomic, copy) NSString *at;
@@ -75,6 +75,7 @@ typedef NS_ENUM(NSUInteger, PCChatMessageType) {
 @property (nonatomic, assign) NSInteger level;
  
 //custom
+@property (nonatomic, strong) PCUser   *user;
 @property (nonatomic, assign) PCChatMessageType messageType;
 @property (nonatomic, assign) NSInteger connections;
 @property (nonatomic, strong) NSDate   *time;

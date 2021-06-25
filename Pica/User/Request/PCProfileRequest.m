@@ -19,14 +19,16 @@
     [self startWithCompletionBlockWithSuccess:^(__kindof YTKBaseRequest * _Nonnull request) {
         PCUser *user = [PCUser yy_modelWithJSON:request.responseObject[@"data"][@"user"]];
         !success ? : success(user);
-        [[NSUserDefaults standardUserDefaults] setObject:request.responseObject[@"data"][@"user"] forKey:PC_LOCAL_USER];
+        if (!self.userId) {
+            [[NSUserDefaults standardUserDefaults] setObject:request.responseObject[@"data"][@"user"] forKey:PC_LOCAL_USER];
+        }
     } failure:^(__kindof YTKBaseRequest * _Nonnull request) {
         !failure ? : failure(request.error);
     }];
 }
 
 - (NSString *)requestUrl {
-    return PC_API_USERS_PROFILE;
+    return self.userId ? [NSString stringWithFormat:PC_API_USERS_PROFILE, self.userId] : PC_API_USERS_PROFILE_ME;
 }
 
 - (NSDictionary<NSString *,NSString *> *)requestHeaderFieldValueDictionary {

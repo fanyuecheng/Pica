@@ -90,7 +90,7 @@
         @strongify(self)
          
         PCComicsComment *comment = self.commentArray.lastObject;
-        if (comment.page < comment.pages) {
+        if (self.mainRequest.page < comment.pages) {
             self.mainRequest.page ++;
             [self requestComment];
         } else {

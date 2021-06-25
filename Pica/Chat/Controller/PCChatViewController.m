@@ -317,7 +317,7 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
     }
 }
 
-- (void) insertMessage:(PCChatMessage *)message scrollToBottom:(BOOL)scroll {
+- (void)insertMessage:(PCChatMessage *)message scrollToBottom:(BOOL)scroll {
     [self.messageArray addObject:message];
     [self.tableView reloadData];
     

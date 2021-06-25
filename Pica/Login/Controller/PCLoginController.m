@@ -56,6 +56,10 @@
     
     self.accountTextField.text = data[@"email"];
     self.passwordTextField.text = data[@"password"];
+    
+    UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
+    pasteboard.string = [data yy_modelToJSONString];
+    [QMUITips showSucceed:@"注册信息已经复制到剪切板，请注意保存~"];
 }
 
 #pragma mark - Action

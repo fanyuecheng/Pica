@@ -18,6 +18,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (CGFloat)pc_heightForFont:(UIFont *)font width:(CGFloat)width; 
 - (UIImage *)pc_imageWithTextColor:(UIColor *)color
                               font:(UIFont *)font;
++ (NSString *)pc_randomTextWithLength:(NSUInteger)length;
+
 @end
 
 NS_ASSUME_NONNULL_END
