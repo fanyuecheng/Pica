@@ -28,7 +28,11 @@ API来自 [picacomic](https://github.com/AnkiKong/picacomic)
 * [x] 浏览历史
 * [x] 留言板
 * [x] 聊天室接收发送图片，文字，声音
-* [ ] 下载本子
+* [ ] 下载本子  
+
+#### 赞赏  
+如果您觉得好用可以打赏我哟 
+![mm_reward_qrcode](https://user-images.githubusercontent.com/34535969/123406394-7574a700-d5dd-11eb-966b-e23a24453a29.png)
 
 #### 免责声明  
 本项目仅供学习&个人使用，版权归原漫画作者及发行商所有。  
