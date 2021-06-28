@@ -8,7 +8,6 @@
 
 #import <Foundation/Foundation.h>
 #import "PCUser.h"
-#import "PCComics.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -45,6 +44,11 @@ NS_ASSUME_NONNULL_BEGIN
  ip = "";
  */
 
+typedef NS_ENUM(NSUInteger, PCCommentType) {
+    PCCommentTypeComic,
+    PCCommentTypeGame
+};
+
 @interface PCComment : NSObject
 
 @property (nonatomic, copy)   NSString *commentId;
@@ -55,7 +59,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) BOOL     hide;
 @property (nonatomic, strong) NSDate   *created_at;
 @property (nonatomic, strong) PCUser   *user;
-@property (nonatomic, strong) PCComics *comic;
+@property (nonatomic, strong) NSString *comic;
+@property (nonatomic, strong) NSString *game;
 @property (nonatomic, assign) NSInteger commentsCount;
 @property (nonatomic, assign) NSInteger likesCount;
 

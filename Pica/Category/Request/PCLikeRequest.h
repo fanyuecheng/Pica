@@ -1,5 +1,5 @@
 //
-//  PCComicsLikeRequest.h
+//  PCLikeRequest.h
 //  Pica
 //
 //  Created by fancy on 2020/11/10.
@@ -10,10 +10,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface PCComicsLikeRequest : PCRequest
-
-@property (nonatomic, copy) NSString *comicsId;
+@interface PCLikeRequest : PCRequest
+ 
 - (instancetype)initWithComicsId:(NSString *)comicsId;
+- (instancetype)initWithGameId:(NSString *)gameId;
 
 @end
 

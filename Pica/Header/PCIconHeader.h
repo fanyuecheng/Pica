@@ -25,5 +25,10 @@
 #define ICON_RANK        @"\U0000e8b3" //rank
 #define ICON_SOUND_PLAY  @"\U0000e8b9" //声音播放
 #define ICON_SOUND_RECORD @"\U0000e8c0" //录音
+#define ICON_GAME        @"\U0000e622" //游戏
+#define ICON_IOS         @"\U0000e60c" //iOS
+#define ICON_ANDROID     @"\U0000e64d" //android
+#define ICON_PLAY        @"\U0000e629" //播放
+#define ICON_SUSPEND     @"\U0000e619" //暂停
 
 #endif /* PCIconHeader_h */

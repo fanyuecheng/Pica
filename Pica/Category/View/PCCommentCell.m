@@ -14,7 +14,7 @@
 #import "PCCommonUI.h"
 #import "PCCommentLikeRequest.h"
 #import "PCUserInfoView.h"
-#import "PCComicsCommentController.h"
+#import "PCCommentController.h"
 
 @interface PCCommentCell ()
 
@@ -116,7 +116,8 @@
  
 - (void)childAction:(QMUIButton *)sender {
     if (self.comment) {
-        PCComicsCommentController *comment = [[PCComicsCommentController alloc] initWithCommentId:self.comment.commentId];
+        PCCommentController *comment = [[PCCommentController alloc] initWithCommentId:self.comment.commentId];
+        comment.commentType = self.comment.game ? PCCommentTypeGame : PCCommentTypeComic;
         [[QMUIHelper visibleViewController].navigationController pushViewController:comment animated:YES];
     }
 }

@@ -11,12 +11,14 @@
 #import "PCCategoryController.h"
 #import "PCProfileController.h"
 #import "PCChatListController.h"
+#import "PCGameListController.h"
 #import "UIImage+PCAdd.h"
  
 @interface PCTabBarViewController ()
 
 @property (nonatomic, strong) PCCategoryController *categoryController;
 @property (nonatomic, strong) PCChatListController *chatController;
+@property (nonatomic, strong) PCGameListController *gameController;
 @property (nonatomic, strong) PCProfileController  *profileController;
 
 @end
@@ -39,12 +41,18 @@
                                 selectedImage:[UIImage pc_iconWithText:ICON_CHAT size:22 color:UIColorBlue]
                                           tag:1];
     
+    PCNavigationController *game = [[PCNavigationController alloc] initWithRootViewController:self.gameController];
+    game.tabBarItem = [self tabBarItemWithTitle:@"游戏"
+                                        image:[UIImage pc_iconWithText:ICON_GAME size:22 color:UIColorGrayLighten]
+                                selectedImage:[UIImage pc_iconWithText:ICON_GAME size:22 color:UIColorBlue]
+                                          tag:2];
+    
     PCNavigationController *me = [[PCNavigationController alloc] initWithRootViewController:self.profileController];
     me.tabBarItem = [self tabBarItemWithTitle:@"我的"
                                         image:[UIImage pc_iconWithText:ICON_USER size:22 color:UIColorGrayLighten]
                                 selectedImage:[UIImage pc_iconWithText:ICON_USER size:22 color:UIColorBlue]
-                                          tag:2];
-    self.viewControllers = @[category, chat, me];
+                                          tag:3];
+    self.viewControllers = @[category, chat, game, me];
 }
  
 - (void)viewDidLoad {
@@ -86,6 +94,14 @@
         _chatController.hidesBottomBarWhenPushed = NO;
     }
     return _chatController;
+}
+
+- (PCGameListController *)gameController {
+    if (!_gameController) {
+        _gameController = [[PCGameListController alloc] init];
+        _gameController.hidesBottomBarWhenPushed = NO;
+    }
+    return _gameController;
 }
 
 @end

@@ -7,16 +7,11 @@
 //
 
 #import "PCCategoryCell.h"
-#import "PCVendorHeader.h"
 #import "UIImageView+PCAdd.h"
 #import "UIImage+PCAdd.h"
 #import "PCCommonUI.h"
 
 @interface PCCategoryCell ()
-
-@property (nonatomic, strong) SDAnimatedImageView *imageView;
-@property (nonatomic, strong) QMUILabel           *titleLabel;
-@property (nonatomic, strong) QMUILabel           *iconLabel;
 
 @end
 

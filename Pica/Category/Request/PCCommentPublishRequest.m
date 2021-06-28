@@ -10,6 +10,13 @@
 
 @implementation PCCommentPublishRequest
 
+- (instancetype)initWithGameId:(NSString *)gameId {
+    if (self = [super init]) {
+        _gameId = [gameId copy];
+    }
+    return self;
+}
+
 - (instancetype)initWithCommentId:(NSString *)commentId {
     if (self = [super init]) {
         _commentId = [commentId copy];
@@ -40,7 +47,9 @@
     if (self.comicsId) {
         return [NSString stringWithFormat:PC_API_COMICS_COMMENTS, self.comicsId];
     } else if (self.commentId) {
-        return [NSString stringWithFormat:PC_API_COMICS_COMMENTS_CHILD_REPLY, self.commentId];
+        return [NSString stringWithFormat:PC_API_COMMENTS_CHILD_REPLY, self.commentId];
+    } else if (self.gameId) {
+        return [NSString stringWithFormat:PC_API_GAME_COMMENTS, self.gameId];
     } else {
         return @"";
     }

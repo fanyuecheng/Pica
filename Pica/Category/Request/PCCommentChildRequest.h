@@ -7,11 +7,13 @@
 //
 
 #import "PCRequest.h"
+#import "PCComment.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface PCCommentChildRequest : PCRequest
 
+@property (nonatomic, assign) PCCommentType type;
 @property (nonatomic, copy)   NSString  *commentId;
 @property (nonatomic, assign) NSInteger page;
 

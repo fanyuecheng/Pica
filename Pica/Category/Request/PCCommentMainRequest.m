@@ -15,9 +15,9 @@
 
 @implementation PCCommentMainRequest
 
-- (instancetype)initWithComicsId:(NSString *)comicsId {
+- (instancetype)initWithObjectId:(NSString *)objectId {
     if (self = [super init]) {
-        _comicsId = [comicsId copy];
+        _objectId = [objectId copy];
         _page = 1;
     }
     return self;
@@ -37,7 +37,7 @@
 }
 
 - (NSString *)requestUrl {
-    NSMutableString *requestUrl = [NSMutableString stringWithFormat:PC_API_COMICS_COMMENTS, self.comicsId];
+    NSMutableString *requestUrl = self.type == PCCommentTypeComic ? [NSMutableString stringWithFormat:PC_API_COMICS_COMMENTS, self.objectId] : [NSMutableString stringWithFormat:PC_API_GAME_COMMENTS, self.objectId];
     [requestUrl appendFormat:@"?page=%@", @(self.page)];
     return requestUrl;
 }

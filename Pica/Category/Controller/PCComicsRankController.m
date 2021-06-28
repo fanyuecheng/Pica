@@ -98,7 +98,7 @@
 #pragma mark - Action
 - (void)indexAction:(UISegmentedControl *)sender {
     NSInteger index = sender.selectedSegmentIndex;
-    [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:index inSection:0] atScrollPosition:UICollectionViewScrollPositionRight animated:YES];
+    [self.collectionView setContentOffset:CGPointMake(SCREEN_WIDTH * index, 0) animated:YES];
 }
 
 #pragma mark - Get
