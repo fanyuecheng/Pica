@@ -1,21 +1,22 @@
 //
-//  PCComicsCommentController.m
+//  PCCommentController.m
 //  Pica
 //
 //  Created by fancy on 2020/11/11.
 //  Copyright © 2020 fancy. All rights reserved.
 //
 
-#import "PCComicsCommentController.h"
+#import "PCCommentController.h"
 #import "PCCommentCell.h"
 #import "PCCommentMainRequest.h"
 #import "PCCommentChildRequest.h"
 #import "PCCommentPublishRequest.h"
 
-@interface PCComicsCommentController () <QMUITextViewDelegate>
+@interface PCCommentController () <QMUITextViewDelegate>
 
-@property (nonatomic, assign) PCComicsCommentType type;
+@property (nonatomic, assign) PCCommentPrimaryType primaryType; 
 @property (nonatomic, copy)   NSString         *comicsId;
+@property (nonatomic, copy)   NSString         *gameId;
 @property (nonatomic, copy)   NSString         *commentId;
 @property (nonatomic, strong) PCCommentMainRequest    *mainRequest;
 @property (nonatomic, strong) PCCommentChildRequest    *childRequest;
@@ -29,11 +30,22 @@
 
 @end
 
-@implementation PCComicsCommentController
+@implementation PCCommentController
  
+- (instancetype)initWithGameId:(NSString *)gameId {
+    if (self = [super init]) {
+        _commentType = PCCommentTypeGame;
+        _primaryType = PCCommentPrimaryTypeMain;
+        _gameId = [gameId copy];
+        _commentArray = [NSMutableArray array];
+        _inputHeight = 50;
+    }
+    return self;
+}
+
 - (instancetype)initWithCommentId:(NSString *)commentId {
     if (self = [super init]) {
-        _type = PCComicsCommentTypeChild;
+        _primaryType = PCCommentPrimaryTypeChild;
         _commentId = [commentId copy];
         _commentArray = [NSMutableArray array];
         _inputHeight = 50;
@@ -43,7 +55,8 @@
 
 - (instancetype)initWithComicsId:(NSString *)comicsId {
     if (self = [super init]) {
-        _type = PCComicsCommentTypeMain;
+        _commentType = PCCommentTypeComic;
+        _primaryType = PCCommentPrimaryTypeMain;
         _comicsId = [comicsId copy];
         _commentArray = [NSMutableArray array];
         _inputHeight = 50;
@@ -60,8 +73,8 @@
 - (void)setupNavigationItems {
     [super setupNavigationItems];
     
-    switch (self.type) {
-        case PCComicsCommentTypeMain:
+    switch (self.primaryType) {
+        case PCCommentPrimaryTypeMain:
             self.title = @"评论";
             break;
             
@@ -179,7 +192,7 @@
 
 #pragma mark - Net
 - (void)requestComment {
-    if (self.type == PCComicsCommentTypeMain) {
+    if (self.primaryType == PCCommentPrimaryTypeMain) {
         if (self.mainRequest.page == 1) {
             [self showEmptyViewWithLoading];
         }
@@ -237,7 +250,8 @@
 #pragma mark - Get
 - (PCCommentMainRequest *)mainRequest {
     if (!_mainRequest) {
-        _mainRequest = [[PCCommentMainRequest alloc] initWithComicsId:self.comicsId];
+        _mainRequest = [[PCCommentMainRequest alloc] initWithObjectId:self.commentType == PCCommentTypeComic ? self.comicsId : self.gameId];
+        _mainRequest.type = self.commentType;
     }
     return _mainRequest;
 }
@@ -245,14 +259,19 @@
 - (PCCommentChildRequest *)childRequest {
     if (!_childRequest) {
         _childRequest = [[PCCommentChildRequest alloc] initWithCommentId:self.commentId];
+        _childRequest.type = self.commentType;
     }
     return _childRequest;
 }
 
 - (PCCommentPublishRequest *)publishRequest {
     if (!_publishRequest) {
-        if (self.type == PCComicsCommentTypeMain) {
-            _publishRequest = [[PCCommentPublishRequest alloc] initWithComicsId:self.comicsId];
+        if (self.primaryType == PCCommentPrimaryTypeMain) {
+            if (self.commentType == PCCommentTypeComic) {
+                _publishRequest = [[PCCommentPublishRequest alloc] initWithComicsId:self.comicsId];
+            } else {
+                _publishRequest = [[PCCommentPublishRequest alloc] initWithGameId:self.gameId];
+            }
         } else {
             _publishRequest = [[PCCommentPublishRequest alloc] initWithCommentId:self.commentId];
         }
@@ -267,7 +286,7 @@
         _textView.textContainerInset = UIEdgeInsetsMake(15, 10, 15, 70);
         _textView.backgroundColor = UIColorWhite;
         _textView.showsVerticalScrollIndicator = NO;
-        _textView.placeholder = self.type == PCComicsCommentTypeMain ? @"在这里发表您的评论" : @"在这里发表您的回复";
+        _textView.placeholder = self.primaryType == PCCommentPrimaryTypeMain ? @"在这里发表您的评论" : @"在这里发表您的回复";
         _textView.qmui_borderColor = PCColorPink;
         _textView.qmui_borderPosition = QMUIViewBorderPositionTop;
         _textView.delegate = self;
@@ -288,7 +307,7 @@
 - (QMUIButton *)commentButton {
     if (!_commentButton) {
         _commentButton = [[QMUIButton alloc] init];
-        [_commentButton setTitle:self.type == PCComicsCommentTypeMain ? @"发布" : @"回复" forState:UIControlStateNormal];
+        [_commentButton setTitle:self.primaryType == PCCommentPrimaryTypeMain ? @"发布" : @"回复" forState:UIControlStateNormal];
         [_commentButton setTitleColor:UIColorWhite forState:UIControlStateNormal];
         _commentButton.layer.cornerRadius = 4;
         _commentButton.layer.masksToBounds = YES;

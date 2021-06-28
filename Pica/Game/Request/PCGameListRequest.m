@@ -1,21 +1,20 @@
 //
-//  PCCommentChildRequest.m
+//  PCGameListRequest.m
 //  Pica
 //
-//  Created by Fancy on 2021/6/4.
+//  Created by Fancy on 2021/6/25.
 //  Copyright © 2021 fancy. All rights reserved.
 //
 
-#import "PCCommentChildRequest.h"
+#import "PCGameListRequest.h"
+#import "PCGame.h"
 #import <YYModel/YYModel.h>
-#import "PCComment.h"
 
-@implementation PCCommentChildRequest
+@implementation PCGameListRequest
 
-- (instancetype)initWithCommentId:(NSString *)commentId {
+- (instancetype)init {
     if (self = [super init]) {
-        _commentId = [commentId copy];
-        _page = 1;
+        self.page = 1;
     }
     return self;
 }
@@ -25,18 +24,15 @@
     [super sendRequest:success failure:failure];
     
     [self startWithCompletionBlockWithSuccess:^(__kindof YTKBaseRequest * _Nonnull request) {
-        PCComicsComment *comment = [PCComicsComment yy_modelWithJSON:request.responseJSONObject[@"data"]]; 
-        [comment.docs enumerateObjectsUsingBlock:^(PCComment * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            obj.isChild = YES;
-        }];
-        !success ? : success(comment);
+        PCGameList *list = [PCGameList yy_modelWithJSON:request.responseJSONObject[@"data"][@"games"]];
+        !success ? : success(list);
     } failure:^(__kindof YTKBaseRequest * _Nonnull request) {
         !failure ? : failure(request.error);
     }];
 }
 
 - (NSString *)requestUrl {
-    return [NSString stringWithFormat:PC_API_COMMENTS_CHILD, self.commentId, @(self.page)];
+    return [NSString stringWithFormat:PC_API_GAME_LIST, @(self.page)];
 }
 
 - (NSDictionary<NSString *,NSString *> *)requestHeaderFieldValueDictionary {
@@ -47,14 +43,12 @@
     return YTKRequestMethodGET;
 }
 
-
 - (NSInteger)cacheTimeInSeconds {
-    return -1;
+    return 60 * 60;
 }
 
 - (BOOL)ignoreCache {
-    return YES;
+    return NO;
 }
-
 
 @end

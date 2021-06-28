@@ -11,6 +11,7 @@
 #import "PCDefineHeader.h"
 #import "PCMessageBubbleView.h"
 #import "PCChatMessage.h"
+#import "PCIconHeader.h"
 
 @interface PCVoiceMessageCell ()
 
@@ -82,9 +83,9 @@
     if (!_playButton) {
         _playButton = [[QMUIButton alloc] init];
         _playButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        _playButton.titleLabel.font = UIFontMake(20);
-        [_playButton setTitle:@"▶️" forState:UIControlStateNormal];
-        [_playButton setTitle:@"⏸" forState:UIControlStateSelected];
+        _playButton.titleLabel.font = [UIFont fontWithName:@"iconfont" size:20];
+        [_playButton setTitle:ICON_PLAY forState:UIControlStateNormal];
+        [_playButton setTitle:ICON_SUSPEND forState:UIControlStateSelected];
         [_playButton addTarget:self action:@selector(playAction:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _playButton;

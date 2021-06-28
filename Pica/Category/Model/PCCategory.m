@@ -36,7 +36,7 @@
     category.title = @"哔咔留言板";
     category.active = YES;
     category.isCustom = YES;
-    category.controllerClass = @"PCComicsCommentController";
+    category.controllerClass = @"PCCommentController";
     category.desc = ICON_COMMENT;
     return category;
 }

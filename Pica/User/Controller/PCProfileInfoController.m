@@ -9,6 +9,7 @@
 #import "PCProfileInfoController.h"
 #import "PCComicsListController.h"
 #import "PCComicsDetailController.h"
+#import "PCGameDetailController.h"
 #import "PCUserCommentRequest.h"
 #import "PCComment.h"
 #import "PCCommentCell.h"
@@ -164,8 +165,13 @@
     } else {
         PCComicsComment *commentList = self.dataSource[indexPath.section];
         PCComment *comment = commentList.docs[indexPath.row];
-        PCComicsDetailController *detail = [[PCComicsDetailController alloc] initWithComicsId:comment.comic.comicsId];
-        [[QMUIHelper visibleViewController].navigationController pushViewController:detail animated:YES];
+        if (comment.comic) {
+            PCComicsDetailController *detail = [[PCComicsDetailController alloc] initWithComicsId:comment.comic];
+            [[QMUIHelper visibleViewController].navigationController pushViewController:detail animated:YES];
+        } else if (comment.game) {
+            PCGameDetailController *detail = [[PCGameDetailController alloc] initWithGameId:comment.game];
+            [[QMUIHelper visibleViewController].navigationController pushViewController:detail animated:YES];
+        }
     }
 }
 

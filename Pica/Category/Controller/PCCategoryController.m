@@ -14,7 +14,7 @@
 #import "NSString+PCAdd.h"
 #import "PCComicsListController.h"
 #import "PCComicsRankController.h"
-#import "PCComicsCommentController.h"
+#import "PCCommentController.h"
 #import "PCSearchRequest.h"
 #import "PCIconHeader.h"
 #import "PCSearchRecordView.h"
@@ -165,8 +165,9 @@
             if ([category.controllerClass isEqualToString:@"PCComicsRankController"] ||
                 [category.controllerClass isEqualToString:@"PCComicsListController"]) {
                 controller = [[NSClassFromString(category.controllerClass) alloc] init];
-            } else if ([category.controllerClass isEqualToString:@"PCComicsCommentController"]) {
-                PCComicsCommentController *comment = [[PCComicsCommentController alloc] initWithComicsId:PC_COMMENT_BOARD_ID];
+            } else if ([category.controllerClass isEqualToString:@"PCCommentController"]) {
+                PCCommentController *comment = [[PCCommentController alloc] initWithComicsId:PC_COMMENT_BOARD_ID];
+                comment.commentType = PCCommentTypeComic;
                 controller = comment;
             }
         } else {

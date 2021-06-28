@@ -11,10 +11,10 @@
 #import "UIImageView+PCAdd.h"
 #import "UIImage+PCAdd.h"
 #import "NSDate+PCAdd.h"
-#import "PCComicsLikeRequest.h"
+#import "PCLikeRequest.h"
 #import "PCComicsFavouriteRequest.h"
 #import "PCComicsListController.h"
-#import "PCComicsCommentController.h"
+#import "PCCommentController.h"
 #import "PCUserInfoView.h"
 #import "PCCommonUI.h"
 
@@ -139,13 +139,14 @@
 }
 
 - (void)commentAction {
-    PCComicsCommentController *comment = [[PCComicsCommentController alloc] initWithComicsId:self.comics.comicsId];
+    PCCommentController *comment = [[PCCommentController alloc] initWithComicsId:self.comics.comicsId];
+    comment.commentType = PCCommentTypeComic;
     [[QMUIHelper visibleViewController].navigationController pushViewController:comment animated:YES];
 }
 
 #pragma mark - Net
 - (void)likeAction {
-    PCComicsLikeRequest *request = [[PCComicsLikeRequest alloc] initWithComicsId:self.comics.comicsId];
+    PCLikeRequest *request = [[PCLikeRequest alloc] initWithComicsId:self.comics.comicsId];
     [request sendRequest:^(NSNumber *liked) {
         self.likeButton.selected = [liked boolValue];
         [liked boolValue] ? self.likeButton.qmui_badgeInteger ++ : self.likeButton.qmui_badgeInteger --;

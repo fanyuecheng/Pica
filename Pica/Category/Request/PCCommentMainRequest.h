@@ -13,10 +13,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PCCommentMainRequest : PCRequest
 
-@property (nonatomic, copy)   NSString  *comicsId;
+@property (nonatomic, assign) PCCommentType type;
+@property (nonatomic, copy)   NSString  *objectId;
 @property (nonatomic, assign) NSInteger page;
 
-- (instancetype)initWithComicsId:(NSString *)comicsId;
+- (instancetype)initWithObjectId:(NSString *)objectId;
 
 @end
 

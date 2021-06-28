@@ -29,8 +29,8 @@
 //漫画评论
 #define PC_API_COMICS_COMMENTS  @"comics/%@/comments"
 //漫画子评论
-#define PC_API_COMICS_COMMENTS_CHILD @"comments/%@/childrens?page=%@"
-#define PC_API_COMICS_COMMENTS_CHILD_REPLY @"comments/%@"
+#define PC_API_COMMENTS_CHILD   @"comments/%@/childrens?page=%@"
+#define PC_API_COMMENTS_CHILD_REPLY @"comments/%@"
 //漫画评论点赞
 #define PC_API_COMICS_COMMENTS_LIKE  @"comments/%@/like"
 //高级搜索
@@ -58,6 +58,14 @@
 #define PC_API_USERS_COMMENT    @"users/my-comments?page=%@"
 //聊天
 #define PC_API_CHAT             @"chat"
+//游戏
+#define PC_API_GAME_LIST        @"games?page=%@"
+//游戏详细
+#define PC_API_GAME_DETAIL      @"games/%@"
+//游戏评论
+#define PC_API_GAME_COMMENTS    @"games/%@/comments"
+//游戏like
+#define PC_API_GAME_LIKE      @"games/%@/like"
 
 //"https://picaapi.picacomic.com/comics/{bookId}/recommendation"
 

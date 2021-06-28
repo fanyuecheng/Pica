@@ -7,10 +7,7 @@
 API来自 [picacomic](https://github.com/AnkiKong/picacomic) 
 
 #### 软件截图  
-![1.png](https://z3.ax1x.com/2021/06/22/RZ47rj.png)  
-![2.png](https://z3.ax1x.com/2021/06/22/RZ4Hqs.png)  
-![3.png](https://z3.ax1x.com/2021/06/22/RZ4TMQ.png)  
-![4.png](https://z3.ax1x.com/2021/06/22/RZ4qZn.png)  
+[![md.jpg](https://z3.ax1x.com/2021/06/28/RNHakQ.md.jpg)](https://imgtu.com/i/RNHakQ)  
 
 #### 软件功能  
 * [x] 登录注册
@@ -28,6 +25,7 @@ API来自 [picacomic](https://github.com/AnkiKong/picacomic)
 * [x] 浏览历史
 * [x] 留言板
 * [x] 聊天室接收发送图片，文字，声音
+* [x] 游戏区
 * [ ] 下载本子  
 
 #### 赞赏  
