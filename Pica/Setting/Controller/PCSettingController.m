@@ -10,6 +10,7 @@
 #import "PCPasswordSetRequest.h"
 #import "AppDelegate.h"
 #import <SafariServices/SafariServices.h>
+#import "PCTabBarViewController.h"
 
 @interface PCSettingController ()
 
@@ -56,10 +57,26 @@
     
     cell.textLabel.text = self.dataSource[indexPath.section][indexPath.row];
     if (indexPath.section == 0 && indexPath.row == 0) {
-        long long fileSize = [[SDImageCache sharedImageCache] totalDiskSize];
-        cell.detailTextLabel.text = [NSByteCountFormatter stringFromByteCount:fileSize countStyle:NSByteCountFormatterCountStyleFile];
+        __block long long fileSize = 0;
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            fileSize = [[SDImageCache sharedImageCache] totalDiskSize];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                cell.detailTextLabel.text = [NSByteCountFormatter stringFromByteCount:fileSize countStyle:NSByteCountFormatterCountStyleFile];
+            });
+        }); 
     } else {
         cell.detailTextLabel.text = nil;
+    }
+    
+    if (indexPath.section == 0 && (indexPath.row == 2 || indexPath.row == 3)) {
+        if (![cell.accessoryView isKindOfClass:[UISwitch class]]) {
+            UISwitch *switchView = [[UISwitch alloc] init];
+            switchView.on = [[NSUserDefaults standardUserDefaults] boolForKey:indexPath.row == 2 ? PC_DATA_TO_SIMPLIFIED_CHINESE : PC_TAB_GAME_HIDDEN];
+            [switchView addTarget:self action:@selector(switchAction:) forControlEvents:UIControlEventValueChanged];
+            cell.accessoryView = switchView;
+        }
+    } else {
+        cell.accessoryView = nil;
     }
     
     return cell;
@@ -156,6 +173,19 @@
     [self showLogoutAlert];
 }
 
+- (void)switchAction:(UISwitch *)sender {
+    NSIndexPath *indexPath = [self.tableView qmui_indexPathForRowAtView:sender];
+    
+    if (indexPath.row == 2) {
+        [[NSUserDefaults standardUserDefaults] setBool:sender.isOn forKey:PC_DATA_TO_SIMPLIFIED_CHINESE];
+    } else if (indexPath.row == 3) {
+        [[NSUserDefaults standardUserDefaults] setBool:sender.isOn forKey:PC_TAB_GAME_HIDDEN];
+        
+        PCTabBarViewController *tabBarViewController = (PCTabBarViewController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+        [tabBarViewController reloadViewControllers];
+    }
+}
+
 #pragma mark - Net
 - (void)updatePassword {
     if (self.passwordSetRequest.passwordOld.length &&
@@ -173,7 +203,7 @@
 #pragma mark - Get
 - (NSArray *)dataSource {
     if (!_dataSource) {
-        _dataSource = @[@[@"清除缓存", @"修改密码"], @[@"关于Pica"]];
+        _dataSource = @[@[@"清除缓存", @"修改密码", @"简体中文", @"隐藏游戏区"], @[@"关于Pica"]];
     }
     return _dataSource;
 }

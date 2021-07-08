@@ -114,6 +114,7 @@
 		33C170F3268972BE00431213 /* PCGameInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 33C170F2268972BE00431213 /* PCGameInfoView.m */; };
 		33C170F72689754600431213 /* iconfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 33C170F62689754600431213 /* iconfont.ttf */; };
 		33C170FA2689B0BA00431213 /* PCContentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 33C170F92689B0BA00431213 /* PCContentCell.m */; };
+		33E6497126945B48001E98EA /* PCPopupContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 33E6497026945B48001E98EA /* PCPopupContainerView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -332,6 +333,8 @@
 		33C170F62689754600431213 /* iconfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = iconfont.ttf; sourceTree = "<group>"; };
 		33C170F82689B0BA00431213 /* PCContentCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCContentCell.h; sourceTree = "<group>"; };
 		33C170F92689B0BA00431213 /* PCContentCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCContentCell.m; sourceTree = "<group>"; };
+		33E6496F26945B48001E98EA /* PCPopupContainerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCPopupContainerView.h; sourceTree = "<group>"; };
+		33E6497026945B48001E98EA /* PCPopupContainerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCPopupContainerView.m; sourceTree = "<group>"; };
 		95C939A3661D2A820DEF2B30 /* Pods-Pica.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pica.debug.xcconfig"; path = "Target Support Files/Pods-Pica/Pods-Pica.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -547,6 +550,8 @@
 				33AB8275267B377300A2FD3F /* PCVoiceMessageCell.m */,
 				33AB8278267C3BFC00A2FD3F /* PCMessageNotificationView.h */,
 				33AB8279267C3BFC00A2FD3F /* PCMessageNotificationView.m */,
+				33E6496F26945B48001E98EA /* PCPopupContainerView.h */,
+				33E6497026945B48001E98EA /* PCPopupContainerView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1064,6 +1069,7 @@
 				334EADB1255A775D00B0231C /* QMUIConfigurationTemplateDefault.m in Sources */,
 				33AD942F255106D80079DFAE /* PCCategory.m in Sources */,
 				33AD941325501C1F0079DFAE /* PCRequest.m in Sources */,
+				33E6497126945B48001E98EA /* PCPopupContainerView.m in Sources */,
 				334EADD5255A873D00B0231C /* PCEpisode.m in Sources */,
 				33AD9408255019B70079DFAE /* PCTabBarViewController.m in Sources */,
 				3358C8D32660C0050000D17F /* PCPasswordSetRequest.m in Sources */,
@@ -1274,8 +1280,13 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.yuecheng.test;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Pica/voiceConvert/opencore-amrwb",
+					"$(PROJECT_DIR)/Pica/voiceConvert/opencore-amrnb",
+				);
+				MARKETING_VERSION = 1.0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pica.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -1295,8 +1306,13 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.mihuashi.test;
+				LIBRARY_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Pica/voiceConvert/opencore-amrwb",
+					"$(PROJECT_DIR)/Pica/voiceConvert/opencore-amrnb",
+				);
+				MARKETING_VERSION = 1.0.1;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pica.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};

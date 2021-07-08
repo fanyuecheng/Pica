@@ -31,6 +31,8 @@
 	<string>请点击“好”以允许访问。若不允许，你将无法发送语音。</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>请点击“好”以允许访问。若不允许，你将无法发送或上传本地相册图片。</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>音频转文字</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>iconfont.ttf</string>

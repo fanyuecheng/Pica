@@ -8,6 +8,7 @@
 
 #import "PCRequest.h"
 #import <QMUIKit/QMUIKit.h>
+#import <YYModel/YYModel.h>
 #import "NSString+PCAdd.h"
 #import "AppDelegate.h"
 
@@ -105,6 +106,13 @@
 #if defined(DEBUG)
     NSLog(@"\n============ [PCRequest Info] ============\nrequest method: %@  from cache: %@\nrequest url: %@\nrequest parameters: \n%@\nrequest response:\n%@\n==========================================\n", self.methodString, self.isDataFromCache ? @"YES" : @"NO", self.requestUrl, self.requestArgument, self.responseJSONObject);
 #endif
+    if (!self.error && [[NSUserDefaults standardUserDefaults] boolForKey:PC_DATA_TO_SIMPLIFIED_CHINESE]) {
+        NSString *simplifiedChinese = [self.responseString pc_simplifiedChinese];
+        NSDictionary *object = [NSJSONSerialization JSONObjectWithData:[simplifiedChinese dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error:nil];
+        [self setValue:simplifiedChinese forKey:@"responseString"];
+        [self setValue:object forKey:@"responseObject"];
+        [self setValue:object forKey:@"responseJSONObject"];
+    }
 }
 
 - (NSString *)methodString {

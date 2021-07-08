@@ -13,52 +13,7 @@
 #import "PCMessageBubbleView.h"
 #import "PCUser.h"
 #import "PCDefineHeader.h"
-
-@interface PCPopupContainerView : QMUIPopupContainerView
-
-@property (nonatomic, strong) NSMutableArray *buttonArray;
-@property (nonatomic, copy)   void (^actionBlock)(PCPopupContainerView *view, NSInteger index);
-
-@end
-
-@implementation PCPopupContainerView
-
-- (instancetype)initWithFrame:(CGRect)frame {
-    if (self = [super initWithFrame:frame]) {
-        self.contentEdgeInsets = UIEdgeInsetsZero;
-        self.buttonArray = [NSMutableArray array];
-        NSArray *array = @[@"复制", @"回复", @"@"];
-        [array enumerateObjectsUsingBlock:^(NSString *title, NSUInteger idx, BOOL * _Nonnull stop) {
-            QMUIButton *button = [[QMUIButton alloc] init];
-            button.tag = idx + 1000;
-            [button setTitle:title forState:UIControlStateNormal];
-            [button setTitleColor:UIColorBlue forState:UIControlStateNormal];
-            [button addTarget:self action:@selector(buttonAction:) forControlEvents:UIControlEventTouchUpInside];
-            [self.contentView addSubview:button];
-            [self.buttonArray addObject:button];
-        }];
-    } 
-    return self;
-}
-
-- (CGSize)sizeThatFitsInContentView:(CGSize)size {
-    return CGSizeMake(180, 40);
-}
-
-- (void)layoutSubviews {
-    [super layoutSubviews];
-        
-    [self.buttonArray enumerateObjectsUsingBlock:^(QMUIButton *obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        obj.frame = CGRectMake(60 * idx, 0, 60, 40);
-    }];
-}
-
-- (void)buttonAction:(QMUIButton *)sender {
-    !self.actionBlock ? : self.actionBlock(self, sender.tag - 1000);
-}
-
-@end
-
+#import "PCPopupContainerView.h"
   
 @implementation PCTextMessageCell
 
@@ -176,6 +131,7 @@
     popupView.preferLayoutDirection = QMUIPopupContainerViewLayoutDirectionAbove;
     popupView.automaticallyHidesWhenUserTap = YES;
     popupView.sourceView = sender;
+    popupView.titleArray = @[@"复制", @"回复", @"@"];
     @weakify(self)
     popupView.actionBlock = ^(PCPopupContainerView *view, NSInteger index) {
         @strongify(self)

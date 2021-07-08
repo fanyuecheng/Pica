@@ -318,14 +318,20 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
 }
 
 - (void)insertMessage:(PCChatMessage *)message scrollToBottom:(BOOL)scroll {
+    BOOL isBottom = self.tableView.contentOffset.y >= self.tableView.contentSize.height + self.tableView.qmui_contentInset.bottom - CGRectGetHeight(self.tableView.bounds) - 300;
+    
     [self.messageArray addObject:message];
     [self.tableView reloadData];
-    
-    if (scroll && !(self.tableView.isDragging || self.tableView.isTracking)) {
-        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+ 
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        if (isBottom && scroll && !(self.tableView.isDragging || self.tableView.isTracking)) {
             [self.tableView qmui_scrollToBottomAnimated:YES];
-        });
-    }
+        }
+    });
+}
+
+- (void)forceScrollToBottom {
+    [self.tableView qmui_scrollToBottomAnimated:YES];
 }
 
 - (void)takePhoto {
@@ -503,6 +509,10 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
             [self.view layoutIfNeeded];
         }
     }
+}
+
+- (void)textViewDidBeginEditing:(UITextView *)textView {
+    [self forceScrollToBottom];
 }
 
 - (BOOL)textViewShouldBeginEditing:(UITextView *)textView {
