@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 
 NS_ASSUME_NONNULL_BEGIN
-/*
+/* //message":"【卑微阿离】使用了🎆末日審判的號角🎆把《洛芽叶子》的訊息中斷 4320 分鐘"}]
  {
          "at": "",
          "audio": "",
@@ -81,6 +81,7 @@ typedef NS_ENUM(NSUInteger, PCChatMessageType) {
 @property (nonatomic, strong) NSDate   *time;
 @property (nonatomic, strong) UIImage  *picture;
 @property (nonatomic, copy)   NSString *messageData;
+@property (nonatomic, copy)   NSString *audioString;
 @property (nonatomic, strong) NSData   *audioData;
 @property (nonatomic, assign) BOOL     isPlaying;
 @property (nonatomic, strong) AVAudioPlayer *audioPlayer;

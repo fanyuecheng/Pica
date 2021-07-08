@@ -10,7 +10,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+#define PC_TAB_GAME_HIDDEN   @"PC_TAB_GAME_HIDDEN"
+
 @interface PCTabBarViewController : QMUITabBarViewController
+
+- (void)reloadViewControllers;
 
 @end
 

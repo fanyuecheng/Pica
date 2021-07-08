@@ -20,6 +20,9 @@ NS_ASSUME_NONNULL_BEGIN
                               font:(UIFont *)font;
 + (NSString *)pc_randomTextWithLength:(NSUInteger)length;
 
+- (NSString *)pc_simplifiedChinese;
+- (NSString *)pc_traditionalChinese;
+
 @end
 
 NS_ASSUME_NONNULL_END

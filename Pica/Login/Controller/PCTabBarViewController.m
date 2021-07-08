@@ -20,6 +20,7 @@
 @property (nonatomic, strong) PCChatListController *chatController;
 @property (nonatomic, strong) PCGameListController *gameController;
 @property (nonatomic, strong) PCProfileController  *profileController;
+@property (nonatomic, copy)   NSArray *controllerArray;
 
 @end
 
@@ -52,12 +53,23 @@
                                         image:[UIImage pc_iconWithText:ICON_USER size:22 color:UIColorGrayLighten]
                                 selectedImage:[UIImage pc_iconWithText:ICON_USER size:22 color:UIColorBlue]
                                           tag:3];
-    self.viewControllers = @[category, chat, game, me];
+    self.controllerArray = @[category, chat, game, me];
+    
+    [self reloadViewControllers];
 }
  
 - (void)viewDidLoad {
     [super viewDidLoad];
       
+}
+
+- (void)reloadViewControllers {
+    NSMutableArray *controllerArray = [NSMutableArray arrayWithArray:self.controllerArray];
+    
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:PC_TAB_GAME_HIDDEN]) {
+        [controllerArray removeObjectAtIndex:2];
+    }
+    self.viewControllers = controllerArray;
 }
  
 #pragma mark - Method

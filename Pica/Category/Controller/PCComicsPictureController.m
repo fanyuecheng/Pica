@@ -26,6 +26,12 @@
 
 @implementation PCComicsPictureController
 
+- (void)viewWillDisappear:(BOOL)animated {
+    [super viewWillDisappear:animated];
+    
+    [self.navigationController setToolbarHidden:YES animated:YES];
+}
+
 - (void)dealloc {
     [[SDImageCache sharedImageCache] clearMemory];
 }
