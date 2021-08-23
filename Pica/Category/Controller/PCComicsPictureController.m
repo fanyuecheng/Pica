@@ -10,8 +10,7 @@
 #import "PCComicsPictureRequest.h"
 #import "PCPictureCell.h"
 #import "PCEpisode.h"
-
-#define PC_READ_DIRECTION  @"PC_READ_DIRECTION"
+#import "PCLocalKeyHeader.h"
 
 @interface PCComicsPictureController () <UICollectionViewDelegate, UICollectionViewDataSource>
 
@@ -63,7 +62,7 @@
 - (void)setupNavigationItems {
     [super setupNavigationItems];
     
-    BOOL isHorizontal = [[NSUserDefaults standardUserDefaults] boolForKey:PC_READ_DIRECTION];
+    BOOL isHorizontal = [kPCUserDefaults boolForKey:PC_READ_DIRECTION];
     
     self.navigationItem.rightBarButtonItem = [UIBarButtonItem qmui_itemWithTitle:isHorizontal ? @"横向" : @"竖向" target:self action:@selector(directionAction:)];
 }
@@ -82,7 +81,7 @@
 }
 
 - (void)directionAction:(UIBarButtonItem *)sender {
-    BOOL isHorizontal = [[NSUserDefaults standardUserDefaults] boolForKey:PC_READ_DIRECTION];
+    BOOL isHorizontal = [kPCUserDefaults boolForKey:PC_READ_DIRECTION];
     isHorizontal = !isHorizontal;
     sender.title = isHorizontal ? @"横向" : @"竖向";
     
@@ -90,7 +89,7 @@
     layout.scrollDirection = isHorizontal ? UICollectionViewScrollDirectionHorizontal : UICollectionViewScrollDirectionVertical;
     self.collectionView.pagingEnabled = isHorizontal;
     
-    [[NSUserDefaults standardUserDefaults] setBool:isHorizontal forKey:PC_READ_DIRECTION];
+    [kPCUserDefaults setBool:isHorizontal forKey:PC_READ_DIRECTION];
 }
  
 #pragma mark - Net
@@ -155,14 +154,15 @@
     
     NSArray *pictureArray = self.pictureArray[indexPath.section].docs;
     
-    cell.picture = pictureArray[indexPath.item];
     cell.loadBlock = ^(PCPicture * _Nonnull picture) {
         NSIndexPath *reloadIndexPath = [NSIndexPath indexPathForItem:[pictureArray indexOfObject:picture] inSection:indexPath.section];
         if ([self.navigationController.viewControllers containsObject:self]) {
-            [collectionView reloadItemsAtIndexPaths:@[reloadIndexPath]]; 
+            [collectionView reloadItemsAtIndexPaths:@[reloadIndexPath]];
         }
     };
     
+    cell.picture = pictureArray[indexPath.item];
+ 
     @weakify(self)
     cell.clickBlock = ^{
         @strongify(self)
@@ -180,7 +180,12 @@
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath {
     UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)collectionView.collectionViewLayout;
     if (layout.scrollDirection == UICollectionViewScrollDirectionVertical) {
-        return self.pictureArray[indexPath.section].docs[indexPath.item].preferSize; 
+        CGSize size = self.pictureArray[indexPath.section].docs[indexPath.item].preferSize;
+        if (!size.width || !size.height) {
+            return CGSizeMake(SCREEN_WIDTH, SCREEN_WIDTH);
+        } else {
+            return size;
+        }
     } else {
         return collectionView.bounds.size;
     }
@@ -215,7 +220,7 @@
         layout.minimumLineSpacing = 0;
         layout.minimumInteritemSpacing = 0;
          
-        BOOL isHorizontal = [[NSUserDefaults standardUserDefaults] boolForKey:PC_READ_DIRECTION];
+        BOOL isHorizontal = [kPCUserDefaults boolForKey:PC_READ_DIRECTION];
         
         layout.scrollDirection = isHorizontal ? UICollectionViewScrollDirectionHorizontal : UICollectionViewScrollDirectionVertical;
         
@@ -256,6 +261,7 @@
     [super didReceiveMemoryWarning];
     
     [[SDImageCache sharedImageCache] clearMemory];
+    NSLog(@"⚠️内存警告⚠️");
 }
 
 @end

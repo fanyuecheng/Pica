@@ -174,4 +174,36 @@
     return NO;
 }
 
+- (NSString *)pc_timeString {
+    NSCalendar *calendar = [NSCalendar currentCalendar];
+    int unit = NSCalendarUnitDay | NSCalendarUnitMonth |  NSCalendarUnitYear ;
+    NSDateComponents *nowCmps = [calendar components:unit fromDate:[NSDate date]];
+    NSDateComponents *myCmps = [calendar components:unit fromDate:self];
+    NSDateFormatter *dateFmt = [[NSDateFormatter alloc ] init ];
+    BOOL isYesterday = NO;
+    if (nowCmps.year != myCmps.year) {
+        dateFmt.dateFormat = @"yyyy/MM/dd";
+    } else {
+        if (nowCmps.day == myCmps.day) {
+            dateFmt.dateFormat = @"HH:mm";
+        } else if((nowCmps.day - myCmps.day) == 1) {
+            isYesterday = YES;
+            dateFmt.AMSymbol = @"上午";
+            dateFmt.PMSymbol = @"下午";
+            dateFmt.dateFormat = @"aHH:mm";
+        } else {
+//            if ((nowCmps.day - myCmps.day) <=7) {
+//                dateFmt.dateFormat = @"EEEE";
+//            } else {
+                dateFmt.dateFormat = @"yyyy/MM/dd";
+//            }
+        }
+    }
+    NSString *str = [dateFmt stringFromDate:self];
+    if (isYesterday) {
+        str = [NSString stringWithFormat:@"%@ %@", @"昨天", str];
+    }
+    return str;
+}
+
 @end

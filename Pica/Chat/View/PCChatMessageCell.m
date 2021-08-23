@@ -128,6 +128,11 @@
     self.timeLabel.text = [NSString stringWithFormat:@"%@ %@", message.platform ? message.platform : @"", [formatter stringFromDate:message.time]];
 }
 
+#pragma mark - Action
+- (void)menuAction:(UIControl *)sender {
+    
+}
+
 #pragma mark - Get
 - (PCUser *)myself {
     if (!_myself) {
@@ -192,6 +197,7 @@
 - (UIControl *)messageContentView {
     if (!_messageContentView) {
         _messageContentView = [[UIControl alloc] init];
+        [_messageContentView addTarget:self action:@selector(menuAction:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _messageContentView;
 }

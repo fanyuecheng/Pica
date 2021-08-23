@@ -33,7 +33,6 @@
         [self.messageContentView addSubview:self.durationLabel];
         [self.messageContentView addSubview:self.wordLabel];
         [self.messageContentView addSubview:self.loadView];
-        [self.messageContentView addTarget:self action:@selector(menuAction:) forControlEvents:UIControlEventTouchUpInside];
     }
     return self;
 }

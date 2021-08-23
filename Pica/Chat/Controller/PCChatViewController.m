@@ -45,6 +45,7 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
 @property (nonatomic, assign) CGFloat        textViewHeight;
 @property (nonatomic, assign) CGFloat        keyboardHeight;
 @property (nonatomic, strong) NSMutableArray *messageArray;
+@property (nonatomic, strong) NSMutableArray *localMessageArray;
 
 @end
 
@@ -65,7 +66,8 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
 - (void)viewDidLoad {
     [super viewDidLoad];
  
-    [self showEmptyViewWithLoading];
+    [self localMessageArray];
+    
     [self connect];
 }
 
@@ -102,6 +104,7 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
 
 #pragma mark - Method
 - (void)connect {
+    [self showEmptyViewWithLoading];
     [self.manager connect];
 }
  
@@ -615,10 +618,10 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
         
         _manager.stateBlock = ^(NSError * _Nonnull error) {
             @strongify(self)
-            if (error) {
-                [self showEmptyViewWithText:@"连接失败" detailText:error.userInfo[NSLocalizedDescriptionKey] buttonTitle:@"重新链接" buttonAction:@selector(connect)];
-            } else {
-                [self hideEmptyView];
+            [self hideEmptyView];
+            if (error && !self.navigationItem.rightBarButtonItem) {
+                [QMUITips showError:@"连接失败" detailText:error.userInfo[NSLocalizedDescriptionKey]]; 
+                self.navigationItem.rightBarButtonItem = [UIBarButtonItem qmui_itemWithTitle:@"重新连接" target:self action:@selector(connect)];
             }
         };
     }
@@ -636,6 +639,25 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
         
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+        
+        @weakify(self);
+        _tableView.mj_header = [MJRefreshStateHeader headerWithRefreshingBlock:^{
+            @strongify(self);
+            if (self.localMessageArray.count) {
+                NSArray *msgArray = nil;
+                if (self.localMessageArray.count > 20) {
+                    msgArray = [self.localMessageArray subarrayWithRange:NSMakeRange(self.localMessageArray.count - 21, 20)];
+                    [self.localMessageArray removeObjectsInArray:msgArray];
+                } else {
+                    msgArray = self.localMessageArray.copy;
+                    [self.localMessageArray removeAllObjects];
+                }
+                NSIndexSet *indexes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [msgArray count])];
+                [self.messageArray insertObjects:msgArray atIndexes:indexes];
+                [self.tableView reloadData];
+            }
+            [self.tableView.mj_header endRefreshing];
+        }];
     }
     return _tableView;
 }
@@ -645,6 +667,21 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
         _messageArray = [NSMutableArray array];
     }
     return _messageArray;
+}
+
+- (NSInteger)chatRecordNum {
+    return [[PCChatMessage aggregate:@"count(*)" where:nil arguments:nil] integerValue];
+}
+
+- (NSMutableArray *)localMessageArray {
+    if (!_localMessageArray) {
+        NSInteger chatRecordNum = [self chatRecordNum];
+        if (chatRecordNum > 10000) {
+            chatRecordNum = 10000;
+        }
+        _localMessageArray = [[PCChatMessage objectsWhere:@"ORDER BY time LIMIT 0,?" arguments:@[@(chatRecordNum)]] mutableCopy];
+    }
+    return _localMessageArray;
 }
 
 - (UIView *)toolbarView {

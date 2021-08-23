@@ -9,7 +9,14 @@
 #define PCAPIHeader_h
 
 //HOST
-#define PC_API_HOST             @"https://picaapi.picacomic.com/"
+#define PC_API_HOST_IOS             @"https://api.tipatipa.xyz/"
+#define PC_API_HOST_ANDROID         @"https://picaapi.picacomic.com/"
+//登录
+#define PC_API_AUTH_SIGN_IN     @"auth/sign-in"
+//注册
+#define PC_API_AUTH_REGIST      @"auth/register"
+//忘记密码
+#define PC_API_AUTH_FORGOT_PSD  @"auth/forgot-password"
 //分类
 #define PC_API_CATEGORIES       @"categories"
 //搜索推荐关键字
@@ -33,6 +40,8 @@
 #define PC_API_COMMENTS_CHILD_REPLY @"comments/%@"
 //漫画评论点赞
 #define PC_API_COMICS_COMMENTS_LIKE  @"comments/%@/like"
+//评论举报
+#define PC_API_COMICS_COMMENTS_REPORT @"comments/%@/report"
 //高级搜索
 #define PC_API_SEARCH_ADVANCED  @"comics/advanced-search?page=%@"
 //漫画排行
@@ -65,8 +74,20 @@
 //游戏评论
 #define PC_API_GAME_COMMENTS    @"games/%@/comments"
 //游戏like
-#define PC_API_GAME_LIKE      @"games/%@/like"
+#define PC_API_GAME_LIKE        @"games/%@/like"
 
+
+#define PC_API_SOURCE           @"sources"
+#define PC_API_INIT             @"init?platform=%@"
+
+ 
+//@"collections" 魔推荐
+//@"banners"     轮播
+//@"announcements?page=%@"  公告
 //"https://picaapi.picacomic.com/comics/{bookId}/recommendation"
+
+//猜测 GET HEAD DELETE 任意参数 成功
+// "users/任意字符串" 
+ 
 
 #endif /* PCAPIHeader_h */

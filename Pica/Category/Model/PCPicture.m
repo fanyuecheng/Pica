@@ -16,18 +16,10 @@
     return @{@"pictureId" : @[@"_id", @"id"]};
 }
 
-- (UIImage *)picture {
-    if (!_picture) {
-        NSString *cacheKey = [[SDWebImageManager sharedManager] cacheKeyForURL:[NSURL URLWithString:self.media.imageURL]];
-        _picture = [[SDImageCache sharedImageCache] imageFromCacheForKey:cacheKey];
-    }
-    return _picture;
-}
-
 - (CGSize)preferSize {
-    if (self.picture) {
+    if (self.image) {
         if (CGSizeIsEmpty(_preferSize)) {
-            CGSize size = self.picture.size;
+            CGSize size = self.image.size;
             _preferSize = CGSizeMake(SCREEN_WIDTH, floorf(SCREEN_WIDTH * size.height / size.width));
         }
         return _preferSize;

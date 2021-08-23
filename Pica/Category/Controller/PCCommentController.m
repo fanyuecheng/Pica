@@ -19,7 +19,7 @@
 @property (nonatomic, copy)   NSString         *gameId;
 @property (nonatomic, copy)   NSString         *commentId;
 @property (nonatomic, strong) PCCommentMainRequest    *mainRequest;
-@property (nonatomic, strong) PCCommentChildRequest    *childRequest;
+@property (nonatomic, strong) PCCommentChildRequest   *childRequest;
 @property (nonatomic, strong) PCCommentPublishRequest *publishRequest;
 @property (nonatomic, assign) CGFloat keyboardHeight;
 @property (nonatomic, assign) CGFloat inputHeight;
@@ -27,6 +27,7 @@
 
 @property (nonatomic, strong) QMUITextView *textView;
 @property (nonatomic, strong) QMUIButton *commentButton;
+@property (nonatomic, strong) UIView *extensionView;
 
 @end
 
@@ -89,6 +90,7 @@
     
     [self.view addSubview:self.textView];
     [self.view addSubview:self.commentButton];
+    [self.view addSubview:self.extensionView];
 }
 
 - (void)initTableView {
@@ -97,17 +99,26 @@
     [self.tableView registerClass:[PCCommentCell class] forCellReuseIdentifier:@"PCCommentCell"];
     
     self.tableView.contentInset = UIEdgeInsetsSetBottom(self.tableView.contentInset, self.tableView.contentInset.bottom + 50);
-    
+    self.tableView.keyboardDismissMode = UIScrollViewKeyboardDismissModeOnDrag;
     @weakify(self)
     self.tableView.mj_footer = [MJRefreshBackStateFooter footerWithRefreshingBlock:^{
         @strongify(self)
          
         PCComicsComment *comment = self.commentArray.lastObject;
-        if (self.mainRequest.page < comment.pages) {
-            self.mainRequest.page ++;
-            [self requestComment];
+        if (self.primaryType == PCCommentPrimaryTypeMain) {
+            if (self.mainRequest.page < comment.pages) {
+                self.mainRequest.page ++;
+                [self requestComment];
+            } else {
+                [self.tableView.mj_footer endRefreshingWithNoMoreData];
+            }
         } else {
-            [self.tableView.mj_footer endRefreshingWithNoMoreData];
+            if (self.childRequest.page < comment.pages) {
+                self.childRequest.page ++;
+                [self requestComment];
+            } else {
+                [self.tableView.mj_footer endRefreshingWithNoMoreData];
+            }
         }
     }];
 }
@@ -115,8 +126,9 @@
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     
-    self.textView.frame = CGRectMake(0, self.view.qmui_height - self.inputHeight - SafeAreaInsetsConstantForDeviceWithNotch.bottom - self.keyboardHeight, self.view.qmui_width, self.inputHeight);
+    self.textView.frame = CGRectMake(0, self.view.qmui_height - self.inputHeight - self.keyboardHeight - (self.keyboardHeight ? 0 : SafeAreaInsetsConstantForDeviceWithNotch.bottom), self.view.qmui_width, self.inputHeight);
     self.commentButton.frame = CGRectMake(self.textView.qmui_width - 60, self.textView.qmui_top + (self.textView.qmui_height - 40), 50, 30);
+    self.extensionView.frame = CGRectMake(0, self.view.qmui_height -  SafeAreaInsetsConstantForDeviceWithNotch.bottom, self.view.qmui_width, SafeAreaInsetsConstantForDeviceWithNotch.bottom);
 }
 
 #pragma mark - Method
@@ -181,8 +193,9 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return [tableView qmui_heightForCellWithIdentifier:@"PCCommentCell" configuration:^(PCCommentCell *cell) {
-        cell.comment = [self commentWithIndexPath:indexPath];
+    PCComment *comment = [self commentWithIndexPath:indexPath];;
+    return [tableView qmui_heightForCellWithIdentifier:@"PCCommentCell" cacheByKey:comment.commentId configuration:^(PCCommentCell *cell) {
+        cell.comment = comment;
     }];
 }
 
@@ -218,8 +231,20 @@
 - (void)publishComment {
     QMUITips *loading = [QMUITips showLoadingInView:DefaultTipsParentView];
     
-    [self.publishRequest sendRequest:^(PCComicsComment *comment) {
+    [self.publishRequest sendRequest:^(PCComment *comment) {
         [loading hideAnimated:NO];
+        
+        PCComicsComment *list = self.commentArray.firstObject;
+        if (list.topComments.count) {
+            NSMutableArray *topComments = [list.topComments mutableCopy];
+            [topComments addObject:comment];
+            list.topComments = topComments;
+        } else {
+            NSMutableArray *docs = [list.docs mutableCopy];
+            [docs insertObject:comment atIndex:0];
+            list.docs = docs;
+        }
+        [self.tableView reloadData];
     } failure:^(NSError * _Nonnull error) {
         [loading hideAnimated:NO];
     }];
@@ -315,6 +340,14 @@
         [_commentButton addTarget:self action:@selector(commentAction:) forControlEvents:UIControlEventTouchUpInside];
     }
     return _commentButton;
+}
+
+- (UIView *)extensionView {
+    if (!_extensionView) {
+        _extensionView = [[UIView alloc] init];
+        _extensionView.backgroundColor = UIColorWhite;
+    }
+    return _extensionView;
 }
 
 #pragma mark - Set

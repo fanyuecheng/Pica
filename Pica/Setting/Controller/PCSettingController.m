@@ -11,6 +11,9 @@
 #import "AppDelegate.h"
 #import <SafariServices/SafariServices.h>
 #import "PCTabBarViewController.h"
+#import "PCColorPickerViewController.h"
+#import "PCChatMessage.h"
+#import "PCAvatarDecorateController.h"
 
 @interface PCSettingController ()
 
@@ -59,7 +62,9 @@
     if (indexPath.section == 0 && indexPath.row == 0) {
         __block long long fileSize = 0;
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
-            fileSize = [[SDImageCache sharedImageCache] totalDiskSize];
+            fileSize += [[SDImageCache sharedImageCache] totalDiskSize];
+            fileSize += [[[[NSFileManager defaultManager] attributesOfItemAtPath:[PCChatMessage dbPath] error:nil] objectForKey:NSFileSize] integerValue];
+            fileSize += [[[[NSFileManager defaultManager] attributesOfItemAtPath:[self networkCachePath] error:nil] objectForKey:NSFileSize] integerValue];
             dispatch_async(dispatch_get_main_queue(), ^{
                 cell.detailTextLabel.text = [NSByteCountFormatter stringFromByteCount:fileSize countStyle:NSByteCountFormatterCountStyleFile];
             });
@@ -68,10 +73,28 @@
         cell.detailTextLabel.text = nil;
     }
     
-    if (indexPath.section == 0 && (indexPath.row == 2 || indexPath.row == 3)) {
+    if (indexPath.section == 0 && (indexPath.row == 2 || indexPath.row == 3 || indexPath.row == 4 || indexPath.row == 5)) {
         if (![cell.accessoryView isKindOfClass:[UISwitch class]]) {
             UISwitch *switchView = [[UISwitch alloc] init];
-            switchView.on = [[NSUserDefaults standardUserDefaults] boolForKey:indexPath.row == 2 ? PC_DATA_TO_SIMPLIFIED_CHINESE : PC_TAB_GAME_HIDDEN];
+            NSString *key = nil;
+            
+            switch (indexPath.row) {
+                case 2:
+                    key = PC_DATA_TO_SIMPLIFIED_CHINESE;
+                    break;
+                case 3:
+                    key = PC_TAB_GAME_HIDDEN;
+                    break;
+                case 4:
+                    key = PC_CHAT_EVENT_COLOR_ON;
+                    break;
+                case 5:
+                    key = PC_CHAT_AVATAR_CHARACTER_ON;
+                    break;
+                default:
+                    break;
+            }
+            switchView.on = [kPCUserDefaults integerForKey:key];
             [switchView addTarget:self action:@selector(switchAction:) forControlEvents:UIControlEventValueChanged];
             cell.accessoryView = switchView;
         }
@@ -91,6 +114,12 @@
                 break;
             case 1:
                 [self showUpdatePasswordAlert];
+                break;
+            case 4:
+                [self selectColor];
+                break;
+            case 5:
+                [self selectAvatarDecorate];
                 break;
             default:
                 break;
@@ -117,6 +146,9 @@
 - (void)showClearCacheAlert {
     QMUIAlertAction *action1 = [QMUIAlertAction actionWithTitle:@"确定" style:QMUIAlertActionStyleDefault handler:^(__kindof QMUIAlertController *aAlertController, QMUIAlertAction *action) {
         [[SDImageCache sharedImageCache] clearDiskOnCompletion:^{
+            [PCChatMessage deleteObjectsWhere:nil arguments:nil];
+            [[NSFileManager defaultManager] removeItemAtPath:[self networkCachePath] error:nil];
+//            [kPCUserDefaults removeObjectForKey:PC_LOCAL_ACCOUNT];
             [self.tableView reloadData];
         }];
     }];
@@ -154,7 +186,7 @@
 
 - (void)showLogoutAlert {
     QMUIAlertAction *action1 = [QMUIAlertAction actionWithTitle:@"确定" style:QMUIAlertActionStyleDefault handler:^(__kindof QMUIAlertController *aAlertController, QMUIAlertAction *action) {
-        [[NSUserDefaults standardUserDefaults] removeObjectForKey:PC_AUTHORIZATION_TOKEN];
+        [kPCUserDefaults removeObjectForKey:PC_AUTHORIZATION_TOKEN];
         AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         [delegate setRootViewControllerToLogin];
     }];
@@ -168,6 +200,24 @@
     [alertController showWithAnimated:YES];
 }
 
+- (void)selectColor {
+    PCColorPickerViewController *color = [[PCColorPickerViewController alloc] init];
+    
+    [self.navigationController pushViewController:color animated:YES];
+}
+
+- (void)selectAvatarDecorate {
+    PCAvatarDecorateController *decorate = [[PCAvatarDecorateController alloc] init];
+    [self.navigationController pushViewController:decorate animated:YES];
+}
+
+- (NSString *)networkCachePath {
+    NSString *pathOfLibrary = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex:0];
+    NSString *path = [pathOfLibrary stringByAppendingPathComponent:@"LazyRequestCache"];
+    
+    return path;
+}
+
 #pragma mark - Action
 - (void)logoutAction:(QMUIButton *)sender {
     [self showLogoutAlert];
@@ -177,12 +227,16 @@
     NSIndexPath *indexPath = [self.tableView qmui_indexPathForRowAtView:sender];
     
     if (indexPath.row == 2) {
-        [[NSUserDefaults standardUserDefaults] setBool:sender.isOn forKey:PC_DATA_TO_SIMPLIFIED_CHINESE];
+        [kPCUserDefaults setBool:sender.isOn forKey:PC_DATA_TO_SIMPLIFIED_CHINESE];
     } else if (indexPath.row == 3) {
-        [[NSUserDefaults standardUserDefaults] setBool:sender.isOn forKey:PC_TAB_GAME_HIDDEN];
+        [kPCUserDefaults setBool:sender.isOn forKey:PC_TAB_GAME_HIDDEN];
         
         PCTabBarViewController *tabBarViewController = (PCTabBarViewController *)[UIApplication sharedApplication].keyWindow.rootViewController;
         [tabBarViewController reloadViewControllers];
+    } else if (indexPath.row == 4) {
+        [kPCUserDefaults setBool:sender.isOn forKey:PC_CHAT_EVENT_COLOR_ON];
+    } else if (indexPath.row == 5) {
+        [kPCUserDefaults setBool:sender.isOn forKey:PC_CHAT_AVATAR_CHARACTER_ON];
     }
 }
 
@@ -203,7 +257,7 @@
 #pragma mark - Get
 - (NSArray *)dataSource {
     if (!_dataSource) {
-        _dataSource = @[@[@"清除缓存", @"修改密码", @"简体中文", @"隐藏游戏区"], @[@"关于Pica"]];
+        _dataSource = @[@[@"清除缓存", @"修改密码", @"简体中文", @"隐藏游戏区", @"聊天文字颜色", @"聊天室头像装饰"], @[@"关于Pica"]];
     }
     return _dataSource;
 }

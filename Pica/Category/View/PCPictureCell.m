@@ -43,8 +43,8 @@
 - (void)setPicture:(PCPicture *)picture {
     _picture = picture;
      
-    if (picture.picture) {
-        self.imageView.image = picture.picture;
+    if (picture.image) {
+        self.imageView.image = picture.image;
         self.titleLabel.text = nil;
     } else {
         self.imageView.image = nil;
@@ -54,7 +54,7 @@
                                                    progress:nil
                                                   completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
             if (image) {
-                picture.picture = image; 
+                picture.image = image;
                 !self.loadBlock ? : self.loadBlock(picture);
             }
         }];
@@ -99,6 +99,9 @@
 - (QMUIZoomImageView *)imageView {
     if (!_imageView) {
         _imageView = [[QMUIZoomImageView alloc] init];
+        SDAnimatedImageView *contentView = [[SDAnimatedImageView alloc] init];
+        [_imageView setValue:contentView forKey:@"_imageView"];
+        [_imageView.scrollView addSubview:contentView];
         _imageView.delegate = self;
     }
     return _imageView;

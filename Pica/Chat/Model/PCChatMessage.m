@@ -35,14 +35,17 @@
             message.messageType = PCChatMessageTypeConnectionCount;
         } else if ([messageType isEqualToString:@"broadcast_message"]) {
             message.messageType = PCChatMessageTypeDefault;
+            [message save];
         } else if ([messageType isEqualToString:@"broadcast_ads"]) {
             message.messageType = PCChatMessageTypeAd;
         } else if ([messageType isEqualToString:@"broadcast_image"]) {
             message.messageType = PCChatMessageTypeImage;
+            [message save];
         } else if ([messageType isEqualToString:@"receive_notification"]) {
             message.messageType = PCChatMessageTypeNotification;
         } else if ([messageType isEqualToString:@"broadcast_audio"]) {
             message.messageType = PCChatMessageTypeAudio;
+            [message save];
         } else if ([messageType isEqualToString:@"kick"]) {
             return nil;
         }
@@ -51,6 +54,19 @@
     } else {
         return nil;
     }
+}
+
+- (NSArray *)eventColorArray {
+    if (!_eventColorArray) {
+        if (self.event_colors.count) {
+            NSMutableArray *colors = [NSMutableArray array];
+            [self.event_colors enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                [colors addObject:(id)[UIColor qmui_colorWithHexString:obj].CGColor];
+            }];
+            _eventColorArray = colors.copy;
+        }
+    } 
+    return _eventColorArray;
 }
 
 - (UIImage *)picture {
@@ -108,6 +124,12 @@
     self.isPlaying = NO;
 }
 
+- (void)save {
+    if (self.user_id) {
+        [super save];
+    }
+}
+
 + (PCChatMessage *)textMessageDataWithText:(NSString *)text
                               replyMessage:(PCChatMessage *)replyMessage
                                         at:(NSString *)at {
@@ -124,12 +146,25 @@
     info[@"message"] = at ? [text stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"@%@ ", at] withString:@""] : text;
     info[@"image"] = @"";
     
+    NSString *character = [PCUser localCharacterImage];
+    if (character) {
+        info[@"character"] = character;
+    }
+    if ([kPCUserDefaults boolForKey:PC_CHAT_EVENT_COLOR_ON]) {
+        NSArray *color = [kPCUserDefaults objectForKey:PC_CHAT_EVENT_COLOR];
+        if (color.count) {
+            info[@"event_colors"] = color;
+        }
+    }
+    
     NSString *messageData = [NSString stringWithFormat:@"42%@", [@[@"send_message", info] yy_modelToJSONString]];
 
     PCChatMessage *message = [PCChatMessage yy_modelWithJSON:info];
     message.messageData = messageData;
     message.time = [NSDate date];
     message.user_id = myself.userId;
+    
+    [message save];
     
     return message;
 }
@@ -166,6 +201,11 @@
      
     info[@"image"] = [NSString stringWithFormat:@"data:image/%@;base64,%@", formatString, base64String];
     
+    NSString *character = [PCUser localCharacterImage];
+    if (character) {
+        info[@"character"] = character;
+    }
+    
     NSString *messageData = [NSString stringWithFormat:@"42%@", [@[@"send_image", info] yy_modelToJSONString]];
 
     PCChatMessage *message = [PCChatMessage yy_modelWithJSON:info];
@@ -174,6 +214,8 @@
     message.time = [NSDate date];
     message.user_id = myself.userId;
     message.picture = image;
+    
+    [message save];
     
     return message;
 }
@@ -192,6 +234,11 @@
     info[@"message"] = @"";
     info[@"audio"] = [data base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
     
+    NSString *character = [PCUser localCharacterImage];
+    if (character) {
+        info[@"character"] = character;
+    } 
+    
     NSString *messageData = [NSString stringWithFormat:@"42%@", [@[@"send_audio", info] yy_modelToJSONString]];
 
     PCChatMessage *message = [PCChatMessage yy_modelWithJSON:info];
@@ -200,6 +247,8 @@
     message.time = [NSDate date];
     message.user_id = myself.userId;
     message.audioData = data;
+    
+    [message save];
     
     return message;
 }
@@ -217,6 +266,51 @@
 - (void)audioPlayerDecodeErrorDidOccur:(AVAudioPlayer *)player error:(NSError * __nullable)error {
     self.isPlaying = NO;
     [QMUITips showError:error.domain];
+}
+
+#pragma mark - DB
++ (NSString *)dbPath {
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths firstObject];
+    return [documentsDirectory stringByAppendingPathComponent:[[self dbName] stringByAppendingPathExtension:@"db"]];
+}
+
++ (NSString *)dbName {
+    return [NSString stringWithFormat:@"PC_DB_USER_%@", [PCUser localUser].userId];
+}
+
++ (NSString *)tableName {
+    return @"PC_TABLE_MESSAGE";
+}
+
++ (NSArray *)persistentProperties {
+    static NSArray *properties = nil;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        properties = @[
+                       @"at",
+                       @"audio",
+                       @"avatar",
+                       @"block_user_id",
+                       @"character",
+                       @"event_colors",
+                       @"gender",
+                       @"image",
+                       @"message",
+                       @"name",
+                       @"platform",
+                       @"reply",
+                       @"reply_name",
+                       @"title",
+                       @"unique_id",
+                       @"user_id", 
+                       @"type",
+                       @"verified",
+                       @"level",
+                       @"time",
+                       ];
+    });
+    return properties;
 }
 
 @end

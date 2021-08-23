@@ -11,7 +11,11 @@
 		3306A44F266A0EAF00FC397A /* PCCommentPublishRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3306A44E266A0EAF00FC397A /* PCCommentPublishRequest.m */; };
 		3306A452266A17FF00FC397A /* PCCommentLikeRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3306A451266A17FF00FC397A /* PCCommentLikeRequest.m */; };
 		3306A455266A1C8C00FC397A /* PCCommentChildRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3306A454266A1C8C00FC397A /* PCCommentChildRequest.m */; };
-		3306A462266DDCCC00FC397A /* PCDatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = 3306A461266DDCCC00FC397A /* PCDatabase.m */; };
+		3306A462266DDCCC00FC397A /* PCComicHistory.m in Sources */ = {isa = PBXBuildFile; fileRef = 3306A461266DDCCC00FC397A /* PCComicHistory.m */; };
+		330B10DC269E871A0075A9A0 /* PCColorGridView.m in Sources */ = {isa = PBXBuildFile; fileRef = 330B10DB269E871A0075A9A0 /* PCColorGridView.m */; };
+		330B10E3269E96880075A9A0 /* PCColorPickerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 330B10E2269E96880075A9A0 /* PCColorPickerViewController.m */; };
+		330B10E6269E97480075A9A0 /* PCColorSlider.m in Sources */ = {isa = PBXBuildFile; fileRef = 330B10E5269E97480075A9A0 /* PCColorSlider.m */; };
+		330B10F526A18B800075A9A0 /* PCAvatarDecorateController.m in Sources */ = {isa = PBXBuildFile; fileRef = 330B10F426A18B800075A9A0 /* PCAvatarDecorateController.m */; };
 		330FA71B2664CFF000C146BE /* PCSearchRecordView.m in Sources */ = {isa = PBXBuildFile; fileRef = 330FA71A2664CFF000C146BE /* PCSearchRecordView.m */; };
 		3329FE44265B58110054F39B /* PCComicsRankRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3329FE43265B58110054F39B /* PCComicsRankRequest.m */; };
 		3329FE47265B78A90054F39B /* PCComicsRankController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3329FE46265B78A90054F39B /* PCComicsRankController.m */; };
@@ -60,6 +64,7 @@
 		3358C8CF2660BC9F0000D17F /* PCSettingController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3358C8CE2660BC9F0000D17F /* PCSettingController.m */; };
 		3358C8D32660C0050000D17F /* PCPasswordSetRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3358C8D22660C0050000D17F /* PCPasswordSetRequest.m */; };
 		33669FFF2553E18C00AEC598 /* PCComicsDetailRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 33669FFE2553E18C00AEC598 /* PCComicsDetailRequest.m */; };
+		3373F41826AFD9D100592892 /* PCTestRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3373F41726AFD9D100592892 /* PCTestRequest.m */; };
 		337AD6AA26737150009EA2D1 /* PCChatListRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 337AD6A926737150009EA2D1 /* PCChatListRequest.m */; };
 		337AD6AE267376D4009EA2D1 /* PCChatList.m in Sources */ = {isa = PBXBuildFile; fileRef = 337AD6AD267376D4009EA2D1 /* PCChatList.m */; };
 		337AD6B126737878009EA2D1 /* PCChatMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 337AD6B026737878009EA2D1 /* PCChatMessage.m */; };
@@ -105,6 +110,10 @@
 		33AD9560255248C30079DFAE /* NSArray+PCAdd.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AD955F255248C30079DFAE /* NSArray+PCAdd.m */; };
 		33AD9564255248EA0079DFAE /* NSDictionary+PCAdd.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AD9563255248EA0079DFAE /* NSDictionary+PCAdd.m */; };
 		33AD956825524A000079DFAE /* PCSearchRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AD956725524A000079DFAE /* PCSearchRequest.m */; };
+		33B78EC726B8FC7F000CA73E /* PCForgotPasswordRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 33B78EC626B8FC7F000CA73E /* PCForgotPasswordRequest.m */; };
+		33B78ECA26B8FFD7000CA73E /* PCSourceRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 33B78EC926B8FFD7000CA73E /* PCSourceRequest.m */; };
+		33B78ECD26B900A6000CA73E /* PCInitRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 33B78ECC26B900A6000CA73E /* PCInitRequest.m */; };
+		33BF13F026CA75FA002EC325 /* PCTiledImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 33BF13EF26CA75FA002EC325 /* PCTiledImageView.m */; };
 		33C170DE2685E7D400431213 /* PCGameListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33C170DD2685E7D400431213 /* PCGameListController.m */; };
 		33C170E32685E8AE00431213 /* PCGameListRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 33C170E22685E8AE00431213 /* PCGameListRequest.m */; };
 		33C170E72685E9A500431213 /* PCGame.m in Sources */ = {isa = PBXBuildFile; fileRef = 33C170E62685E9A500431213 /* PCGame.m */; };
@@ -114,6 +123,7 @@
 		33C170F3268972BE00431213 /* PCGameInfoView.m in Sources */ = {isa = PBXBuildFile; fileRef = 33C170F2268972BE00431213 /* PCGameInfoView.m */; };
 		33C170F72689754600431213 /* iconfont.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 33C170F62689754600431213 /* iconfont.ttf */; };
 		33C170FA2689B0BA00431213 /* PCContentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 33C170F92689B0BA00431213 /* PCContentCell.m */; };
+		33E0FC3426B164360030BF21 /* PCCommentReportRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 33E0FC3326B164360030BF21 /* PCCommentReportRequest.m */; };
 		33E6497126945B48001E98EA /* PCPopupContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 33E6497026945B48001E98EA /* PCPopupContainerView.m */; };
 /* End PBXBuildFile section */
 
@@ -126,8 +136,17 @@
 		3306A451266A17FF00FC397A /* PCCommentLikeRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCCommentLikeRequest.m; sourceTree = "<group>"; };
 		3306A453266A1C8C00FC397A /* PCCommentChildRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCCommentChildRequest.h; sourceTree = "<group>"; };
 		3306A454266A1C8C00FC397A /* PCCommentChildRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCCommentChildRequest.m; sourceTree = "<group>"; };
-		3306A460266DDCCC00FC397A /* PCDatabase.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCDatabase.h; sourceTree = "<group>"; };
-		3306A461266DDCCC00FC397A /* PCDatabase.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCDatabase.m; sourceTree = "<group>"; };
+		3306A460266DDCCC00FC397A /* PCComicHistory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCComicHistory.h; sourceTree = "<group>"; };
+		3306A461266DDCCC00FC397A /* PCComicHistory.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCComicHistory.m; sourceTree = "<group>"; };
+		330B10DA269E871A0075A9A0 /* PCColorGridView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCColorGridView.h; sourceTree = "<group>"; };
+		330B10DB269E871A0075A9A0 /* PCColorGridView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCColorGridView.m; sourceTree = "<group>"; };
+		330B10E1269E96880075A9A0 /* PCColorPickerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCColorPickerViewController.h; sourceTree = "<group>"; };
+		330B10E2269E96880075A9A0 /* PCColorPickerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCColorPickerViewController.m; sourceTree = "<group>"; };
+		330B10E4269E97480075A9A0 /* PCColorSlider.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCColorSlider.h; sourceTree = "<group>"; };
+		330B10E5269E97480075A9A0 /* PCColorSlider.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCColorSlider.m; sourceTree = "<group>"; };
+		330B10F326A18B800075A9A0 /* PCAvatarDecorateController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCAvatarDecorateController.h; sourceTree = "<group>"; };
+		330B10F426A18B800075A9A0 /* PCAvatarDecorateController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCAvatarDecorateController.m; sourceTree = "<group>"; };
+		330B10F626A193470075A9A0 /* PCLocalKeyHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCLocalKeyHeader.h; sourceTree = "<group>"; };
 		330FA7192664CFF000C146BE /* PCSearchRecordView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCSearchRecordView.h; sourceTree = "<group>"; };
 		330FA71A2664CFF000C146BE /* PCSearchRecordView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCSearchRecordView.m; sourceTree = "<group>"; };
 		3329FE42265B58110054F39B /* PCComicsRankRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCComicsRankRequest.h; sourceTree = "<group>"; };
@@ -227,6 +246,8 @@
 		3358C8D22660C0050000D17F /* PCPasswordSetRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCPasswordSetRequest.m; sourceTree = "<group>"; };
 		33669FFD2553E18C00AEC598 /* PCComicsDetailRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCComicsDetailRequest.h; sourceTree = "<group>"; };
 		33669FFE2553E18C00AEC598 /* PCComicsDetailRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCComicsDetailRequest.m; sourceTree = "<group>"; };
+		3373F41626AFD9D100592892 /* PCTestRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCTestRequest.h; sourceTree = "<group>"; };
+		3373F41726AFD9D100592892 /* PCTestRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCTestRequest.m; sourceTree = "<group>"; };
 		337AD6A826737150009EA2D1 /* PCChatListRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCChatListRequest.h; sourceTree = "<group>"; };
 		337AD6A926737150009EA2D1 /* PCChatListRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCChatListRequest.m; sourceTree = "<group>"; };
 		337AD6AC267376D4009EA2D1 /* PCChatList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCChatList.h; sourceTree = "<group>"; };
@@ -316,6 +337,14 @@
 		33AD9563255248EA0079DFAE /* NSDictionary+PCAdd.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+PCAdd.m"; sourceTree = "<group>"; };
 		33AD956625524A000079DFAE /* PCSearchRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCSearchRequest.h; sourceTree = "<group>"; };
 		33AD956725524A000079DFAE /* PCSearchRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCSearchRequest.m; sourceTree = "<group>"; };
+		33B78EC526B8FC7F000CA73E /* PCForgotPasswordRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCForgotPasswordRequest.h; sourceTree = "<group>"; };
+		33B78EC626B8FC7F000CA73E /* PCForgotPasswordRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCForgotPasswordRequest.m; sourceTree = "<group>"; };
+		33B78EC826B8FFD7000CA73E /* PCSourceRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCSourceRequest.h; sourceTree = "<group>"; };
+		33B78EC926B8FFD7000CA73E /* PCSourceRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCSourceRequest.m; sourceTree = "<group>"; };
+		33B78ECB26B900A6000CA73E /* PCInitRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCInitRequest.h; sourceTree = "<group>"; };
+		33B78ECC26B900A6000CA73E /* PCInitRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCInitRequest.m; sourceTree = "<group>"; };
+		33BF13EE26CA75FA002EC325 /* PCTiledImageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCTiledImageView.h; sourceTree = "<group>"; };
+		33BF13EF26CA75FA002EC325 /* PCTiledImageView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCTiledImageView.m; sourceTree = "<group>"; };
 		33C170DC2685E7D400431213 /* PCGameListController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCGameListController.h; sourceTree = "<group>"; };
 		33C170DD2685E7D400431213 /* PCGameListController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCGameListController.m; sourceTree = "<group>"; };
 		33C170E12685E8AE00431213 /* PCGameListRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCGameListRequest.h; sourceTree = "<group>"; };
@@ -333,6 +362,8 @@
 		33C170F62689754600431213 /* iconfont.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = iconfont.ttf; sourceTree = "<group>"; };
 		33C170F82689B0BA00431213 /* PCContentCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCContentCell.h; sourceTree = "<group>"; };
 		33C170F92689B0BA00431213 /* PCContentCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCContentCell.m; sourceTree = "<group>"; };
+		33E0FC3226B164360030BF21 /* PCCommentReportRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCCommentReportRequest.h; sourceTree = "<group>"; };
+		33E0FC3326B164360030BF21 /* PCCommentReportRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCCommentReportRequest.m; sourceTree = "<group>"; };
 		33E6496F26945B48001E98EA /* PCPopupContainerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCPopupContainerView.h; sourceTree = "<group>"; };
 		33E6497026945B48001E98EA /* PCPopupContainerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCPopupContainerView.m; sourceTree = "<group>"; };
 		95C939A3661D2A820DEF2B30 /* Pods-Pica.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pica.debug.xcconfig"; path = "Target Support Files/Pods-Pica/Pods-Pica.debug.xcconfig"; sourceTree = "<group>"; };
@@ -370,10 +401,28 @@
 		3306A45F266DDC9C00FC397A /* Class */ = {
 			isa = PBXGroup;
 			children = (
-				3306A460266DDCCC00FC397A /* PCDatabase.h */,
-				3306A461266DDCCC00FC397A /* PCDatabase.m */,
 				337AD6BC26785199009EA2D1 /* PCSocket.h */,
 				337AD6BD26785199009EA2D1 /* PCSocket.m */,
+			);
+			path = Class;
+			sourceTree = "<group>";
+		};
+		330B10D9269E86A60075A9A0 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				330B10DA269E871A0075A9A0 /* PCColorGridView.h */,
+				330B10DB269E871A0075A9A0 /* PCColorGridView.m */,
+				330B10E4269E97480075A9A0 /* PCColorSlider.h */,
+				330B10E5269E97480075A9A0 /* PCColorSlider.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		330B10EF26A162250075A9A0 /* Class */ = {
+			isa = PBXGroup;
+			children = (
+				3306A460266DDCCC00FC397A /* PCComicHistory.h */,
+				3306A461266DDCCC00FC397A /* PCComicHistory.m */,
 			);
 			path = Class;
 			sourceTree = "<group>";
@@ -414,6 +463,7 @@
 		3358C8A8265F6DEC0000D17F /* User */ = {
 			isa = PBXGroup;
 			children = (
+				330B10EF26A162250075A9A0 /* Class */,
 				3358C8B1265F79990000D17F /* View */,
 				3358C8AD265F75250000D17F /* Request */,
 				3358C8A9265F6E020000D17F /* Controller */,
@@ -463,6 +513,7 @@
 		3358C8CB2660BC740000D17F /* Setting */ = {
 			isa = PBXGroup;
 			children = (
+				330B10D9269E86A60075A9A0 /* View */,
 				3358C8D02660BFDF0000D17F /* Request */,
 				3358C8CC2660BC8D0000D17F /* Controller */,
 			);
@@ -474,6 +525,10 @@
 			children = (
 				3358C8CD2660BC9F0000D17F /* PCSettingController.h */,
 				3358C8CE2660BC9F0000D17F /* PCSettingController.m */,
+				330B10E1269E96880075A9A0 /* PCColorPickerViewController.h */,
+				330B10E2269E96880075A9A0 /* PCColorPickerViewController.m */,
+				330B10F326A18B800075A9A0 /* PCAvatarDecorateController.h */,
+				330B10F426A18B800075A9A0 /* PCAvatarDecorateController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -609,6 +664,8 @@
 				33AD93C6255017160079DFAE /* AppDelegate.m */,
 				33AD93CB255017160079DFAE /* ViewController.h */,
 				33AD93CC255017160079DFAE /* ViewController.m */,
+				3373F41626AFD9D100592892 /* PCTestRequest.h */,
+				3373F41726AFD9D100592892 /* PCTestRequest.m */,
 				33AD93CE255017160079DFAE /* Main.storyboard */,
 				33AD93D7255017170079DFAE /* main.m */,
 			);
@@ -645,6 +702,7 @@
 				33AD93F6255019520079DFAE /* PCVendorHeader.h */,
 				334EAD752559409A00B0231C /* PCDefineHeader.h */,
 				334EAD94255A6DCC00B0231C /* PCIconHeader.h */,
+				330B10F626A193470075A9A0 /* PCLocalKeyHeader.h */,
 			);
 			path = Header;
 			sourceTree = "<group>";
@@ -730,6 +788,12 @@
 				33AD942025501D2B0079DFAE /* PCLoginRequest.m */,
 				33828E3E25E6577C00967957 /* PCRegistRequest.h */,
 				33828E3F25E6577C00967957 /* PCRegistRequest.m */,
+				33B78EC526B8FC7F000CA73E /* PCForgotPasswordRequest.h */,
+				33B78EC626B8FC7F000CA73E /* PCForgotPasswordRequest.m */,
+				33B78EC826B8FFD7000CA73E /* PCSourceRequest.h */,
+				33B78EC926B8FFD7000CA73E /* PCSourceRequest.m */,
+				33B78ECB26B900A6000CA73E /* PCInitRequest.h */,
+				33B78ECC26B900A6000CA73E /* PCInitRequest.m */,
 			);
 			path = Request;
 			sourceTree = "<group>";
@@ -820,6 +884,8 @@
 				3306A454266A1C8C00FC397A /* PCCommentChildRequest.m */,
 				3306A44D266A0EAF00FC397A /* PCCommentPublishRequest.h */,
 				3306A44E266A0EAF00FC397A /* PCCommentPublishRequest.m */,
+				33E0FC3226B164360030BF21 /* PCCommentReportRequest.h */,
+				33E0FC3326B164360030BF21 /* PCCommentReportRequest.m */,
 				3306A450266A17FF00FC397A /* PCCommentLikeRequest.h */,
 				3306A451266A17FF00FC397A /* PCCommentLikeRequest.m */,
 			);
@@ -851,6 +917,8 @@
 				3329FE52265B90C40054F39B /* PCKnightRankCell.m */,
 				330FA7192664CFF000C146BE /* PCSearchRecordView.h */,
 				330FA71A2664CFF000C146BE /* PCSearchRecordView.m */,
+				33BF13EE26CA75FA002EC325 /* PCTiledImageView.h */,
+				33BF13EF26CA75FA002EC325 /* PCTiledImageView.m */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1065,6 +1133,7 @@
 				33AD955C25516C120079DFAE /* PCComicsListController.m in Sources */,
 				33AD956825524A000079DFAE /* PCSearchRequest.m in Sources */,
 				337AD6BB26784E52009EA2D1 /* PCChatListCell.m in Sources */,
+				330B10F526A18B800075A9A0 /* PCAvatarDecorateController.m in Sources */,
 				330FA71B2664CFF000C146BE /* PCSearchRecordView.m in Sources */,
 				334EADB1255A775D00B0231C /* QMUIConfigurationTemplateDefault.m in Sources */,
 				33AD942F255106D80079DFAE /* PCCategory.m in Sources */,
@@ -1073,6 +1142,7 @@
 				334EADD5255A873D00B0231C /* PCEpisode.m in Sources */,
 				33AD9408255019B70079DFAE /* PCTabBarViewController.m in Sources */,
 				3358C8D32660C0050000D17F /* PCPasswordSetRequest.m in Sources */,
+				3373F41826AFD9D100592892 /* PCTestRequest.m in Sources */,
 				337AD6CB2678A1E7009EA2D1 /* PCChatManager.m in Sources */,
 				33AD9438255107C70079DFAE /* PCCategoryController.m in Sources */,
 				334EAE17255BDA8E00B0231C /* PCCommentCell.m in Sources */,
@@ -1080,12 +1150,16 @@
 				33828E4425E65CB600967957 /* PCRegistController.m in Sources */,
 				334EAE01255AA83D00B0231C /* PCPictureCell.m in Sources */,
 				33AB826E2679E0BA00A2FD3F /* PCImageMessageCell.m in Sources */,
+				330B10DC269E871A0075A9A0 /* PCColorGridView.m in Sources */,
 				337AD6AE267376D4009EA2D1 /* PCChatList.m in Sources */,
-				3306A462266DDCCC00FC397A /* PCDatabase.m in Sources */,
+				33B78ECA26B8FFD7000CA73E /* PCSourceRequest.m in Sources */,
+				3306A462266DDCCC00FC397A /* PCComicHistory.m in Sources */,
+				33E0FC3426B164360030BF21 /* PCCommentReportRequest.m in Sources */,
 				33AD93F9255019760079DFAE /* PCTableViewController.m in Sources */,
 				334EAE0B255BD11900B0231C /* PCCommentMainRequest.m in Sources */,
 				3329FE47265B78A90054F39B /* PCComicsRankController.m in Sources */,
 				33AD9564255248EA0079DFAE /* NSDictionary+PCAdd.m in Sources */,
+				33BF13F026CA75FA002EC325 /* PCTiledImageView.m in Sources */,
 				3358C8B4265F79AF0000D17F /* PCProfileHeaderView.m in Sources */,
 				337AD6B826784BD3009EA2D1 /* PCChatListController.m in Sources */,
 				33C170F026896ECF00431213 /* PCGameDetailRequest.m in Sources */,
@@ -1101,7 +1175,10 @@
 				33AD942A2551057D0079DFAE /* PCCategoryRequest.m in Sources */,
 				3358C8C1265FB1DE0000D17F /* PCSloganSetRequest.m in Sources */,
 				3358C8C426608D530000D17F /* PCProfileInfoController.m in Sources */,
+				33B78ECD26B900A6000CA73E /* PCInitRequest.m in Sources */,
 				3358C8BB265F94970000D17F /* PCAvatarSetRequest.m in Sources */,
+				33B78EC726B8FC7F000CA73E /* PCForgotPasswordRequest.m in Sources */,
+				330B10E6269E97480075A9A0 /* PCColorSlider.m in Sources */,
 				334EADDD255A8A8500B0231C /* UIView+PCAdd.m in Sources */,
 				33AD93D8255017170079DFAE /* main.m in Sources */,
 				3358C8B7265F88F30000D17F /* PCPunchInRequest.m in Sources */,
@@ -1129,6 +1206,7 @@
 				33AD944125510C430079DFAE /* PCCategoryCell.m in Sources */,
 				33AD93FE255019950079DFAE /* PCViewController.m in Sources */,
 				3358C8A7265F50090000D17F /* PCRandomRequest.m in Sources */,
+				330B10E3269E96880075A9A0 /* PCColorPickerViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1205,7 +1283,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -1258,7 +1336,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -1275,7 +1353,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Pica/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1285,7 +1363,7 @@
 					"$(PROJECT_DIR)/Pica/voiceConvert/opencore-amrwb",
 					"$(PROJECT_DIR)/Pica/voiceConvert/opencore-amrnb",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.pica.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1301,7 +1379,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = "";
 				INFOPLIST_FILE = Pica/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1311,7 +1389,7 @@
 					"$(PROJECT_DIR)/Pica/voiceConvert/opencore-amrwb",
 					"$(PROJECT_DIR)/Pica/voiceConvert/opencore-amrnb",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.pica.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;

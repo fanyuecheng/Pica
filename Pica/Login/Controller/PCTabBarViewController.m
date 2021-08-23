@@ -13,7 +13,8 @@
 #import "PCChatListController.h"
 #import "PCGameListController.h"
 #import "UIImage+PCAdd.h"
- 
+#import "PCLocalKeyHeader.h"
+
 @interface PCTabBarViewController ()
 
 @property (nonatomic, strong) PCCategoryController *categoryController;
@@ -66,7 +67,7 @@
 - (void)reloadViewControllers {
     NSMutableArray *controllerArray = [NSMutableArray arrayWithArray:self.controllerArray];
     
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:PC_TAB_GAME_HIDDEN]) {
+    if ([kPCUserDefaults boolForKey:PC_TAB_GAME_HIDDEN]) {
         [controllerArray removeObjectAtIndex:2];
     }
     self.viewControllers = controllerArray;

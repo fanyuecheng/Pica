@@ -13,7 +13,7 @@
 #import "PCKnightRankCell.h"
 #import "PCComicsDetailController.h"
 #import "PCComicsListController.h"
-#import "PCDatabase.h"
+#import "PCComicHistory.h"
 
 @interface PCRankListController ()
 
@@ -77,7 +77,7 @@
         controller = list;
     } else {
         PCComics *comics = self.dataSource[indexPath.row];
-        [[PCDatabase sharedInstance] saveComic:comics];
+        [[PCComicHistory sharedInstance] saveComic:comics];
         controller = [[PCComicsDetailController alloc] initWithComicsId:comics.comicsId];
     }
     [[QMUIHelper visibleViewController].navigationController pushViewController:controller animated:YES];

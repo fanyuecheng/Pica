@@ -8,13 +8,10 @@
 
 #import <YTKNetwork/YTKNetwork.h>
 #import "PCAPIHeader.h"
+#import "PCLocalKeyHeader.h" 
 
 NS_ASSUME_NONNULL_BEGIN
-
-#define PC_AUTHORIZATION_TOKEN @"PC_AUTHORIZATION_TOKEN"
-#define PC_ERROR_DATA          @"PC_ERROR_DATA"
-#define PC_DATA_TO_SIMPLIFIED_CHINESE   @"PC_DATA_TO_SIMPLIFIED_CHINESE"
-
+ 
 @interface PCRequest : YTKRequest
 
 + (NSDictionary *)headerWithUrl:(NSString *)url

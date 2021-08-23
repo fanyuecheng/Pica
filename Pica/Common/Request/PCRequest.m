@@ -12,20 +12,27 @@
 #import "NSString+PCAdd.h"
 #import "AppDelegate.h"
 
-//2587EFC6F859B4E3A1D8B6D33B272  ios
-#define kApiKey        @"C69BAF41DA5ABD1FFEDC6D2FEA56B"
-//~n}$S9$lGts=U)8zfL/R.PM9;4[3|@/CEsl~Kk!7?BYZ:BAa5zkkRBL7r|1/*Cr  ❎
-//~d}$Q7$eIni=V)9RK/P.RM4;9[7|@/CA}b~OW!3?EV`:<>M7pddUBL5n|0/*Cn   ❎
-//~d}$Q7$eIni=V)9\\RK/P.RM4;9[7|@/CA}b~OW!3?EV`:<>M7pddUBL5n|0/*Cn ✅
+#define PC_API_KEY_IOS       @"2587EFC6F859B4E3A1D8B6D33B272"
+#define PC_API_KEY_ANDROID   @"C69BAF41DA5ABD1FFEDC6D2FEA56B"
+#define PC_API_KEY_SECRET_ANDROID    @"~d}$Q7$eIni=V)9\\RK/P.RM4;9[7|@/CA}b~OW!3?EV`:<>M7pddUBL5n|0/*Cn"
+#define PC_API_KEY_SECRET_IOS    @"????"
 
-#define kSecretKey     @"~d}$Q7$eIni=V)9\\RK/P.RM4;9[7|@/CA}b~OW!3?EV`:<>M7pddUBL5n|0/*Cn"
-#define kVersion       @"2.2.1.3.3.4"
-#define kBuildVersion  @"45"
-#define kVhannel       @"1" // 2 3
+#define PC_VERSION_IOS            @"2.1.2.5"
+#define PC_VERSION_ANDROID        @"2.2.1.3.3.4"
+#define PC_BUILD_VERSION_IOS      @"34"
+#define PC_BUILD_VERSION_ANDROID  @"45"
+#define PC_PLATFORM_IOS           @"ios"
+#define PC_PLATFORM_ANDROID       @"android"
+ 
+#define PC_API_CHANNEL            @"1" // 2 3
 //cb69a7aa-b9a8-3320-8cf1-74347e9ee970
 //cb69a7aa-b9a8-3320-8cf1-74347e9ee979
-#define kAppUUID       @"cb69a7aa-b9a8-3320-8cf1-74347e9ee970"
+//1A8BF3E5-0358-42D5-9814-7C79A24B6ACC
+#define PC_APP_UUID               @"cb69a7aa-b9a8-3320-8cf1-74347e9ee970"
 //original","low","medium","high"
+#define PC_APP_IMAGE_QUALITY      @"original"
+#define PC_USER_AGENT_IOS         @"sora/1 CFNetwork/1128.0.1 Darwin/19.6.0"
+#define PC_USER_AGENT_ANDROID     @"okhttp/3.8.1"
 
 @implementation PCRequest
   
@@ -35,26 +42,26 @@
     NSString *timeInterval = [NSString stringWithFormat:@"%.f", time.timeIntervalSince1970];
     NSString *uuid = [[[NSUUID UUID] UUIDString] stringByReplacingOccurrencesOfString:@"-" withString:@""].lowercaseString;
     NSMutableDictionary *header = @{
-                            @"api-key"           : kApiKey,
+                            @"api-key"           : PC_API_KEY_ANDROID,
                             @"accept"            : @"application/vnd.picacomic.com.v1+json",
-                            @"app-channel"       : kVhannel,
+                            @"app-channel"       : PC_API_CHANNEL,
                             @"time"              : timeInterval,
                             @"nonce"             : uuid,
                             @"signature"         : @"",
-                            @"app-version"       : kVersion,
-                            @"app-uuid"          : kAppUUID,
-                            @"app-platform"      : @"android",
-                            @"app-build-version" : kBuildVersion,
+                            @"app-version"       : PC_VERSION_ANDROID,
+                            @"app-uuid"          : PC_APP_UUID,
+                            @"app-platform"      : PC_PLATFORM_ANDROID,
+                            @"app-build-version" : PC_BUILD_VERSION_ANDROID,
                             @"Content-Type"      : @"application/json; charset=UTF-8",
-                            @"User-Agent"        : @"okhttp/3.8.1",
-                            @"image-quality"     : @"original",
+                            @"User-Agent"        : PC_USER_AGENT_ANDROID,
+                            @"image-quality"     : PC_APP_IMAGE_QUALITY,
                             @"accept-encoding"   : @"gzip"
     }.mutableCopy;
      
-    NSString *raw = [NSString stringWithFormat:@"%@%@%@%@%@", [url stringByReplacingOccurrencesOfString:@"https://picaapi.picacomic.com/" withString:@""], timeInterval, uuid, method, kApiKey].lowercaseString;
-    header[@"signature"] = [raw pc_hmacSHA256StringWithKey:kSecretKey];
+    NSString *raw = [NSString stringWithFormat:@"%@%@%@%@%@", [url stringByReplacingOccurrencesOfString:PC_API_HOST_ANDROID withString:@""], timeInterval, uuid, method, PC_API_KEY_ANDROID].lowercaseString;
+    header[@"signature"] = [raw pc_hmacSHA256StringWithKey:PC_API_KEY_SECRET_ANDROID];
      
-    NSString *token = [[NSUserDefaults standardUserDefaults] stringForKey:PC_AUTHORIZATION_TOKEN];
+    NSString *token = [kPCUserDefaults stringForKey:PC_AUTHORIZATION_TOKEN];
     if (token.length) {
         header[@"authorization"] = token;
     }
@@ -103,10 +110,11 @@
 }
 
 - (void)requestCompletePreprocessor {
+    [super requestCompletePreprocessor];
 #if defined(DEBUG)
     NSLog(@"\n============ [PCRequest Info] ============\nrequest method: %@  from cache: %@\nrequest url: %@\nrequest parameters: \n%@\nrequest response:\n%@\n==========================================\n", self.methodString, self.isDataFromCache ? @"YES" : @"NO", self.requestUrl, self.requestArgument, self.responseJSONObject);
 #endif
-    if (!self.error && [[NSUserDefaults standardUserDefaults] boolForKey:PC_DATA_TO_SIMPLIFIED_CHINESE]) {
+    if (!self.error && [kPCUserDefaults boolForKey:PC_DATA_TO_SIMPLIFIED_CHINESE]) {
         NSString *simplifiedChinese = [self.responseString pc_simplifiedChinese];
         NSDictionary *object = [NSJSONSerialization JSONObjectWithData:[simplifiedChinese dataUsingEncoding:NSUTF8StringEncoding] options:NSJSONReadingAllowFragments error:nil];
         [self setValue:simplifiedChinese forKey:@"responseString"];
@@ -144,7 +152,7 @@
 }
 
 - (NSString *)baseUrl {
-    return PC_API_HOST;
+    return PC_API_HOST_ANDROID;
 }
 
 - (YTKRequestSerializerType)requestSerializerType {
