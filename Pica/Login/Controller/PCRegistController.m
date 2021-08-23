@@ -81,7 +81,7 @@
     self.birthdayButton.frame = CGRectMake(15, self.passwordTextField.qmui_bottom + 5, SCREEN_WIDTH - 30, 50);
     self.genderControl.frame = CGRectMake(15, self.birthdayButton.qmui_bottom + 5, SCREEN_WIDTH - 30, 50);
     self.questionButton.frame = CGRectMake(15, self.genderControl.qmui_bottom + 5, SCREEN_WIDTH - 30, 40);
-    self.autoButton.frame = CGRectMake(15, self.contentView.qmui_height - 45, SCREEN_WIDTH - 30, 40);
+    self.autoButton.frame = CGRectMake(15, self.contentView.qmui_height - 45 - SafeAreaInsetsConstantForDeviceWithNotch.bottom, SCREEN_WIDTH - 30, 40);
     self.question1.frame = CGRectMake(SCREEN_WIDTH + 15, self.nameTextField.qmui_top, SCREEN_WIDTH - 30, 50);
     self.answer1.frame = CGRectMake(SCREEN_WIDTH + 15, self.question1.qmui_bottom + 5, SCREEN_WIDTH - 30, 50);
     self.question2.frame = CGRectMake(SCREEN_WIDTH + 15, self.answer1.qmui_bottom + 5, SCREEN_WIDTH - 30, 50);
@@ -209,11 +209,12 @@
         self.autoRegistArray = [NSMutableArray array];
         //只注册一个账号 
         self.autoTotalCount = 1;
-        self.autoFinishedCount = 0;
     }
     
     for (NSInteger i = 0; i < self.autoTotalCount; i++) {
-        [self autoRegist];
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)((i * 0.1) * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self autoRegist];
+        });
     }
 }
 

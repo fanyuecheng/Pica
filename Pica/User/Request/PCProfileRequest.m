@@ -20,7 +20,7 @@
         PCUser *user = [PCUser yy_modelWithJSON:request.responseObject[@"data"][@"user"]];
         !success ? : success(user);
         if (!self.userId) {
-            [[NSUserDefaults standardUserDefaults] setObject:request.responseObject[@"data"][@"user"] forKey:PC_LOCAL_USER];
+            [kPCUserDefaults setObject:request.responseObject[@"data"][@"user"] forKey:PC_LOCAL_USER];
         }
     } failure:^(__kindof YTKBaseRequest * _Nonnull request) {
         !failure ? : failure(request.error);
@@ -40,11 +40,11 @@
 }
 
 - (NSInteger)cacheTimeInSeconds {
-    return 60 * 60;
+    return -1;
 }
 
 - (BOOL)ignoreCache {
-    return NO;
+    return YES;
 }
 
 @end

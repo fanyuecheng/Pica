@@ -45,6 +45,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (BOOL)pc_isLeapYear:(NSDate *)date;
 
+- (NSString *)pc_timeString;
 
 @end
 

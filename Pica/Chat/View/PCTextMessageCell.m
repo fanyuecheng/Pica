@@ -14,7 +14,7 @@
 #import "PCUser.h"
 #import "PCDefineHeader.h"
 #import "PCPopupContainerView.h"
-  
+
 @implementation PCTextMessageCell
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
@@ -22,7 +22,6 @@
          
         [self.messageContentView addSubview:self.replyLabel];
         [self.messageContentView addSubview:self.messageLabel];
-        [self.messageContentView addTarget:self action:@selector(menuAction:) forControlEvents:UIControlEventTouchUpInside];
     }
     return self;
 }
@@ -92,20 +91,24 @@
 - (void)setMessage:(PCChatMessage *)message {
     [super setMessage:message];
     
+    BOOL color = [kPCUserDefaults boolForKey:PC_CHAT_EVENT_COLOR_ON];
+
     if (message.at.length) {
         NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] init];
         
         NSAttributedString *atString = [[NSAttributedString alloc] initWithString:[message.at stringByReplacingOccurrencesOfString:@"嗶咔_" withString:@"@"] attributes:@{NSFontAttributeName: UIFontMake(14), NSForegroundColorAttributeName: PCColorHotPink}];
         
-        NSAttributedString *messageString = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@"\n%@", message.message] attributes:@{NSFontAttributeName: UIFontMake(15), NSForegroundColorAttributeName: UIColorBlack}];
+        NSString *msgString = [NSString stringWithFormat:@"\n%@", message.message];
+        NSAttributedString *messageString = message.event_colors.count && color ? [self colorAttributedStringWithText:msgString colorArray:message.eventColorArray] : [self normalAttributedStringWithText:msgString];
         
         [attributedText appendAttributedString:atString];
         [attributedText appendAttributedString:messageString];
         
         self.messageLabel.attributedText = attributedText;
     } else {
-        self.messageLabel.attributedText = [[NSAttributedString alloc] initWithString:message.message attributes:@{NSFontAttributeName: UIFontMake(15), NSForegroundColorAttributeName:UIColorBlack}];
+        self.messageLabel.attributedText = message.event_colors.count && color ? [self colorAttributedStringWithText:message.message colorArray:message.eventColorArray] : [self normalAttributedStringWithText:message.message];
     }
+     
     self.replyLabel.hidden = message.reply.length == 0;
     if (message.reply.length) {
         NSMutableAttributedString *attributedText = [[NSMutableAttributedString alloc] init];
@@ -120,6 +123,31 @@
     } else {
         self.replyLabel.attributedText = nil;
     }
+}
+
+#pragma mark - Method
+- (NSAttributedString *)normalAttributedStringWithText:(NSString *)text {
+    return [[NSAttributedString alloc] initWithString:text attributes:@{NSFontAttributeName: UIFontMake(15), NSForegroundColorAttributeName:UIColorBlack}];
+}
+
+- (NSAttributedString *)colorAttributedStringWithText:(NSString *)text
+                                           colorArray:(NSArray *)colorArray {
+    NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithString:text];
+    [attributedString addAttributes:@{NSFontAttributeName: UIFontMake(15)} range:NSMakeRange(0, text.length)];
+    
+ 
+    NSMutableArray *colors = [NSMutableArray array];
+    do {
+        [colors addObjectsFromArray:colorArray];
+    } while (colors.count < text.length);
+   
+    
+    for (NSInteger i = 0; i < attributedString.string.length; i++) {
+        NSRange range = [text rangeOfComposedCharacterSequenceAtIndex:i];
+        [attributedString addAttributes:@{NSForegroundColorAttributeName: colors[i]} range:range];
+    }
+    
+    return attributedString;
 }
 
 #pragma mark - Action

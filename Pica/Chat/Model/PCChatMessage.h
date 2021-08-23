@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <GYDataCenter/GYDataCenter.h>
 
 NS_ASSUME_NONNULL_BEGIN
 /* //message":"【卑微阿离】使用了🎆末日審判的號角🎆把《洛芽叶子》的訊息中斷 4320 分鐘"}]
@@ -52,7 +53,7 @@ typedef NS_ENUM(NSUInteger, PCChatMessageType) {
 };
 
 @class UIImage, AVAudioPlayer, PCUser;
-@interface PCChatMessage : NSObject
+@interface PCChatMessage : GYModelObject
 
 @property (nonatomic, copy) NSString *at;
 @property (nonatomic, copy) NSString *audio;
@@ -86,16 +87,18 @@ typedef NS_ENUM(NSUInteger, PCChatMessageType) {
 @property (nonatomic, assign) BOOL     isPlaying;
 @property (nonatomic, strong) AVAudioPlayer *audioPlayer;
 @property (nonatomic, copy)   void (^playStateBlock)(BOOL isPlaying);
+@property (nonatomic, copy)   NSArray  *eventColorArray;
 
 - (void)playVoiceMessage;
 - (void)pauseVoiceMessage;
 - (void)stopVoiceMessage;
++ (NSString *)dbPath;
 
 + (PCChatMessage *)messageWithSocketMessage:(NSString *)socketMessage;
 
 + (PCChatMessage *)textMessageDataWithText:(NSString *)text
-                              replyMessage:(PCChatMessage *)replyMessage
-                                        at:(NSString *)at;
+                              replyMessage:(nullable PCChatMessage *)replyMessage
+                                        at:(nullable NSString *)at;
 
 + (PCChatMessage *)imageMessageDataWithData:(NSData *)data;
 + (PCChatMessage *)voiceMessageDataWithData:(NSData *)data;

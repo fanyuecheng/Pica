@@ -43,7 +43,6 @@
     [super viewDidLoad];
     
     [self requestKeyword];
-    [self requestCategory];
 }
 
 - (void)initSubviews {
@@ -69,17 +68,17 @@
 
 #pragma mark - Request
 - (void)requestKeyword {
+    [self showEmptyViewWithLoading];
     PCKeywordRequest *request = [[PCKeywordRequest alloc] init];
     [request sendRequest:^(NSArray *keywordArray) {
         self.keywordArray = keywordArray;
+        [self requestCategory];
     } failure:^(NSError * _Nonnull error) {
-        
+        [self showEmptyViewWithText:@"网络错误" detailText:nil buttonTitle:@"重新请求" buttonAction:@selector(requestKeyword)];
     }];
 }
 
 - (void)requestCategory {
-    [self showEmptyViewWithLoading];
-    
     PCCategoryRequest *request = [[PCCategoryRequest alloc] init];
     [request sendRequest:^(NSArray *responseArray) {
         [self hideEmptyView];

@@ -64,7 +64,7 @@
         _imageView = [[SDAnimatedImageView alloc] init];
         _imageView.layer.cornerRadius = 4;
         _imageView.layer.masksToBounds = YES;
-        _imageView.layer.borderWidth = .3;
+        _imageView.layer.borderWidth = .5;
         _imageView.layer.borderColor = UIColorSeparator.CGColor;
     }
     return _imageView;

@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "PCThumb.h"
+#import "PCLocalKeyHeader.h"
 
 NS_ASSUME_NONNULL_BEGIN
 /*
@@ -31,7 +32,6 @@ NS_ASSUME_NONNULL_BEGIN
  gender = "m";
  name = "复活的炎头队长";
  */
-#define PC_LOCAL_USER @"PC_LOCAL_USER"
 
 @interface PCUser : NSObject
 
@@ -53,11 +53,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 //我的
 @property (nonatomic, strong) NSDate *created_at;
+@property (nonatomic, strong) NSDate *activation_date;
 @property (nonatomic, strong) NSDate *birthday;
 @property (nonatomic, assign) BOOL isPunched;
 @property (nonatomic, copy)   NSString *email;
 
 + (PCUser *)localUser;
++ (NSArray *)characterImageArray;
++ (NSString *)localCharacterImage;
+
 + (void)requsetMyself:(nullable void (^)(PCUser *user, NSError *error))finished;
 
 @end

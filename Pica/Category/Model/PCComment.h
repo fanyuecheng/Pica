@@ -67,6 +67,8 @@ typedef NS_ENUM(NSUInteger, PCCommentType) {
 //custom
 @property (nonatomic, assign) BOOL     isChild;
 
++ (PCComment *)commentWithContent:(NSString *)content isChild:(BOOL)isChild;
+
 @end
 
 @interface PCComicsComment : NSObject

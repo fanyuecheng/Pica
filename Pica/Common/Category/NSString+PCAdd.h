@@ -13,7 +13,6 @@ NS_ASSUME_NONNULL_BEGIN
 @interface NSString (PCAdd)
 
 - (NSString *)pc_hmacSHA256StringWithKey:(NSString *)key;
-- (CGSize)pc_sizeForFont:(UIFont *)font size:(CGSize)size;
 - (CGFloat)pc_widthForFont:(UIFont *)font;
 - (CGFloat)pc_heightForFont:(UIFont *)font width:(CGFloat)width; 
 - (UIImage *)pc_imageWithTextColor:(UIColor *)color

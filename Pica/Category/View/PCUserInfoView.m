@@ -10,6 +10,7 @@
 #import "PCVendorHeader.h"
 #import "UIImageView+PCAdd.h"
 #import "PCCommonUI.h"
+#import "PCDefineHeader.h"
  
 @interface PCUserInfoView ()
 
@@ -17,8 +18,8 @@
 @property (nonatomic, strong) UIImageView *avatarView;
 @property (nonatomic, strong) UIImageView *characterView;
 @property (nonatomic, strong) QMUILabel   *nameLabel;
-@property (nonatomic, strong) QMUILabel   *titleLabel;
-@property (nonatomic, strong) QMUILabel   *sloganLabel;
+@property (nonatomic, strong) QMUIMarqueeLabel *titleLabel;
+@property (nonatomic, strong) QMUITextView *sloganView;
 
 @end
 
@@ -47,7 +48,7 @@
     [self addSubview:self.characterView];
     [self addSubview:self.nameLabel];
     [self addSubview:self.titleLabel];
-    [self addSubview:self.sloganLabel];
+    [self addSubview:self.sloganView];
 }
 
 - (void)layoutSubviews {
@@ -58,7 +59,9 @@
     self.characterView.frame = CGRectMake((self.qmui_width - 100) * 0.5, self.levelLabel.qmui_bottom + 5, 100, 100);
     self.nameLabel.frame = CGRectMake(0, self.characterView.qmui_bottom + 5, self.qmui_width, QMUIViewSelfSizingHeight);
     self.titleLabel.frame = CGRectMake(0, self.nameLabel.qmui_bottom + 5, self.qmui_width, QMUIViewSelfSizingHeight);
-    self.sloganLabel.frame = CGRectMake(10, self.titleLabel.qmui_bottom + 5, self.qmui_width - 20, QMUIViewSelfSizingHeight);
+    CGSize sloganSize = [self.sloganView sizeThatFits:CGSizeMake(self.qmui_width, CGFLOAT_MAX)];
+    CGFloat height = self.titleLabel.qmui_bottom + 5 + sloganSize.height > self.qmui_height ? self.qmui_height - (self.titleLabel.qmui_bottom + 5) - 15 : sloganSize.height;
+    self.sloganView.frame = CGRectMake(0, self.titleLabel.qmui_bottom + 5, self.qmui_width, height);
 }
 
 - (void)setUser:(PCUser *)user {
@@ -66,22 +69,30 @@
     
     self.levelLabel.text = [NSString stringWithFormat:@"Lv.%@", @(user.level)];
     [self.avatarView pc_setImageWithURL:user.avatar.imageURL];
-    if (user.character) {
-        [self.characterView pc_setImageWithURL:user.character placeholderImage:nil];
-    }
+    [self.characterView pc_setImageWithURL:user.character placeholderImage:nil];
     self.nameLabel.text = user.name;
     self.titleLabel.text = [NSString stringWithFormat:@"%@(%@)", user.title, [user.gender isEqualToString:@"m"] ? @"绅士" : @"淑女"];
-    self.sloganLabel.text = user.slogan;
+    self.sloganView.text = user.slogan;
 }
 
 - (CGSize)sizeThatFits:(CGSize)size {
     CGFloat height = 0;
     
-    height += 10 + [self.levelLabel sizeThatFits:CGSizeMake(size.width, CGFLOAT_MAX)].height + 5 + 100 + 5 + [self.nameLabel sizeThatFits:CGSizeMake(size.width, CGFLOAT_MAX)].height + 5 + [self.titleLabel sizeThatFits:CGSizeMake(size.width, CGFLOAT_MAX)].height + 5 + [self.sloganLabel sizeThatFits:CGSizeMake(size.width - 20, CGFLOAT_MAX)].height + 20;
+    height += 10 + [self.levelLabel sizeThatFits:CGSizeMake(size.width, CGFLOAT_MAX)].height + 5 + 100 + 5 + [self.nameLabel sizeThatFits:CGSizeMake(size.width, CGFLOAT_MAX)].height + 5 + [self.titleLabel sizeThatFits:CGSizeMake(size.width, CGFLOAT_MAX)].height + 5 + [self.sloganView sizeThatFits:CGSizeMake(size.width, CGFLOAT_MAX)].height + 15;
     
     return CGSizeMake(size.width, height);
 }
 
+- (void)avatarAction:(UITapGestureRecognizer *)sender {
+    if (self.user.character) {
+        if (self.characterView.image) {
+            self.characterView.image = nil; 
+        } else {
+            [self.characterView pc_setImageWithURL:self.user.character placeholderImage:nil];
+        }
+    }
+}
+ 
 #pragma mark - Get
 - (QMUILabel *)levelLabel {
     if (!_levelLabel) {
@@ -105,6 +116,8 @@
 - (UIImageView *)characterView {
     if (!_characterView) {
         _characterView = [[UIImageView alloc] init];
+        _characterView.userInteractionEnabled = YES;
+        [_characterView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(avatarAction:)]];
     }
     return _characterView;
 }
@@ -117,21 +130,26 @@
     return _nameLabel;
 }
 
-- (QMUILabel *)titleLabel {
+- (QMUIMarqueeLabel *)titleLabel {
     if (!_titleLabel) {
-        _titleLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(15) textColor:PCColorHotPink];
+        _titleLabel = [[QMUIMarqueeLabel alloc] init];
+        _titleLabel.textColor = PCColorHotPink;
+        _titleLabel.font = UIFontMake(15);
         _titleLabel.textAlignment = NSTextAlignmentCenter;
     }
     return _titleLabel;
 }
 
-- (QMUILabel *)sloganLabel {
-    if (!_sloganLabel) {
-        _sloganLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(15) textColor:UIColorGray];
-        _sloganLabel.textAlignment = NSTextAlignmentCenter;
-        _sloganLabel.numberOfLines = 0;
+- (QMUITextView *)sloganView {
+    if (!_sloganView) {
+        _sloganView = [[QMUITextView alloc] init];
+        _sloganView.font = UIFontMake(15);
+        _sloganView.textColor = UIColorGray;
+        _sloganView.editable = NO;
+        _sloganView.textAlignment = NSTextAlignmentCenter;
+        _sloganView.textContainerInset = UIEdgeInsetsMake(5, 5, 5, 5);
     }
-    return _sloganLabel;
+    return _sloganView;
 }
 
 @end

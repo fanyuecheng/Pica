@@ -7,7 +7,8 @@
 //
 
 #import "PCCommentPublishRequest.h"
-
+#import "PCComment.h"
+ 
 @implementation PCCommentPublishRequest
 
 - (instancetype)initWithGameId:(NSString *)gameId {
@@ -36,8 +37,7 @@
     [super sendRequest:success failure:failure];
     
     [self startWithCompletionBlockWithSuccess:^(__kindof YTKBaseRequest * _Nonnull request) {
-        
-        !success ? : success(nil);
+        !success ? : success([PCComment commentWithContent:self.content isChild:(self.commentId != nil)]);
     } failure:^(__kindof YTKBaseRequest * _Nonnull request) {
         !failure ? : failure(request.error);
     }];

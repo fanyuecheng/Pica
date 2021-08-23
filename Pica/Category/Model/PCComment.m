@@ -16,6 +16,16 @@
              @"comic" : @[@"_comic._id", @"_comic"],
              @"game" : @[@"_game._id", @"_game"]};
 }
+
++ (PCComment *)commentWithContent:(NSString *)content isChild:(BOOL)isChild {
+    PCComment *comment = [[PCComment alloc] init];
+    comment.content = content;
+    comment.created_at = [NSDate date];
+    comment.user = [PCUser localUser];
+    comment.isChild = isChild;
+    comment.commentId = @"pc_comment_id_test_temp";
+    return comment;
+}
  
 @end
 

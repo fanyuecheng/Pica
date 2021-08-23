@@ -28,7 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) PCThumb  *media;
 
 //custom
-@property (nonatomic, strong) UIImage  *picture;
+@property (nonatomic, strong) UIImage  *image;
 @property (nonatomic, assign) CGSize   preferSize; 
 
 @end

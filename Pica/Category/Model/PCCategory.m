@@ -41,6 +41,19 @@
     return category;
 }
 
++ (PCCategory *)aiCategory {
+    PCCategory *category = [[PCCategory alloc] init];
+    category.title = @"嗶咔AI推薦";
+    category.active = YES;
+    category.isWeb = NO;
+    PCThumb *thumb = [[PCThumb alloc] init];
+    thumb.originalName = @"ai.jpg";
+    thumb.path = @"ai.jpg";
+    thumb.fileServer = @"https://wikawika.xyz/static/";
+    category.thumb = thumb;
+    return category;
+}
+
 + (NSDictionary *)modelCustomPropertyMapper {
     return @{@"categoryId" : @"_id",
              @"desc" : @"description"};

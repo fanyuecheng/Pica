@@ -85,7 +85,7 @@
 
 #pragma mark - Private Method
 - (void)sendInitData {
-    NSDictionary *user = [[NSUserDefaults standardUserDefaults] objectForKey:PC_LOCAL_USER];
+    NSDictionary *user = [kPCUserDefaults objectForKey:PC_LOCAL_USER];
     NSString *msg = [NSString stringWithFormat:@"42%@", [@[@"init", user] yy_modelToJSONString]];
     [self sendData:msg];
 }

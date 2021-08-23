@@ -6,8 +6,13 @@ PODS:
   - AFNetworking/Reachability (4.0.1)
   - AFNetworking/Security (4.0.1)
   - AFNetworking/Serialization (4.0.1)
+  - FMDB (2.6.2):
+    - FMDB/standard (= 2.6.2)
+  - FMDB/standard (2.6.2)
+  - GYDataCenter (0.1.1):
+    - FMDB
   - JXPagingView/Pager (2.1.0)
-  - MJRefresh (3.6.1)
+  - MJRefresh (3.7.2)
   - QMUIKit (4.2.3):
     - QMUIKit/QMUIComponents (= 4.2.3)
     - QMUIKit/QMUICore (= 4.2.3)
@@ -337,8 +342,10 @@ PODS:
   - YYModel (1.0.4)
 
 DEPENDENCIES:
+  - FMDB (~> 2.6.1)
+  - GYDataCenter
   - JXPagingView/Pager (~> 2.1.0)
-  - MJRefresh (~> 3.6.1)
+  - MJRefresh (~> 3.7.2)
   - QMUIKit (~> 4.2.3)
   - SDWebImage (~> 5.11.1)
   - SocketRocket (~> 0.5.1)
@@ -348,6 +355,8 @@ DEPENDENCIES:
 SPEC REPOS:
   trunk:
     - AFNetworking
+    - FMDB
+    - GYDataCenter
     - JXPagingView
     - MJRefresh
     - QMUIKit
@@ -358,14 +367,16 @@ SPEC REPOS:
 
 SPEC CHECKSUMS:
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
+  FMDB: 854a0341b4726e53276f2a8996f06f1b80f9259a
+  GYDataCenter: 620dc2564589f50d2370a691303e0d7215f7c0af
   JXPagingView: ef48a5a2392252c68db7999de38f4761a2707e2a
-  MJRefresh: d2c1970d1cf6e77fcfcdfe76c943dfab8dbfa5c1
+  MJRefresh: 30997d30b347c8e9508a4db11e3a690da0c9b85a
   QMUIKit: c047f987b14be9f48df47cb934a2d21ccd7ef4b6
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SocketRocket: d57c7159b83c3c6655745cd15302aa24b6bae531
   YTKNetwork: c16be90b06be003de9e9cd0d3b187cc8eaf35c04
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: 4926010ac66f0c4bb190accc9e7b37b05675db3e
+PODFILE CHECKSUM: bb6f1dbee7c58fd622d54ddf2b60f20e2850e78e
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.10.2

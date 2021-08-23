@@ -15,7 +15,8 @@
 #import "PCCommentLikeRequest.h"
 #import "PCUserInfoView.h"
 #import "PCCommentController.h"
-
+#import "PCCommentReportRequest.h"
+ 
 @interface PCCommentCell ()
 
 @property (nonatomic, strong) UIImageView *avatarView;
@@ -28,8 +29,10 @@
 @property (nonatomic, strong) QMUIButton  *likeButton;
 @property (nonatomic, strong) QMUIButton  *childButton;
 @property (nonatomic, strong) QMUILabel   *topLabel;
+@property (nonatomic, strong) QMUIButton  *reportButton;
 
-@property (nonatomic, strong) PCCommentLikeRequest *likeRequest;
+@property (nonatomic, strong) PCCommentLikeRequest   *likeRequest;
+@property (nonatomic, strong) PCCommentReportRequest *reportRequest;
 
 @end
 
@@ -47,6 +50,7 @@
         [self.contentView addSubview:self.likeButton];
         [self.contentView addSubview:self.childButton];
         [self.contentView addSubview:self.topLabel];
+        [self.contentView addSubview:self.reportButton];
     }
     return self;
 }
@@ -54,7 +58,7 @@
 - (void)layoutSubviews {
     [super layoutSubviews];
     
-    self.topLabel.frame = CGRectMake(self.qmui_width - 50, 0, 50, 20);
+    self.topLabel.frame = CGRectMake(0, 0, 50, 20);
     self.avatarView.frame = CGRectMake(15, 20, 80, 80);
     self.characterView.frame = CGRectMake(5, 10, 100, 100);
     [self.nameLabel sizeToFit];
@@ -74,20 +78,19 @@
     }
     [self.likeButton sizeToFit];
     self.likeButton.frame = CGRectSetXY(self.likeButton.bounds, self.childButton.qmui_left - self.likeButton.qmui_width - 10, self.childButton.qmui_top);
+    self.reportButton.frame = CGRectMake(self.qmui_width - 50, 0, 50, 20);
 }
 
 - (void)setComment:(PCComment *)comment {
     _comment = comment;
      
     [self.avatarView pc_setImageWithURL:comment.user.avatar.imageURL];
-    if (comment.user.character) {
-        [self.characterView pc_setImageWithURL:comment.user.character placeholderImage:nil];
-    }
+    [self.characterView pc_setImageWithURL:comment.user.character placeholderImage:nil];
     self.nameLabel.text = comment.user.name;
     self.titleLabel.text = comment.user.title;
     self.levelLabel.text = [NSString stringWithFormat:@"Lv.%@", @(comment.user.level)];
     self.contentLabel.text = [comment.content qmui_trim];
-    self.timeLabel.text = [comment.created_at pc_stringWithFormat:@"yyyy年MM月dd日"];
+    self.timeLabel.text = [comment.created_at pc_timeString];
     [self.likeButton setTitle:[@(comment.likesCount) stringValue] forState:UIControlStateNormal];
     self.likeButton.selected = comment.isLiked;
     [self.childButton setTitle:[NSString stringWithFormat:@"子评论 %@", @(comment.commentsCount)] forState:UIControlStateNormal];
@@ -112,6 +115,24 @@
     } failure:^(NSError * _Nonnull error) {
         
     }];
+}
+
+- (void)reportAction:(QMUIButton *)sender {
+    QMUIAlertAction *action1 = [QMUIAlertAction actionWithTitle:@"确定" style:QMUIAlertActionStyleDefault handler:^(__kindof QMUIAlertController *aAlertController, QMUIAlertAction *action) {
+        [self.reportRequest sendRequest:^(NSString *commentId) {
+            [QMUITips showSucceed:@"举报成功"];
+        } failure:^(NSError * _Nonnull error) {
+            
+        }];
+    }];
+    
+    QMUIAlertAction *action2 = [QMUIAlertAction actionWithTitle:@"取消" style:QMUIAlertActionStyleCancel handler:nil];
+    
+    QMUIAlertController *alertController = [QMUIAlertController alertControllerWithTitle:@"确认举报这个评论?" message:nil preferredStyle:QMUIAlertControllerStyleAlert];
+    
+    [alertController addAction:action1];
+    [alertController addAction:action2];
+    [alertController showWithAnimated:YES];
 }
  
 - (void)childAction:(QMUIButton *)sender {
@@ -227,9 +248,21 @@
         _topLabel.layer.cornerRadius = 4;
         _topLabel.layer.masksToBounds = YES;
         _topLabel.hidden = YES;
-        _topLabel.layer.qmui_maskedCorners = QMUILayerMinXMaxYCorner;
+        _topLabel.layer.qmui_maskedCorners = QMUILayerMaxXMaxYCorner;
     }
     return _topLabel;
+}
+
+- (QMUIButton *)reportButton {
+    if (!_reportButton) {
+        _reportButton = [[QMUIButton alloc] init];
+        _reportButton.qmui_outsideEdge = UIEdgeInsetsMake(-10, 0, -10, 0);
+        _reportButton.titleLabel.font = UIFontMake(12);
+        [_reportButton setTitleColor:UIColorGray forState:UIControlStateNormal];
+        [_reportButton setTitle:@"•••" forState:UIControlStateNormal];
+        [_reportButton addTarget:self action:@selector(reportAction:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _reportButton;
 }
 
 - (PCCommentLikeRequest *)likeRequest {
@@ -239,6 +272,15 @@
         }
     }
     return _likeRequest;
+}
+
+- (PCCommentReportRequest *)reportRequest {
+    if (!_reportRequest) {
+        if (self.comment.commentId) {
+            _reportRequest = [[PCCommentReportRequest alloc] initWithCommentId:self.comment.commentId];
+        }
+    }
+    return _reportRequest;
 }
 
 @end

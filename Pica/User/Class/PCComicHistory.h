@@ -1,5 +1,5 @@
 //
-//  PCDatabase.h
+//  PCComicHistory.h
 //  Pica
 //
 //  Created by Fancy on 2021/6/7.
@@ -11,7 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class PCComics;
-@interface PCDatabase : NSObject
+@interface PCComicHistory : NSObject
 
 + (instancetype)sharedInstance;
 

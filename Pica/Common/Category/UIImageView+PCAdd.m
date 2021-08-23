@@ -53,6 +53,11 @@ static char kAssociatedObjectKey_PC_noFadeAnimation;
           placeholderImage:(UIImage *)placeholderImage
                   progress:(void (^)(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL))progress
                  completed:(void (^)(UIImage *image, NSError *error))completed {
+    
+//    CGFloat scale = UIScreen.mainScreen.scale;
+//    CGSize thumbnailSize = CGSizeMake(800 * scale, 800 * scale);
+//    NSDictionary *context = @{SDWebImageContextImageThumbnailPixelSize : @(thumbnailSize)};
+//    SDWebImageProgressiveLoad
     [self pc_setImageWithURL:url
             placeholderImage:placeholderImage
                      options:0

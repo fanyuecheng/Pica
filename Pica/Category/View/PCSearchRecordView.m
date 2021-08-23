@@ -10,8 +10,7 @@
 #import "PCVendorHeader.h"
 #import "PCComicsListController.h"
 #import "UIImage+PCAdd.h"
-
-#define PC_SEARCH_RECORD @"PC_SEARCH_RECORD"
+#import "PCLocalKeyHeader.h"
 
 @interface PCSearchRecordView ()
 
@@ -51,7 +50,7 @@
         }
         [self.recordArray insertObject:key atIndex:0];
         [self addTagView];
-        [[NSUserDefaults standardUserDefaults] setObject:self.dataSource forKey:PC_SEARCH_RECORD];
+        [kPCUserDefaults setObject:self.recordArray forKey:PC_SEARCH_RECORD];
     }
 }
 
@@ -80,7 +79,7 @@
 }
 
 - (void)deleteAction:(UIButton *)sender {
-    [[NSUserDefaults standardUserDefaults] removeObjectForKey:PC_SEARCH_RECORD];
+    [kPCUserDefaults removeObjectForKey:PC_SEARCH_RECORD];
     [self.contentView qmui_removeAllSubviews];
     [self.recordArray removeAllObjects];
     [self removeFromSuperview];
@@ -113,7 +112,7 @@
 - (NSMutableArray *)recordArray {
     if (!_recordArray) {
         _recordArray = [NSMutableArray array];
-        NSArray *localData = [[NSUserDefaults standardUserDefaults] arrayForKey:PC_SEARCH_RECORD];
+        NSArray *localData = [kPCUserDefaults arrayForKey:PC_SEARCH_RECORD];
         if (localData.count) {
             [_recordArray addObjectsFromArray:localData];
         }

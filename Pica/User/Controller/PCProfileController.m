@@ -104,6 +104,9 @@
 }
 
 - (void)updateSloganWithText:(NSString *)slogan {
+    if (slogan.length == 0) {
+        return;
+    }
     self.sloganSetRequest.slogan = slogan;
     QMUITips *loading = [QMUITips showLoadingInView:DefaultTipsParentView];
     

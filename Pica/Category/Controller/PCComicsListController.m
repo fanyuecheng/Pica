@@ -13,7 +13,7 @@
 #import "PCFavouriteComicsRequest.h"
 #import "PCComicsListCell.h"
 #import "PCComicsDetailController.h"
-#import "PCDatabase.h"
+#import "PCComicHistory.h"
 
 @interface PCComicsListController ()
 
@@ -109,7 +109,7 @@
         return;
     }
     QMUIAlertAction *action1 = [QMUIAlertAction actionWithTitle:@"确定" style:QMUIAlertActionStyleDefault handler:^(__kindof QMUIAlertController *aAlertController, QMUIAlertAction *action) {
-        [[PCDatabase sharedInstance] clearAllComic];
+        [[PCComicHistory sharedInstance] clearAllComic];
         self.comicsArray.firstObject.docs = @[];
         [self.tableView reloadData];
         [self showEmptyViewWithText:@"没有任何本子" detailText:nil buttonTitle:nil buttonAction:NULL];
@@ -204,7 +204,7 @@
     PCComicsList *list = [[PCComicsList alloc] init];
     list.page = 1;
     list.pages = 1;
-    list.docs = [[PCDatabase sharedInstance] allComic];
+    list.docs = [[PCComicHistory sharedInstance] allComic];
     list.total = list.docs.count;
     [self requestFinishedWithList:list];
 }
@@ -322,7 +322,7 @@
     
     PCComicsDetailController *detail = [[PCComicsDetailController alloc] initWithComicsId:comics.comicsId];
     [self.navigationController pushViewController:detail animated:YES];
-    [[PCDatabase sharedInstance] saveComic:comics];
+    [[PCComicHistory sharedInstance] saveComic:comics];
 }
 
 #pragma mark - Get

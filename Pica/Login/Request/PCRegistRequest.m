@@ -22,7 +22,7 @@
 }
 
 - (NSString *)requestUrl {
-    return @"auth/register";
+    return PC_API_AUTH_REGIST;
 }
 
 - (NSDictionary<NSString *,NSString *> *)requestHeaderFieldValueDictionary {
@@ -33,8 +33,7 @@
     return YTKRequestMethodPOST;
 }
 
-- (nullable id)requestArgument {  
-    
+- (nullable id)requestArgument {
     if (self.email &&
         self.password &&
         self.name &&

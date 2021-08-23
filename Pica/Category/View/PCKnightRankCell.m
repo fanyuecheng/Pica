@@ -51,10 +51,7 @@
 - (void)setUser:(PCUser *)user {
     _user = user;
     
-    if (user.character) {
-        [self.characterView pc_setImageWithURL:user.character placeholderImage:nil];
-    }
-    
+    [self.characterView pc_setImageWithURL:user.character placeholderImage:nil];
     [self.coverView pc_setImageWithURL:user.avatar.imageURL];
     self.titleLabel.text = user.name;
     self.authorLabel.text = [NSString stringWithFormat:@"Lv：%@    %@", @(user.level), user.title];

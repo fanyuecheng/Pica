@@ -1,29 +1,27 @@
 //
-//  PCDatabase.m
+//  PCComicHistory.m
 //  Pica
 //
 //  Created by Fancy on 2021/6/7.
 //  Copyright © 2021 fancy. All rights reserved.
 //
 
-#import "PCDatabase.h"
+#import "PCComicHistory.h"
 #import "PCComics.h"
 #import <YYModel/YYModel.h>
-  
-#define PC_DB_COMICS_HISTORY @"PC_DB_COMICS_HISTORY"
-#define kPCUserDefaults      [NSUserDefaults standardUserDefaults]
+#import "PCLocalKeyHeader.h"
 
-@interface PCDatabase ()
+@interface PCComicHistory ()
 
 @property (nonatomic, strong) NSMutableArray *cacheArray;
 
 @end
 
-@implementation PCDatabase
+@implementation PCComicHistory
 
 + (instancetype)sharedInstance {
     static dispatch_once_t onceToken;
-    static PCDatabase *instance = nil;
+    static PCComicHistory *instance = nil;
     dispatch_once(&onceToken, ^{
         instance = [[super allocWithZone:NULL] init];
     });

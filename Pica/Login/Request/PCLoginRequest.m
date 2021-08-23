@@ -26,7 +26,15 @@
     
     [self startWithCompletionBlockWithSuccess:^(__kindof YTKBaseRequest * _Nonnull request) {
         NSString *token = request.responseJSONObject[@"data"][@"token"];
-        [[NSUserDefaults standardUserDefaults] setObject:token forKey:PC_AUTHORIZATION_TOKEN];
+        [kPCUserDefaults setObject:token forKey:PC_AUTHORIZATION_TOKEN];
+        NSMutableArray *accountArray = [[kPCUserDefaults arrayForKey:PC_LOCAL_ACCOUNT] mutableCopy];
+        if (!accountArray) {
+            accountArray = [NSMutableArray array];
+        }
+        if (![accountArray containsObject:self.account]) {
+            [accountArray addObject:self.account];
+        }
+        [kPCUserDefaults setObject:accountArray forKey:PC_LOCAL_ACCOUNT];
         !success ? : success(token);
         [PCUser requsetMyself:nil];
     } failure:^(__kindof YTKBaseRequest * _Nonnull request) {
@@ -35,7 +43,7 @@
 }
 
 - (NSString *)requestUrl {
-    return @"auth/sign-in";
+    return PC_API_AUTH_SIGN_IN;
 }
 
 - (NSDictionary<NSString *,NSString *> *)requestHeaderFieldValueDictionary {

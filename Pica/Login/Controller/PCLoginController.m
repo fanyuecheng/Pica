@@ -1,11 +1,11 @@
-//
+//  test "sdwojcudd"  
 //  PCLoginController.m
 //  Pica
 //
 //  Created by fancy on 2020/11/2.
 //  Copyright © 2020 fancy. All rights reserved.
 //
-//  test id = @"sdwojcudd" password = @"12312312321313";
+//
 
 #import "PCLoginController.h"
 #import "PCRegistController.h"
@@ -18,6 +18,8 @@
 @property (nonatomic, strong) QMUITextField *passwordTextField;
 @property (nonatomic, strong) QMUIButton    *loginButton;
 @property (nonatomic, strong) QMUIButton    *registButton;
+@property (nonatomic, copy)   NSArray       *accountArray;
+@property (nonatomic, strong) UIScrollView  *inputAccountView;
 
 @end
 
@@ -88,12 +90,18 @@
     [self presentViewController:navi animated:YES completion:nil];
 }
 
+- (void)accountAction:(QMUIButton *)sender {
+    self.accountTextField.text = sender.currentTitle;
+    [self.passwordTextField becomeFirstResponder];
+}
+
 #pragma mark - Get
 - (QMUITextField *)accountTextField {
     if (!_accountTextField) {
         _accountTextField = [[QMUITextField alloc] init];
         _accountTextField.borderStyle = UITextBorderStyleRoundedRect;
         _accountTextField.placeholder = @"账号";
+        _accountTextField.inputAccessoryView = self.inputAccountView;
     }
     return _accountTextField;
 }
@@ -128,5 +136,41 @@
     return _registButton;
 }
 
+- (NSArray *)accountArray {
+    if (!_accountArray) {
+        _accountArray = [kPCUserDefaults arrayForKey:PC_LOCAL_ACCOUNT];
+    }
+    return _accountArray;
+}
 
+- (UIScrollView *)inputAccountView {
+    if (!_inputAccountView) {
+        _inputAccountView = [[UIScrollView alloc] init];
+        _inputAccountView.showsHorizontalScrollIndicator = NO;
+        _inputAccountView.backgroundColor = UIColorWhite;
+        _inputAccountView.qmui_borderPosition = QMUIViewBorderPositionTop;
+        _inputAccountView.qmui_width = .5;
+        if (self.accountArray.count) {
+            __block UIButton *lastButton = nil;
+            [self.accountArray enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                QMUIButton *button = [[QMUIButton alloc] init];
+                button.layer.cornerRadius = 4;
+                button.layer.masksToBounds = YES;
+                button.titleLabel.font = UIFontMake(14);
+                [button setTitleColor:UIColorWhite forState:UIControlStateNormal];
+                [button setTitle:obj forState:UIControlStateNormal];
+                button.backgroundColor = UIColorGray6;
+                [button addTarget:self action:@selector(accountAction:) forControlEvents:UIControlEventTouchUpInside];
+                [button sizeToFit];
+                [_inputAccountView addSubview:button];
+                button.frame = CGRectMake(lastButton ? CGRectGetMaxX(lastButton.frame) + 10 : 15, (44 - CGRectGetHeight(button.bounds)) * 0.5, CGRectGetWidth(button.bounds) + 10, CGRectGetHeight(button.bounds));
+                lastButton = button;
+            }];
+            _inputAccountView.contentSize = CGSizeMake(CGRectGetMaxX(lastButton.frame) + 15, 0);
+            _inputAccountView.frame = CGRectMake(0, 0, SCREEN_WIDTH, 44);
+        }
+    }
+    return _inputAccountView;
+}
+ 
 @end
