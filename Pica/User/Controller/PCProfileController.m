@@ -72,7 +72,9 @@
     [self.profileRequest sendRequest:^(PCUser *user) {
         [self hideEmptyView];
         self.user = user;
+        [self.pagerView.mainTableView.mj_header endRefreshing];
     } failure:^(NSError * _Nonnull error) {
+        [self.pagerView.mainTableView.mj_header endRefreshing];
         [self showEmptyViewWithText:@"网络错误" detailText:nil buttonTitle:@"重新请求" buttonAction:@selector(requestProfile)];
     }];
 }
@@ -336,6 +338,11 @@
         _pagerView = [[JXPagerView alloc] initWithDelegate:self];
         _pagerView.listContainerView.scrollView.qmui_multipleDelegatesEnabled = YES;
         _pagerView.listContainerView.scrollView.delegate = self;
+        @weakify(self)
+        _pagerView.mainTableView.mj_header = [MJRefreshStateHeader headerWithRefreshingBlock:^{
+            @strongify(self)
+            [self requestProfile];
+        }];
     }
     return _pagerView;
 }

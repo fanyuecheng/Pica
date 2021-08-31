@@ -1364,7 +1364,7 @@
 					"$(PROJECT_DIR)/Pica/voiceConvert/opencore-amrnb",
 				);
 				MARKETING_VERSION = 1.0.2;
-				PRODUCT_BUNDLE_IDENTIFIER = com.pica.ios;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yuecheng.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -1390,7 +1390,7 @@
 					"$(PROJECT_DIR)/Pica/voiceConvert/opencore-amrnb",
 				);
 				MARKETING_VERSION = 1.0.2;
-				PRODUCT_BUNDLE_IDENTIFIER = com.pica.ios;
+				PRODUCT_BUNDLE_IDENTIFIER = com.yuecheng.test;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
