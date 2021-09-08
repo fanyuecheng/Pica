@@ -7,6 +7,10 @@
 API来自 [picacomic-api](https://github.com/czp3009/picacomic-api) 
 
 #### 更新日志  
+**v1.0.3**  
+* 分流设置   
+* bug fix   
+
 **v1.0.2**  
 * 聊天消息本地化  
 * 聊天文字消息设置颜色  
