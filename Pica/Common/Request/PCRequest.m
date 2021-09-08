@@ -24,7 +24,6 @@
 #define PC_PLATFORM_IOS           @"ios"
 #define PC_PLATFORM_ANDROID       @"android"
  
-#define PC_API_CHANNEL            @"1" // 2 3
 //cb69a7aa-b9a8-3320-8cf1-74347e9ee970
 //cb69a7aa-b9a8-3320-8cf1-74347e9ee979
 //1A8BF3E5-0358-42D5-9814-7C79A24B6ACC
@@ -41,6 +40,12 @@
                            time:(NSDate *)time {
     NSString *timeInterval = [NSString stringWithFormat:@"%.f", time.timeIntervalSince1970];
     NSString *uuid = [[[NSUUID UUID] UUIDString] stringByReplacingOccurrencesOfString:@"-" withString:@""].lowercaseString;
+    NSString *channel = [kPCUserDefaults stringForKey:PC_API_CHANNEL];
+    if (channel.length == 0) {
+        channel = @"1";
+        [kPCUserDefaults setObject:@"1" forKey:PC_API_CHANNEL];
+    }
+    
     NSMutableDictionary *header = @{
                             @"api-key"           : PC_API_KEY_ANDROID,
                             @"accept"            : @"application/vnd.picacomic.com.v1+json",
@@ -93,7 +98,7 @@
                         });
                     }
 #if defined(DEBUG)
-                    NSLog(@"\n============ PCRequest Info] ============\nrequest method: %@  from cache: %@\nrequest url: %@\nrequest parameters: \n%@\nrequest error:\n%@\nresponse:\n%@\n==========================================\n", self.methodString, self.isDataFromCache ? @"YES" : @"NO", self.requestUrl, self.requestArgument, self.error, self.response);
+                    NSLog(@"\n============ PCRequest Info] ============\nrequest method: %@  from cache: %@\nrequest url: %@\nrequest parameters: \n%@\nrequest error:\n%@\nresponse:\n%@\n%@\n==========================================\n", self.methodString, self.isDataFromCache ? @"YES" : @"NO", self.requestUrl, self.requestArgument, self.error, self.response, self.responseObject);
 #endif
                 }
             });
@@ -112,7 +117,7 @@
 - (void)requestCompletePreprocessor {
     [super requestCompletePreprocessor];
 #if defined(DEBUG)
-    NSLog(@"\n============ [PCRequest Info] ============\nrequest method: %@  from cache: %@\nrequest url: %@\nrequest parameters: \n%@\nrequest response:\n%@\n==========================================\n", self.methodString, self.isDataFromCache ? @"YES" : @"NO", self.requestUrl, self.requestArgument, self.responseJSONObject);
+    NSLog(@"\n============ [PCRequest Info] ============\nrequest method: %@  from cache: %@\nrequest url: %@\nrequest parameters: \n%@\nrequest response:\n%@\n%@\n==========================================\n", self.methodString, self.isDataFromCache ? @"YES" : @"NO", self.requestUrl, self.requestArgument, self.response, self.responseJSONObject);
 #endif
     if (!self.error && [kPCUserDefaults boolForKey:PC_DATA_TO_SIMPLIFIED_CHINESE]) {
         NSString *simplifiedChinese = [self.responseString pc_simplifiedChinese];

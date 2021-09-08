@@ -73,10 +73,10 @@ static char kAssociatedObjectKey_PC_noFadeAnimation;
                   progress:(void (^)(NSInteger receivedSize, NSInteger expectedSize, NSURL * _Nullable targetURL))progress
                  completed:(void (^)(UIImage *image, NSError *error))completed {
     //屏蔽 污dirty
-    if ([url containsString:@"https://pica-pica.wikawika.xyz/special/frame-dirty.png"]) {
-        self.image = nil;
-        return;
-    }
+//    if ([url containsString:@"https://pica-pica.wikawika.xyz/special/frame-dirty.png"]) {
+//        self.image = nil;
+//        return;
+//    }
     
     NSURL *imageUrl = [NSURL URLWithString:url];
 

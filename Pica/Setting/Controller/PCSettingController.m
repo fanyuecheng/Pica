@@ -69,26 +69,28 @@
                 cell.detailTextLabel.text = [NSByteCountFormatter stringFromByteCount:fileSize countStyle:NSByteCountFormatterCountStyleFile];
             });
         }); 
+    } else if (indexPath.section == 0 && indexPath.row == 2) {
+        cell.detailTextLabel.text = [kPCUserDefaults stringForKey:PC_API_CHANNEL];
     } else {
         cell.detailTextLabel.text = nil;
     }
     
-    if (indexPath.section == 0 && (indexPath.row == 2 || indexPath.row == 3 || indexPath.row == 4 || indexPath.row == 5)) {
+    if (indexPath.section == 0 && (indexPath.row == 3 || indexPath.row == 4 || indexPath.row == 5 || indexPath.row == 6)) {
         if (![cell.accessoryView isKindOfClass:[UISwitch class]]) {
             UISwitch *switchView = [[UISwitch alloc] init];
             NSString *key = nil;
             
             switch (indexPath.row) {
-                case 2:
+                case 3:
                     key = PC_DATA_TO_SIMPLIFIED_CHINESE;
                     break;
-                case 3:
+                case 4:
                     key = PC_TAB_GAME_HIDDEN;
                     break;
-                case 4:
+                case 5:
                     key = PC_CHAT_EVENT_COLOR_ON;
                     break;
-                case 5:
+                case 6:
                     key = PC_CHAT_AVATAR_CHARACTER_ON;
                     break;
                 default:
@@ -115,10 +117,13 @@
             case 1:
                 [self showUpdatePasswordAlert];
                 break;
-            case 4:
-                [self selectColor];
+            case 2:
+                [self selectChannel];
                 break;
             case 5:
+                [self selectColor];
+                break;
+            case 6:
                 [self selectAvatarDecorate];
                 break;
             default:
@@ -218,6 +223,17 @@
     return path;
 }
 
+- (void)selectChannel {
+    NSInteger channel = [[kPCUserDefaults stringForKey:PC_API_CHANNEL] integerValue];
+    channel ++;
+    if (channel > 3) {
+        channel = 1;
+    }
+    [kPCUserDefaults setObject:[@(channel) stringValue] forKey:PC_API_CHANNEL];
+    [kPCUserDefaults synchronize];
+    [self.tableView reloadData];
+}
+
 #pragma mark - Action
 - (void)logoutAction:(QMUIButton *)sender {
     [self showLogoutAlert];
@@ -257,7 +273,7 @@
 #pragma mark - Get
 - (NSArray *)dataSource {
     if (!_dataSource) {
-        _dataSource = @[@[@"清除缓存", @"修改密码", @"简体中文", @"隐藏游戏区", @"聊天文字颜色", @"聊天室头像装饰"], @[@"关于Pica"]];
+        _dataSource = @[@[@"清除缓存", @"修改密码", @"分流", @"简体中文", @"隐藏游戏区", @"聊天文字颜色", @"聊天室头像装饰"], @[@"关于Pica"]];
     }
     return _dataSource;
 }

@@ -35,13 +35,6 @@
 #define PC_API_COMICS_IMAGE     @"comics/%@/order/%@/pages"
 //漫画评论
 #define PC_API_COMICS_COMMENTS  @"comics/%@/comments"
-//漫画子评论
-#define PC_API_COMMENTS_CHILD   @"comments/%@/childrens?page=%@"
-#define PC_API_COMMENTS_CHILD_REPLY @"comments/%@"
-//漫画评论点赞
-#define PC_API_COMICS_COMMENTS_LIKE  @"comments/%@/like"
-//评论举报
-#define PC_API_COMICS_COMMENTS_REPORT @"comments/%@/report"
 //高级搜索
 #define PC_API_SEARCH_ADVANCED  @"comics/advanced-search?page=%@"
 //漫画排行
@@ -50,6 +43,13 @@
 #define PC_API_COMICS_KNIGHT    @"comics/knight-leaderboard"
 //随机本子
 #define PC_API_COMICS_RANDOOM   @"comics/random"
+//漫画子评论
+#define PC_API_COMMENTS_CHILD       @"comments/%@/childrens?page=%@"
+#define PC_API_COMMENTS_CHILD_REPLY @"comments/%@"
+//漫画评论点赞
+#define PC_API_COMICS_COMMENTS_LIKE  @"comments/%@/like"
+//评论举报
+#define PC_API_COMICS_COMMENTS_REPORT @"comments/%@/report"
 //个人信息
 #define PC_API_USERS_PROFILE_ME @"users/profile"
 #define PC_API_USERS_PROFILE    @"users/%@/profile"
@@ -77,17 +77,8 @@
 #define PC_API_GAME_LIKE        @"games/%@/like"
 
 
-#define PC_API_SOURCE           @"sources"
-#define PC_API_INIT             @"init?platform=%@"
-
- 
-//@"collections" 魔推荐
-//@"banners"     轮播
-//@"announcements?page=%@"  公告
-//"https://picaapi.picacomic.com/comics/{bookId}/recommendation"
-
-//猜测 GET HEAD DELETE 任意参数 成功
-// "users/任意字符串" 
- 
+//未使用api
+#define PC_API_SOURCE                   @"sources"
+#define PC_API_INIT                     @"init?platform=%@"
 
 #endif /* PCAPIHeader_h */

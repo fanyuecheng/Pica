@@ -85,7 +85,6 @@ static UIImage *disclosureIndicatorImageDark;
 #pragma mark - UISwitch
     QMUICMI.switchOnTintColor = UIColor.pc_tintColor;                           // SwitchOnTintColor : UISwitch 打开时的背景色（除了圆点外的其他颜色）
     QMUICMI.switchOffTintColor =  UIColor.pc_separatorColor;                    // SwitchOffTintColor : UISwitch 关闭时的背景色（除了圆点外的其他颜色）
-    QMUICMI.switchTintColor = SwitchOnTintColor;                                // SwitchTintColor : UISwitch 关闭时的周围边框颜色
     QMUICMI.switchThumbTintColor = nil;                                         // SwitchThumbTintColor : UISwitch 中间的操控圆点的颜色
     
 #pragma mark - NavigationBar

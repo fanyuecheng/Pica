@@ -4,9 +4,13 @@
   
 初衷：哔咔的广告实在是太多了，且真的很难用，乱七八糟无关的功能太多，很多人只是想看个本子而已，如此的简单纯粹。  
 所以抽空搞了这个极简版的iOSApp，旨在实用，不整那么多花里胡哨的。  
-API来自 [picacomic](https://github.com/AnkiKong/picacomic) 
+API来自 [picacomic-api](https://github.com/czp3009/picacomic-api) 
 
 #### 更新日志  
+**v1.0.3**  
+* 分流设置   
+* bug fix   
+
 **v1.0.2**  
 * 聊天消息本地化  
 * 聊天文字消息设置颜色  

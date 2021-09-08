@@ -64,7 +64,6 @@
 		3358C8CF2660BC9F0000D17F /* PCSettingController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3358C8CE2660BC9F0000D17F /* PCSettingController.m */; };
 		3358C8D32660C0050000D17F /* PCPasswordSetRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3358C8D22660C0050000D17F /* PCPasswordSetRequest.m */; };
 		33669FFF2553E18C00AEC598 /* PCComicsDetailRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 33669FFE2553E18C00AEC598 /* PCComicsDetailRequest.m */; };
-		3373F41826AFD9D100592892 /* PCTestRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3373F41726AFD9D100592892 /* PCTestRequest.m */; };
 		337AD6AA26737150009EA2D1 /* PCChatListRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 337AD6A926737150009EA2D1 /* PCChatListRequest.m */; };
 		337AD6AE267376D4009EA2D1 /* PCChatList.m in Sources */ = {isa = PBXBuildFile; fileRef = 337AD6AD267376D4009EA2D1 /* PCChatList.m */; };
 		337AD6B126737878009EA2D1 /* PCChatMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 337AD6B026737878009EA2D1 /* PCChatMessage.m */; };
@@ -246,8 +245,6 @@
 		3358C8D22660C0050000D17F /* PCPasswordSetRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCPasswordSetRequest.m; sourceTree = "<group>"; };
 		33669FFD2553E18C00AEC598 /* PCComicsDetailRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCComicsDetailRequest.h; sourceTree = "<group>"; };
 		33669FFE2553E18C00AEC598 /* PCComicsDetailRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCComicsDetailRequest.m; sourceTree = "<group>"; };
-		3373F41626AFD9D100592892 /* PCTestRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCTestRequest.h; sourceTree = "<group>"; };
-		3373F41726AFD9D100592892 /* PCTestRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCTestRequest.m; sourceTree = "<group>"; };
 		337AD6A826737150009EA2D1 /* PCChatListRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCChatListRequest.h; sourceTree = "<group>"; };
 		337AD6A926737150009EA2D1 /* PCChatListRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCChatListRequest.m; sourceTree = "<group>"; };
 		337AD6AC267376D4009EA2D1 /* PCChatList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCChatList.h; sourceTree = "<group>"; };
@@ -664,8 +661,6 @@
 				33AD93C6255017160079DFAE /* AppDelegate.m */,
 				33AD93CB255017160079DFAE /* ViewController.h */,
 				33AD93CC255017160079DFAE /* ViewController.m */,
-				3373F41626AFD9D100592892 /* PCTestRequest.h */,
-				3373F41726AFD9D100592892 /* PCTestRequest.m */,
 				33AD93CE255017160079DFAE /* Main.storyboard */,
 				33AD93D7255017170079DFAE /* main.m */,
 			);
@@ -1142,7 +1137,6 @@
 				334EADD5255A873D00B0231C /* PCEpisode.m in Sources */,
 				33AD9408255019B70079DFAE /* PCTabBarViewController.m in Sources */,
 				3358C8D32660C0050000D17F /* PCPasswordSetRequest.m in Sources */,
-				3373F41826AFD9D100592892 /* PCTestRequest.m in Sources */,
 				337AD6CB2678A1E7009EA2D1 /* PCChatManager.m in Sources */,
 				33AD9438255107C70079DFAE /* PCCategoryController.m in Sources */,
 				334EAE17255BDA8E00B0231C /* PCCommentCell.m in Sources */,
@@ -1363,8 +1357,8 @@
 					"$(PROJECT_DIR)/Pica/voiceConvert/opencore-amrwb",
 					"$(PROJECT_DIR)/Pica/voiceConvert/opencore-amrnb",
 				);
-				MARKETING_VERSION = 1.0.2;
-				PRODUCT_BUNDLE_IDENTIFIER = com.yuecheng.test;
+				MARKETING_VERSION = 1.0.3;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pica.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};
@@ -1377,7 +1371,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = "";
+				DEVELOPMENT_TEAM = WX7HG5RLRC;
 				INFOPLIST_FILE = Pica/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -1389,8 +1383,8 @@
 					"$(PROJECT_DIR)/Pica/voiceConvert/opencore-amrwb",
 					"$(PROJECT_DIR)/Pica/voiceConvert/opencore-amrnb",
 				);
-				MARKETING_VERSION = 1.0.2;
-				PRODUCT_BUNDLE_IDENTIFIER = com.yuecheng.test;
+				MARKETING_VERSION = 1.0.3;
+				PRODUCT_BUNDLE_IDENTIFIER = com.pica.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
 			};

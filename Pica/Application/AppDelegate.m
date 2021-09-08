@@ -10,7 +10,7 @@
 #import "PCTabBarViewController.h"
 #import "PCCategoryController.h"
 #import "PCNavigationController.h"
-#import "PCTestRequest.h"
+
 @interface AppDelegate ()
 
 @property (nonatomic, strong) PCLoginController      *loginController;
@@ -33,14 +33,6 @@
     }
      
     [self.window makeKeyAndVisible];
-    
-//    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-//        [[PCTestRequest new] sendRequest:^(id  _Nonnull response) {
-//            
-//        } failure:^(NSError * _Nonnull error) {
-//            
-//        }];
-//    });
     
     return YES;
 }
