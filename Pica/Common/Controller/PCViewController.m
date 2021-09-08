@@ -37,6 +37,7 @@
     [super didReceiveMemoryWarning];
     
     [[SDImageCache sharedImageCache] clearMemory];
+    [[SDWebImageManager sharedManager] cancelAll];
 }
 
 @end

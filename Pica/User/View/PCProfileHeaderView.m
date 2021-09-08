@@ -60,12 +60,12 @@
     [super layoutSubviews];
     
     self.backgroundView.frame = self.bounds;
-    self.characterView.frame = CGRectMake((self.qmui_width - 140) * 0.5, 20, 140, 140);
-    self.avatarView.frame = CGRectMake((self.qmui_width - 100) * 0.5, 40, 100, 100);
-    self.nameLabel.frame = CGRectMake(10, self.characterView.qmui_bottom + 10, self.qmui_width - 20, QMUIViewSelfSizingHeight);
-    self.levelLabel.frame = CGRectMake(10, self.nameLabel.qmui_bottom + 5, self.qmui_width - 20, QMUIViewSelfSizingHeight);
-    self.titleLabel.frame = CGRectMake(10, self.levelLabel.qmui_bottom + 5, self.qmui_width - 20, QMUIViewSelfSizingHeight);
-    self.sloganLabel.frame = CGRectMake(10, self.titleLabel.qmui_bottom + 5, self.qmui_width - 20, QMUIViewSelfSizingHeight);
+    self.characterView.frame = CGRectMake(0, 0, 140, 140);
+    self.avatarView.frame = CGRectMake(20, 20, 100, 100);
+    self.nameLabel.frame = CGRectMake(self.characterView.qmui_right + 10, self.avatarView.qmui_top + 10, self.qmui_width - 160, QMUIViewSelfSizingHeight);
+    self.levelLabel.frame = CGRectMake(self.nameLabel.qmui_left, self.nameLabel.qmui_bottom + 15, self.nameLabel.qmui_width, QMUIViewSelfSizingHeight);
+    self.titleLabel.frame = CGRectMake(self.nameLabel.qmui_left, self.levelLabel.qmui_bottom + 15, self.nameLabel.qmui_width, QMUIViewSelfSizingHeight);
+    self.sloganLabel.frame = CGRectMake(20, self.characterView.qmui_bottom + 10, self.qmui_width - 40, QMUIViewSelfSizingHeight);
     self.signButton.frame = CGRectMake(self.qmui_width - 60, 25, 45, 22);
     self.gradientLayer.frame = CGRectMake(0, self.qmui_height * 0.5, self.qmui_width, self.qmui_height * 0.5);
 }
@@ -73,8 +73,8 @@
 - (CGSize)sizeThatFits:(CGSize)size {
     CGFloat height = 0;
     
-    height += 20 + 140 + 10 + [self.nameLabel sizeThatFits:CGSizeMax].height + 5 + [self.levelLabel sizeThatFits:CGSizeMax].height + 5 + [self.titleLabel sizeThatFits:CGSizeMax].height + 5 + [self.sloganLabel sizeThatFits:CGSizeMax].height + 10;
-    
+    height += 140 + 10 + [self.sloganLabel sizeThatFits:CGSizeMake(SCREEN_WIDTH - 40, CGFLOAT_MAX)].height + 20;
+     
     return CGSizeMake(SCREEN_WIDTH, height);
 }
 
@@ -136,32 +136,29 @@
 
 - (QMUILabel *)levelLabel {
     if (!_levelLabel) {
-        _levelLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(14) textColor:UIColorWhite];
-        _levelLabel.textAlignment = NSTextAlignmentCenter;
+        _levelLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(14) textColor:PCColorHotPink];
     }
     return _levelLabel;
 }
 
 - (QMUILabel *)nameLabel {
     if (!_nameLabel) {
-        _nameLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(15) textColor:UIColorWhite];
-        _nameLabel.textAlignment = NSTextAlignmentCenter;
+        _nameLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(15) textColor:PCColorHotPink];
     }
     return _nameLabel;
 }
 
 - (QMUILabel *)titleLabel {
     if (!_titleLabel) {
-        _titleLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(14) textColor:UIColorWhite];
-        _titleLabel.textAlignment = NSTextAlignmentCenter; 
+        _titleLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(14) textColor:PCColorHotPink];
     }
     return _titleLabel;
 }
  
 - (QMUILabel *)sloganLabel {
     if (!_sloganLabel) {
-        _sloganLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(14) textColor:UIColorWhite];
-        _sloganLabel.textAlignment = NSTextAlignmentCenter;
+        _sloganLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(14) textColor:PCColorHotPink];
+        _sloganLabel.numberOfLines = 0;
         _sloganLabel.userInteractionEnabled = YES;
         [_sloganLabel addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(sloganAction:)]];
     }
@@ -173,9 +170,9 @@
         _signButton = [[QMUIButton alloc] init];
         _signButton.titleLabel.font = UIFontMake(14);
         [_signButton setTitle:@"签到" forState:UIControlStateNormal];
-        [_signButton setTitleColor:UIColorWhite forState:UIControlStateNormal];
+        [_signButton setTitleColor:PCColorHotPink forState:UIControlStateNormal];
         _signButton.layer.cornerRadius = 11;
-        _signButton.layer.borderColor = UIColorWhite.CGColor;
+        _signButton.layer.borderColor = PCColorHotPink.CGColor;
         _signButton.layer.borderWidth = .5;
         [_signButton addTarget:self action:@selector(punchInAction:) forControlEvents:UIControlEventTouchUpInside];
     }

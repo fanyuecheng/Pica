@@ -16,7 +16,7 @@
 #import "PCUserInfoView.h"
 #import "PCCommentController.h"
 #import "PCCommentReportRequest.h"
- 
+
 @interface PCCommentCell ()
 
 @property (nonatomic, strong) UIImageView *avatarView;
@@ -29,7 +29,7 @@
 @property (nonatomic, strong) QMUIButton  *likeButton;
 @property (nonatomic, strong) QMUIButton  *childButton;
 @property (nonatomic, strong) QMUILabel   *topLabel;
-@property (nonatomic, strong) QMUIButton  *reportButton;
+@property (nonatomic, strong) QMUIButton  *moreButton;
 
 @property (nonatomic, strong) PCCommentLikeRequest   *likeRequest;
 @property (nonatomic, strong) PCCommentReportRequest *reportRequest;
@@ -50,7 +50,7 @@
         [self.contentView addSubview:self.likeButton];
         [self.contentView addSubview:self.childButton];
         [self.contentView addSubview:self.topLabel];
-        [self.contentView addSubview:self.reportButton];
+        [self.contentView addSubview:self.moreButton];
     }
     return self;
 }
@@ -78,7 +78,7 @@
     }
     [self.likeButton sizeToFit];
     self.likeButton.frame = CGRectSetXY(self.likeButton.bounds, self.childButton.qmui_left - self.likeButton.qmui_width - 10, self.childButton.qmui_top);
-    self.reportButton.frame = CGRectMake(self.qmui_width - 50, 0, 50, 20);
+    self.moreButton.frame = CGRectMake(self.qmui_width - 60, 0, 60, 40);
 }
 
 - (void)setComment:(PCComment *)comment {
@@ -117,21 +117,17 @@
     }];
 }
 
-- (void)reportAction:(QMUIButton *)sender {
-    QMUIAlertAction *action1 = [QMUIAlertAction actionWithTitle:@"确定" style:QMUIAlertActionStyleDefault handler:^(__kindof QMUIAlertController *aAlertController, QMUIAlertAction *action) {
-        [self.reportRequest sendRequest:^(NSString *commentId) {
-            [QMUITips showSucceed:@"举报成功"];
-        } failure:^(NSError * _Nonnull error) {
-            
-        }];
+- (void)moreAction:(QMUIButton *)sender {
+    QMUIAlertAction *action1 = [QMUIAlertAction actionWithTitle:@"举报" style:QMUIAlertActionStyleDefault handler:^(__kindof QMUIAlertController *aAlertController, QMUIAlertAction *action) {
+        [self report];
     }];
     
-    QMUIAlertAction *action2 = [QMUIAlertAction actionWithTitle:@"取消" style:QMUIAlertActionStyleCancel handler:nil];
+    QMUIAlertAction *action3 = [QMUIAlertAction actionWithTitle:@"取消" style:QMUIAlertActionStyleCancel handler:nil];
     
-    QMUIAlertController *alertController = [QMUIAlertController alertControllerWithTitle:@"确认举报这个评论?" message:nil preferredStyle:QMUIAlertControllerStyleAlert];
+    QMUIAlertController *alertController = [QMUIAlertController alertControllerWithTitle:nil message:nil preferredStyle:QMUIAlertControllerStyleActionSheet];
     
     [alertController addAction:action1];
-    [alertController addAction:action2];
+    [alertController addAction:action3];
     [alertController showWithAnimated:YES];
 }
  
@@ -151,6 +147,28 @@
         controller.contentView = infoView;
         [controller showWithAnimated:YES completion:nil];
     }
+}
+
+#pragma mark - Method
+- (void)report {
+    QMUIAlertAction *action1 = [QMUIAlertAction actionWithTitle:@"确定" style:QMUIAlertActionStyleDefault handler:^(__kindof QMUIAlertController *aAlertController, QMUIAlertAction *action) {
+        if (![self.reportRequest.commentId isEqualToString:self.comment.commentId]) {
+            self.reportRequest.commentId = self.comment.commentId;
+        }
+        [self.reportRequest sendRequest:^(NSString *commentId) {
+            [QMUITips showSucceed:@"举报成功"];
+        } failure:^(NSError * _Nonnull error) {
+            
+        }];
+    }];
+    
+    QMUIAlertAction *action2 = [QMUIAlertAction actionWithTitle:@"取消" style:QMUIAlertActionStyleCancel handler:nil];
+    
+    QMUIAlertController *alertController = [QMUIAlertController alertControllerWithTitle:@"确认举报这个评论?" message:nil preferredStyle:QMUIAlertControllerStyleAlert];
+    
+    [alertController addAction:action1];
+    [alertController addAction:action2];
+    [alertController showWithAnimated:YES];
 }
 
 #pragma mark - Get
@@ -253,16 +271,16 @@
     return _topLabel;
 }
 
-- (QMUIButton *)reportButton {
-    if (!_reportButton) {
-        _reportButton = [[QMUIButton alloc] init];
-        _reportButton.qmui_outsideEdge = UIEdgeInsetsMake(-10, 0, -10, 0);
-        _reportButton.titleLabel.font = UIFontMake(12);
-        [_reportButton setTitleColor:UIColorGray forState:UIControlStateNormal];
-        [_reportButton setTitle:@"•••" forState:UIControlStateNormal];
-        [_reportButton addTarget:self action:@selector(reportAction:) forControlEvents:UIControlEventTouchUpInside];
+- (QMUIButton *)moreButton {
+    if (!_moreButton) {
+        _moreButton = [[QMUIButton alloc] init];
+        _moreButton.qmui_outsideEdge = UIEdgeInsetsMake(0, -10, -10, 0);
+        _moreButton.titleLabel.font = UIFontBoldMake(18);
+        [_moreButton setTitleColor:UIColorGray forState:UIControlStateNormal];
+        [_moreButton setTitle:@"•••" forState:UIControlStateNormal];
+        [_moreButton addTarget:self action:@selector(moreAction:) forControlEvents:UIControlEventTouchUpInside];
     }
-    return _reportButton;
+    return _moreButton;
 }
 
 - (PCCommentLikeRequest *)likeRequest {
@@ -276,9 +294,7 @@
 
 - (PCCommentReportRequest *)reportRequest {
     if (!_reportRequest) {
-        if (self.comment.commentId) {
-            _reportRequest = [[PCCommentReportRequest alloc] initWithCommentId:self.comment.commentId];
-        }
+        _reportRequest = [[PCCommentReportRequest alloc] initWithCommentId:self.comment.commentId];
     }
     return _reportRequest;
 }

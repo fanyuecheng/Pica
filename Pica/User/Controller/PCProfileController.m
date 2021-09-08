@@ -115,6 +115,7 @@
     [self.sloganSetRequest sendRequest:^(id  _Nonnull response) {
         [loading hideAnimated:YES];
         [self.headerView updateSlogan:slogan];
+        [self.pagerView reloadData];
     } failure:^(NSError * _Nonnull error) {
         [loading hideAnimated:YES];
     }];
@@ -157,10 +158,10 @@
     }];
      
     QMUIAlertAction *action2 = [QMUIAlertAction actionWithTitle:@"取消" style:QMUIAlertActionStyleCancel handler:nil];
-    
     QMUIAlertController *alertController = [QMUIAlertController alertControllerWithTitle:@"请输入您的slogan" message:nil preferredStyle:QMUIAlertControllerStyleAlert];
     
     [alertController addTextFieldWithConfigurationHandler:^(QMUITextField * _Nonnull textField) {
+        textField.placeholder = self.user.slogan;
         [textField becomeFirstResponder];
     }];
     

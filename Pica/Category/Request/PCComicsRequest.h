@@ -22,6 +22,12 @@ NS_ASSUME_NONNULL_BEGIN
 //默认 dd: 新到旧 da: 旧到新 ld: 最多爱心 vd: 最多指名
 @property (nonatomic, copy)   NSString *s;
 
+//未使用
+@property (nonatomic, copy)    NSString *a;//author
+@property (nonatomic, copy)    NSString *f;//finished
+@property (nonatomic, copy)    NSString *ct;//translate
+@property (nonatomic, copy)    NSString *ca;//creatorId
+
 @end
 
 NS_ASSUME_NONNULL_END

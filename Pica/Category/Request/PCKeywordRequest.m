@@ -23,7 +23,7 @@
 }
 
 - (NSString *)requestUrl {
-    return @"keywords";
+    return PC_API_KEYWORDS;
 }
 
 - (NSDictionary<NSString *,NSString *> *)requestHeaderFieldValueDictionary {
