@@ -85,10 +85,20 @@
 - (void)updateAvatar:(UIImage *)avatar {
     self.avatarView.image = avatar;
     self.backgroundView.image = [avatar sd_blurredImageWithRadius:10];
+    [self configLabelWithImage:avatar];
 }
 
 - (void)updateSlogan:(NSString *)slogan {
     self.sloganLabel.text = slogan;
+}
+
+- (void)configLabelWithImage:(UIImage *)image {
+    BOOL dark = image.qmui_averageColor.qmui_colorIsDark;
+    UIColor *textColor = dark ? UIColorWhite : UIColorGray;
+    self.titleLabel.textColor = textColor;
+    self.nameLabel.textColor = textColor;
+    self.levelLabel.textColor = textColor;
+    self.sloganLabel.textColor = textColor;
 }
 
 #pragma mark - Action
@@ -136,7 +146,7 @@
 
 - (QMUILabel *)levelLabel {
     if (!_levelLabel) {
-        _levelLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(14) textColor:PCColorHotPink];
+        _levelLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(14) textColor:UIColorBlack];
     }
     return _levelLabel;
 }
@@ -200,7 +210,9 @@
                                         options:0
                                         context:@{SDWebImageContextImageTransformer : [SDImageBlurTransformer transformerWithRadius:10]}
                                        progress:nil
-                                      completed:nil];
+                                      completed:^(UIImage * _Nonnull image, NSError * _Nonnull error) {
+            [self configLabelWithImage:image];
+        }];
         [self.avatarView pc_setImageWithURL:user.avatar.imageURL];
     } else {
         self.avatarView.image = [UIImage qmui_imageWithColor:PCColorPink size:CGSizeMake(100, 100) cornerRadius:0];

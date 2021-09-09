@@ -61,6 +61,8 @@
 #define PC_API_USERS_SLOGAN     @"users/profile"
 //密码
 #define PC_API_USERS_PASSWORD   @"users/password"
+//name
+#define PC_API_USERS_NAME       @"users/update-id"
 //我的收藏
 #define PC_API_USERS_FAVOURITE  @"users/favourite?s=%@&page=%@"
 //我的评论
