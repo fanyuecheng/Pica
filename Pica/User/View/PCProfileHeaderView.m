@@ -143,21 +143,21 @@
 
 - (QMUILabel *)nameLabel {
     if (!_nameLabel) {
-        _nameLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(15) textColor:PCColorHotPink];
+        _nameLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(15) textColor:UIColorBlack];
     }
     return _nameLabel;
 }
 
 - (QMUILabel *)titleLabel {
     if (!_titleLabel) {
-        _titleLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(14) textColor:PCColorHotPink];
+        _titleLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(14) textColor:UIColorBlack];
     }
     return _titleLabel;
 }
  
 - (QMUILabel *)sloganLabel {
     if (!_sloganLabel) {
-        _sloganLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(14) textColor:PCColorHotPink];
+        _sloganLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(14) textColor:UIColorBlack];
         _sloganLabel.numberOfLines = 0;
         _sloganLabel.userInteractionEnabled = YES;
         [_sloganLabel addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(sloganAction:)]];
