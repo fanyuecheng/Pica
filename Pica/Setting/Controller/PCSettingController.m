@@ -8,6 +8,7 @@
 
 #import "PCSettingController.h"
 #import "PCPasswordSetRequest.h"
+#import "PCNameSetRequest.h"
 #import "AppDelegate.h"
 #import <SafariServices/SafariServices.h>
 #import "PCTabBarViewController.h"
@@ -19,6 +20,7 @@
 
 @property (nonatomic, copy)   NSArray <NSArray *>*dataSource;
 @property (nonatomic, strong) PCPasswordSetRequest *passwordSetRequest;
+@property (nonatomic, strong) PCNameSetRequest     *nameSetRequest;
 @property (nonatomic, strong) QMUIButton *logoutButton;
 
 @end
@@ -70,27 +72,29 @@
             });
         }); 
     } else if (indexPath.section == 0 && indexPath.row == 2) {
+        cell.detailTextLabel.text = @"id仅能修改一次！";
+    } else if (indexPath.section == 0 && indexPath.row == 3) {
         cell.detailTextLabel.text = [kPCUserDefaults stringForKey:PC_API_CHANNEL];
     } else {
         cell.detailTextLabel.text = nil;
     }
     
-    if (indexPath.section == 0 && (indexPath.row == 3 || indexPath.row == 4 || indexPath.row == 5 || indexPath.row == 6)) {
+    if (indexPath.section == 0 && (indexPath.row == 4 || indexPath.row == 5 || indexPath.row == 6 || indexPath.row == 7)) {
         if (![cell.accessoryView isKindOfClass:[UISwitch class]]) {
             UISwitch *switchView = [[UISwitch alloc] init];
             NSString *key = nil;
             
             switch (indexPath.row) {
-                case 3:
+                case 4:
                     key = PC_DATA_TO_SIMPLIFIED_CHINESE;
                     break;
-                case 4:
+                case 5:
                     key = PC_TAB_GAME_HIDDEN;
                     break;
-                case 5:
+                case 6:
                     key = PC_CHAT_EVENT_COLOR_ON;
                     break;
-                case 6:
+                case 7:
                     key = PC_CHAT_AVATAR_CHARACTER_ON;
                     break;
                 default:
@@ -118,12 +122,15 @@
                 [self showUpdatePasswordAlert];
                 break;
             case 2:
+                [self showUpdateNameAlert];
+                break;
+            case 3:
                 [self selectChannel];
                 break;
-            case 5:
+            case 6:
                 [self selectColor];
                 break;
-            case 6:
+            case 7:
                 [self selectAvatarDecorate];
                 break;
             default:
@@ -153,7 +160,7 @@
         [[SDImageCache sharedImageCache] clearDiskOnCompletion:^{
             [PCChatMessage deleteObjectsWhere:nil arguments:nil];
             [[NSFileManager defaultManager] removeItemAtPath:[self networkCachePath] error:nil];
-//            [kPCUserDefaults removeObjectForKey:PC_LOCAL_ACCOUNT];
+            [kPCUserDefaults removeObjectForKey:PC_LOCAL_ACCOUNT];
             [self.tableView reloadData];
         }];
     }];
@@ -167,6 +174,29 @@
     [alertController showWithAnimated:YES];
 }
  
+
+- (void)showUpdateNameAlert {
+    QMUIAlertAction *action1 = [QMUIAlertAction actionWithTitle:@"确定" style:QMUIAlertActionStyleDefault handler:^(__kindof QMUIAlertController *aAlertController, QMUIAlertAction *action) {
+        self.nameSetRequest.email = aAlertController.textFields.firstObject.text;
+        self.nameSetRequest.name = aAlertController.textFields.lastObject.text;
+        [self updateName];
+    }];
+    
+    QMUIAlertAction *action2 = [QMUIAlertAction actionWithTitle:@"取消" style:QMUIAlertActionStyleCancel handler:nil];
+    
+    QMUIAlertController *alertController = [QMUIAlertController alertControllerWithTitle:@"修改ID" message:@"请输入email和name" preferredStyle:QMUIAlertControllerStyleAlert];
+    [alertController addTextFieldWithConfigurationHandler:^(QMUITextField * _Nonnull textField) {
+        textField.placeholder = @"email";
+    }];
+    [alertController addTextFieldWithConfigurationHandler:^(QMUITextField * _Nonnull textField) {
+        textField.placeholder = @"name";
+    }];
+    
+    [alertController addAction:action1];
+    [alertController addAction:action2];
+    [alertController showWithAnimated:YES];
+}
+
 - (void)showUpdatePasswordAlert {
     QMUIAlertAction *action1 = [QMUIAlertAction actionWithTitle:@"确定" style:QMUIAlertActionStyleDefault handler:^(__kindof QMUIAlertController *aAlertController, QMUIAlertAction *action) {
         self.passwordSetRequest.passwordOld = aAlertController.textFields.firstObject.text;
@@ -270,10 +300,31 @@
     }
 }
 
+- (void)updateName {
+    if (self.nameSetRequest.email.length &&
+        self.nameSetRequest.name.length) {
+        QMUITips *loading = [QMUITips showLoadingInView:DefaultTipsParentView];
+        [self.nameSetRequest sendRequest:^(id  _Nonnull response) {
+            [loading hideAnimated:YES];
+            QMUIAlertAction *action1 = [QMUIAlertAction actionWithTitle:@"确定" style:QMUIAlertActionStyleDefault handler:^(__kindof QMUIAlertController *aAlertController, QMUIAlertAction *action) {
+                [kPCUserDefaults removeObjectForKey:PC_AUTHORIZATION_TOKEN];
+                AppDelegate *delegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+                [delegate setRootViewControllerToLogin];
+            }];
+              
+            QMUIAlertController *alertController = [QMUIAlertController alertControllerWithTitle:@"修改ID成功" message:@"请使用新email重新登录" preferredStyle:QMUIAlertControllerStyleAlert];
+            [alertController addAction:action1];
+            [alertController showWithAnimated:YES];
+        } failure:^(NSError * _Nonnull error) {
+            [loading hideAnimated:YES];
+        }];
+    }
+}
+
 #pragma mark - Get
 - (NSArray *)dataSource {
     if (!_dataSource) {
-        _dataSource = @[@[@"清除缓存", @"修改密码", @"分流", @"简体中文", @"隐藏游戏区", @"聊天文字颜色", @"聊天室头像装饰"], @[@"关于Pica"]];
+        _dataSource = @[@[@"清除缓存", @"修改密码", @"修改ID", @"分流", @"简体中文", @"隐藏游戏区", @"聊天文字颜色", @"聊天室头像装饰"], @[@"关于Pica"]];
     }
     return _dataSource;
 }
@@ -283,6 +334,13 @@
         _passwordSetRequest = [[PCPasswordSetRequest alloc] init];
     }
     return _passwordSetRequest;
+}
+
+- (PCNameSetRequest *)nameSetRequest {
+    if (!_nameSetRequest) {
+        _nameSetRequest = [[PCNameSetRequest alloc] init];
+    }
+    return _nameSetRequest;
 }
 
 - (QMUIButton *)logoutButton {
