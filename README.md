@@ -7,6 +7,11 @@
 API来自 [picacomic-api](https://github.com/czp3009/picacomic-api) 
 
 #### 更新日志  
+**v1.0.5**  
+* 本子详情可点击tag/作者/翻译组跳转列表  
+*  骑士榜单可点击跳转列表    
+*  bug fix   
+
 **v1.0.4**  
 * 可修改登录id(email)&name，仅限1次   
 * bug fix   

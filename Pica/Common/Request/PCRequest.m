@@ -74,44 +74,42 @@
     return header;
 }
 
-- (instancetype)init {
-    if (self = [super init]) {
-        YTKRequestEventAccessory *accessory = [[YTKRequestEventAccessory alloc] init];
-        accessory.willStartBlock = ^(PCRequest *_Nonnull request) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-            });
-        };
-        
-        accessory.willStopBlock = ^(PCRequest *_Nonnull request) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-                if (request.error) {
-                    NSDictionary *response = request.responseJSONObject;
-                    [request.error qmui_bindObject:response forKey:PC_ERROR_DATA];
-                    [QMUITips showError:[NSString stringWithFormat:@"error:%@\nmessage:%@\ndetail:%@", response[@"error"], response[@"message"], response[@"detail"]] inView:DefaultTipsParentView];
-                    if ([response[@"error"] isEqualToString:@"1005"] &&
-                        [response[@"message"] isEqualToString:@"unauthorized"] &&
-                        [response[@"code"] integerValue] == 401) {
-                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                            [(AppDelegate *)[UIApplication sharedApplication].delegate setRootViewControllerToLogin];
-                        });
-                    }
-#if defined(DEBUG)
-                    NSLog(@"\n============ PCRequest Info] ============\nrequest method: %@  from cache: %@\nrequest url: %@\nrequest parameters: \n%@\nrequest error:\n%@\nresponse:\n%@\n%@\n==========================================\n", self.methodString, self.isDataFromCache ? @"YES" : @"NO", self.requestUrl, self.requestArgument, self.error, self.response, self.responseObject);
-#endif
-                }
-            });
-        };
-
-        [self addAccessory:accessory];
-    }
-    return self;
-}
-
 - (void)sendRequest:(void (^)(id response))success
             failure:(void (^)(NSError *error))failure {
- 
+    [self addAccessory];
+}
+
+- (void)addAccessory {
+    [self.requestAccessories removeAllObjects];
+    YTKRequestEventAccessory *accessory = [[YTKRequestEventAccessory alloc] init];
+    accessory.willStartBlock = ^(PCRequest *_Nonnull request) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+        });
+    };
+    
+    accessory.willStopBlock = ^(PCRequest *_Nonnull request) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+            if (request.error) {
+                NSDictionary *response = request.responseJSONObject;
+                [request.error qmui_bindObject:response forKey:PC_ERROR_DATA];
+                [QMUITips showError:[NSString stringWithFormat:@"error:%@\nmessage:%@\ndetail:%@", response[@"error"], response[@"message"], response[@"detail"]] inView:DefaultTipsParentView];
+                if ([response[@"error"] isEqualToString:@"1005"] &&
+                    [response[@"message"] isEqualToString:@"unauthorized"] &&
+                    [response[@"code"] integerValue] == 401) {
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.8 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [(AppDelegate *)[UIApplication sharedApplication].delegate setRootViewControllerToLogin];
+                    });
+                }
+#if defined(DEBUG)
+                NSLog(@"\n============ PCRequest Info] ============\nrequest method: %@  from cache: %@\nrequest url: %@\nrequest parameters: \n%@\nrequest error:\n%@\nresponse:\n%@\n%@\n==========================================\n", self.methodString, self.isDataFromCache ? @"YES" : @"NO", self.requestUrl, self.requestArgument, self.error, self.response, self.responseObject);
+#endif
+            }
+        });
+    };
+
+    [self addAccessory:accessory];
 }
 
 - (void)requestCompletePreprocessor {

@@ -327,7 +327,7 @@ PODS:
   - SDWebImage (5.11.1):
     - SDWebImage/Core (= 5.11.1)
   - SDWebImage/Core (5.11.1)
-  - SocketRocket (0.5.1)
+  - SocketRocket (0.6.0)
   - YTKNetwork (3.0.6):
     - AFNetworking/NSURLSession (~> 4.0)
   - YYModel (1.0.4)
@@ -339,7 +339,7 @@ DEPENDENCIES:
   - MJRefresh (~> 3.7.2)
   - QMUIKit (~> 4.3.0)
   - SDWebImage (~> 5.11.1)
-  - SocketRocket (~> 0.5.1)
+  - SocketRocket (~> 0.6.0)
   - YTKNetwork (~> 3.0.6)
   - YYModel (~> 1.0.4)
 
@@ -364,10 +364,10 @@ SPEC CHECKSUMS:
   MJRefresh: 30997d30b347c8e9508a4db11e3a690da0c9b85a
   QMUIKit: 67888be9aa0ee0b12b8a219fcea2eec900afd841
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
-  SocketRocket: d57c7159b83c3c6655745cd15302aa24b6bae531
+  SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   YTKNetwork: c16be90b06be003de9e9cd0d3b187cc8eaf35c04
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: 7bde37567357e5d434b179e4137210a2a5ae4727
+PODFILE CHECKSUM: 6062f227932915f42a1d0fa07142772a9be7650b
 
 COCOAPODS: 1.10.2

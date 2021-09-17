@@ -189,11 +189,15 @@
         case PCComicsListTypeSearch:
             [self requestSearchComics];
             break;
-        case PCComicsListTypeCategory:
-            [self requestCategoryComics];
-            break;
         case PCComicsListTypeFavourite:
             [self requestFavouriteComics];
+            break;
+        case PCComicsListTypeTag:
+        case PCComicsListTypeTranslate:
+        case PCComicsListTypeCreator:
+        case PCComicsListTypeAuthor:
+        case PCComicsListTypeCategory:
+            [self requestCategoryComics];
             break;
         default:
             break;
@@ -224,6 +228,26 @@
 - (void)requestCategoryComics {
     if (self.categoryRequest.page == 1) {
         [self showEmptyViewWithLoading];
+    }
+
+    switch (self.type) {
+        case PCComicsListTypeTranslate:
+            self.categoryRequest.ct = self.keyword;
+            break;
+        case PCComicsListTypeTag:
+            self.categoryRequest.t = self.keyword;
+            break;
+        case PCComicsListTypeCreator:
+            self.categoryRequest.ca = self.keyword;
+            break;
+        case PCComicsListTypeAuthor:
+            self.categoryRequest.a = self.keyword;
+            break;
+        case PCComicsListTypeCategory:
+            self.categoryRequest.c = self.keyword;
+            break;
+        default:
+            break;
     }
     
     [self.categoryRequest sendRequest:^(PCComicsList *list) {
@@ -336,7 +360,6 @@
 - (PCComicsRequest *)categoryRequest {
     if (!_categoryRequest) {
         _categoryRequest = [[PCComicsRequest alloc] init];
-        _categoryRequest.c = self.keyword;
     }
     return _categoryRequest;
 }

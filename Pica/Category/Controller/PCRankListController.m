@@ -72,8 +72,8 @@
     UIViewController *controller = nil;
     if (self.type == PCRankListTypeKnight) {
         PCUser *user = self.dataSource[indexPath.row];
-        PCComicsListController *list = [[PCComicsListController alloc] initWithType:PCComicsListTypeSearch];
-        list.keyword = user.name;
+        PCComicsListController *list = [[PCComicsListController alloc] initWithType:PCComicsListTypeCreator];
+        list.keyword = user.userId;
         controller = list;
     } else {
         PCComics *comics = self.dataSource[indexPath.row];
