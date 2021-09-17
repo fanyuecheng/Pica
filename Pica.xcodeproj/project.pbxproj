@@ -1358,11 +1358,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Pica/voiceConvert/opencore-amrwb",
-					"$(PROJECT_DIR)/Pica/voiceConvert/opencore-amrnb",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MARKETING_VERSION = 1.0.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.pica.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -1384,11 +1380,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				LIBRARY_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(PROJECT_DIR)/Pica/voiceConvert/opencore-amrwb",
-					"$(PROJECT_DIR)/Pica/voiceConvert/opencore-amrnb",
-				);
+				LIBRARY_SEARCH_PATHS = "$(inherited)";
 				MARKETING_VERSION = 1.0.4;
 				PRODUCT_BUNDLE_IDENTIFIER = com.pica.ios;
 				PRODUCT_NAME = "$(TARGET_NAME)";
