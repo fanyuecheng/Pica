@@ -39,6 +39,15 @@
     if (self.t) {
         [requestUrl appendFormat:@"&t=%@", self.t];
     }
+    if (self.ct) {
+        [requestUrl appendFormat:@"&ct=%@", self.ct];
+    }
+    if (self.ca) {
+        [requestUrl appendFormat:@"&ca=%@", self.ca];
+    }
+    if (self.a) {
+        [requestUrl appendFormat:@"&a=%@", self.a];
+    }
     return [requestUrl stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
 }
 

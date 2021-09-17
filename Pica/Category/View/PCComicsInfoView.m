@@ -22,8 +22,8 @@
 
 @property (nonatomic, strong) UIImageView *coverView;
 @property (nonatomic, strong) QMUILabel   *titleLabel;
-@property (nonatomic, strong) QMUILabel   *authorLabel;
-@property (nonatomic, strong) QMUILabel   *sinicizationLabel;
+@property (nonatomic, strong) QMUIButton  *authorButton;
+@property (nonatomic, strong) QMUIButton  *sinicizationButton;
 @property (nonatomic, strong) QMUILabel   *viewLabel;
 @property (nonatomic, strong) QMUILabel   *categoryLabel;
 @property (nonatomic, strong) QMUILabel   *descLabel;
@@ -56,8 +56,8 @@
 - (void)didInitialize {  
     [self addSubview:self.coverView];
     [self addSubview:self.titleLabel];
-    [self addSubview:self.authorLabel];
-    [self addSubview:self.sinicizationLabel];
+    [self addSubview:self.authorButton];
+    [self addSubview:self.sinicizationButton];
     [self addSubview:self.viewLabel];
     [self addSubview:self.categoryLabel];
     [self addSubview:self.descLabel];
@@ -79,9 +79,11 @@
     
     self.coverView.frame = CGRectMake(15, 10, 90, 130);
     self.titleLabel.frame = CGRectMake(115, 10, self.qmui_width - 120, QMUIViewSelfSizingHeight);
-    self.authorLabel.frame = CGRectMake(115, self.titleLabel.qmui_bottom + 5, self.qmui_width - 120, QMUIViewSelfSizingHeight);
-    self.sinicizationLabel.frame = CGRectMake(115, self.authorLabel.qmui_bottom + 5, self.qmui_width - 120, QMUIViewSelfSizingHeight);
-    self.viewLabel.frame = CGRectMake(115, self.sinicizationLabel.qmui_bottom + 5, self.qmui_width - 120, QMUIViewSelfSizingHeight);
+    [self.authorButton sizeToFit];
+    self.authorButton.frame = CGRectSetXY(self.authorButton.frame, 115, self.titleLabel.qmui_bottom + 5);
+    [self.sinicizationButton sizeToFit];
+    self.sinicizationButton.frame = CGRectSetXY(self.sinicizationButton.frame, 115, self.  authorButton.qmui_bottom + 5);
+    self.viewLabel.frame = CGRectMake(115, self.sinicizationButton.qmui_bottom + 5, self.qmui_width - 120, QMUIViewSelfSizingHeight);
     self.categoryLabel.frame = CGRectMake(115, self.viewLabel.qmui_bottom + 5, self.qmui_width - 120, QMUIViewSelfSizingHeight);
     self.tagView.frame = CGRectMake(15, self.coverView.qmui_bottom + 10, self.qmui_width - 30, QMUIViewSelfSizingHeight);
     self.descLabel.frame = CGRectMake(15, self.comics.tags.count ? self.tagView.qmui_bottom + 10 : self.tagView.qmui_bottom, self.qmui_width - 30, QMUIViewSelfSizingHeight);
@@ -125,17 +127,31 @@
 }
 
 - (void)tagAction:(QMUIButton *)sender {
-    PCComicsListController *list = [[PCComicsListController alloc] initWithType:PCComicsListTypeSearch];
+    PCComicsListController *list = [[PCComicsListController alloc] initWithType:PCComicsListTypeTag];
+    list.keyword = sender.currentTitle;
+    [[QMUIHelper visibleViewController].navigationController pushViewController:list animated:YES];
+}
+ 
+- (void)authorAction:(QMUIButton *)sender {
+    PCComicsListController *list = [[PCComicsListController alloc] initWithType:PCComicsListTypeAuthor];
+    list.keyword = sender.currentTitle;
+    [[QMUIHelper visibleViewController].navigationController pushViewController:list animated:YES];
+}
+
+- (void)sinicizationAction:(QMUIButton *)sender {
+    PCComicsListController *list = [[PCComicsListController alloc] initWithType:PCComicsListTypeTranslate];
     list.keyword = sender.currentTitle;
     [[QMUIHelper visibleViewController].navigationController pushViewController:list animated:YES];
 }
 
 - (void)avatarAction:(UIGestureRecognizer *)sender {
-    QMUIModalPresentationViewController *controller = [[QMUIModalPresentationViewController alloc] init];
-    PCUserInfoView *infoView = [[PCUserInfoView alloc] init];
-    infoView.user = self.comics.creator;
-    controller.contentView = infoView;
-    [controller showWithAnimated:YES completion:nil];
+    if (self.comics.chineseTeam.length && ![self.comics.chineseTeam isEqualToString:@"无"] && [self.comics.chineseTeam isEqualToString:@"不明"]) {
+        QMUIModalPresentationViewController *controller = [[QMUIModalPresentationViewController alloc] init];
+        PCUserInfoView *infoView = [[PCUserInfoView alloc] init];
+        infoView.user = self.comics.creator;
+        controller.contentView = infoView;
+        [controller showWithAnimated:YES completion:nil];
+    }
 }
 
 - (void)commentAction {
@@ -184,18 +200,24 @@
     return _titleLabel;
 }
 
-- (QMUILabel *)authorLabel {
-    if (!_authorLabel) {
-        _authorLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(13) textColor:PCColorHotPink];
+- (QMUIButton *)authorButton {
+    if (!_authorButton) {
+        _authorButton = [[QMUIButton alloc] init];
+        _authorButton.titleLabel.font = UIFontMake(13);
+        [_authorButton setTitleColor:PCColorHotPink forState:UIControlStateNormal];
+        [_authorButton addTarget:self action:@selector(authorAction:) forControlEvents:UIControlEventTouchUpInside];
     }
-    return _authorLabel;
+    return _authorButton;
 }
 
-- (QMUILabel *)sinicizationLabel {
-    if (!_sinicizationLabel) {
-        _sinicizationLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(13) textColor:UIColorGrayLighten];
+- (QMUIButton *)sinicizationButton {
+    if (!_sinicizationButton) {
+        _sinicizationButton = [[QMUIButton alloc] init];
+        _sinicizationButton.titleLabel.font = UIFontMake(13);
+        [_sinicizationButton setTitleColor:UIColorGrayLighten forState:UIControlStateNormal];
+        [_sinicizationButton addTarget:self action:@selector(sinicizationAction:) forControlEvents:UIControlEventTouchUpInside];
     }
-    return _sinicizationLabel;
+    return _sinicizationButton;
 }
 
 - (QMUILabel *)categoryLabel {
@@ -298,8 +320,8 @@
     
     [self.coverView pc_setImageWithURL:comics.thumb.imageURL];
     self.titleLabel.text = comics.title;
-    self.authorLabel.text = comics.author;
-    self.sinicizationLabel.text = comics.chineseTeam;
+    [self.authorButton setTitle:comics.author forState:UIControlStateNormal];
+    [self.sinicizationButton setTitle:comics.chineseTeam forState:UIControlStateNormal];
     self.viewLabel.text = [NSString stringWithFormat:@"绅士指名次数：%@ %@", @(comics.viewsCount), comics.finished ? @"(已完结)" : @""];
     NSMutableString *category = [NSMutableString stringWithString:@"分类 "];
     [comics.categories enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
