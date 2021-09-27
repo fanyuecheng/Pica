@@ -13,11 +13,9 @@ NS_ASSUME_NONNULL_BEGIN
 @interface PCProfileHeaderView : UIView
 
 @property (nonatomic, strong) PCUser *user;
-@property (nonatomic, copy)   void (^punchInBlock)(void);
 @property (nonatomic, copy)   void (^avatarBlock)(void);
 @property (nonatomic, copy)   void (^sloganBlock)(void);
 
-- (void)setPunchInButtonHidden:(BOOL)hidden;
 - (void)updateAvatar:(UIImage *)avatar; 
 - (void)updateSlogan:(NSString *)slogan;
 

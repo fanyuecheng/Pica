@@ -22,7 +22,6 @@
 @property (nonatomic, strong) QMUILabel   *nameLabel;
 @property (nonatomic, strong) QMUILabel   *titleLabel;
 @property (nonatomic, strong) QMUILabel   *sloganLabel;
-@property (nonatomic, strong) QMUIButton  *signButton;
 @property (nonatomic, strong) CAGradientLayer *gradientLayer;
 
 @end
@@ -53,7 +52,6 @@
     [self addSubview:self.levelLabel];
     [self addSubview:self.titleLabel];
     [self addSubview:self.sloganLabel];
-    [self addSubview:self.signButton];
 }
 
 - (void)layoutSubviews {
@@ -66,7 +64,6 @@
     self.levelLabel.frame = CGRectMake(self.nameLabel.qmui_left, self.nameLabel.qmui_bottom + 15, self.nameLabel.qmui_width, QMUIViewSelfSizingHeight);
     self.titleLabel.frame = CGRectMake(self.nameLabel.qmui_left, self.levelLabel.qmui_bottom + 15, self.nameLabel.qmui_width, QMUIViewSelfSizingHeight);
     self.sloganLabel.frame = CGRectMake(20, self.characterView.qmui_bottom + 10, self.qmui_width - 40, QMUIViewSelfSizingHeight);
-    self.signButton.frame = CGRectMake(self.qmui_width - 60, 25, 45, 22);
     self.gradientLayer.frame = CGRectMake(0, self.qmui_height * 0.5, self.qmui_width, self.qmui_height * 0.5);
 }
 
@@ -76,10 +73,6 @@
     height += 140 + 10 + [self.sloganLabel sizeThatFits:CGSizeMake(SCREEN_WIDTH - 40, CGFLOAT_MAX)].height + 20;
      
     return CGSizeMake(SCREEN_WIDTH, height);
-}
-
-- (void)setPunchInButtonHidden:(BOOL)hidden {
-    self.signButton.hidden = hidden;
 }
 
 - (void)updateAvatar:(UIImage *)avatar {
@@ -102,9 +95,6 @@
 }
 
 #pragma mark - Action
-- (void)punchInAction:(QMUIButton *)sender {
-    !self.punchInBlock ? : self.punchInBlock();
-}
 
 - (void)avatarAction:(UITapGestureRecognizer *)sender {
     !self.avatarBlock ? : self.avatarBlock();
@@ -174,20 +164,6 @@
     }
     return _sloganLabel;
 }
- 
-- (QMUIButton *)signButton {
-    if (!_signButton) {
-        _signButton = [[QMUIButton alloc] init];
-        _signButton.titleLabel.font = UIFontMake(14);
-        [_signButton setTitle:@"签到" forState:UIControlStateNormal];
-        [_signButton setTitleColor:PCColorHotPink forState:UIControlStateNormal];
-        _signButton.layer.cornerRadius = 11;
-        _signButton.layer.borderColor = PCColorHotPink.CGColor;
-        _signButton.layer.borderWidth = .5;
-        [_signButton addTarget:self action:@selector(punchInAction:) forControlEvents:UIControlEventTouchUpInside];
-    }
-    return _signButton;
-}
 
 - (CAGradientLayer *)gradientLayer {
     if (!_gradientLayer) {
@@ -224,7 +200,6 @@
     self.nameLabel.text = user.name;
     self.titleLabel.text = user.title;
     self.sloganLabel.text = user.slogan ? user.slogan : @"no slogan";
-    self.signButton.hidden = user.isPunched;
 }
 
  
