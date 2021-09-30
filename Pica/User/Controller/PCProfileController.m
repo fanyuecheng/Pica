@@ -8,7 +8,6 @@
 
 #import "PCProfileController.h"
 #import "PCProfileRequest.h"
-#import "PCPunchInRequest.h"
 #import "PCUser.h"
 #import "PCProfileHeaderView.h"
 #import "PCNavigationController.h"
@@ -22,7 +21,6 @@
 
 @property (nonatomic, strong) PCUser *user;
 @property (nonatomic, strong) PCProfileRequest *profileRequest;
-@property (nonatomic, strong) PCPunchInRequest *punchInRequest;
 @property (nonatomic, strong) PCAvatarSetRequest  *avatarSetRequest;
 @property (nonatomic, strong) PCSloganSetRequest  *sloganSetRequest;
 @property (nonatomic, strong) PCProfileHeaderView *headerView;
@@ -37,9 +35,14 @@
 
 @implementation PCProfileController
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
      
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestProfile) name:PCPunchSuccessNotification object:nil];
     [self requestProfile];
 }
 
@@ -76,20 +79,6 @@
     } failure:^(NSError * _Nonnull error) {
         [self.pagerView.mainTableView.mj_header endRefreshing];
         [self showEmptyViewWithText:@"网络错误" detailText:nil buttonTitle:@"重新请求" buttonAction:@selector(requestProfile)];
-    }];
-}
-
-- (void)sendPunchInRequest {
-    [self.punchInRequest sendRequest:^(NSString *response) {
-        if ([response isEqualToString:@"fail"]) {
-            [QMUITips showError:@"您今天已经打过卡了~"];
-        } else {
-            [QMUITips showSucceed:@"已打卡"];
-            [self requestProfile];
-        }
-        [self.headerView setPunchInButtonHidden:YES];
-    } failure:^(NSError * _Nonnull error) {
-         
     }];
 }
 
@@ -280,13 +269,6 @@
     return _profileRequest;
 }
 
-- (PCPunchInRequest *)punchInRequest {
-    if (!_punchInRequest) {
-        _punchInRequest = [[PCPunchInRequest alloc] init];
-    }
-    return _punchInRequest;
-}
-
 - (PCAvatarSetRequest *)avatarSetRequest {
     if (!_avatarSetRequest) {
         _avatarSetRequest = [[PCAvatarSetRequest alloc] init];
@@ -305,10 +287,6 @@
     if (!_headerView) {
         _headerView = [[PCProfileHeaderView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 264)];
         @weakify(self)
-        _headerView.punchInBlock = ^{
-           @strongify(self)
-            [self sendPunchInRequest];
-        };
         _headerView.avatarBlock = ^{
             @strongify(self)
             [self showSelectImageAlert];

@@ -10,6 +10,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+#define PCPunchSuccessNotification @"PCPunchSuccessNotification"
+
 @interface PCProfileRequest : PCRequest
 
 @property (nonatomic, copy) NSString *userId;

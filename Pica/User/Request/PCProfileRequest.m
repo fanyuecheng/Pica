@@ -9,6 +9,8 @@
 #import "PCProfileRequest.h"
 #import <YYModel/YYModel.h>
 #import "PCUser.h"
+#import "PCPunchInRequest.h"
+#import <QMUIKit/QMUIKit.h>
 
 @implementation PCProfileRequest
 
@@ -18,12 +20,28 @@
     
     [self startWithCompletionBlockWithSuccess:^(__kindof YTKBaseRequest * _Nonnull request) {
         PCUser *user = [PCUser yy_modelWithJSON:request.responseObject[@"data"][@"user"]];
-        !success ? : success(user);
         if (!self.userId) {
             [kPCUserDefaults setObject:request.responseObject[@"data"][@"user"] forKey:PC_LOCAL_USER];
+            if (!user.isPunched) {
+                [self sendPunchInRequest];
+            }
         }
+        !success ? : success(user);
     } failure:^(__kindof YTKBaseRequest * _Nonnull request) {
         !failure ? : failure(request.error);
+    }];
+}
+
+- (void)sendPunchInRequest {
+    [[PCPunchInRequest new] sendRequest:^(NSString *response) {
+        if ([response isEqualToString:@"fail"]) {
+            [QMUITips showError:@"您今天已经打过卡了~"];
+        } else {
+            [QMUITips showSucceed:@"已自动打卡"];
+            [[NSNotificationCenter defaultCenter] postNotificationName:PCPunchSuccessNotification object:nil];
+        }
+    } failure:^(NSError * _Nonnull error) {
+         
     }];
 }
 

@@ -7,8 +7,12 @@
 API来自 [picacomic-api](https://github.com/czp3009/picacomic-api) 
 
 #### 更新日志  
+**v1.0.6**  
+*  自动打卡    
+*  bug fix   
+
 **v1.0.5**  
-* 本子详情可点击tag/作者/翻译组跳转列表  
+*  本子详情可点击tag/作者/翻译组跳转列表  
 *  骑士榜单可点击跳转列表    
 *  bug fix   
 
@@ -78,10 +82,6 @@ API来自 [picacomic-api](https://github.com/czp3009/picacomic-api)
 * [x] 聊天室接收发送图片，文字，声音
 * [x] 游戏区
 * [ ] 下载本子  
-
-#### 赞赏  
-如果您觉得好用可以打赏我哟 
-![mm_reward_qrcode](https://user-images.githubusercontent.com/34535969/123406394-7574a700-d5dd-11eb-966b-e23a24453a29.png)
 
 #### 免责声明  
 本项目仅供学习&个人使用，版权归原漫画作者及发行商所有。  

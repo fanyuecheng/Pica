@@ -24,6 +24,7 @@
 
 @property (nonatomic, copy)   NSArray <NSString *>   *keywordArray;
 @property (nonatomic, copy)   NSArray <PCCategory *> *categoryArray;
+@property (nonatomic, copy)   NSArray <PCCategory *> *comicArray;
 
 @property (nonatomic, strong) PCSearchRecordView *recordView;
 @property (nonatomic, strong) UICollectionView *collectionView;
@@ -93,13 +94,25 @@
     }];
 }
 
+#pragma mark - Action
+- (void)categoryAction:(QMUIButton *)sender {
+    BOOL hidden = [kPCUserDefaults boolForKey:PC_CATEGORY_WEB_HIDDEN];
+    [kPCUserDefaults setBool:!hidden forKey:PC_CATEGORY_WEB_HIDDEN];
+    [kPCUserDefaults synchronize];
+    [self.collectionView reloadData];
+}
+
 #pragma mark - CollectionView
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView {
     return 2;
 }
 
 - (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section {
-    return section == 0 ? self.keywordArray.count : self.categoryArray.count;
+    if (section == 0) {
+        return self.keywordArray.count;
+    } else {
+        return [kPCUserDefaults boolForKey:PC_CATEGORY_WEB_HIDDEN] ? self.comicArray.count : self.categoryArray.count;
+    }
 }
 
 - (__kindof UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath {
@@ -109,7 +122,8 @@
         return cell;
     } else {
         PCCategoryCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"PCCategoryCell" forIndexPath:indexPath];
-        cell.category = self.categoryArray[indexPath.item];
+        NSArray *dataSource = [kPCUserDefaults boolForKey:PC_CATEGORY_WEB_HIDDEN] ? self.comicArray : self.categoryArray;
+        cell.category = dataSource[indexPath.item];
         return cell;
     }
 }
@@ -126,6 +140,19 @@
             [header addSubview:tltleLabel]; 
         }
         tltleLabel.text = indexPath.section == 0 ? @"大家都在搜" : @"热门分类";
+        QMUIButton *actionButton = [header viewWithTag:1001];
+        if (!actionButton) {
+            actionButton = [[QMUIButton alloc] init];
+            [actionButton setTitleColor:UIColorBlue forState:UIControlStateNormal];
+            actionButton.titleLabel.font = UIFontMake(15);
+            actionButton.tag = 1001;
+            [actionButton addTarget:self action:@selector(categoryAction:) forControlEvents:UIControlEventTouchUpInside];
+            [header addSubview:actionButton];
+        }
+        [actionButton setTitle:indexPath.section == 0 ? @"" : ([kPCUserDefaults boolForKey:PC_CATEGORY_WEB_HIDDEN] ? @"显示网页分类" : @"隐藏网页分类") forState:UIControlStateNormal];
+        [actionButton sizeToFit];
+        actionButton.frame = indexPath.section == 0 ? CGRectZero : CGRectMake(SCREEN_WIDTH - 10 - actionButton.qmui_width, 0, actionButton.qmui_width, 40);
+        
         return header;
     } else {
         return nil;
@@ -154,7 +181,8 @@
         [self.navigationController pushViewController:list animated:YES];
     } else {
         UIViewController *controller = nil;
-        PCCategory *category = self.categoryArray[indexPath.item];
+        NSArray *dataSource = [kPCUserDefaults boolForKey:PC_CATEGORY_WEB_HIDDEN] ? self.comicArray : self.categoryArray;
+        PCCategory *category = dataSource[indexPath.item];
         
         if (category.isWeb) {
             SFSafariViewController *safari = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:category.link]];
@@ -212,6 +240,13 @@
 
 - (void)setCategoryArray:(NSArray<PCCategory *> *)categoryArray {
     _categoryArray = [categoryArray copy];
+    NSMutableArray *comicArray = [NSMutableArray array];
+    [_categoryArray enumerateObjectsUsingBlock:^(PCCategory * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if (!obj.isWeb) {
+            [comicArray addObject:obj];
+        }
+    }];
+    self.comicArray = comicArray;
     [self.collectionView reloadData];
 }
 
