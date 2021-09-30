@@ -49,7 +49,7 @@
     NSMutableDictionary *header = @{
                             @"api-key"           : PC_API_KEY_ANDROID,
                             @"accept"            : @"application/vnd.picacomic.com.v1+json",
-                            @"app-channel"       : PC_API_CHANNEL,
+                            @"app-channel"       : channel,
                             @"time"              : timeInterval,
                             @"nonce"             : uuid,
                             @"signature"         : @"",
