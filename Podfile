@@ -15,5 +15,5 @@ target 'Pica' do
     pod 'JXPagingView/Pager', '~> 2.1.0'
     pod 'SocketRocket', '~> 0.6.0'
     pod 'GYDataCenter'
-    pod 'FMDB', '~> 2.6.1'  
+    pod 'FMDB', '~> 2.6.1'
 end
