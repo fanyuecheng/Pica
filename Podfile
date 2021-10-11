@@ -9,11 +9,11 @@ target 'Pica' do
 
     pod 'YTKNetwork', '~> 3.0.6'
     pod 'YYModel', '~> 1.0.4' 
-    pod 'SDWebImage', '~> 5.11.1'
+    pod 'SDWebImage', '~> 5.12.0'
     pod 'QMUIKit', '~> 4.3.0'  
     pod 'MJRefresh', '~> 3.7.2'
     pod 'JXPagingView/Pager', '~> 2.1.0'
     pod 'SocketRocket', '~> 0.6.0'
     pod 'GYDataCenter'
-    pod 'FMDB', '~> 2.6.1'  
+    pod 'FMDB', '~> 2.6.1'
 end

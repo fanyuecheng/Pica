@@ -57,10 +57,9 @@ static char kAssociatedObjectKey_PC_noFadeAnimation;
 //    CGFloat scale = UIScreen.mainScreen.scale;
 //    CGSize thumbnailSize = CGSizeMake(800 * scale, 800 * scale);
 //    NSDictionary *context = @{SDWebImageContextImageThumbnailPixelSize : @(thumbnailSize)};
-//    SDWebImageProgressiveLoad
     [self pc_setImageWithURL:url
             placeholderImage:placeholderImage
-                     options:0
+                     options:SDWebImageScaleDownLargeImages
                      context:nil
                     progress:progress
                    completed:completed];
