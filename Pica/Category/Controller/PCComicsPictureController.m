@@ -153,14 +153,7 @@
     PCPictureCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"PCPictureCell" forIndexPath:indexPath];
     
     NSArray *pictureArray = self.pictureArray[indexPath.section].docs;
-    
-    cell.loadBlock = ^(PCPicture * _Nonnull picture) {
-        NSIndexPath *reloadIndexPath = [NSIndexPath indexPathForItem:[pictureArray indexOfObject:picture] inSection:indexPath.section];
-        if ([self.navigationController.viewControllers containsObject:self]) {
-            [collectionView reloadItemsAtIndexPaths:@[reloadIndexPath]];
-        }
-    };
-    
+
     cell.picture = pictureArray[indexPath.item];
  
     @weakify(self)
@@ -172,6 +165,14 @@
             [self.navigationController setToolbarHidden:self.navigationBarHidden animated:YES];
         }
         [self setNeedsStatusBarAppearanceUpdate];
+    };
+    
+    cell.loadBlock = ^(PCPicture * _Nonnull picture) {
+        @strongify(self)
+        NSIndexPath *reloadIndexPath = [NSIndexPath indexPathForItem:[pictureArray indexOfObject:picture] inSection:indexPath.section];
+        if ([self.navigationController.viewControllers containsObject:self]) {
+            [collectionView reloadItemsAtIndexPaths:@[reloadIndexPath]];
+        }
     };
     
     return cell;

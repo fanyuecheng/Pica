@@ -160,7 +160,7 @@
         [[SDImageCache sharedImageCache] clearDiskOnCompletion:^{
             [PCChatMessage deleteObjectsWhere:nil arguments:nil];
             [[NSFileManager defaultManager] removeItemAtPath:[self networkCachePath] error:nil];
-            [kPCUserDefaults removeObjectForKey:PC_LOCAL_ACCOUNT];
+//            [kPCUserDefaults removeObjectForKey:PC_LOCAL_ACCOUNT];
             [self.tableView reloadData];
         }];
     }];
