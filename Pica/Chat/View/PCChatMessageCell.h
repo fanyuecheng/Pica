@@ -24,6 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) UIControl   *messageContentView;
 @property (nonatomic, strong) PCMessageBubbleView *messageBubbleView;
 
+@property (nonatomic, copy)   void (^atBlock)(PCChatMessage *message);
+
 - (BOOL)messageOwnerIsMyself;
 
 @end

@@ -272,16 +272,16 @@
 - (void)switchAction:(UISwitch *)sender {
     NSIndexPath *indexPath = [self.tableView qmui_indexPathForRowAtView:sender];
     
-    if (indexPath.row == 2) {
+    if (indexPath.row == 4) {
         [kPCUserDefaults setBool:sender.isOn forKey:PC_DATA_TO_SIMPLIFIED_CHINESE];
-    } else if (indexPath.row == 3) {
+    } else if (indexPath.row == 5) {
         [kPCUserDefaults setBool:sender.isOn forKey:PC_TAB_GAME_HIDDEN];
         
         PCTabBarViewController *tabBarViewController = (PCTabBarViewController *)[UIApplication sharedApplication].keyWindow.rootViewController;
         [tabBarViewController reloadViewControllers];
-    } else if (indexPath.row == 4) {
+    } else if (indexPath.row == 6) {
         [kPCUserDefaults setBool:sender.isOn forKey:PC_CHAT_EVENT_COLOR_ON];
-    } else if (indexPath.row == 5) {
+    } else if (indexPath.row == 7) {
         [kPCUserDefaults setBool:sender.isOn forKey:PC_CHAT_AVATAR_CHARACTER_ON];
     }
 }
