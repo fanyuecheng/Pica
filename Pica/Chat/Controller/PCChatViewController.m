@@ -128,7 +128,7 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
         cell.privateBlock = ^(PCChatMessage * _Nonnull msg) {
             @strongify(self)
             self.atUserName = msg.name;
-            self.textView.text = [NSString stringWithFormat:@"%@@%@ %@ ", self.textView.text, self.atUserName, @"悄悄话"];
+            self.textView.text = [NSString stringWithFormat:@"%@@%@ %@ ", self.textView.text, self.atUserName, @"@悄悄话"];
         };
          
         cell.replayBlock = ^(PCChatMessage * _Nonnull msg) {
