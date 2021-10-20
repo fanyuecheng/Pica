@@ -308,6 +308,7 @@
                        @"verified",
                        @"level",
                        @"time",
+                       @"messageType"
                        ];
     });
     return properties;
