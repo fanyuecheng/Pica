@@ -21,6 +21,8 @@ static CGFloat const kChatBarTextViewBottomOffset = 10;
 static CGFloat const kChatBarTextViewMinHeight = 37.f;
 static CGFloat const kChatBarTextViewMaxHeight = 102.f;
 
+static NSMutableDictionary <NSString *, PCChatViewController *> *kPCChatViewControllerDictionary = nil;
+
 @interface PCChatViewController () <UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AVAudioRecorderDelegate, QMUITextViewDelegate>
 
 @property (nonatomic, copy)   NSString *url;
@@ -51,6 +53,28 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
 
 @implementation PCChatViewController
 
++ (PCChatViewController *)chatViewControllerWithURL:(NSString *)url {
+    if (!kPCChatViewControllerDictionary) {
+        kPCChatViewControllerDictionary = [NSMutableDictionary dictionary];
+    }
+    if (url.length <= 0 || url == nil) {
+        return nil;
+    } else {
+        PCChatViewController *controller = kPCChatViewControllerDictionary[url];
+        if (controller == nil) {
+            controller = [[PCChatViewController alloc] initWithURL:url];
+            [kPCChatViewControllerDictionary setObject:controller forKey:url];
+        }
+        return controller;
+    }
+}
+
++ (void)deleteChatViewControllerWithURL:(NSString *)url {
+    if (url.length >= 0) {
+        [kPCChatViewControllerDictionary removeObjectForKey:url];
+    }
+}
+
 - (void)dealloc {
     [self.manager disconnect];
 }
@@ -62,13 +86,19 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
     }
     return self;
 }
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    
+    if (self.manager.socket.socketReadyState != SR_OPEN) {
+        [self connect];
+    }
+}
  
 - (void)viewDidLoad {
     [super viewDidLoad];
  
     [self localMessageArray];
-    
-    [self connect];
 }
 
 - (void)initSubviews {
@@ -624,10 +654,10 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
                 if (message.messageType == PCChatMessageTypeDefault || message.messageType == PCChatMessageTypeImage ||
                     message.messageType == PCChatMessageTypeAudio) {
                     [self insertMessage:message scrollToBottom:YES];
-                } else if (message.messageType == PCChatMessageTypeConnectionCount) { 
+                } else if (message.messageType == PCChatMessageTypeConnectionCount && self.navigationController.topViewController == self) { 
                     self.navigationItem.rightBarButtonItem = [UIBarButtonItem qmui_itemWithTitle:[NSString stringWithFormat:@"在线人数:%@", @(message.connections)] target:nil action:NULL];
                     self.navigationItem.rightBarButtonItem.enabled = NO;
-                } else if (message.messageType == PCChatMessageTypeNotification) {
+                } else if (message.messageType == PCChatMessageTypeNotification && self.navigationController.topViewController == self) {
                     [PCMessageNotificationView showWithMessage:message.message animated:YES];
                 }
             }

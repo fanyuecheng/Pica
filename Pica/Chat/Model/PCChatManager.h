@@ -8,12 +8,15 @@
 
 #import <Foundation/Foundation.h>
 #import <UIKit/UIKit.h>
+#import "PCSocket.h"
 
 NS_ASSUME_NONNULL_BEGIN
  
 @class PCChatMessage;
 @interface PCChatManager : NSObject
  
+@property (nonatomic, strong, readonly) PCSocket *socket;
+
 @property (nonatomic, copy) void (^stateBlock)(NSError * _Nullable error);
 @property (nonatomic, copy) void (^messageBlock)(PCChatMessage *message);
 
