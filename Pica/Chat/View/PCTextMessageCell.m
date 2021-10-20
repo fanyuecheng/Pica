@@ -159,7 +159,7 @@
     popupView.preferLayoutDirection = QMUIPopupContainerViewLayoutDirectionAbove;
     popupView.automaticallyHidesWhenUserTap = YES;
     popupView.sourceView = sender;
-    popupView.titleArray = @[@"复制", @"回复", @"@"];
+    popupView.titleArray = @[@"复制", @"回复", @"悄悄话"];
     @weakify(self)
     popupView.actionBlock = ^(PCPopupContainerView *view, NSInteger index) {
         @strongify(self)
@@ -172,7 +172,7 @@
                 !self.replayBlock ? : self.replayBlock(self.message);
                 break;
             case 2:
-                !self.atBlock ? : self.atBlock(self.message);
+                !self.privateBlock ? : self.privateBlock(self.message);
                 break;
             default:
                 break;

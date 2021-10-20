@@ -118,12 +118,17 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
     if (message.messageType == PCChatMessageTypeDefault) {
         PCTextMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PCTextMessageCell" forIndexPath:indexPath];
         cell.message = message;
-        
         @weakify(self)
         cell.atBlock = ^(PCChatMessage * _Nonnull msg) {
             @strongify(self)
             self.atUserName = msg.name;
             self.textView.text = [NSString stringWithFormat:@"%@@%@ ", self.textView.text, self.atUserName];
+        };
+        
+        cell.privateBlock = ^(PCChatMessage * _Nonnull msg) {
+            @strongify(self)
+            self.atUserName = msg.name;
+            self.textView.text = [NSString stringWithFormat:@"%@@%@ %@ ", self.textView.text, self.atUserName, @"悄悄话"];
         };
          
         cell.replayBlock = ^(PCChatMessage * _Nonnull msg) {
@@ -135,10 +140,22 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
     } else if (message.messageType == PCChatMessageTypeImage) {
         PCImageMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PCImageMessageCell" forIndexPath:indexPath];
         cell.message = message;
+        @weakify(self)
+        cell.atBlock = ^(PCChatMessage * _Nonnull msg) {
+            @strongify(self)
+            self.atUserName = msg.name;
+            self.textView.text = [NSString stringWithFormat:@"%@@%@ ", self.textView.text, self.atUserName];
+        };
         return cell;
     } else if (message.messageType == PCChatMessageTypeAudio) {
         PCVoiceMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PCVoiceMessageCell" forIndexPath:indexPath];
         cell.message = message;
+        @weakify(self)
+        cell.atBlock = ^(PCChatMessage * _Nonnull msg) {
+            @strongify(self)
+            self.atUserName = msg.name;
+            self.textView.text = [NSString stringWithFormat:@"%@@%@ ", self.textView.text, self.atUserName];
+        };
         return cell;
     }
     

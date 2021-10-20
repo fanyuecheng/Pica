@@ -133,6 +133,10 @@
     
 }
 
+- (void)atAction:(id)sender {
+    !self.atBlock ? : self.atBlock(self.message);
+}
+
 #pragma mark - Get
 - (PCUser *)myself {
     if (!_myself) {
@@ -175,6 +179,8 @@
         _titleLabel.backgroundColor = PCColorGold;
         _titleLabel.layer.cornerRadius = 7;
         _titleLabel.layer.masksToBounds = YES;
+        _titleLabel.userInteractionEnabled = YES;
+        [_titleLabel addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(atAction:)]];
     }
     return _titleLabel;
 }
@@ -190,6 +196,8 @@
 - (QMUILabel *)nameLabel {
     if (!_nameLabel) {
         _nameLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(13) textColor:UIColorBlack];
+        _nameLabel.userInteractionEnabled = YES;
+        [_nameLabel addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(atAction:)]];
     }
     return _nameLabel;
 }
