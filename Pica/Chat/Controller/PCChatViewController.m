@@ -21,8 +21,6 @@ static CGFloat const kChatBarTextViewBottomOffset = 10;
 static CGFloat const kChatBarTextViewMinHeight = 37.f;
 static CGFloat const kChatBarTextViewMaxHeight = 102.f;
 
-static NSMutableDictionary <NSString *, PCChatViewController *> *kPCChatViewControllerDictionary = nil;
-
 @interface PCChatViewController () <UITableViewDelegate, UITableViewDataSource, UIImagePickerControllerDelegate, UINavigationControllerDelegate, AVAudioRecorderDelegate, QMUITextViewDelegate>
 
 @property (nonatomic, copy)   NSString *url;
@@ -53,28 +51,6 @@ static NSMutableDictionary <NSString *, PCChatViewController *> *kPCChatViewCont
 
 @implementation PCChatViewController
 
-+ (PCChatViewController *)chatViewControllerWithURL:(NSString *)url {
-    if (!kPCChatViewControllerDictionary) {
-        kPCChatViewControllerDictionary = [NSMutableDictionary dictionary];
-    }
-    if (url.length <= 0 || url == nil) {
-        return nil;
-    } else {
-        PCChatViewController *controller = kPCChatViewControllerDictionary[url];
-        if (controller == nil) {
-            controller = [[PCChatViewController alloc] initWithURL:url];
-            [kPCChatViewControllerDictionary setObject:controller forKey:url];
-        }
-        return controller;
-    }
-}
-
-+ (void)deleteChatViewControllerWithURL:(NSString *)url {
-    if (url.length >= 0) {
-        [kPCChatViewControllerDictionary removeObjectForKey:url];
-    }
-}
-
 - (void)dealloc {
     [self.manager disconnect];
 }
@@ -87,17 +63,10 @@ static NSMutableDictionary <NSString *, PCChatViewController *> *kPCChatViewCont
     return self;
 }
 
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    
-    if (self.manager.socket.socketReadyState != SR_OPEN) {
-        [self connect];
-    }
-}
- 
 - (void)viewDidLoad {
     [super viewDidLoad];
  
+    [self connect];
     [self localMessageArray];
 }
 

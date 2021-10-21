@@ -93,7 +93,7 @@
 #pragma mark - Get
 - (PCSocket *)socket {
     if (!_socket) {
-        _socket = [[PCSocket alloc] init];
+        _socket = [PCSocket sharedInstance];
     }
     return _socket;
 }
