@@ -103,6 +103,8 @@ typedef NS_ENUM(NSUInteger, PCChatMessageType) {
 + (PCChatMessage *)imageMessageDataWithData:(NSData *)data;
 + (PCChatMessage *)voiceMessageDataWithData:(NSData *)data;
 
++ (void)customConfigMessage:(NSMutableDictionary *)info;
+
 @end
 
 NS_ASSUME_NONNULL_END

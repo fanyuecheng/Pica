@@ -25,5 +25,9 @@
 #define PC_LOCAL_ACCOUNT       @"PC_LOCAL_ACCOUNT"
 #define PC_API_CHANNEL         @"PC_API_CHANNEL"
 #define PC_CATEGORY_WEB_HIDDEN @"PC_CATEGORY_WEB_HIDDEN"
+#define PC_CHAT_TITLE          @"PC_CHAT_TITLE"
+#define PC_CHAT_TITLE_ON       @"PC_CHAT_TITLE_ON"
+#define PC_CHAT_LV             @"PC_CHAT_LV"
+#define PC_CHAT_LV_ON          @"PC_CHAT_LV_ON"
 
 #endif /* PCLocalKeyHeader_h */

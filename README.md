@@ -7,6 +7,9 @@
 API来自 [picacomic-api](https://github.com/czp3009/picacomic-api) 
 
 #### 更新日志  
+**v1.0.9**   
+*  聊天室设置    
+
 **v1.0.8**   
 *  聊天增加悄悄话   
 *  聊天点头像/称号快速@  

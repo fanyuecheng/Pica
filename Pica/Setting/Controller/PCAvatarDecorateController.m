@@ -114,7 +114,8 @@
 
 - (void)setSelectIndex:(NSInteger)selectIndex {
     _selectIndex = selectIndex;
-    [kPCUserDefaults setInteger:selectIndex forKey:PC_CHAT_AVATAR_CHARACTER];
+    NSString *string = (selectIndex == -1) ? @"随机" : [@(selectIndex) stringValue];
+    [kPCUserDefaults setObject:string forKey:PC_CHAT_AVATAR_CHARACTER];
     [self.collectionView reloadData];
 }
  

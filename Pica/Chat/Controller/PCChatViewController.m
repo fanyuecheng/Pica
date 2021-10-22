@@ -62,13 +62,14 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
     }
     return self;
 }
- 
+
 - (void)viewDidLoad {
     [super viewDidLoad];
  
-    [self localMessageArray];
-    
     [self connect];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        [self localMessageArray];
+    });
 }
 
 - (void)initSubviews {
@@ -624,10 +625,10 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
                 if (message.messageType == PCChatMessageTypeDefault || message.messageType == PCChatMessageTypeImage ||
                     message.messageType == PCChatMessageTypeAudio) {
                     [self insertMessage:message scrollToBottom:YES];
-                } else if (message.messageType == PCChatMessageTypeConnectionCount) { 
+                } else if (message.messageType == PCChatMessageTypeConnectionCount && self.navigationController.topViewController == self) { 
                     self.navigationItem.rightBarButtonItem = [UIBarButtonItem qmui_itemWithTitle:[NSString stringWithFormat:@"在线人数:%@", @(message.connections)] target:nil action:NULL];
                     self.navigationItem.rightBarButtonItem.enabled = NO;
-                } else if (message.messageType == PCChatMessageTypeNotification) {
+                } else if (message.messageType == PCChatMessageTypeNotification && self.navigationController.topViewController == self) {
                     [PCMessageNotificationView showWithMessage:message.message animated:YES];
                 }
             }
