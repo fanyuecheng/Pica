@@ -130,6 +130,31 @@
     }
 }
 
++ (void)customConfigMessage:(NSMutableDictionary *)info {
+    NSString *character = [PCUser localCharacterImage];
+    if (character) {
+        info[@"character"] = character;
+    }
+    if ([kPCUserDefaults boolForKey:PC_CHAT_EVENT_COLOR_ON]) {
+        NSArray *color = [kPCUserDefaults objectForKey:PC_CHAT_EVENT_COLOR];
+        if (color.count) {
+            info[@"event_colors"] = color;
+        }
+    }
+    if ([kPCUserDefaults boolForKey:PC_CHAT_LV_ON]) {
+        NSString *lv = [kPCUserDefaults objectForKey:PC_CHAT_LV];
+        if (lv) {
+            info[@"level"] = lv;
+        }
+    }
+    if ([kPCUserDefaults boolForKey:PC_CHAT_TITLE_ON]) {
+        NSString *title = [kPCUserDefaults objectForKey:PC_CHAT_TITLE];
+        if (title) {
+            info[@"title"] = title;
+        }
+    }
+}
+
 + (PCChatMessage *)textMessageDataWithText:(NSString *)text
                               replyMessage:(PCChatMessage *)replyMessage
                                         at:(NSString *)at {
@@ -146,16 +171,7 @@
     info[@"message"] = at ? [text stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"@%@ ", at] withString:@""] : text;
     info[@"image"] = @"";
     
-    NSString *character = [PCUser localCharacterImage];
-    if (character) {
-        info[@"character"] = character;
-    }
-    if ([kPCUserDefaults boolForKey:PC_CHAT_EVENT_COLOR_ON]) {
-        NSArray *color = [kPCUserDefaults objectForKey:PC_CHAT_EVENT_COLOR];
-        if (color.count) {
-            info[@"event_colors"] = color;
-        }
-    }
+    [PCChatMessage customConfigMessage:info];
     
     NSString *messageData = [NSString stringWithFormat:@"42%@", [@[@"send_message", info] yy_modelToJSONString]];
 
@@ -201,10 +217,7 @@
      
     info[@"image"] = [NSString stringWithFormat:@"data:image/%@;base64,%@", formatString, base64String];
     
-    NSString *character = [PCUser localCharacterImage];
-    if (character) {
-        info[@"character"] = character;
-    }
+    [PCChatMessage customConfigMessage:info];
     
     NSString *messageData = [NSString stringWithFormat:@"42%@", [@[@"send_image", info] yy_modelToJSONString]];
 
@@ -234,10 +247,7 @@
     info[@"message"] = @"";
     info[@"audio"] = [data base64EncodedStringWithOptions:NSDataBase64EncodingEndLineWithLineFeed];
     
-    NSString *character = [PCUser localCharacterImage];
-    if (character) {
-        info[@"character"] = character;
-    } 
+    [PCChatMessage customConfigMessage:info];
     
     NSString *messageData = [NSString stringWithFormat:@"42%@", [@[@"send_audio", info] yy_modelToJSONString]];
 

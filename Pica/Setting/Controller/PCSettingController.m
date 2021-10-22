@@ -6,15 +6,14 @@
 //  Copyright © 2021 fancy. All rights reserved.
 //
 
+#import <SafariServices/SafariServices.h>
 #import "PCSettingController.h"
 #import "PCPasswordSetRequest.h"
 #import "PCNameSetRequest.h"
 #import "AppDelegate.h"
-#import <SafariServices/SafariServices.h>
 #import "PCTabBarViewController.h"
-#import "PCColorPickerViewController.h"
 #import "PCChatMessage.h"
-#import "PCAvatarDecorateController.h"
+#import "PCChatSettingController.h"
 
 @interface PCSettingController ()
 
@@ -61,7 +60,7 @@
     }
     
     cell.textLabel.text = self.dataSource[indexPath.section][indexPath.row];
-    if (indexPath.section == 0 && indexPath.row == 0) {
+    if (indexPath.section == 1 && indexPath.row == 1) {
         __block long long fileSize = 0;
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
             fileSize += [[SDImageCache sharedImageCache] totalDiskSize];
@@ -71,15 +70,15 @@
                 cell.detailTextLabel.text = [NSByteCountFormatter stringFromByteCount:fileSize countStyle:NSByteCountFormatterCountStyleFile];
             });
         }); 
-    } else if (indexPath.section == 0 && indexPath.row == 2) {
+    } else if (indexPath.section == 1 && indexPath.row == 2) {
         cell.detailTextLabel.text = @"id仅能修改一次！";
-    } else if (indexPath.section == 0 && indexPath.row == 3) {
+    } else if (indexPath.section == 1 && indexPath.row == 3) {
         cell.detailTextLabel.text = [kPCUserDefaults stringForKey:PC_API_CHANNEL];
     } else {
         cell.detailTextLabel.text = nil;
     }
     
-    if (indexPath.section == 0 && (indexPath.row == 4 || indexPath.row == 5 || indexPath.row == 6 || indexPath.row == 7)) {
+    if (indexPath.section == 1 && (indexPath.row == 4 || indexPath.row == 5)) {
         if (![cell.accessoryView isKindOfClass:[UISwitch class]]) {
             UISwitch *switchView = [[UISwitch alloc] init];
             NSString *key = nil;
@@ -90,12 +89,6 @@
                     break;
                 case 5:
                     key = PC_TAB_GAME_HIDDEN;
-                    break;
-                case 6:
-                    key = PC_CHAT_EVENT_COLOR_ON;
-                    break;
-                case 7:
-                    key = PC_CHAT_AVATAR_CHARACTER_ON;
                     break;
                 default:
                     break;
@@ -114,24 +107,20 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.section == 0) {
+        [self chatSetting];
+    } else if (indexPath.section == 1) {
         switch (indexPath.row) {
             case 0:
-                [self showClearCacheAlert];
+                [self showUpdatePasswordAlert];
                 break;
             case 1:
-                [self showUpdatePasswordAlert];
+                [self showClearCacheAlert];
                 break;
             case 2:
                 [self showUpdateNameAlert];
                 break;
             case 3:
                 [self selectChannel];
-                break;
-            case 6:
-                [self selectColor];
-                break;
-            case 7:
-                [self selectAvatarDecorate];
                 break;
             default:
                 break;
@@ -235,17 +224,6 @@
     [alertController showWithAnimated:YES];
 }
 
-- (void)selectColor {
-    PCColorPickerViewController *color = [[PCColorPickerViewController alloc] init];
-    
-    [self.navigationController pushViewController:color animated:YES];
-}
-
-- (void)selectAvatarDecorate {
-    PCAvatarDecorateController *decorate = [[PCAvatarDecorateController alloc] init];
-    [self.navigationController pushViewController:decorate animated:YES];
-}
-
 - (NSString *)networkCachePath {
     NSString *pathOfLibrary = [NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSUserDomainMask, YES) objectAtIndex:0];
     NSString *path = [pathOfLibrary stringByAppendingPathComponent:@"LazyRequestCache"];
@@ -264,6 +242,11 @@
     [self.tableView reloadData];
 }
 
+- (void)chatSetting {
+    PCChatSettingController *chatSetting = [[PCChatSettingController alloc] initWithStyle:UITableViewStyleGrouped];
+    [self.navigationController pushViewController:chatSetting animated:YES];
+}
+
 #pragma mark - Action
 - (void)logoutAction:(QMUIButton *)sender {
     [self showLogoutAlert];
@@ -279,10 +262,6 @@
         
         PCTabBarViewController *tabBarViewController = (PCTabBarViewController *)[UIApplication sharedApplication].keyWindow.rootViewController;
         [tabBarViewController reloadViewControllers];
-    } else if (indexPath.row == 6) {
-        [kPCUserDefaults setBool:sender.isOn forKey:PC_CHAT_EVENT_COLOR_ON];
-    } else if (indexPath.row == 7) {
-        [kPCUserDefaults setBool:sender.isOn forKey:PC_CHAT_AVATAR_CHARACTER_ON];
     }
 }
 
@@ -324,7 +303,7 @@
 #pragma mark - Get
 - (NSArray *)dataSource {
     if (!_dataSource) {
-        _dataSource = @[@[@"清除缓存", @"修改密码", @"修改ID", @"分流", @"简体中文", @"隐藏游戏区", @"聊天文字颜色", @"聊天室头像装饰"], @[@"关于Pica"]];
+        _dataSource = @[@[@"聊天设置"], @[@"修改密码", @"清除缓存", @"修改ID", @"分流", @"简体中文", @"隐藏游戏区"], @[@"关于Pica"]];
     }
     return _dataSource;
 }

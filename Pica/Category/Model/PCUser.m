@@ -39,13 +39,13 @@ static NSMutableArray <NSString *> *PCCharacterImageArray = nil;
 
 + (NSString *)localCharacterImage {
     BOOL on = [kPCUserDefaults integerForKey:PC_CHAT_AVATAR_CHARACTER_ON];
-    NSInteger index = [kPCUserDefaults integerForKey:PC_CHAT_AVATAR_CHARACTER];
+    NSString *index = [kPCUserDefaults objectForKey:PC_CHAT_AVATAR_CHARACTER];
     
     if (on) {
-        if (index == -1) {
-            index = arc4random() % [PCUser characterImageArray].count;
+        if ([index isEqualToString:@"随机"]) {
+            return [PCUser characterImageArray][arc4random() % [PCUser characterImageArray].count];
         }
-        return [PCUser characterImageArray][index];
+        return [PCUser characterImageArray][[index integerValue]];
     } else {
         return [PCUser localUser].character;
     }
