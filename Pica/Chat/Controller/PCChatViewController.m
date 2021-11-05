@@ -346,7 +346,7 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
  
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if (isBottom && scroll && !(self.tableView.isDragging || self.tableView.isTracking)) {
-            [self.tableView qmui_scrollToBottomAnimated:YES];
+            [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.messageArray.count - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
         }
     });
 }
