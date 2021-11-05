@@ -32,6 +32,8 @@
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(socketDidOpenNotification:) name:kWebSocketDidOpenNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(socketDidReceiveMessageNotification:) name:kWebSocketDidReceiveMessageNotification object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(socketFailNotification:) name:kWebSocketFailWithErrorNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(socketCloseNotification:) name:kWebSocketDidCloseNotification object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(socketConnectingNotification:) name:kWebSocketConnectingNotification object:nil];
     }
     return self;
 }
@@ -101,11 +103,19 @@
 #pragma mark - Notification
 - (void)socketDidOpenNotification:(NSNotification *)noti {
     [self sendInitData];
-    !self.stateBlock ? : self.stateBlock(nil);
+    !self.stateBlock ? : self.stateBlock(@"open");
 }
 
 - (void)socketFailNotification:(NSNotification *)noti {
-    !self.stateBlock ? : self.stateBlock(noti.object);
+    !self.stateBlock ? : self.stateBlock(@"error");
+}
+
+- (void)socketCloseNotification:(NSNotification *)noti {
+    !self.stateBlock ? : self.stateBlock(@"close");
+}
+
+- (void)socketConnectingNotification:(NSNotification *)noti {
+    !self.stateBlock ? : self.stateBlock(@"connecting");
 }
 
 - (void)socketDidReceiveMessageNotification:(NSNotification *)noti {

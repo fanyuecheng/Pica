@@ -90,7 +90,6 @@
 - (CAShapeLayer *)backgroundLayer {
     if (!_backgroundLayer) {
         _backgroundLayer = [CAShapeLayer layer];
-        _backgroundLayer.fillColor = UIColorBlue.CGColor; 
     }
     return _backgroundLayer;
 }
@@ -125,8 +124,10 @@
 }
 
 - (void)setFillColor:(UIColor *)fillColor {
-    _fillColor = fillColor;
-    self.backgroundLayer.fillColor = fillColor.CGColor;
+    if (![_fillColor.qmui_hexString isEqualToString:fillColor.qmui_hexString]) {
+        _fillColor = fillColor;
+        self.backgroundLayer.fillColor = fillColor.CGColor;
+    }
 }
 
 @end

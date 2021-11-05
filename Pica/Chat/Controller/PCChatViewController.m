@@ -634,12 +634,14 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
             }
         };
         
-        _manager.stateBlock = ^(NSError * _Nonnull error) {
+        _manager.stateBlock = ^(NSString * _Nonnull state) {
             @strongify(self)
-            [self hideEmptyView];
-            if (error && !self.navigationItem.rightBarButtonItem) {
-                [QMUITips showError:@"连接失败" detailText:error.userInfo[NSLocalizedDescriptionKey]]; 
-                self.navigationItem.rightBarButtonItem = [UIBarButtonItem qmui_itemWithTitle:@"重新连接" target:self action:@selector(connect)];
+            if ([state isEqualToString:@"connecting"]) {
+                [self showEmptyViewWithLoading];
+            } else if ([state isEqualToString:@"open"]) {
+                [self hideEmptyView];
+            } else {
+                [self showEmptyViewWithText:[state isEqualToString:@"error"] ? @"连结失败" : @"连结关闭" detailText:nil buttonTitle:@"重新连接" buttonAction:@selector(connect)];
             }
         };
     }
