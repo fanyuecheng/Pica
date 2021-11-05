@@ -17,7 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
  
 @property (nonatomic, strong, readonly) PCSocket *socket;
 
-@property (nonatomic, copy) void (^stateBlock)(NSError * _Nullable error);
+@property (nonatomic, copy) void (^stateBlock)(NSString *state);
 @property (nonatomic, copy) void (^messageBlock)(PCChatMessage *message);
 
 - (instancetype)initWithURL:(NSString *)url;
