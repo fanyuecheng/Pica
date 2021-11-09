@@ -2,7 +2,7 @@
 //  PCChatSettingController.h
 //  Pica
 //
-//  Created by 米画师 on 2021/10/22.
+//  Created by Fancy on 2021/10/22.
 //  Copyright © 2021 fancy. All rights reserved.
 //
 
