@@ -13,6 +13,7 @@
 #import "PCImageMessageCell.h"
 #import "PCVoiceMessageCell.h"
 #import "PCMessageNotificationView.h"
+#import "PCUser.h"
 #import "PCChatMessage.h"
 #import "UIImage+PCAdd.h"
 #import <AVFoundation/AVFoundation.h>
@@ -26,7 +27,7 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
 @property (nonatomic, copy)   NSString *url;
 @property (nonatomic, strong) PCChatManager *manager;
 @property (nonatomic, strong) PCChatMessage *replyMessage;
-@property (nonatomic, copy)   NSString      *atUserName;
+@property (nonatomic, strong) PCUser        *atUser;
 
 @property (nonatomic, strong) UITableView *tableView;
 @property (nonatomic, strong) QMUIButton   *replyButton;
@@ -116,51 +117,44 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     PCChatMessage *message = self.messageArray[indexPath.row];
+    PCChatMessageCell *cell = nil;
+    @weakify(self)
     if (message.messageType == PCChatMessageTypeDefault) {
-        PCTextMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PCTextMessageCell" forIndexPath:indexPath];
-        cell.message = message;
+        PCTextMessageCell *textCell = [tableView dequeueReusableCellWithIdentifier:@"PCTextMessageCell" forIndexPath:indexPath];
+        textCell.message = message;
         @weakify(self)
-        cell.atBlock = ^(PCChatMessage * _Nonnull msg) {
+        textCell.privateBlock = ^(PCChatMessage * _Nonnull msg) {
             @strongify(self)
-            self.atUserName = msg.name;
-            self.textView.text = [NSString stringWithFormat:@"%@@%@ ", self.textView.text, self.atUserName];
+            self.atUser = [self atUserWithId:msg.user_id name:msg.name];
+            self.textView.text = [NSString stringWithFormat:@"%@@%@ %@", self.textView.text, msg.name, @"@悄悄话"];
         };
-        
-        cell.privateBlock = ^(PCChatMessage * _Nonnull msg) {
-            @strongify(self)
-            self.atUserName = msg.name;
-            self.textView.text = [NSString stringWithFormat:@"%@@%@ %@ ", self.textView.text, self.atUserName, @"@悄悄话"];
-        };
-         
-        cell.replayBlock = ^(PCChatMessage * _Nonnull msg) {
+        textCell.replayBlock = ^(PCChatMessage * _Nonnull msg) {
             @strongify(self)
             self.replyMessage = msg;
         };
         
-        return cell;
+        cell = textCell;
     } else if (message.messageType == PCChatMessageTypeImage) {
-        PCImageMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PCImageMessageCell" forIndexPath:indexPath];
-        cell.message = message;
-        @weakify(self)
-        cell.atBlock = ^(PCChatMessage * _Nonnull msg) {
-            @strongify(self)
-            self.atUserName = msg.name;
-            self.textView.text = [NSString stringWithFormat:@"%@@%@ ", self.textView.text, self.atUserName];
-        };
-        return cell;
+        PCImageMessageCell *imageCell = [tableView dequeueReusableCellWithIdentifier:@"PCImageMessageCell" forIndexPath:indexPath];
+        imageCell.message = message;
+        cell = imageCell;
     } else if (message.messageType == PCChatMessageTypeAudio) {
-        PCVoiceMessageCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PCVoiceMessageCell" forIndexPath:indexPath];
-        cell.message = message;
-        @weakify(self)
-        cell.atBlock = ^(PCChatMessage * _Nonnull msg) {
-            @strongify(self)
-            self.atUserName = msg.name;
-            self.textView.text = [NSString stringWithFormat:@"%@@%@ ", self.textView.text, self.atUserName];
-        };
-        return cell;
+        PCVoiceMessageCell *voiceCell = [tableView dequeueReusableCellWithIdentifier:@"PCVoiceMessageCell" forIndexPath:indexPath];
+        voiceCell.message = message;
+        cell = voiceCell;
     }
     
-    return [UITableViewCell new];
+    cell.atBlock = ^(PCChatMessage * _Nonnull msg) {
+        @strongify(self)
+        self.atUser = [self atUserWithId:nil name:msg.name];
+        self.textView.text = [NSString stringWithFormat:@"%@@%@ ", self.textView.text, msg.name];
+    };
+    
+    if (cell) {
+        return cell;
+    } else {
+        return [UITableViewCell new];
+    }
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -346,7 +340,7 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
  
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(.25 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
         if (isBottom && scroll && !(self.tableView.isDragging || self.tableView.isTracking)) {
-            [self.tableView qmui_scrollToBottomAnimated:YES];
+            [self.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:self.messageArray.count - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:YES];
         }
     });
 }
@@ -410,6 +404,14 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
 - (void)presentAlbumViewController {
     self.imagePickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     [self presentViewController:self.imagePickerController animated:YES completion:nil];
+}
+
+- (PCUser *)atUserWithId:(NSString *)userId
+                    name:(NSString *)name {
+    PCUser *user = [[PCUser alloc] init];
+    user.userId = userId;
+    user.name = name;
+    return user;
 }
 
 #pragma mark - Record
@@ -553,12 +555,12 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
     
     if (text.length != 0) {
         textView.text = @"";
-        PCChatMessage *message = [self.manager sendText:text replyMessage:self.replyMessage at:self.atUserName];
+        PCChatMessage *message = [self.manager sendText:text replyMessage:self.replyMessage at:self.atUser];
         if (message) {
             [self insertMessage:message scrollToBottom:YES];
         }
         self.replyMessage = nil;
-        self.atUserName = nil;
+        self.atUser = nil;
     }
     
     return YES;
@@ -580,7 +582,7 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
 //                        NSString *atText = [textView.text substringWithRange:NSMakeRange(location, length)];
                         textView.text = [textView.text stringByReplacingCharactersInRange:NSMakeRange(location, length) withString:@""];
                         
-                        self.atUserName = nil;
+                        self.atUser = nil;
                         
                         return NO;
                     }

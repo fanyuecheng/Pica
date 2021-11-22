@@ -12,7 +12,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
  
-@class PCChatMessage;
+@class PCChatMessage, PCUser;
 @interface PCChatManager : NSObject
  
 @property (nonatomic, strong, readonly) PCSocket *socket;
@@ -27,7 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)sendData:(id)data;
 - (PCChatMessage *)sendText:(NSString *)text
                replyMessage:(nullable PCChatMessage *)replyMessage
-                         at:(nullable NSString *)at;
+                         at:(nullable PCUser *)at;
 - (PCChatMessage *)sendImage:(NSData *)image;
 - (PCChatMessage *)sendAudio:(NSString *)path;
 

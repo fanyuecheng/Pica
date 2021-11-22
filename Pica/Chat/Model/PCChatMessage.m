@@ -157,18 +157,18 @@
 
 + (PCChatMessage *)textMessageDataWithText:(NSString *)text
                               replyMessage:(PCChatMessage *)replyMessage
-                                        at:(NSString *)at {
+                                        at:(PCUser *)at {
     PCUser *myself = [PCUser localUser];
     
     NSMutableDictionary *info = [NSMutableDictionary dictionaryWithDictionary:[myself yy_modelToJSONObject]];
     info[@"avatar"] = myself.avatar.imageURL;
     info[@"audio"] = @"";
-    info[@"block_user_id"] = @"";
+    info[@"block_user_id"] = at.userId;
     info[@"platform"] = @"android";//@"Pica_iOS"
     info[@"reply_name"] = replyMessage ? replyMessage.name : @"";
     info[@"reply"] = replyMessage ? replyMessage.message : @"";
-    info[@"at"] = at ? [NSString stringWithFormat:@"嗶咔_%@", at] : @"";
-    info[@"message"] = at ? [text stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"@%@ ", at] withString:@""] : text;
+    info[@"at"] = at ? [NSString stringWithFormat:@"嗶咔_%@", at.name] : @"";
+    info[@"message"] = at ? [text stringByReplacingOccurrencesOfString:[NSString stringWithFormat:@"@%@ ", at.name] withString:@""] : text;
     info[@"image"] = @"";
     
     [PCChatMessage customConfigMessage:info];
