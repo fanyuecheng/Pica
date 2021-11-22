@@ -53,7 +53,7 @@
 
 - (PCChatMessage *)sendText:(NSString *)text
                replyMessage:(PCChatMessage *)replyMessage
-                         at:(NSString *)at {
+                         at:(PCUser *)at {
     if (text) {
         PCChatMessage *message = [PCChatMessage textMessageDataWithText:text replyMessage:replyMessage at:at];
         [self sendData:message.messageData];

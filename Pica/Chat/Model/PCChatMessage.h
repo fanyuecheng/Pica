@@ -98,7 +98,7 @@ typedef NS_ENUM(NSUInteger, PCChatMessageType) {
 
 + (PCChatMessage *)textMessageDataWithText:(NSString *)text
                               replyMessage:(nullable PCChatMessage *)replyMessage
-                                        at:(nullable NSString *)at;
+                                        at:(nullable PCUser *)at;
 
 + (PCChatMessage *)imageMessageDataWithData:(NSData *)data;
 + (PCChatMessage *)voiceMessageDataWithData:(NSData *)data;
