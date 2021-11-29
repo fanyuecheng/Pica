@@ -57,7 +57,10 @@
 - (void)addTagView {
     [self.contentView qmui_removeAllSubviews];
     [self.recordArray enumerateObjectsUsingBlock:^(NSString *obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        QMUIButton *button = [[QMUIFillButton alloc] initWithFillType:QMUIFillButtonColorBlue];
+        QMUIButton *button = [[QMUIButton alloc] init];
+        button.cornerRadius = QMUIButtonCornerRadiusAdjustsBounds;
+        button.layer.borderColor = UIColorBlue.CGColor;
+        button.layer.borderWidth = .5;
         button.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 10, 10);
         [button setTitle:obj forState:UIControlStateNormal];
         [button addTarget:self action:@selector(tagAction:) forControlEvents:UIControlEventTouchUpInside];

@@ -332,7 +332,10 @@
     [self.tagView qmui_removeAllSubviews];
     
     [comics.tags enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        QMUIFillButton *button = [[QMUIFillButton alloc] initWithFillType:QMUIFillButtonColorBlue];
+        QMUIButton *button = [[QMUIButton alloc] init];
+        button.cornerRadius = QMUIButtonCornerRadiusAdjustsBounds;
+        button.layer.borderColor = UIColorBlue.CGColor;
+        button.layer.borderWidth = .5;
         button.titleLabel.font = UIFontBoldMake(13);
         [button setTitle:obj forState:UIControlStateNormal];
         button.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 12, 10);

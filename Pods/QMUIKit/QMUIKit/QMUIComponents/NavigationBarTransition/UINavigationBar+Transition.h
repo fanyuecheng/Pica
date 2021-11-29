@@ -18,6 +18,12 @@
 @interface UINavigationBar (Transition)
 
 /// 用来模仿真的navBar，配合 UINavigationController+NavigationBarTransition 在转场过程中存在的一条假navBar
-@property(nonatomic, strong) UINavigationBar *transitionNavigationBar;
+@property(nonatomic, weak) UINavigationBar *qmuinb_copyStylesToBar;
+@end
 
+@interface _QMUITransitionNavigationBar : UINavigationBar
+
+// 建立假 bar 到真 bar 的关系，内部会通过 qmuinb_copyStylesToBar 同时设置真 bar 到假 bar 的关系
+@property(nonatomic, weak) UINavigationBar *originalNavigationBar;
+@property(nonatomic, assign) BOOL shouldPreventAppearance;
 @end
