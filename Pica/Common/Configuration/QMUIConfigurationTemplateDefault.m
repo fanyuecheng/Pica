@@ -119,8 +119,8 @@ static UIImage *disclosureIndicatorImageDark;
     
 #pragma mark - TabBar
     if (@available(iOS 15.0, *)) {
-        QMUICMI.toolBarUsesStandardAppearanceOnly = YES;
-        QMUICMI.toolBarRemoveBackgroundEffectAutomatically = YES;
+        QMUICMI.tabBarUsesStandardAppearanceOnly = YES;
+        QMUICMI.tabBarRemoveBackgroundEffectAutomatically = YES;
     }
     
     QMUICMI.tabBarBackgroundImage = [[UIImage qmui_imageWithColor:UIColorMake(249, 249, 249)] resizableImageWithCapInsets:UIEdgeInsetsMake(1, 1, 1, 1)];   // TabBarBackgroundImage : UITabBar 的背景图，建议使用 resizableImage，否则在 UITabBar (NavigationController) 的 setBackgroundImage: 里会每次都视为 image 发生了变化（isEqual: 为 NO）
@@ -134,6 +134,10 @@ static UIImage *disclosureIndicatorImageDark;
     QMUICMI.tabBarItemImageColorSelected = TabBarItemTitleColorSelected;        // TabBarItemImageColorSelected : UITabBarItem 选中时的图片颜色
     
 #pragma mark - Toolbar
+    if (@available(iOS 15.0, *)) {
+        QMUICMI.toolBarUsesStandardAppearanceOnly = YES;
+        QMUICMI.toolBarRemoveBackgroundEffectAutomatically = YES;
+    }
     
     QMUICMI.toolBarHighlightedAlpha = 0.4f;                                     // ToolBarHighlightedAlpha : QMUIToolbarButton 在 highlighted 状态下的 alpha
     QMUICMI.toolBarDisabledAlpha = 0.4f;                                        // ToolBarDisabledAlpha : QMUIToolbarButton 在 disabled 状态下的 alpha
