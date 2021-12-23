@@ -109,8 +109,7 @@
     _message = message;
     
     BOOL isMeself = [self messageOwnerIsMyself];
-    self.messageBubbleView.arrowLeft = !isMeself;
-    self.messageBubbleView.fillColor = isMeself ? UIColorBlue : PCColorLightPink;
+    self.messageBubbleView.arrowLeft = !isMeself; 
     [self.avatarView pc_setImageWithURL:message.avatar placeholderImage:nil];
     [self.characterView pc_setImageWithURL:message.character placeholderImage:nil];
     NSString *gender = @"⚧";

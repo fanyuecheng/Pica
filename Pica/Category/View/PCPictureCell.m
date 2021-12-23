@@ -22,7 +22,7 @@
     [super prepareForReuse];
     self.titleLabel.text = nil;
     [self.imageView sd_cancelCurrentImageLoad];
-    self.imageView.image = nil;
+    self.imageView.imageView.image = nil;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -47,7 +47,7 @@
         self.imageView.image = picture.image;
         self.titleLabel.text = nil;
     } else {
-        self.imageView.image = nil;
+        self.imageView.imageView.image = nil;
         self.titleLabel.text = picture.media.originalName;
         [[SDWebImageManager sharedManager] loadImageWithURL:[NSURL URLWithString:picture.media.imageURL]
                                                     options:SDWebImageScaleDownLargeImages
