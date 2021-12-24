@@ -81,22 +81,21 @@
     if (indexPath.section == 1 && (indexPath.row == 4 || indexPath.row == 5)) {
         if (![cell.accessoryView isKindOfClass:[UISwitch class]]) {
             UISwitch *switchView = [[UISwitch alloc] init];
-            NSString *key = nil;
-            
-            switch (indexPath.row) {
-                case 4:
-                    key = PC_DATA_TO_SIMPLIFIED_CHINESE;
-                    break;
-                case 5:
-                    key = PC_TAB_GAME_HIDDEN;
-                    break;
-                default:
-                    break;
-            }
-            switchView.on = [kPCUserDefaults integerForKey:key];
             [switchView addTarget:self action:@selector(switchAction:) forControlEvents:UIControlEventValueChanged];
             cell.accessoryView = switchView;
         }
+        NSString *key = nil;
+        switch (indexPath.row) {
+            case 4:
+                key = PC_DATA_TO_SIMPLIFIED_CHINESE;
+                break;
+            case 5:
+                key = PC_TAB_GAME_HIDDEN;
+                break;
+            default:
+                break;
+        }
+        ((UISwitch *)cell.accessoryView).on = [kPCUserDefaults integerForKey:key];
     } else {
         cell.accessoryView = nil;
     }
