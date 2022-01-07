@@ -7,7 +7,7 @@
 API来自 [picacomic-api](https://github.com/czp3009/picacomic-api) 
 
 #### 更新日志  
-**v1.1.1**   
+**v1.1.0 - 1.1.2**   
 *  bug fix   
 
 **v1.0.9**   
