@@ -63,13 +63,17 @@ NSString * const kWebSocketDidCloseNotification = @"kWebSocketDidCloseNotificati
 
 #pragma mark - Notification
 - (void)appWillEnterForeground:(NSNotification *)notification {
-    self.isBackground = NO;
-    [self openSocket];
+    if ([[QMUIHelper visibleViewController] isKindOfClass:NSClassFromString(@"PCChatViewController")]) {
+        self.isBackground = NO;
+        [self openSocket];
+    } 
 }
 
 - (void)appDidEnterBackground:(NSNotification *)notification {
-    self.isBackground = YES;
-    [self closeSocket];
+    if ([[QMUIHelper visibleViewController] isKindOfClass:NSClassFromString(@"PCChatViewController")]) {
+        self.isBackground = YES;
+        [self closeSocket];
+    }
 }
 
 - (void)reachabilityDidChange:(NSNotification *)notification {
