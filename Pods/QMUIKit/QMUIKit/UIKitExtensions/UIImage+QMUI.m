@@ -164,7 +164,7 @@ CGSizeFlatSpecificScale(CGSize size, float scale) {
 //        return [self imageWithTintColor:tintColor];
 //    }
     BOOL opaque = self.qmui_opaque ? tintColor.qmui_alpha >= 1.0 : NO;// 如果图片不透明但 tintColor 半透明，则生成的图片也应该是半透明的
-    return [UIImage qmui_imageWithSize:self.size opaque:opaque scale:self.scale actions:^(CGContextRef contextRef) {
+    UIImage *result = [UIImage qmui_imageWithSize:self.size opaque:opaque scale:self.scale actions:^(CGContextRef contextRef) {
         CGContextTranslateCTM(contextRef, 0, self.size.height);
         CGContextScaleCTM(contextRef, 1.0, -1.0);
         if (!opaque) {
@@ -174,6 +174,14 @@ CGSizeFlatSpecificScale(CGSize size, float scale) {
         CGContextSetFillColorWithColor(contextRef, tintColor.CGColor);
         CGContextFillRect(contextRef, CGRectMakeWithSize(self.size));
     }];
+    
+    SEL selector = NSSelectorFromString(@"qmui_generatorSupportsDynamicColor");
+    if ([NSStringFromClass(tintColor.class) containsString:@"QMUIThemeColor"] && [UIImage respondsToSelector:selector]) {
+        BOOL supports;
+        [UIImage.class qmui_performSelector:selector withPrimitiveReturnValue:&supports];
+        QMUIAssert(supports, @"UIImage (QMUI)", @"UIImage (QMUITheme) hook 尚未生效，QMUIThemeColor 生成的图片无法自动转成 QMUIThemeImage，可能导致 theme 切换时无法刷新。");
+    }
+    return result;
 }
 
 - (UIImage *)qmui_imageWithBlendColor:(UIColor *)blendColor {
@@ -560,7 +568,7 @@ CGSizeFlatSpecificScale(CGSize size, float scale) {
     
     color = color ? color : UIColorClear;
 	BOOL opaque = (cornerRadius == 0.0 && [color qmui_alpha] == 1.0);
-    return [UIImage qmui_imageWithSize:size opaque:opaque scale:0 actions:^(CGContextRef contextRef) {
+    UIImage *result = [UIImage qmui_imageWithSize:size opaque:opaque scale:0 actions:^(CGContextRef contextRef) {
         CGContextSetFillColorWithColor(contextRef, color.CGColor);
         
         if (cornerRadius > 0) {
@@ -571,6 +579,13 @@ CGSizeFlatSpecificScale(CGSize size, float scale) {
             CGContextFillRect(contextRef, CGRectMakeWithSize(size));
         }
     }];
+    SEL selector = NSSelectorFromString(@"qmui_generatorSupportsDynamicColor");
+    if ([NSStringFromClass(color.class) containsString:@"QMUIThemeColor"] && [UIImage respondsToSelector:selector]) {
+        BOOL supports;
+        [UIImage.class qmui_performSelector:selector withPrimitiveReturnValue:&supports];
+        QMUIAssert(supports, @"UIImage (QMUI)", @"UIImage (QMUITheme) hook 尚未生效，QMUIThemeColor 生成的图片无法自动转成 QMUIThemeImage，可能导致 theme 切换时无法刷新。");
+    }
+    return result;
 }
 
 + (UIImage *)qmui_imageWithColor:(UIColor *)color size:(CGSize)size cornerRadiusArray:(NSArray<NSNumber *> *)cornerRadius {
@@ -629,8 +644,14 @@ CGSizeFlatSpecificScale(CGSize size, float scale) {
             if (type == QMUIImageGradientTypeHorizontal) {
                 startPoint = CGPointMake(0, 0);
                 endPoint = CGPointMake(size.width, 0);
-            } else {
+            } else if(type == QMUIImageGradientTypeVertical) {
                 startPoint = CGPointMake(0, 0);
+                endPoint = CGPointMake(0, size.height);
+            }else if (type == QMUIImageGradientTypeTopLeftToBottomRight){
+                startPoint = CGPointMake(0, 0);
+                endPoint = CGPointMake(size.width, size.height);
+            }else if (type == QMUIImageGradientTypeTopRightToBottomLeft){
+                startPoint = CGPointMake(size.width, 0);
                 endPoint = CGPointMake(0, size.height);
             }
             CGContextDrawLinearGradient(contextRef, gradient, startPoint, endPoint, kCGGradientDrawsBeforeStartLocation);

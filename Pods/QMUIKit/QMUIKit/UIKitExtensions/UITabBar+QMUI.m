@@ -22,6 +22,7 @@
 #import "UINavigationController+QMUI.h"
 #import "UIVisualEffectView+QMUI.h"
 #import "UIApplication+QMUI.h"
+#import "NSArray+QMUI.h"
 
 NSInteger const kLastTouchedTabBarItemIndexNone = -1;
 NSString *const kShouldCheckTabBarHiddenKey = @"kShouldCheckTabBarHiddenKey";
@@ -136,17 +137,13 @@ QMUISynthesizeBOOLProperty(qmuitb_hasSetEffectForegroundColor, setQmuitb_hasSetE
                     // [UIKit Bug] iOS 11-12，全面屏设备下，带 TabBar 的界面在 push/pop 后，UIScrollView 的滚动位置可能发生变化
                     // https://github.com/Tencent/QMUI_iOS/issues/934
                     if (@available(iOS 13.0, *)) {
-                    } else {
-                        if (@available(iOS 11, *)) {
-                            if (IS_NOTCHED_SCREEN && ((CGRectGetHeight(frame) == 49 || CGRectGetHeight(frame) == 32))) {// 只关注全面屏设备下的这两种非正常的 tabBar 高度即可
-                                CGFloat bottomSafeAreaInsets = selfObject.safeAreaInsets.bottom > 0 ? selfObject.safeAreaInsets.bottom : selfObject.superview.safeAreaInsets.bottom;// 注意，如果只是拿 selfObject.safeAreaInsets 判断，会肉眼看到高度的跳变，因此引入 superview 的值（虽然理论上 tabBar 不一定都会布局到 UITabBarController.view 的底部）
-                                if (bottomSafeAreaInsets == CGRectGetHeight(selfObject.frame)) {
-                                    return;// 由于这个系统 bug https://github.com/Tencent/QMUI_iOS/issues/446，这里先暂时屏蔽本次 frame 变化
-                                }
-                                frame.size.height += bottomSafeAreaInsets;
-                                frame.origin.y -= bottomSafeAreaInsets;
-                            }
+                    } else if (IS_NOTCHED_SCREEN && ((CGRectGetHeight(frame) == 49 || CGRectGetHeight(frame) == 32))) {// 只关注全面屏设备下的这两种非正常的 tabBar 高度即可
+                        CGFloat bottomSafeAreaInsets = selfObject.safeAreaInsets.bottom > 0 ? selfObject.safeAreaInsets.bottom : selfObject.superview.safeAreaInsets.bottom;// 注意，如果只是拿 selfObject.safeAreaInsets 判断，会肉眼看到高度的跳变，因此引入 superview 的值（虽然理论上 tabBar 不一定都会布局到 UITabBarController.view 的底部）
+                        if (bottomSafeAreaInsets == CGRectGetHeight(selfObject.frame)) {
+                            return;// 由于这个系统 bug https://github.com/Tencent/QMUI_iOS/issues/446，这里先暂时屏蔽本次 frame 变化
                         }
+                        frame.size.height += bottomSafeAreaInsets;
+                        frame.origin.y -= bottomSafeAreaInsets;
                     }
                 }
                 
@@ -376,6 +373,13 @@ QMUISynthesizeBOOLProperty(qmuitb_hasSetEffectForegroundColor, setQmuitb_hasSetE
                     [appearance qmui_applyItemAppearanceWithBlock:itemActionBlock];
                 }
                 tabBar.standardAppearance = appearance;
+#ifdef IOS15_SDK_ALLOWED
+                if (@available(iOS 15.0, *)) {
+                    if (QMUICMIActivated && TabBarUsesStandardAppearanceOnly) {
+                        tabBar.scrollEdgeAppearance = appearance;
+                    }
+                }
+#endif
             };
             
             ExtendImplementationOfVoidMethodWithSingleArgument([UITabBar class], @selector(setTintColor:), UIColor *, ^(UITabBar *selfObject, UIColor *tintColor) {
@@ -418,7 +422,7 @@ QMUISynthesizeBOOLProperty(qmuitb_hasSetEffectForegroundColor, setQmuitb_hasSetE
             
             ExtendImplementationOfVoidMethodWithSingleArgument([UITabBar class], @selector(setBarStyle:), UIBarStyle, ^(UITabBar *selfObject, UIBarStyle barStyle) {
                 syncAppearance(selfObject, ^void(UITabBarAppearance *appearance) {
-                    appearance.backgroundEffect = [UIBlurEffect effectWithStyle:barStyle == UIBarStyleDefault ? UIBlurEffectStyleSystemMaterialLight : UIBlurEffectStyleSystemMaterialDark];
+                    appearance.backgroundEffect = [UIBlurEffect effectWithStyle:barStyle == UIBarStyleDefault ? UIBlurEffectStyleSystemChromeMaterialLight : UIBlurEffectStyleSystemChromeMaterialDark];
                 }, nil);
             });
         }
@@ -481,12 +485,31 @@ QMUISynthesizeBOOLProperty(qmuitb_hasSetEffectForegroundColor, setQmuitb_hasSetE
 }
 
 - (UIVisualEffectView *)qmui_effectView {
-    for (UIView *subview in self.qmui_backgroundView.subviews) {
-        if ([subview isMemberOfClass:UIVisualEffectView.class]) {
-            return (UIVisualEffectView *)subview;
+    NSArray<UIVisualEffectView *> *visibleEffectViews = [self.qmui_effectViews qmui_filterWithBlock:^BOOL(UIVisualEffectView * _Nonnull item) {
+        return !item.hidden && item.alpha > 0.01 && item.superview;
+    }];
+    return visibleEffectViews.lastObject;
+}
+
+- (NSArray<UIVisualEffectView *> *)qmui_effectViews {
+    UIView *backgroundView = self.qmui_backgroundView;
+    NSMutableArray<UIVisualEffectView *> *result = NSMutableArray.new;
+    if (@available(iOS 13.0, *)) {
+        UIVisualEffectView *backgroundEffectView1 = [backgroundView valueForKey:@"_effectView1"];
+        UIVisualEffectView *backgroundEffectView2 = [backgroundView valueForKey:@"_effectView2"];
+        if (backgroundEffectView1) {
+            [result addObject:backgroundEffectView1];
+        }
+        if (backgroundEffectView2) {
+            [result addObject:backgroundEffectView2];
+        }
+    } else {
+        UIVisualEffectView *backgroundEffectView = [backgroundView qmui_valueForKey:@"_backgroundEffectView"];
+        if (backgroundEffectView) {
+            [result addObject:backgroundEffectView];
         }
     }
-    return nil;
+    return result.count > 0 ? result : nil;
 }
 
 - (void)qmuitb_swizzleBackgroundView {

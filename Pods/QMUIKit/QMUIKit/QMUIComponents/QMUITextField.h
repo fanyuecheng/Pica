@@ -22,6 +22,12 @@
 @optional
 
 /**
+ 由于 maximumTextLength 的实现方式导致业务无法再重写自己的 shouldChangeCharacters，否则会丢失 maximumTextLength 的功能。所以这里提供一个额外的 delegate，在 QMUI 内部逻辑返回 YES 的时候会再询问一次这个 delegate，从而给业务提供一个机会去限制自己的输入内容。如果 QMUI 内部逻辑本身就返回 NO（例如超过了 maximumTextLength 的长度），则不会触发这个方法。
+ 当输入被这个方法拦截时，由于拦截逻辑是业务自己写的，业务能轻松获取到这个拦截的时机，所以此时不会调用 textField:didPreventTextChangeInRange:replacementString:。如果有类似 tips 之类的操作，可以直接在 return NO 之前处理。
+ */
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string originalValue:(BOOL)originalValue;
+
+/**
  *  配合 `maximumTextLength` 属性使用，在输入文字超过限制时被调用。
  *  @warning 在 UIControlEventEditingChanged 里也会触发文字长度拦截，由于此时 textField 的文字已经改变完，所以无法得知发生改变的文本位置及改变的文本内容，所以此时 range 和 replacementString 这两个参数的值也会比较特殊，具体请看参数讲解。
  *
@@ -79,5 +85,20 @@
  *  默认为 NO。
  */
 @property(nonatomic, assign) IBInspectable BOOL shouldCountingNonASCIICharacterAsTwo;
+
+/**
+ *  控制输入框是否要出现“粘贴”menu
+ *  @param sender 触发这次询问事件的来源
+ *  @param superReturnValue [super canPerformAction:withSender:] 的返回值，当你不需要控制这个 block 的返回值时，可以返回 superReturnValue
+ *  @return 控制是否要出现“粘贴”menu，YES 表示出现，NO 表示不出现。当你想要返回系统默认的结果时，请返回参数 superReturnValue
+ */
+@property(nonatomic, copy) BOOL (^canPerformPasteActionBlock)(id sender, BOOL superReturnValue);
+
+/**
+ *  当输入框的“粘贴”事件被触发时，可通过这个 block 去接管事件的响应。
+ *  @param sender “粘贴”事件触发的来源，例如可能是一个 UIMenuController
+ *  @return 返回值用于控制是否要调用系统默认的 paste: 实现，YES 表示执行完 block 后继续调用系统默认实现，NO 表示执行完 block 后就结束了，不调用 super。
+ */
+@property(nonatomic, copy) BOOL (^pasteBlock)(id sender);
 
 @end

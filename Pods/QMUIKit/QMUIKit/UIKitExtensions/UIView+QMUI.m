@@ -64,10 +64,7 @@ QMUISynthesizeIdCopyProperty(qmui_frameDidChangeBlock, setQmui_frameDidChangeBlo
 }
 
 - (UIEdgeInsets)qmui_safeAreaInsets {
-    if (@available(iOS 11.0, *)) {
-        return self.safeAreaInsets;
-    }
-    return UIEdgeInsetsZero;
+    return self.safeAreaInsets;
 }
 
 - (void)qmui_removeAllSubviews {
@@ -97,6 +94,43 @@ static char kAssociatedObjectKey_outsideEdge;
                 };
             });
         } oncePerIdentifier:@"UIView (QMUI) outsideEdge"];
+        
+        if ([self isKindOfClass:UISlider.class]) {
+            [QMUIHelper executeBlock:^{
+                if (@available(iOS 14.0, *)) {
+                    // -[_UISlideriOSVisualElement thumbHitEdgeInsets]
+                    OverrideImplementation(NSClassFromString(@"_UISlideriOSVisualElement"), NSSelectorFromString(@"thumbHitEdgeInsets"), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
+                        return ^UIEdgeInsets(UIView *selfObject) {
+                            // call super
+                            UIEdgeInsets (*originSelectorIMP)(id, SEL);
+                            originSelectorIMP = (UIEdgeInsets (*)(id, SEL))originalIMPProvider();
+                            UIEdgeInsets result = originSelectorIMP(selfObject, originCMD);
+                            
+                            UISlider *slider = (UISlider *)selfObject.superview;
+                            if ([slider isKindOfClass:UISlider.class] && !UIEdgeInsetsEqualToEdgeInsets(slider.qmui_outsideEdge, UIEdgeInsetsZero)) {
+                                result = UIEdgeInsetsConcat(result, slider.qmui_outsideEdge);
+                            }
+                            return result;
+                        };
+                    });
+                } else {
+                    // -[UISlider _thumbHitEdgeInsets]
+                    OverrideImplementation([UISlider class], NSSelectorFromString(@"_thumbHitEdgeInsets"), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
+                        return ^UIEdgeInsets(UISlider *selfObject) {
+                            // call super
+                            UIEdgeInsets (*originSelectorIMP)(id, SEL);
+                            originSelectorIMP = (UIEdgeInsets (*)(id, SEL))originalIMPProvider();
+                            UIEdgeInsets result = originSelectorIMP(selfObject, originCMD);
+                            
+                            if (!UIEdgeInsetsEqualToEdgeInsets(selfObject.qmui_outsideEdge, UIEdgeInsetsZero)) {
+                                result = UIEdgeInsetsConcat(result, selfObject.qmui_outsideEdge);
+                            }
+                            return result;
+                        };
+                    });
+                }
+            } oncePerIdentifier:@"UIView (QMUI) outsideEdge slider"];
+        }
     }
 }
 
@@ -286,13 +320,7 @@ static char kAssociatedObjectKey_viewController;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         ExtendImplementationOfVoidMethodWithoutArguments([UIViewController class], @selector(viewDidLoad), ^(UIViewController *selfObject) {
-            if (@available(iOS 11.0, *)) {
-                selfObject.view.qmui_viewController = selfObject;
-            } else {
-                // 临时修复 iOS 10.0.2 上在输入框内切换输入法可能引发死循环的 bug，待查
-                // https://github.com/Tencent/QMUI_iOS/issues/471
-                ((UIView *)[selfObject qmui_valueForKey:@"_view"]).qmui_viewController = selfObject;
-            }
+            selfObject.view.qmui_viewController = selfObject;
         });
     });
 }
@@ -665,6 +693,16 @@ static char kAssociatedObjectKey_layoutSubviewsBlock;
     objc_setAssociatedObject(self, &kAssociatedObjectKey_layoutSubviewsBlock, qmui_layoutSubviewsBlock, OBJC_ASSOCIATION_COPY_NONATOMIC);
     Class viewClass = self.class;
     [QMUIHelper executeBlock:^{
+        // iOS 14 及以上，iPad 悬浮键盘，项目里 hook 了 -[UIView layoutSubviews] 的同时为输入框设置 inputAccessoryView，则输入框聚焦时会触发系统布局死循环
+        // 实测只有 iOS 14 有这种问题，iOS 13、15 都没有，但现网又有用户反馈 iOS 15 也有问题，暂且放开 iOS 15
+        // https://github.com/Tencent/QMUI_iOS/issues/1247
+        // https://km.woa.com/group/24897/articles/show/456340
+        if (IOS_VERSION >= 14.0 && IS_IPAD && viewClass == UIView.class) {
+            IMP layoutSubviewsIMPForUIKit = class_getMethodImplementation(UIView.class, @selector(layoutSubviews));
+            SEL layoutSubviewSEL =  @selector(layoutSubviews);
+            const char * typeEncoding = method_getTypeEncoding(class_getInstanceMethod(UIView.class, layoutSubviewSEL));
+            class_addMethod(NSClassFromString(@"UIInputSetHostView"), layoutSubviewSEL, layoutSubviewsIMPForUIKit, typeEncoding);
+        }
         ExtendImplementationOfVoidMethodWithoutArguments(viewClass, @selector(layoutSubviews), ^(__kindof UIView *selfObject) {
             if (selfObject.qmui_layoutSubviewsBlock && [selfObject isMemberOfClass:viewClass]) {
                 selfObject.qmui_layoutSubviewsBlock(selfObject);

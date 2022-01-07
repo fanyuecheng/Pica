@@ -12,7 +12,7 @@
 @interface PCColorSlider ()
 
 @property (nonatomic, strong) QMUILabel     *titleLabel;
-@property (nonatomic, strong) QMUISlider    *slider;
+@property (nonatomic, strong) UISlider      *slider;
 @property (nonatomic, strong) QMUITextField *textField;
 
 @end
@@ -60,7 +60,7 @@
 }
 
 #pragma mark - Action
-- (void)sliderAction:(QMUISlider *)sender {
+- (void)sliderAction:(UISlider *)sender {
     self.textField.text = [@(ceil(sender.value)) stringValue];
 }
 
@@ -80,12 +80,12 @@
     return _titleLabel;
 }
 
-- (QMUISlider *)slider {
+- (UISlider *)slider {
     if (!_slider) {
-        _slider = [[QMUISlider alloc] init];
-        _slider.trackHeight = 40;
-        _slider.thumbSize = CGSizeMake(40, 40);
-        _slider.thumbColor = UIColorWhite;
+        _slider = [[UISlider alloc] init];
+        _slider.qmui_trackHeight = 40;
+        _slider.qmui_thumbSize = CGSizeMake(40, 40);
+        _slider.qmui_thumbColor = UIColorWhite;
         _slider.layer.cornerRadius = 20;
         _slider.layer.masksToBounds = YES;
         _slider.maximumValue = 225;

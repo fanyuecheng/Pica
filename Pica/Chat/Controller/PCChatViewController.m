@@ -333,7 +333,7 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
 }
 
 - (void)insertMessage:(PCChatMessage *)message scrollToBottom:(BOOL)scroll {
-    BOOL isBottom = self.tableView.contentOffset.y >= self.tableView.contentSize.height + self.tableView.qmui_contentInset.bottom - CGRectGetHeight(self.tableView.bounds) - 300;
+    BOOL isBottom = self.tableView.contentOffset.y >= self.tableView.contentSize.height + self.tableView.adjustedContentInset.bottom - CGRectGetHeight(self.tableView.bounds) - 300;
     
     [self.messageArray addObject:message];
     [self.tableView reloadData];

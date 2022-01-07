@@ -8,6 +8,7 @@
 
 #import "PCMessageBubbleView.h"
 #import "PCVendorHeader.h"
+#import "PCCommonUI.h"
 
 @interface PCMessageBubbleView ()
 
@@ -90,6 +91,7 @@
 - (CAShapeLayer *)backgroundLayer {
     if (!_backgroundLayer) {
         _backgroundLayer = [CAShapeLayer layer];
+        _backgroundLayer.fillColor = PCColorLightPink.CGColor;
     }
     return _backgroundLayer;
 }
@@ -124,10 +126,8 @@
 }
 
 - (void)setFillColor:(UIColor *)fillColor {
-    if (![_fillColor.qmui_hexString isEqualToString:fillColor.qmui_hexString]) {
-        _fillColor = fillColor;
-        self.backgroundLayer.fillColor = fillColor.CGColor;
-    }
+    _fillColor = fillColor;
+    self.backgroundLayer.fillColor = fillColor.CGColor;
 }
 
 @end

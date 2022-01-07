@@ -13,7 +13,8 @@
 
 @interface PCComicHistory ()
 
-@property (nonatomic, strong) NSMutableArray *cacheArray;
+@property (nonatomic, strong) NSMutableDictionary *cacheDctionary;
+@property (nonatomic, strong) NSMutableArray      *cacheArray;
 
 @end
 
@@ -35,15 +36,10 @@
 #pragma mark - Method
 - (void)saveComic:(PCComics *)comic {
     if (comic.comicsId) {
-        __block BOOL contains = NO;
-        [self.cacheArray enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            if ([obj[@"_id"] isEqualToString:comic.comicsId]) {
-                contains = YES;
-                *stop = YES;
-            }
-        }];
-          
-        if (!contains) {
+        NSDictionary *comicJson = [self.cacheDctionary objectForKey:comic.comicsId];
+        if (comicJson) {
+            [self.cacheArray replaceObjectAtIndex:[self.cacheArray indexOfObject:comicJson] withObject:[comic yy_modelToJSONObject]];
+        } else {
             [self.cacheArray insertObject:[comic yy_modelToJSONObject] atIndex:0];
         }
         [kPCUserDefaults setObject:self.cacheArray forKey:PC_DB_COMICS_HISTORY];
@@ -52,16 +48,10 @@
 
 - (void)deleteComic:(PCComics *)comic {
     if (comic) {
-        __block id object = nil;
-        [self.cacheArray enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            if ([obj[@"_id"] isEqualToString:comic.comicsId]) {
-                object = obj;
-                *stop = YES;
-            }
-        }];
-        
-        if (object) {
-            [self.cacheArray removeObject:object];
+        NSDictionary *comicJson = [self.cacheDctionary objectForKey:comic.comicsId];
+        if (comicJson) {
+            [self.cacheArray removeObject:comicJson];
+            [self.cacheDctionary removeObjectForKey:comic.comicsId];
         }
         [kPCUserDefaults setObject:self.cacheArray forKey:PC_DB_COMICS_HISTORY];
     }
@@ -90,5 +80,16 @@
     return _cacheArray;
 }
 
+- (NSMutableDictionary *)cacheDctionary {
+    if (!_cacheDctionary) {
+        _cacheDctionary = [NSMutableDictionary dictionary];
+        if (self.cacheArray.count) {
+            [self.cacheArray enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                [_cacheDctionary setObject:obj forKey:obj[@"_id"]];
+            }];
+        }
+    }
+    return _cacheDctionary;
+}
 
 @end

@@ -20,7 +20,6 @@
 @class QMUIZoomImageView;
 @class QMUIEmptyView;
 @class QMUIButton;
-@class QMUISlider;
 @class QMUIZoomImageViewVideoToolbar;
 @class QMUIPieProgressView;
 
@@ -95,7 +94,7 @@
 // @see QMUIZoomImageViewVideoToolbar
 @property(nonatomic, strong, readonly) QMUIZoomImageViewVideoToolbar *videoToolbar;
 
-// 视频底部控制条的 margins，会在此基础上自动叠加 QMUIZoomImageView.qmui_safeAreaInsets，因此无需考虑在 iPhone X 下的兼容
+// 视频底部控制条的 margins，会在此基础上自动叠加 QMUIZoomImageView.safeAreaInsets，因此无需考虑在 iPhone X 下的兼容
 // 默认值为 {0, 25, 25, 18}
 @property(nonatomic, assign) UIEdgeInsets videoToolbarMargins UI_APPEARANCE_SELECTOR;
 
@@ -163,7 +162,7 @@
 
 @property(nonatomic, strong, readonly) QMUIButton *playButton;
 @property(nonatomic, strong, readonly) QMUIButton *pauseButton;
-@property(nonatomic, strong, readonly) QMUISlider *slider;
+@property(nonatomic, strong, readonly) UISlider *slider;
 @property(nonatomic, strong, readonly) UILabel *sliderLeftLabel;
 @property(nonatomic, strong, readonly) UILabel *sliderRightLabel;
 

@@ -266,7 +266,7 @@
         _topLabel.layer.cornerRadius = 4;
         _topLabel.layer.masksToBounds = YES;
         _topLabel.hidden = YES;
-        _topLabel.layer.qmui_maskedCorners = QMUILayerMaxXMaxYCorner;
+        _topLabel.layer.maskedCorners = kCALayerMaxXMaxYCorner;
     }
     return _topLabel;
 }
