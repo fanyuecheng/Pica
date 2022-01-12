@@ -8,7 +8,7 @@
 
 #import "PCRandomRequest.h"
 #import <YYModel/YYModel.h>
-#import "PCComics.h"
+#import "PCComic.h"
 
 @implementation PCRandomRequest
 
@@ -18,9 +18,9 @@
     
     [self startWithCompletionBlockWithSuccess:^(__kindof YTKBaseRequest * _Nonnull request) {
         NSArray *comics = request.responseJSONObject[@"data"][@"comics"];
-        NSArray <PCComics *> *comicArray = [NSArray yy_modelArrayWithClass:[PCComics class] json:comics];
+        NSArray <PCComic *> *comicArray = [NSArray yy_modelArrayWithClass:[PCComic class] json:comics];
         
-        PCComicsList *list = [[PCComicsList alloc] init];
+        PCComicList *list = [[PCComicList alloc] init];
         list.total = comicArray.count;
         list.page = 1;
         list.pages = 1;

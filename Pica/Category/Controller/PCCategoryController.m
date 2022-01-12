@@ -12,8 +12,8 @@
 #import "PCCategoryCell.h"
 #import "PCKeywordCell.h"
 #import "NSString+PCAdd.h"
-#import "PCComicsListController.h"
-#import "PCComicsRankController.h"
+#import "PCComicListController.h"
+#import "PCComicRankController.h"
 #import "PCCommentController.h"
 #import "PCSearchRequest.h"
 #import "PCIconHeader.h"
@@ -176,7 +176,7 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     if (indexPath.section == 0) {
         NSString *keyword = self.keywordArray[indexPath.item];
-        PCComicsListController *list = [[PCComicsListController alloc] initWithType:PCComicsListTypeSearch];
+        PCComicListController *list = [[PCComicListController alloc] initWithType:PCComicListTypeSearch];
         list.keyword = keyword;
         [self.navigationController pushViewController:list animated:YES];
     } else {
@@ -189,16 +189,16 @@
             [self presentViewController:safari animated:YES completion:nil];
             return;
         } else if (category.isCustom) {
-            if ([category.controllerClass isEqualToString:@"PCComicsRankController"] ||
-                [category.controllerClass isEqualToString:@"PCComicsListController"]) {
+            if ([category.controllerClass isEqualToString:@"PCComicRankController"] ||
+                [category.controllerClass isEqualToString:@"PCComicListController"]) {
                 controller = [[NSClassFromString(category.controllerClass) alloc] init];
             } else if ([category.controllerClass isEqualToString:@"PCCommentController"]) {
-                PCCommentController *comment = [[PCCommentController alloc] initWithComicsId:PC_COMMENT_BOARD_ID];
+                PCCommentController *comment = [[PCCommentController alloc] initWithComicId:PC_COMMENT_BOARD_ID];
                 comment.commentType = PCCommentTypeComic;
                 controller = comment;
             }
         } else {
-            PCComicsListController *list = [[PCComicsListController alloc] initWithType:PCComicsListTypeCategory];
+            PCComicListController *list = [[PCComicListController alloc] initWithType:PCComicListTypeCategory];
             list.keyword = category.title;
             controller = list;
         }
@@ -212,7 +212,7 @@
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     if (textField.text.length) {
         [textField resignFirstResponder];
-        PCComicsListController *list = [[PCComicsListController alloc] initWithType:PCComicsListTypeSearch];
+        PCComicListController *list = [[PCComicListController alloc] initWithType:PCComicListTypeSearch];
         list.keyword = textField.text;
         [self.navigationController pushViewController:list animated:YES];
         [self.recordView saveSearchKey:textField.text];

@@ -8,7 +8,7 @@
 
 #import "PCSearchRecordView.h"
 #import "PCVendorHeader.h"
-#import "PCComicsListController.h"
+#import "PCComicListController.h"
 #import "UIImage+PCAdd.h"
 #import "PCLocalKeyHeader.h"
 
@@ -76,7 +76,7 @@
 #pragma mark - Action
 - (void)tagAction:(UIButton *)sender {
     [self removeFromSuperview];
-    PCComicsListController *list = [[PCComicsListController alloc] initWithType:PCComicsListTypeSearch];
+    PCComicListController *list = [[PCComicListController alloc] initWithType:PCComicListTypeSearch];
     list.keyword = sender.currentTitle;
     [[QMUIHelper visibleViewController].navigationController pushViewController:list animated:YES];
 }

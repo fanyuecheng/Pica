@@ -25,9 +25,9 @@
     return self;
 }
 
-- (instancetype)initWithComicsId:(NSString *)comicsId {
+- (instancetype)initWithComicId:(NSString *)comicId {
     if (self = [super init]) {
-        _comicsId = [comicsId copy];
+        _comicId = [comicId copy];
     }
     return self;
 }
@@ -44,8 +44,8 @@
 }
 
 - (NSString *)requestUrl {
-    if (self.comicsId) {
-        return [NSString stringWithFormat:PC_API_COMICS_COMMENTS, self.comicsId];
+    if (self.comicId) {
+        return [NSString stringWithFormat:PC_API_COMICS_COMMENTS, self.comicId];
     } else if (self.commentId) {
         return [NSString stringWithFormat:PC_API_COMMENTS_CHILD_REPLY, self.commentId];
     } else if (self.gameId) {

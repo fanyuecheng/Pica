@@ -15,7 +15,7 @@
 @interface PCCommentController () <QMUITextViewDelegate>
 
 @property (nonatomic, assign) PCCommentPrimaryType primaryType; 
-@property (nonatomic, copy)   NSString         *comicsId;
+@property (nonatomic, copy)   NSString         *comicId;
 @property (nonatomic, copy)   NSString         *gameId;
 @property (nonatomic, copy)   NSString         *commentId;
 @property (nonatomic, strong) PCCommentMainRequest    *mainRequest;
@@ -23,7 +23,7 @@
 @property (nonatomic, strong) PCCommentPublishRequest *publishRequest;
 @property (nonatomic, assign) CGFloat keyboardHeight;
 @property (nonatomic, assign) CGFloat inputHeight;
-@property (nonatomic, strong) NSMutableArray <PCComicsComment *> *commentArray;
+@property (nonatomic, strong) NSMutableArray <PCComicComment *> *commentArray;
 
 @property (nonatomic, strong) QMUITextView *textView;
 @property (nonatomic, strong) QMUIButton *commentButton;
@@ -54,11 +54,11 @@
     return self;
 }
 
-- (instancetype)initWithComicsId:(NSString *)comicsId {
+- (instancetype)initWithComicId:(NSString *)comicId {
     if (self = [super init]) {
         _commentType = PCCommentTypeComic;
         _primaryType = PCCommentPrimaryTypeMain;
-        _comicsId = [comicsId copy];
+        _comicId = [comicId copy];
         _commentArray = [NSMutableArray array];
         _inputHeight = 50;
     }
@@ -104,7 +104,7 @@
     self.tableView.mj_footer = [MJRefreshBackStateFooter footerWithRefreshingBlock:^{
         @strongify(self)
          
-        PCComicsComment *comment = self.commentArray.lastObject;
+        PCComicComment *comment = self.commentArray.lastObject;
         if (self.primaryType == PCCommentPrimaryTypeMain) {
             if (self.mainRequest.page < comment.pages) {
                 self.mainRequest.page ++;
@@ -133,7 +133,7 @@
 
 #pragma mark - Method
 - (PCComment *)commentWithIndexPath:(NSIndexPath *)indexPath {
-    PCComicsComment *list = self.commentArray.firstObject;
+    PCComicComment *list = self.commentArray.firstObject;
     PCComment *comment = nil;
     if (list.topComments.count) {
         if (indexPath.section == 0) {
@@ -147,7 +147,7 @@
     return comment;
 }
 
-- (void)requestFinishedWithComment:(PCComicsComment *)comment
+- (void)requestFinishedWithComment:(PCComicComment *)comment
                              error:(NSError *)error {
     if (error) {
         [self showEmptyViewWithText:@"网络错误" detailText:nil buttonTitle:@"重新请求" buttonAction:@selector(requestComment)];
@@ -164,7 +164,7 @@
 
 #pragma mark - Table
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    PCComicsComment *list = self.commentArray.firstObject;
+    PCComicComment *list = self.commentArray.firstObject;
     if (list.topComments.count) {
         return self.commentArray.count + 1;
     } else {
@@ -173,7 +173,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    PCComicsComment *list = self.commentArray.firstObject;
+    PCComicComment *list = self.commentArray.firstObject;
     if (list.topComments.count) {
         if (section == 0) {
             return list.topComments.count;
@@ -210,7 +210,7 @@
             [self showEmptyViewWithLoading];
         }
         
-        [self.mainRequest sendRequest:^(PCComicsComment *comment) {
+        [self.mainRequest sendRequest:^(PCComicComment *comment) {
             [self requestFinishedWithComment:comment error:nil];
         } failure:^(NSError * _Nonnull error) {
             [self requestFinishedWithComment:nil error:error];
@@ -220,7 +220,7 @@
             [self showEmptyViewWithLoading];
         }
         
-        [self.childRequest sendRequest:^(PCComicsComment *comment) {
+        [self.childRequest sendRequest:^(PCComicComment *comment) {
             [self requestFinishedWithComment:comment error:nil];
         } failure:^(NSError * _Nonnull error) {
             [self requestFinishedWithComment:nil error:error];
@@ -234,7 +234,7 @@
     [self.publishRequest sendRequest:^(PCComment *comment) {
         [loading hideAnimated:NO];
         
-        PCComicsComment *list = self.commentArray.firstObject;
+        PCComicComment *list = self.commentArray.firstObject;
         if (list.topComments.count) {
             NSMutableArray *topComments = [list.topComments mutableCopy];
             [topComments addObject:comment];
@@ -275,7 +275,7 @@
 #pragma mark - Get
 - (PCCommentMainRequest *)mainRequest {
     if (!_mainRequest) {
-        _mainRequest = [[PCCommentMainRequest alloc] initWithObjectId:self.commentType == PCCommentTypeComic ? self.comicsId : self.gameId];
+        _mainRequest = [[PCCommentMainRequest alloc] initWithObjectId:self.commentType == PCCommentTypeComic ? self.comicId : self.gameId];
         _mainRequest.type = self.commentType;
     }
     return _mainRequest;
@@ -293,7 +293,7 @@
     if (!_publishRequest) {
         if (self.primaryType == PCCommentPrimaryTypeMain) {
             if (self.commentType == PCCommentTypeComic) {
-                _publishRequest = [[PCCommentPublishRequest alloc] initWithComicsId:self.comicsId];
+                _publishRequest = [[PCCommentPublishRequest alloc] initWithComicId:self.comicId];
             } else {
                 _publishRequest = [[PCCommentPublishRequest alloc] initWithGameId:self.gameId];
             }

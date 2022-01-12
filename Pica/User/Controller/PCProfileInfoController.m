@@ -7,8 +7,8 @@
 //
 
 #import "PCProfileInfoController.h"
-#import "PCComicsListController.h"
-#import "PCComicsDetailController.h"
+#import "PCComicListController.h"
+#import "PCComicDetailController.h"
 #import "PCGameDetailController.h"
 #import "PCUserCommentRequest.h"
 #import "PCComment.h"
@@ -53,7 +53,7 @@
         @weakify(self)
         self.tableView.mj_footer = [MJRefreshBackStateFooter footerWithRefreshingBlock:^{
             @strongify(self) 
-            PCComicsComment *comment = self.dataSource.lastObject;
+            PCComicComment *comment = self.dataSource.lastObject;
             if (comment.page < comment.pages) {
                 self.commentRequest.page ++;
                 [self requestComment];
@@ -83,7 +83,7 @@
         [self showEmptyViewWithLoading];
     }
     
-    [self.commentRequest sendRequest:^(PCComicsComment *comment) {
+    [self.commentRequest sendRequest:^(PCComicComment *comment) {
         [self hideEmptyView];
         [self.tableView.mj_footer endRefreshing];
         [self.dataSource addObject:comment];
@@ -117,7 +117,7 @@
             return self.dataSource.count;
             break;
         case PCProfileInfoTypeComment:{
-            PCComicsComment *comment = self.dataSource[section];
+            PCComicComment *comment = self.dataSource[section];
             return comment.docs.count;
             break;}
         default:
@@ -134,7 +134,7 @@
         return cell;
     } else {
         PCCommentCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PCCommentCell" forIndexPath:indexPath];
-        PCComicsComment *comment = self.dataSource[indexPath.section];
+        PCComicComment *comment = self.dataSource[indexPath.section];
         PCComment *commentObject = comment.docs[indexPath.row];
         if (!commentObject.user) {
             commentObject.user = [PCUser localUser];
@@ -149,7 +149,7 @@
         return 44;
     } else {
         return [tableView qmui_heightForCellWithIdentifier:@"PCCommentCell" configuration:^(PCCommentCell *cell) {
-            PCComicsComment *comment = self.dataSource[indexPath.section];
+            PCComicComment *comment = self.dataSource[indexPath.section];
             cell.comment = comment.docs[indexPath.row];
         }];
     }
@@ -159,14 +159,14 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     if (self.type == PCProfileInfoTypeComic) {
-        PCComicsListController *comicsList = [[PCComicsListController alloc] initWithType:indexPath.row == 0 ? PCComicsListTypeFavourite : PCComicsListTypeHistory];
+        PCComicListController *comicList = [[PCComicListController alloc] initWithType:indexPath.row == 0 ? PCComicListTypeFavourite : PCComicListTypeHistory];
         
-        [[QMUIHelper visibleViewController].navigationController pushViewController:comicsList animated:YES];
+        [[QMUIHelper visibleViewController].navigationController pushViewController:comicList animated:YES];
     } else {
-        PCComicsComment *commentList = self.dataSource[indexPath.section];
+        PCComicComment *commentList = self.dataSource[indexPath.section];
         PCComment *comment = commentList.docs[indexPath.row];
         if (comment.comic) {
-            PCComicsDetailController *detail = [[PCComicsDetailController alloc] initWithComicsId:comment.comic];
+            PCComicDetailController *detail = [[PCComicDetailController alloc] initWithComicId:comment.comic];
             [[QMUIHelper visibleViewController].navigationController pushViewController:detail animated:YES];
         } else if (comment.game) {
             PCGameDetailController *detail = [[PCGameDetailController alloc] initWithGameId:comment.game];

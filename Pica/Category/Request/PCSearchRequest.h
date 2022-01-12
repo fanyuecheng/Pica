@@ -7,7 +7,7 @@
 //
 
 #import "PCRequest.h"
-#import "PCComics.h"
+#import "PCComic.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

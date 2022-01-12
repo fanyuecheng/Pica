@@ -30,7 +30,7 @@
 @end
 
 
-@implementation PCComicsComment
+@implementation PCComicComment
 
 + (NSDictionary *)modelCustomPropertyMapper {
     return @{@"page" : @"comments.page",

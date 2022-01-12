@@ -23,7 +23,7 @@ typedef NS_ENUM(NSUInteger, PCCommentPrimaryType) {
 @property (nonatomic, assign) PCCommentType commentType;
 @property (nonatomic, assign, readonly) PCCommentPrimaryType primaryType;
 
-- (instancetype)initWithComicsId:(NSString *)comicsId;
+- (instancetype)initWithComicId:(NSString *)comicId;
 - (instancetype)initWithGameId:(NSString *)gameId;
 - (instancetype)initWithCommentId:(NSString *)commentId;
 

@@ -22,24 +22,26 @@ NS_ASSUME_NONNULL_BEGIN
  id = "5f6cc0f1eda62249b7e0669c";
  */
 
+@class PCEpisode;
 @interface PCPicture : NSObject
 
 @property (nonatomic, copy)   NSString *pictureId;
 @property (nonatomic, strong) PCThumb  *media;
 
-//custom
-@property (nonatomic, strong) UIImage  *image;
-@property (nonatomic, assign) CGSize   preferSize; 
+- (void)loadImage:(nullable void (^)(UIImage *image, NSError *error))finished;
+- (void)cancelLoadImage;
 
 @end
 
-@interface PCEpisodePicture : NSObject
+@interface
+PCEpisodePicture : NSObject
 
 @property (nonatomic, assign) NSInteger page;
 @property (nonatomic, assign) NSInteger pages;
 @property (nonatomic, assign) NSInteger total;
-@property (nonatomic, assign) NSInteger limit; 
+@property (nonatomic, assign) NSInteger limit;
 @property (nonatomic, copy)   NSArray <PCPicture *> *docs;
+@property (nonatomic, strong) PCEpisode *ep;
  
 @end
 //4903357  2cc6322b%2C1611637507%2Ccda26*71   597194c114aeef59678d9faf8176f05d

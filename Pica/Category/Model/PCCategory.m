@@ -16,7 +16,7 @@
     category.title = @"哔咔排行榜";
     category.active = YES;
     category.isCustom = YES;
-    category.controllerClass = @"PCComicsRankController";
+    category.controllerClass = @"PCComicRankController";
     category.desc = ICON_RANK;
     return category;
 }
@@ -26,7 +26,7 @@
     category.title = @"随机本子";
     category.active = YES;
     category.isCustom = YES;
-    category.controllerClass = @"PCComicsListController";
+    category.controllerClass = @"PCComicListController";
     category.desc = ICON_PICTURE;
     return category;
 }

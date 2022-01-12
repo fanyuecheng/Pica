@@ -71,7 +71,7 @@ typedef NS_ENUM(NSUInteger, PCCommentType) {
 
 @end
 
-@interface PCComicsComment : NSObject
+@interface PCComicComment : NSObject
 
 @property (nonatomic, assign) NSInteger page;
 @property (nonatomic, assign) NSInteger pages;

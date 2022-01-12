@@ -6,11 +6,11 @@
 //  Copyright © 2021 fancy. All rights reserved.
 //
 
-#import "PCComicsListCell.h"
+#import "PCComicListCell.h"
 
 NS_ASSUME_NONNULL_BEGIN
 @class PCUser;
-@interface PCKnightRankCell : PCComicsListCell
+@interface PCKnightRankCell : PCComicListCell
 
 @property (nonatomic, strong) PCUser *user;
 
