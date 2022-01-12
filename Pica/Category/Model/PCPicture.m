@@ -7,8 +7,16 @@
 //
 
 #import "PCPicture.h"
+#import "PCDefineHeader.h"
 #import "PCVendorHeader.h"
 #import "UIImage+PCAdd.h"
+#import "PCImageSizeCache.h"
+
+@interface PCPicture ()
+
+@property (nonatomic, strong) SDWebImageCombinedOperation *operation;
+
+@end
 
 @implementation PCPicture
 
@@ -16,16 +24,20 @@
     return @{@"pictureId" : @[@"_id", @"id"]};
 }
 
-- (CGSize)preferSize {
-    if (self.image) {
-        if (CGSizeIsEmpty(_preferSize)) {
-            CGSize size = self.image.size;
-            _preferSize = CGSizeMake(SCREEN_WIDTH, floorf(SCREEN_WIDTH * size.height / size.width));
+- (void)loadImage:(void (^)(UIImage *image, NSError *error))finished {
+    self.operation = [[SDWebImageManager sharedManager] loadImageWithURL:[NSURL URLWithString:self.media.imageURL] options:SDWebImageScaleDownLargeImages context:nil progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finishe, NSURL * _Nullable imageURL) {
+        if (image) {
+            [kPCImageSizeCache storeImageSize:image.size forKey:self.media.imageURL];
+            !finished ? : finished(image, nil);
+        } else {
+            !finished ? : finished(nil, error);
         }
-        return _preferSize;
-    } else {
-        return CGSizeMake(SCREEN_WIDTH, SCREEN_WIDTH);
-    }
+    }];
+}
+
+- (void)cancelLoadImage {
+    [self.operation cancel];
+    self.operation = nil;
 }
  
 @end

@@ -10,14 +10,18 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class PCComics;
+#define kPCComicHistory  [PCComicHistory sharedInstance]
+
+@class PCComic;
 @interface PCComicHistory : NSObject
 
 + (instancetype)sharedInstance;
 
-- (void)saveComic:(PCComics *)comic;
-- (void)deleteComic:(PCComics *)comic;
-- (NSArray <PCComics *>*)allComic;
+- (void)saveComic:(PCComic *)comic;
+- (void)updateComic:(PCComic *)comic;
+- (void)deleteComic:(PCComic *)comic;
+- (PCComic *)comicWithId:(NSString *)comicId;
+- (NSArray <PCComic *>*)allComic;
 - (void)clearAllComic;
 
 @end

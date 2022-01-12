@@ -7,12 +7,12 @@
 //
 
 #import "PCRankListController.h"
-#import "PCComicsRankRequest.h"
+#import "PCComicRankRequest.h"
 #import "PCKnightRankRequest.h"
-#import "PCComicsRankCell.h"
+#import "PCComicRankCell.h"
 #import "PCKnightRankCell.h"
-#import "PCComicsDetailController.h"
-#import "PCComicsListController.h"
+#import "PCComicDetailController.h"
+#import "PCComicListController.h"
 #import "PCComicHistory.h"
 
 @interface PCRankListController ()
@@ -40,7 +40,7 @@
 - (void)initTableView {
     [super initTableView];
     
-    [self.tableView registerClass:[PCComicsRankCell class] forCellReuseIdentifier:@"PCComicsRankCell"];
+    [self.tableView registerClass:[PCComicRankCell class] forCellReuseIdentifier:@"PCComicRankCell"];
     [self.tableView registerClass:[PCKnightRankCell class] forCellReuseIdentifier:@"PCKnightRankCell"];
     
     self.tableView.separatorInset = UIEdgeInsetsMake(0, 35, 0, 15);
@@ -57,8 +57,8 @@
         [cell setUser:self.dataSource[indexPath.row] index:indexPath.row];
         return cell;
     } else {
-        PCComicsRankCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PCComicsRankCell" forIndexPath:indexPath];
-        [cell setComics:self.dataSource[indexPath.row] index:indexPath.row];
+        PCComicRankCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PCComicRankCell" forIndexPath:indexPath];
+        [cell setComic:self.dataSource[indexPath.row] index:indexPath.row];
         return cell;
     }
 }
@@ -72,13 +72,13 @@
     UIViewController *controller = nil;
     if (self.type == PCRankListTypeKnight) {
         PCUser *user = self.dataSource[indexPath.row];
-        PCComicsListController *list = [[PCComicsListController alloc] initWithType:PCComicsListTypeCreator];
+        PCComicListController *list = [[PCComicListController alloc] initWithType:PCComicListTypeCreator];
         list.keyword = user.userId;
         controller = list;
     } else {
-        PCComics *comics = self.dataSource[indexPath.row];
-        [[PCComicHistory sharedInstance] saveComic:comics];
-        controller = [[PCComicsDetailController alloc] initWithComicsId:comics.comicsId];
+        PCComic *comic = self.dataSource[indexPath.row];
+        [kPCComicHistory saveComic:comic];
+        controller = [[PCComicDetailController alloc] initWithComicId:comic.comicId];
     }
     [[QMUIHelper visibleViewController].navigationController pushViewController:controller animated:YES];
 }
@@ -103,13 +103,13 @@
     if (!_request) {
         switch (self.type) {
             case PCRankListTypeH24:
-                _request = [[PCComicsRankRequest alloc] initWithType:PCComicsRankTypeH24];
+                _request = [[PCComicRankRequest alloc] initWithType:PCComicRankTypeH24];
                 break;
             case PCRankListTypeD7:
-                _request = [[PCComicsRankRequest alloc] initWithType:PCComicsRankTypeD7];
+                _request = [[PCComicRankRequest alloc] initWithType:PCComicRankTypeD7];
                 break;
             case PCRankListTypeD30:
-                _request = [[PCComicsRankRequest alloc] initWithType:PCComicsRankTypeD30];
+                _request = [[PCComicRankRequest alloc] initWithType:PCComicRankTypeD30];
                 break;
             default:
                 _request = [[PCKnightRankRequest alloc] init];

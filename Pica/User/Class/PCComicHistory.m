@@ -7,13 +7,12 @@
 //
 
 #import "PCComicHistory.h"
-#import "PCComics.h"
+#import "PCComic.h"
 #import <YYModel/YYModel.h>
 #import "PCLocalKeyHeader.h"
 
 @interface PCComicHistory ()
 
-@property (nonatomic, strong) NSMutableDictionary *cacheDctionary;
 @property (nonatomic, strong) NSMutableArray      *cacheArray;
 
 @end
@@ -34,9 +33,31 @@
 }
 
 #pragma mark - Method
-- (void)saveComic:(PCComics *)comic {
-    if (comic.comicsId) {
-        NSDictionary *comicJson = [self.cacheDctionary objectForKey:comic.comicsId];
+- (void)saveComic:(PCComic *)comic {
+    if (comic.comicId) {
+        __block NSDictionary *comicJson = nil;
+        [self.cacheArray enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([comic.comicId isEqualToString:obj[@"_id"]]) {
+                comicJson = obj;
+                *stop = YES;
+            }
+        }];
+        if (!comicJson) {
+            [self.cacheArray insertObject:[comic yy_modelToJSONObject] atIndex:0];
+            [kPCUserDefaults setObject:self.cacheArray forKey:PC_DB_COMICS_HISTORY];
+        }
+    }
+}
+
+- (void)updateComic:(PCComic *)comic {
+    if (comic.comicId) {
+        __block NSDictionary *comicJson = nil;
+        [self.cacheArray enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([comic.comicId isEqualToString:obj[@"_id"]]) {
+                comicJson = obj;
+                *stop = YES;
+            }
+        }];
         if (comicJson) {
             [self.cacheArray replaceObjectAtIndex:[self.cacheArray indexOfObject:comicJson] withObject:[comic yy_modelToJSONObject]];
         } else {
@@ -46,19 +67,36 @@
     }
 }
 
-- (void)deleteComic:(PCComics *)comic {
+
+- (void)deleteComic:(PCComic *)comic {
     if (comic) {
-        NSDictionary *comicJson = [self.cacheDctionary objectForKey:comic.comicsId];
+        __block NSDictionary *comicJson = nil;
+        [self.cacheArray enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([comic.comicId isEqualToString:obj[@"_id"]]) {
+                comicJson = obj;
+                *stop = YES;
+            }
+        }];
         if (comicJson) {
             [self.cacheArray removeObject:comicJson];
-            [self.cacheDctionary removeObjectForKey:comic.comicsId];
         }
         [kPCUserDefaults setObject:self.cacheArray forKey:PC_DB_COMICS_HISTORY];
     }
 }
 
-- (NSArray <PCComics *>*)allComic {
-    NSArray *allComic = [NSArray yy_modelArrayWithClass:[PCComics class] json:self.cacheArray];
+- (PCComic *)comicWithId:(NSString *)comicId {
+    __block NSDictionary *comicJson = nil;
+    [self.cacheArray enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        if ([comicId isEqualToString:obj[@"_id"]]) {
+            comicJson = obj;
+            *stop = YES;
+        }
+    }];
+    return [PCComic yy_modelWithJSON:comicJson];
+}
+
+- (NSArray <PCComic *>*)allComic {
+    NSArray *allComic = [NSArray yy_modelArrayWithClass:[PCComic class] json:self.cacheArray];
     return allComic;
 }
 
@@ -78,18 +116,6 @@
         }
     }
     return _cacheArray;
-}
-
-- (NSMutableDictionary *)cacheDctionary {
-    if (!_cacheDctionary) {
-        _cacheDctionary = [NSMutableDictionary dictionary];
-        if (self.cacheArray.count) {
-            [self.cacheArray enumerateObjectsUsingBlock:^(NSDictionary *obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                [_cacheDctionary setObject:obj forKey:obj[@"_id"]];
-            }];
-        }
-    }
-    return _cacheDctionary;
 }
 
 @end

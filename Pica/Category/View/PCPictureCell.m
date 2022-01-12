@@ -8,7 +8,8 @@
 
 #import "PCPictureCell.h"
 #import "PCVendorHeader.h"
-
+#import "PCImageSizeCache.h"
+ 
 @interface PCPictureCell () <QMUIZoomImageViewDelegate>
 
 @property (nonatomic, strong) QMUILabel         *titleLabel;
@@ -21,7 +22,7 @@
 - (void)prepareForReuse {
     [super prepareForReuse];
     self.titleLabel.text = nil;
-    [self.imageView sd_cancelCurrentImageLoad];
+    [self.picture cancelLoadImage];
     self.imageView.imageView.image = nil;
 }
 
@@ -42,24 +43,16 @@
 
 - (void)setPicture:(PCPicture *)picture {
     _picture = picture;
-     
-    if (picture.image) {
-        self.imageView.image = picture.image;
-        self.titleLabel.text = nil;
-    } else {
-        self.imageView.imageView.image = nil;
-        self.titleLabel.text = picture.media.originalName;
-        [[SDWebImageManager sharedManager] loadImageWithURL:[NSURL URLWithString:picture.media.imageURL]
-                                                    options:SDWebImageScaleDownLargeImages
-                                                    context:nil
-                                                   progress:nil
-                                                  completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
-            if (image) {
-                picture.image = image;
-                !self.loadBlock ? : self.loadBlock(picture);
-            }
-        }];
-    }
+    
+    BOOL needReload = ![kPCImageSizeCache containsImageSizeForKey:picture.media.imageURL];
+    
+    self.titleLabel.text = picture.media.originalName;
+    [picture loadImage:^(UIImage * _Nonnull image, NSError * _Nonnull error) {
+        self.imageView.image = image;
+        if (needReload) {
+            !self.loadBlock ? : self.loadBlock(picture);
+        }
+    }];
 }
 
 #pragma mark - QMUIZoomImageViewDelegate

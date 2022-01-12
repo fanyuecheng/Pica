@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PCLikeRequest : PCRequest
  
-- (instancetype)initWithComicsId:(NSString *)comicsId;
+- (instancetype)initWithComicId:(NSString *)comicId;
 - (instancetype)initWithGameId:(NSString *)gameId;
 
 @end

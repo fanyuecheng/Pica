@@ -170,7 +170,7 @@ static UIImage *disclosureIndicatorImageDark;
     
 #pragma mark - Plain TableView
     if (@available(iOS 15, *)) {
-        QMUICMI.tableViewSectionHeaderTopPadding = UITableViewAutomaticDimension;
+        QMUICMI.tableViewSectionHeaderTopPadding = 0;
         QMUICMI.tableViewGroupedSectionHeaderTopPadding = UITableViewAutomaticDimension;
         QMUICMI.tableViewInsetGroupedSectionHeaderTopPadding = UITableViewAutomaticDimension;
     }

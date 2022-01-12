@@ -28,7 +28,7 @@
     [super sendRequest:success failure:failure];
     
     [self startWithCompletionBlockWithSuccess:^(__kindof YTKBaseRequest * _Nonnull request) {
-        PCComicsComment *comment = [PCComicsComment yy_modelWithJSON:request.responseJSONObject[@"data"]];
+        PCComicComment *comment = [PCComicComment yy_modelWithJSON:request.responseJSONObject[@"data"]];
         
         !success ? : success(comment);
     } failure:^(__kindof YTKBaseRequest * _Nonnull request) {

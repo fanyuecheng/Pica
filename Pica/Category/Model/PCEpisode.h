@@ -26,7 +26,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-@interface PCComicsEpisode : NSObject
+@interface PCComicEpisode : NSObject
 
 @property (nonatomic, assign) NSInteger page;
 @property (nonatomic, assign) NSInteger pages;
@@ -35,7 +35,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, copy)   NSArray <PCEpisode *> *docs;
 
 //custom 用于图片详情
-@property (nonatomic, copy)   NSString *comicsId;
+@property (nonatomic, copy)   NSString *comicId;
 
 @end
 

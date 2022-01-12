@@ -16,7 +16,7 @@
 
 @end
 
-@implementation PCComicsEpisode
+@implementation PCComicEpisode
 
 + (NSDictionary *)modelContainerPropertyGenericClass {
     return @{@"docs" : @"PCEpisode"};

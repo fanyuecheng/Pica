@@ -33,7 +33,7 @@
     [super sendRequest:success failure:failure];
     
     [self startWithCompletionBlockWithSuccess:^(__kindof YTKBaseRequest * _Nonnull request) {
-        PCComicsList *list = [PCComicsList yy_modelWithJSON:request.responseJSONObject[@"data"][@"comics"]];
+        PCComicList *list = [PCComicList yy_modelWithJSON:request.responseJSONObject[@"data"][@"comics"]];
         !success ? : success(list);
     } failure:^(__kindof YTKBaseRequest * _Nonnull request) {
         !failure ? : failure(request.error);
