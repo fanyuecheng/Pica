@@ -7,6 +7,7 @@
 //
 
 #import "PCPictureCell.h"
+#import "PCDefineHeader.h"
 #import "PCVendorHeader.h"
 #import "PCImageSizeCache.h"
  
@@ -47,12 +48,18 @@
     BOOL needReload = ![kPCImageSizeCache containsImageSizeForKey:picture.media.imageURL];
     
     self.titleLabel.text = picture.media.originalName;
-    [picture loadImage:^(UIImage * _Nonnull image, NSError * _Nonnull error) {
-        self.imageView.image = image;
-        if (needReload) {
-            !self.loadBlock ? : self.loadBlock(picture);
-        }
-    }];
+    if (picture.image) {
+        self.imageView.image = picture.image;
+    } else {
+        @weakify(self)
+        [picture loadImage:^(UIImage * _Nonnull image, NSError * _Nonnull error) {
+            @strongify(self)
+            self.imageView.image = image;
+            if (needReload) {
+                !self.loadBlock ? : self.loadBlock(picture);
+            }
+        }];
+    }
 }
 
 #pragma mark - QMUIZoomImageViewDelegate
