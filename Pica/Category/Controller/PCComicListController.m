@@ -349,6 +349,13 @@
     [kPCComicHistory saveComic:comic];
 }
 
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    PCComic *comic = self.comicArray[indexPath.section].docs[indexPath.row];
+    return [tableView qmui_heightForCellWithIdentifier:@"PCComicListCell" cacheByKey:comic.comicId configuration:^(PCComicListCell *cell) {
+        cell.comic = comic;
+    }];
+}
+
 #pragma mark - Get
 - (NSMutableArray<PCComicList *> *)comicArray {
     if (!_comicArray) {
