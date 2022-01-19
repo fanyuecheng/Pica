@@ -23,6 +23,7 @@
 		3329FE4D265B7BAA0054F39B /* PCKnightRankRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3329FE4C265B7BAA0054F39B /* PCKnightRankRequest.m */; };
 		3329FE50265B83F60054F39B /* PCComicRankCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3329FE4F265B83F60054F39B /* PCComicRankCell.m */; };
 		3329FE53265B90C40054F39B /* PCKnightRankCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3329FE52265B90C40054F39B /* PCKnightRankCell.m */; };
+		33454F032797EF4F00778FAC /* PCImagePreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 33454F022797EF4F00778FAC /* PCImagePreviewView.m */; };
 		334EAD6725593BB400B0231C /* PCComic.m in Sources */ = {isa = PBXBuildFile; fileRef = 334EAD6625593BB400B0231C /* PCComic.m */; };
 		334EAD6B25593E7900B0231C /* PCTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 334EAD6A25593E7900B0231C /* PCTableViewCell.m */; };
 		334EAD6F25593E8800B0231C /* PCComicListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 334EAD6E25593E8800B0231C /* PCComicListCell.m */; };
@@ -163,6 +164,8 @@
 		3329FE4F265B83F60054F39B /* PCComicRankCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCComicRankCell.m; sourceTree = "<group>"; };
 		3329FE51265B90C40054F39B /* PCKnightRankCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCKnightRankCell.h; sourceTree = "<group>"; };
 		3329FE52265B90C40054F39B /* PCKnightRankCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCKnightRankCell.m; sourceTree = "<group>"; };
+		33454F012797EF4F00778FAC /* PCImagePreviewView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCImagePreviewView.h; sourceTree = "<group>"; };
+		33454F022797EF4F00778FAC /* PCImagePreviewView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCImagePreviewView.m; sourceTree = "<group>"; };
 		334EAD6525593BB400B0231C /* PCComic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCComic.h; sourceTree = "<group>"; };
 		334EAD6625593BB400B0231C /* PCComic.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCComic.m; sourceTree = "<group>"; };
 		334EAD6925593E7900B0231C /* PCTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCTableViewCell.h; sourceTree = "<group>"; };
@@ -917,6 +920,8 @@
 				334EADD8255A88EB00B0231C /* PCComicEpisodeView.m */,
 				334EADFF255AA83D00B0231C /* PCPictureCell.h */,
 				334EAE00255AA83D00B0231C /* PCPictureCell.m */,
+				33454F012797EF4F00778FAC /* PCImagePreviewView.h */,
+				33454F022797EF4F00778FAC /* PCImagePreviewView.m */,
 				334EAE04255BC9A100B0231C /* PCUserInfoView.h */,
 				334EAE05255BC9A100B0231C /* PCUserInfoView.m */,
 				334EAE15255BDA8E00B0231C /* PCCommentCell.h */,
@@ -1159,6 +1164,7 @@
 				3306A44F266A0EAF00FC397A /* PCCommentPublishRequest.m in Sources */,
 				33828E4425E65CB600967957 /* PCRegistController.m in Sources */,
 				334EAE01255AA83D00B0231C /* PCPictureCell.m in Sources */,
+				33454F032797EF4F00778FAC /* PCImagePreviewView.m in Sources */,
 				33AB826E2679E0BA00A2FD3F /* PCImageMessageCell.m in Sources */,
 				330B10DC269E871A0075A9A0 /* PCColorGridView.m in Sources */,
 				337AD6AE267376D4009EA2D1 /* PCChatList.m in Sources */,
