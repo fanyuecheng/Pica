@@ -42,10 +42,13 @@
                 *stop = YES;
             }
         }];
-        if (!comicJson) {
-            [self.cacheArray insertObject:[comic yy_modelToJSONObject] atIndex:0];
-            [kPCUserDefaults setObject:self.cacheArray forKey:PC_DB_COMICS_HISTORY];
+        if (comicJson) {
+            [self.cacheArray removeObject:comicJson];
+        } else {
+            comicJson = [comic yy_modelToJSONObject];
         }
+        [self.cacheArray insertObject:comicJson atIndex:0];
+        [kPCUserDefaults setObject:self.cacheArray forKey:PC_DB_COMICS_HISTORY];
     }
 }
 

@@ -27,6 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (nonatomic, copy)   NSString *pictureId;
 @property (nonatomic, strong) PCThumb  *media;
+@property (nonatomic, strong) UIImage  *image;
 
 - (void)loadImage:(nullable void (^)(UIImage *image, NSError *error))finished;
 - (void)cancelLoadImage;

@@ -7,13 +7,15 @@
 //
 
 #import "PCPictureCell.h"
+#import "PCDefineHeader.h"
 #import "PCVendorHeader.h"
 #import "PCImageSizeCache.h"
- 
-@interface PCPictureCell () <QMUIZoomImageViewDelegate>
+#import "PCImagePreviewView.h"
 
-@property (nonatomic, strong) QMUILabel         *titleLabel;
-@property (nonatomic, strong) QMUIZoomImageView *imageView;
+@interface PCPictureCell ()
+
+@property (nonatomic, strong) QMUILabel          *titleLabel;
+@property (nonatomic, strong) PCImagePreviewView *imageView;
 
 @end
 
@@ -24,6 +26,7 @@
     self.titleLabel.text = nil;
     [self.picture cancelLoadImage];
     self.imageView.imageView.image = nil;
+    [self.imageView recover];
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -46,30 +49,42 @@
     
     BOOL needReload = ![kPCImageSizeCache containsImageSizeForKey:picture.media.imageURL];
     
-    self.titleLabel.text = picture.media.originalName;
-    [picture loadImage:^(UIImage * _Nonnull image, NSError * _Nonnull error) {
-        self.imageView.image = image;
-        if (needReload) {
-            !self.loadBlock ? : self.loadBlock(picture);
-        }
-    }];
+    if (picture.image) {
+        self.titleLabel.text = nil;
+        self.imageView.imageView.image = picture.image;
+    } else {
+        self.titleLabel.text = picture.media.originalName;
+        self.imageView.imageView.image = nil;
+        @weakify(self)
+        [picture loadImage:^(UIImage * _Nonnull image, NSError * _Nonnull error) {
+            @strongify(self)
+            if (image) {
+                self.titleLabel.text = nil;
+                self.imageView.imageView.image = image;
+            }
+            if (needReload) {
+                !self.loadBlock ? : self.loadBlock(picture);
+            }
+        }];
+    }
 }
 
-#pragma mark - QMUIZoomImageViewDelegate
-- (void)singleTouchInZoomingImageView:(QMUIZoomImageView *)zoomImageView location:(CGPoint)location {
-    !self.clickBlock ? : self.clickBlock();
-}
-
-- (void)longPressInZoomingImageView:(QMUIZoomImageView *)zoomImageView {
-    if (zoomImageView.image == nil) {
+#pragma mark - Method
+- (void)showSaveAlert {
+    if (self.imageView.imageView.image == nil) {
         return;
     }
     QMUIAlertAction *action1 = [QMUIAlertAction actionWithTitle:@"确定" style:QMUIAlertActionStyleDefault handler:^(__kindof QMUIAlertController *aAlertController, QMUIAlertAction *action) {
-        QMUIImageWriteToSavedPhotosAlbumWithAlbumAssetsGroup(zoomImageView.image, nil, ^(QMUIAsset *asset, NSError *error) {
-            if (asset) {
-                [QMUITips showSucceed:@"已保存到相册"];
-            }
-        });
+        NSString *cacheKey = [[SDWebImageManager sharedManager] cacheKeyForURL:[NSURL URLWithString:self.picture.media.imageURL]];
+        NSString *path = [[SDImageCache sharedImageCache] cachePathForKey:cacheKey];
+        
+        if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
+            QMUISaveImageAtPathToSavedPhotosAlbumWithAlbumAssetsGroup(path, nil, ^(QMUIAsset *asset, NSError *error) {
+                if (asset) {
+                    [QMUITips showSucceed:@"图片已保存到相册"];
+                }
+            });
+        }
     }];
   
     QMUIAlertAction *action2 = [QMUIAlertAction actionWithTitle:@"取消" style:QMUIAlertActionStyleCancel handler:nil];
@@ -80,7 +95,7 @@
     [alertController addAction:action2];
     [alertController showWithAnimated:YES];
 }
-
+ 
 #pragma mark - Get
 - (QMUILabel *)titleLabel {
     if (!_titleLabel) {
@@ -90,13 +105,18 @@
     return _titleLabel;
 }
 
-- (QMUIZoomImageView *)imageView {
+- (PCImagePreviewView *)imageView {
     if (!_imageView) {
-        _imageView = [[QMUIZoomImageView alloc] init];
-        SDAnimatedImageView *contentView = [[SDAnimatedImageView alloc] init];
-        [_imageView setValue:contentView forKey:@"_imageView"];
-        [_imageView.scrollView addSubview:contentView];
-        _imageView.delegate = self;
+        _imageView = [[PCImagePreviewView alloc] init];
+        @weakify(self)
+        _imageView.tapBlock = ^{
+            @strongify(self)
+            !self.clickBlock ? : self.clickBlock();
+        };
+        _imageView.longPressBlock = ^{
+            @strongify(self)
+            [self showSaveAlert];
+        };
     }
     return _imageView;
 }

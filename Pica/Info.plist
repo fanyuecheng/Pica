@@ -27,6 +27,8 @@
 	</dict>
 	<key>NSCameraUsageDescription</key>
 	<string>请点击“好”以允许访问。若不允许，你将无法使用拍照、上传照片等功能。</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>请点击“好”以允许访问。若不允许，你将无法浏览本子。</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>请点击“好”以允许访问。若不允许，你将无法发送语音。</string>
 	<key>NSPhotoLibraryUsageDescription</key>

@@ -41,7 +41,7 @@
     _comic = comic;
     
     [self.coverView pc_setImageWithURL:comic.thumb.imageURL];
-    self.titleLabel.text = comic.title;
+    self.titleLabel.text = [NSString stringWithFormat:@"%@(EP:%@ Page:%@)%@", comic.title, @(comic.epsCount), @(comic.pagesCount), comic.finished ? @"(完结)" : @""];
     self.authorLabel.text = comic.author;
     NSMutableString *category = [NSMutableString stringWithString:@"分类 "];
     [comic.categories enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
@@ -70,6 +70,17 @@
     return color;
 }
 
+- (CGSize)sizeThatFits:(CGSize)size {
+    CGFloat height = 0;
+    height += 15 + [self.titleLabel sizeThatFits:CGSizeMake(SCREEN_WIDTH - 145, CGFLOAT_MAX)].height + 5 + [self.authorLabel sizeThatFits:CGSizeMake(SCREEN_WIDTH - 145, CGFLOAT_MAX)].height + 5 + [self.categoryLabel sizeThatFits:CGSizeMake(SCREEN_WIDTH - 145, CGFLOAT_MAX)].height + 5 + [self.likeLabel sizeThatFits:CGSizeMake(SCREEN_WIDTH - 145, CGFLOAT_MAX)].height;
+ 
+    if (height < 130) {
+        height = 130;
+    }
+    
+    return CGSizeMake(SCREEN_WIDTH, height);
+}
+
 #pragma mark - Get
 - (UIImageView *)coverView {
     if (!_coverView) {
@@ -85,7 +96,7 @@
 - (QMUILabel *)titleLabel {
     if (!_titleLabel) {
         _titleLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontBoldMake(15) textColor:UIColorBlack];
-        _titleLabel.numberOfLines = 2;
+        _titleLabel.numberOfLines = 0;
     }
     return _titleLabel;
 }

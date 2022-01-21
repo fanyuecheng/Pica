@@ -18,6 +18,8 @@
 #import "PCSearchRequest.h"
 #import "PCIconHeader.h"
 #import "PCSearchRecordView.h"
+#import "PCAuthenticationController.h"
+#import "PCNavigationController.h"
 #import <SafariServices/SafariServices.h>
 
 @interface PCCategoryController () <UICollectionViewDelegate, UICollectionViewDataSource, QMUITextFieldDelegate>
@@ -44,6 +46,12 @@
     [super viewDidLoad];
     
     [self requestKeyword];
+    
+    if ([kPCUserDefaults boolForKey:PC_LOCAL_AUTHORIZATION]) {
+        PCNavigationController *navigation = [[PCNavigationController alloc] initWithRootViewController:[[PCAuthenticationController alloc] init]];
+        navigation.modalPresentationStyle = UIModalPresentationFullScreen;
+        [self presentViewController:navigation animated:YES completion:nil];
+    }
 }
 
 - (void)initSubviews {

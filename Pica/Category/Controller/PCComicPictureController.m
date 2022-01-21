@@ -32,8 +32,7 @@
     [super didMoveToParentViewController:parent];
     
     if (parent == nil) {
-        NSIndexPath *indexPath = [self.collectionView indexPathsForVisibleItems].firstObject;
-        
+        NSIndexPath *indexPath = [[self.collectionView indexPathsForVisibleItems] sortedArrayUsingSelector:@selector(compare:)].lastObject;
         PCEpisode *episode = self.episodeArray[self.index];
         PCComic *comic = [kPCComicHistory comicWithId:self.comicId];
         comic.historyEpisodeTitle = episode.title;
@@ -136,13 +135,13 @@
         [self.pictureArray replaceObjectAtIndex:page - 1 withObject:picture];
         if (self.historyEpisodeIndex) {
             [self.collectionView reloadData];
-            [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:self.historyEpisodeIndex inSection:page - 1] atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
+            [self.collectionView scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:self.historyEpisodeIndex inSection:page - 1] atScrollPosition:UICollectionViewScrollPositionBottom animated:NO];
             self.historyEpisodeIndex = 0;
             self.historyEpisodePage = 0;
         } else {
-            NSIndexPath *indexPath = [self.collectionView indexPathsForVisibleItems].firstObject;
+            NSIndexPath *indexPath =  [[self.collectionView indexPathsForVisibleItems] sortedArrayUsingSelector:@selector(compare:)].firstObject;
             [self.collectionView reloadData];
-            [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionNone animated:NO];
+            [self.collectionView scrollToItemAtIndexPath:indexPath atScrollPosition:UICollectionViewScrollPositionTop animated:NO];
         }
     } failure:^(NSError * _Nonnull error) {
         self.onRequest = NO;

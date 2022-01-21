@@ -23,7 +23,7 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
-    NSString *token = [[NSUserDefaults standardUserDefaults] stringForKey:PC_AUTHORIZATION_TOKEN];
+    NSString *token = [kPCUserDefaults stringForKey:PC_AUTHORIZATION_TOKEN];
     if (token) {
         SDWebImageDownloader *downloader = [SDWebImageManager sharedManager].imageLoader;
         [downloader setValue:token forHTTPHeaderField:@"authorization"];

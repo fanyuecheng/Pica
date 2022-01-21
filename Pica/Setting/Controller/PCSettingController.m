@@ -74,11 +74,13 @@
         cell.detailTextLabel.text = @"id仅能修改一次！";
     } else if (indexPath.section == 1 && indexPath.row == 3) {
         cell.detailTextLabel.text = [kPCUserDefaults stringForKey:PC_API_CHANNEL];
+    } else if (indexPath.section == 2) {
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"版本号 %@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
     } else {
         cell.detailTextLabel.text = nil;
     }
     
-    if (indexPath.section == 1 && (indexPath.row == 4 || indexPath.row == 5)) {
+    if (indexPath.section == 1 && (indexPath.row == 4 || indexPath.row == 5 || indexPath.row == 6)) {
         if (![cell.accessoryView isKindOfClass:[UISwitch class]]) {
             UISwitch *switchView = [[UISwitch alloc] init];
             [switchView addTarget:self action:@selector(switchAction:) forControlEvents:UIControlEventValueChanged];
@@ -91,6 +93,9 @@
                 break;
             case 5:
                 key = PC_TAB_GAME_HIDDEN;
+                break;
+            case 6:
+                key = PC_LOCAL_AUTHORIZATION;
                 break;
             default:
                 break;
@@ -132,14 +137,9 @@
 
 #pragma mark - Method
 - (UIView *)tableFooterView {
-    UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_HEIGHT, 200)];
+    UIView *footer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_HEIGHT, 50 + 44 + 20)];
     [footer addSubview:self.logoutButton];
-    
-    QMUILabel *versionLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(10) textColor:UIColorGray];
-    versionLabel.text = [NSString stringWithFormat:@"Pica 版本号 %@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
-    versionLabel.textAlignment = NSTextAlignmentCenter;
-    versionLabel.frame = CGRectMake(10, self.logoutButton.qmui_bottom + 50, SCREEN_WIDTH - 20, QMUIViewSelfSizingHeight);
-    [footer addSubview:versionLabel];
+
     return footer;
 }
 
@@ -261,6 +261,8 @@
         
         PCTabBarViewController *tabBarViewController = (PCTabBarViewController *)[UIApplication sharedApplication].keyWindow.rootViewController;
         [tabBarViewController reloadViewControllers];
+    } else if (indexPath.row == 6) {
+        [kPCUserDefaults setBool:sender.isOn forKey:PC_LOCAL_AUTHORIZATION];
     }
 }
 
@@ -302,7 +304,7 @@
 #pragma mark - Get
 - (NSArray *)dataSource {
     if (!_dataSource) {
-        _dataSource = @[@[@"聊天设置"], @[@"修改密码", @"清除缓存", @"修改ID", @"分流", @"简体中文", @"隐藏游戏区"], @[@"关于Pica"]];
+        _dataSource = @[@[@"聊天设置"], @[@"修改密码", @"清除缓存", @"修改ID", @"分流", @"简体中文", @"隐藏游戏区", @"安全锁"], @[@"关于Pica"]];
     }
     return _dataSource;
 }
