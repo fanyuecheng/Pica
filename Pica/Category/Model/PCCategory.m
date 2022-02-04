@@ -8,6 +8,7 @@
 
 #import "PCCategory.h"
 #import "PCIconHeader.h"
+#import "PCComicListController.h"
 
 @implementation PCCategory
 
@@ -38,6 +39,17 @@
     category.isCustom = YES;
     category.controllerClass = @"PCCommentController";
     category.desc = ICON_COMMENT;
+    return category;
+}
+
++ (PCCategory *)recommendCategory {
+    PCCategory *category = [[PCCategory alloc] init];
+    category.title = @"本子推荐";
+    category.active = YES;
+    category.isCustom = YES;
+    category.controllerClass = @"PCComicListController";
+    category.desc = ICON_GOOD;
+    category.categoryId = [@(PCComicListTypeRecommend) stringValue];
     return category;
 }
 

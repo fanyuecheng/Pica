@@ -20,6 +20,10 @@
 
 @implementation PCComicList
 
++ (NSDictionary *)modelCustomPropertyMapper {
+    return @{@"docs" : @[@"docs", @"comics"]};
+}
+
 + (NSDictionary *)modelContainerPropertyGenericClass {
     return @{@"docs" : @"PCComic"};
 }

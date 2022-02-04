@@ -40,7 +40,7 @@
     
     self.imageView.frame = CGRectMake(0, 0, self.contentView.qmui_width, self.contentView.qmui_width);
     self.iconLabel.frame = CGRectMake(0, 0, self.contentView.qmui_width, self.contentView.qmui_width);
-    self.titleLabel.frame = CGRectMake(0, self.contentView.qmui_width, self.contentView.qmui_width, 20);
+    self.titleLabel.frame = CGRectMake(0, self.contentView.qmui_width, self.contentView.qmui_width, 30);
 }
 
 #pragma mark - Set

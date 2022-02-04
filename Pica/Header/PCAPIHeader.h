@@ -39,6 +39,7 @@
 #define PC_API_SEARCH_ADVANCED  @"comics/advanced-search?page=%@"
 //漫画排行
 #define PC_API_COMICS_RANK      @"comics/leaderboard"
+#define PC_API_COMICS_COLLECTION @"collections"
 //骑士排行
 #define PC_API_COMICS_KNIGHT    @"comics/knight-leaderboard"
 //随机本子

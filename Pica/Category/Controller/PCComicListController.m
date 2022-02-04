@@ -14,6 +14,7 @@
 #import "PCComicListCell.h"
 #import "PCComicDetailController.h"
 #import "PCComicHistory.h"
+#import "PCComicCollectionRequest.h"
 
 @interface PCComicListController ()
 
@@ -22,6 +23,7 @@
 @property (nonatomic, strong) PCSearchRequest *searchRequest;
 @property (nonatomic, strong) PCRandomRequest *randomRequest;
 @property (nonatomic, strong) PCFavouriteComicRequest *favouriteRequest;
+@property (nonatomic, strong) PCComicCollectionRequest *collectionRequest;
 @property (nonatomic, strong) NSMutableArray <PCComicList *>*comicArray;
 
 @end
@@ -44,6 +46,8 @@
         case PCComicListTypeHistory:
             self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(deleteAction:)];
             break;
+        case PCComicListTypeRecommend:
+            break;
         default:
             self.navigationItem.rightBarButtonItem = [UIBarButtonItem qmui_itemWithTitle:@"新到旧" target:self action:@selector(sortAction:)];
             break;
@@ -63,6 +67,9 @@
         case PCComicListTypeFavourite:
             self.title = @"我的收藏";
             break;
+        case PCComicListTypeRecommend:
+            self.title = @"本子推荐";
+            break;
         default:
             self.title = self.keyword;
             break;
@@ -75,7 +82,7 @@
     [self.tableView registerClass:[PCComicListCell class] forCellReuseIdentifier:@"PCComicListCell"];
     self.tableView.rowHeight = 130;
      
-    if (self.type != PCComicListTypeRandom) {
+    if (self.type != PCComicListTypeRandom && self.type != PCComicListTypeRecommend) {
         @weakify(self)
         self.tableView.mj_footer = [MJRefreshBackStateFooter footerWithRefreshingBlock:^{
             @strongify(self)
@@ -192,6 +199,9 @@
         case PCComicListTypeFavourite:
             [self requestFavouriteComics];
             break;
+        case PCComicListTypeRecommend:
+            [self requestRecommendComics];
+            break;
         case PCComicListTypeTag:
         case PCComicListTypeTranslate:
         case PCComicListTypeCreator:
@@ -211,6 +221,18 @@
     list.docs = [kPCComicHistory allComic];
     list.total = list.docs.count;
     [self requestFinishedWithList:list];
+}
+
+- (void)requestRecommendComics {
+    [self showEmptyViewWithLoading];
+ 
+    [self.collectionRequest sendRequest:^(NSArray *response) {
+        [self hideEmptyView];
+        [self.comicArray addObjectsFromArray:response];
+        [self.tableView reloadData];
+    } failure:^(NSError * _Nonnull error) {
+        [self requestFinishedWithError:error];
+    }];
 }
 
 - (void)requestFavouriteComics {
@@ -316,6 +338,9 @@
         case PCComicListTypeCategory:
             sel = @selector(requestCategoryComics);
             break;
+        case PCComicListTypeRecommend:
+            sel = @selector(requestRecommendComics);
+            break;
         default:
             break;
     }
@@ -324,6 +349,27 @@
 
 
 #pragma mark - Table
+- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+    if (self.type == PCComicListTypeRecommend && self.comicArray.count) {
+        QMUILabel *header = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(15) textColor:UIColorBlue];
+        header.contentEdgeInsets = UIEdgeInsetsMake(0, 15, 0, 0);
+        header.backgroundColor = UIColorWhite;
+        header.frame = CGRectMake(0, 0, tableView.qmui_width, 30);
+        header.text = self.comicArray[section].title;
+        return header;
+    } else {
+        return nil;
+    }
+}
+
+- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
+    if (self.type == PCComicListTypeRecommend && self.comicArray.count  ) {
+        return 30;
+    } else {
+        return CGFLOAT_MIN;
+    }
+}
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return self.comicArray.count;
 }
@@ -391,6 +437,13 @@
         _favouriteRequest = [[PCFavouriteComicRequest alloc] init];
     }
     return _favouriteRequest;
+}
+
+- (PCComicCollectionRequest *)collectionRequest {
+    if (!_collectionRequest) {
+        _collectionRequest = [[PCComicCollectionRequest alloc] init];
+    }
+    return _collectionRequest;
 }
 
 @end

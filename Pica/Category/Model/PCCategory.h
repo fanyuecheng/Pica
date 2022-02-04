@@ -40,6 +40,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (PCCategory *)rankCategory;
 + (PCCategory *)randomCategory;
 + (PCCategory *)commentCategory;
++ (PCCategory *)recommendCategory;
 + (PCCategory *)aiCategory;//iOS 专有
 
 @end

@@ -12,7 +12,7 @@
 #import "PCCommonUI.h"
 #import "PCDefineHeader.h"
  
-@interface PCUserInfoView ()
+@interface PCUserInfoView () <QMUIZoomImageViewDelegate>
 
 @property (nonatomic, strong) QMUILabel   *levelLabel;
 @property (nonatomic, strong) UIImageView *avatarView;
@@ -20,6 +20,7 @@
 @property (nonatomic, strong) QMUILabel   *nameLabel;
 @property (nonatomic, strong) QMUIMarqueeLabel *titleLabel;
 @property (nonatomic, strong) QMUITextView *sloganView;
+@property (nonatomic, strong) QMUIZoomImageView *previewView;
 
 @end
 
@@ -84,15 +85,48 @@
 }
 
 - (void)avatarAction:(UITapGestureRecognizer *)sender {
-    if (self.user.character) {
-        if (self.characterView.image) {
-            self.characterView.image = nil; 
-        } else {
-            [self.characterView pc_setImageWithURL:self.user.character placeholderImage:nil];
-        }
+    UIView *superView = self.superview;
+    if (superView) {
+        [superView addSubview:self.previewView];
+        [UIView animateWithDuration:.25 animations:^{
+            self.alpha = 0;
+            self.previewView.alpha = 1;
+        }];
     }
 }
  
+#pragma mark - <QMUIZoomImageViewDelegate>
+
+- (void)singleTouchInZoomingImageView:(QMUIZoomImageView *)zoomImageView location:(CGPoint)location {
+    [UIView animateWithDuration:.25 animations:^{
+        self.alpha = 1;
+        self.previewView.alpha = 0;
+    } completion:^(BOOL finished) {
+        [self.previewView removeFromSuperview];
+    }];
+}
+
+- (void)longPressInZoomingImageView:(QMUIZoomImageView *)zoomImageView {
+    if (zoomImageView.image == nil) {
+        return;
+    }
+    QMUIAlertAction *action1 = [QMUIAlertAction actionWithTitle:@"确定" style:QMUIAlertActionStyleDefault handler:^(__kindof QMUIAlertController *aAlertController, QMUIAlertAction *action) {
+        QMUIImageWriteToSavedPhotosAlbumWithAlbumAssetsGroup(zoomImageView.image, nil, ^(QMUIAsset *asset, NSError *error) {
+            if (asset) {
+                [QMUITips showSucceed:@"已保存到相册"];
+            }
+        });
+    }];
+  
+    QMUIAlertAction *action2 = [QMUIAlertAction actionWithTitle:@"取消" style:QMUIAlertActionStyleCancel handler:nil];
+    
+    QMUIAlertController *alertController = [QMUIAlertController alertControllerWithTitle:@"保存图片到相册" message:nil preferredStyle:QMUIAlertControllerStyleActionSheet];
+    
+    [alertController addAction:action1];
+    [alertController addAction:action2];
+    [alertController showWithAnimated:YES];
+}
+
 #pragma mark - Get
 - (QMUILabel *)levelLabel {
     if (!_levelLabel) {
@@ -150,6 +184,18 @@
         _sloganView.textContainerInset = UIEdgeInsetsMake(5, 5, 5, 5);
     }
     return _sloganView;
+}
+
+- (QMUIZoomImageView *)previewView {
+    if (!_previewView) {
+        _previewView = [[QMUIZoomImageView alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT)];
+        _previewView.delegate = self;
+        _previewView.alpha = 0;
+        [[SDWebImageManager sharedManager] loadImageWithURL:[NSURL URLWithString:self.user.avatar.imageURL] options:kNilOptions progress:nil completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
+            self->_previewView.image = [image qmui_imageResizedInLimitedSize:CGSizeMake(SCREEN_WIDTH, SCREEN_WIDTH)];
+        }];
+    }
+    return _previewView;
 }
 
 @end

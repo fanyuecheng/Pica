@@ -44,8 +44,10 @@
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     
-    self.columnsView.frame = CGRectMake(10, self.qmui_navigationBarMaxYInViewCoordinator + 10, SCREEN_WIDTH - 20, 40);
-    self.collectionView.frame = CGRectMake(0, self.columnsView.qmui_bottom + 10, SCREEN_WIDTH, SCREEN_HEIGHT - self.columnsView.qmui_bottom - 10);
+    CGFloat navigation = self.qmui_navigationBarMaxYInViewCoordinator;
+    
+    self.columnsView.frame = CGRectMake(10, navigation + 10, SCREEN_WIDTH - 20, 40);
+    self.collectionView.frame = CGRectMake(0, self.columnsView.qmui_bottom + 10, SCREEN_WIDTH, SCREEN_HEIGHT - navigation - 10 - 40 - 10);
 }
 
 #pragma mark - CollectionView
@@ -116,7 +118,6 @@
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
         layout.minimumLineSpacing = 0;
         layout.minimumInteritemSpacing = 0;
-        layout.sectionInset = UIEdgeInsetsMake(0, 0, SafeAreaInsetsConstantForDeviceWithNotch.bottom, 0);
         layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
  
         _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
