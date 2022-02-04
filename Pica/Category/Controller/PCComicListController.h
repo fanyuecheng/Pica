@@ -19,7 +19,8 @@ typedef NS_ENUM(NSUInteger, PCComicListType) {
     PCComicListTypeTag,
     PCComicListTypeTranslate,
     PCComicListTypeCreator,
-    PCComicListTypeAuthor 
+    PCComicListTypeAuthor,
+    PCComicListTypeRecommend
 };
 
 @interface PCComicListController : PCTableViewController

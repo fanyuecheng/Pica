@@ -65,6 +65,7 @@
 		3358C8CF2660BC9F0000D17F /* PCSettingController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3358C8CE2660BC9F0000D17F /* PCSettingController.m */; };
 		3358C8D32660C0050000D17F /* PCPasswordSetRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3358C8D22660C0050000D17F /* PCPasswordSetRequest.m */; };
 		33669FFF2553E18C00AEC598 /* PCComicDetailRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 33669FFE2553E18C00AEC598 /* PCComicDetailRequest.m */; };
+		336886C827ACF0F200474151 /* PCComicCollectionRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 336886C627ACF0F200474151 /* PCComicCollectionRequest.m */; };
 		3377E97D26E9AB93005F7E3B /* PCNameSetRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3377E97C26E9AB93005F7E3B /* PCNameSetRequest.m */; };
 		337AD6AA26737150009EA2D1 /* PCChatListRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 337AD6A926737150009EA2D1 /* PCChatListRequest.m */; };
 		337AD6AE267376D4009EA2D1 /* PCChatList.m in Sources */ = {isa = PBXBuildFile; fileRef = 337AD6AD267376D4009EA2D1 /* PCChatList.m */; };
@@ -253,6 +254,8 @@
 		3358C8D22660C0050000D17F /* PCPasswordSetRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCPasswordSetRequest.m; sourceTree = "<group>"; };
 		33669FFD2553E18C00AEC598 /* PCComicDetailRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCComicDetailRequest.h; sourceTree = "<group>"; };
 		33669FFE2553E18C00AEC598 /* PCComicDetailRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCComicDetailRequest.m; sourceTree = "<group>"; };
+		336886C627ACF0F200474151 /* PCComicCollectionRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCComicCollectionRequest.m; sourceTree = "<group>"; };
+		336886C727ACF0F200474151 /* PCComicCollectionRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCComicCollectionRequest.h; sourceTree = "<group>"; };
 		3377E97B26E9AB93005F7E3B /* PCNameSetRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCNameSetRequest.h; sourceTree = "<group>"; };
 		3377E97C26E9AB93005F7E3B /* PCNameSetRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCNameSetRequest.m; sourceTree = "<group>"; };
 		337AD6A826737150009EA2D1 /* PCChatListRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCChatListRequest.h; sourceTree = "<group>"; };
@@ -911,6 +914,8 @@
 				33E0FC3326B164360030BF21 /* PCCommentReportRequest.m */,
 				3306A450266A17FF00FC397A /* PCCommentLikeRequest.h */,
 				3306A451266A17FF00FC397A /* PCCommentLikeRequest.m */,
+				336886C727ACF0F200474151 /* PCComicCollectionRequest.h */,
+				336886C627ACF0F200474151 /* PCComicCollectionRequest.m */,
 			);
 			path = Request;
 			sourceTree = "<group>";
@@ -1204,6 +1209,7 @@
 				3358C8C1265FB1DE0000D17F /* PCSloganSetRequest.m in Sources */,
 				3358C8C426608D530000D17F /* PCProfileInfoController.m in Sources */,
 				33B78ECD26B900A6000CA73E /* PCInitRequest.m in Sources */,
+				336886C827ACF0F200474151 /* PCComicCollectionRequest.m in Sources */,
 				3358C8BB265F94970000D17F /* PCAvatarSetRequest.m in Sources */,
 				33B78EC726B8FC7F000CA73E /* PCForgotPasswordRequest.m in Sources */,
 				330B10E6269E97480075A9A0 /* PCColorSlider.m in Sources */,
@@ -1394,7 +1400,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 1.1.4;
+				MARKETING_VERSION = 1.1.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yuecheng.pica;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1421,7 +1427,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 1.1.4;
+				MARKETING_VERSION = 1.1.5;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yuecheng.pica;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;

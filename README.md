@@ -7,6 +7,10 @@
 API来自 [picacomic-api](https://github.com/czp3009/picacomic-api) 
 
 #### 更新日志  
+**v1.1.5**   
+*  增加本子魔/神/妹/母等推荐  
+*  增加用户头像预览/下载
+
 **v1.1.4**   
 *  增加解锁功能  
 *  本子列表增加page等数据  

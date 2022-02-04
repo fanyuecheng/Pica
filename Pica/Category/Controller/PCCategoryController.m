@@ -94,6 +94,7 @@
         NSMutableArray *categoryArray = [NSMutableArray array];
         [categoryArray addObject:[PCCategory rankCategory]];
         [categoryArray addObject:[PCCategory randomCategory]];
+        [categoryArray addObject:[PCCategory recommendCategory]];
         [categoryArray addObject:[PCCategory commentCategory]];
         [categoryArray addObjectsFromArray:responseArray];
         self.categoryArray = categoryArray;
@@ -177,7 +178,7 @@
         return CGSizeMake([keyword pc_widthForFont:UIFontMake(14)] + 20, 26);
     } else {
         CGFloat itemWidth = floorf((SCREEN_WIDTH - 40) / 3);
-        return CGSizeMake(itemWidth, itemWidth + 20);
+        return CGSizeMake(itemWidth, itemWidth + 30);
     }
 }
 
@@ -197,9 +198,10 @@
             [self presentViewController:safari animated:YES completion:nil];
             return;
         } else if (category.isCustom) {
-            if ([category.controllerClass isEqualToString:@"PCComicRankController"] ||
-                [category.controllerClass isEqualToString:@"PCComicListController"]) {
+            if ([category.controllerClass isEqualToString:@"PCComicRankController"]) {
                 controller = [[NSClassFromString(category.controllerClass) alloc] init];
+            } else if ([category.controllerClass isEqualToString:@"PCComicListController"]) {
+                controller = [[PCComicListController alloc] initWithType:[category.categoryId integerValue]];
             } else if ([category.controllerClass isEqualToString:@"PCCommentController"]) {
                 PCCommentController *comment = [[PCCommentController alloc] initWithComicId:PC_COMMENT_BOARD_ID];
                 comment.commentType = PCCommentTypeComic;
@@ -262,7 +264,7 @@
 - (UICollectionView *)collectionView {
     if (!_collectionView) {
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-        layout.minimumLineSpacing = 10;
+        layout.minimumLineSpacing = 8;
         layout.minimumInteritemSpacing = 10;
         layout.sectionInset = UIEdgeInsetsMake(10, 10, 10 + SafeAreaInsetsConstantForDeviceWithNotch.bottom, 10);
         layout.scrollDirection = UICollectionViewScrollDirectionVertical;
@@ -288,7 +290,7 @@
         _textField.clearButtonMode = UITextFieldViewModeWhileEditing;
         _textField.placeholder = @"搜索";
         _textField.returnKeyType = UIReturnKeySearch;
-        QMUILabel *leftView = [[QMUILabel alloc] qmui_initWithFont:[UIFont fontWithName:@"iconfont" size:14] textColor:UIColorPlaceholder];
+        QMUILabel *leftView = [[QMUILabel alloc] qmui_initWithFont:[UIFont fontWithName:@"iconfont" size:15] textColor:UIColorPlaceholder];
         leftView.text = ICON_SEARCH;
         leftView.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 0);
         [leftView sizeToFit];

@@ -106,6 +106,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface PCComicList : NSObject
  
+@property (nonatomic, copy)   NSString *title;
 @property (nonatomic, assign) NSInteger total;
 @property (nonatomic, assign) NSInteger limit;
 @property (nonatomic, assign) NSInteger page;
