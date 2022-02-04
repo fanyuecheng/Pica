@@ -8,6 +8,7 @@
 
 #import "PCLoginRequest.h"
 #import "PCUser.h"
+#import <UMCommon/MobClick.h>
 
 @implementation PCLoginRequest
 
@@ -37,6 +38,7 @@
         [kPCUserDefaults setObject:accountArray forKey:PC_LOCAL_ACCOUNT];
         !success ? : success(token);
         [PCUser requsetMyself:nil];
+        [MobClick profileSignInWithPUID:self.account];
     } failure:^(__kindof YTKBaseRequest * _Nonnull request) {
         !failure ? : failure(request.error);
     }];

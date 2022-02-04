@@ -23,6 +23,14 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
+    [self initWindow];
+    
+    [self configUMeng];
+    
+    return YES;
+}
+
+- (void)initWindow {
     NSString *token = [kPCUserDefaults stringForKey:PC_AUTHORIZATION_TOKEN];
     if (token) {
         SDWebImageDownloader *downloader = [SDWebImageManager sharedManager].imageLoader;
@@ -33,8 +41,13 @@
     }
      
     [self.window makeKeyAndVisible];
-    
-    return YES;
+}
+
+- (void)configUMeng {
+#if defined(DEBUG)
+    [UMConfigure setLogEnabled:YES];
+#endif
+    [UMConfigure initWithAppkey:PC_UMENG_APP_KEY channel:@"App Store"];
 }
  
 - (void)setRootViewControllerToLogin {

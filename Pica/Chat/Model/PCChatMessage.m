@@ -164,7 +164,7 @@
     info[@"avatar"] = myself.avatar.imageURL;
     info[@"audio"] = @"";
     info[@"block_user_id"] = at.userId;
-    info[@"platform"] = @"android";//@"Pica_iOS"
+    info[@"platform"] = @"Pica";//@"android"
     info[@"reply_name"] = replyMessage ? replyMessage.name : @"";
     info[@"reply"] = replyMessage ? replyMessage.message : @"";
     info[@"at"] = at ? [NSString stringWithFormat:@"嗶咔_%@", at.name] : @"";
@@ -192,7 +192,7 @@
     info[@"avatar"] = myself.avatar.imageURL;
     info[@"audio"] = @"";
     info[@"block_user_id"] = @"";
-    info[@"platform"] = @"android";//@"Pica_iOS"
+    info[@"platform"] = @"Pica";
     info[@"reply_name"] = @"";
     info[@"reply"] = @"";
     info[@"at"] = @"";
@@ -240,7 +240,7 @@
     info[@"avatar"] = myself.avatar.imageURL;
     info[@"image"] = @"";
     info[@"block_user_id"] = @"";
-    info[@"platform"] = @"android";//@"Pica_iOS"
+    info[@"platform"] = @"Pica";
     info[@"reply_name"] = @"";
     info[@"reply"] = @"";
     info[@"at"] = @"";

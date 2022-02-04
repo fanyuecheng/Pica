@@ -31,4 +31,6 @@
 #define PC_CHAT_LV             @"PC_CHAT_LV"
 #define PC_CHAT_LV_ON          @"PC_CHAT_LV_ON"
 
+#define PC_UMENG_APP_KEY       @"61fce5dfe0f9bb492bf30a2c"
+
 #endif /* PCLocalKeyHeader_h */

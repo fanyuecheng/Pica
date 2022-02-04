@@ -66,6 +66,8 @@
 		3358C8D32660C0050000D17F /* PCPasswordSetRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3358C8D22660C0050000D17F /* PCPasswordSetRequest.m */; };
 		33669FFF2553E18C00AEC598 /* PCComicDetailRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 33669FFE2553E18C00AEC598 /* PCComicDetailRequest.m */; };
 		336886C827ACF0F200474151 /* PCComicCollectionRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 336886C627ACF0F200474151 /* PCComicCollectionRequest.m */; };
+		336886CD27AD24EE00474151 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 336886CC27AD24EE00474151 /* CoreTelephony.framework */; };
+		336886D027AD251D00474151 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 336886CF27AD251D00474151 /* SystemConfiguration.framework */; };
 		3377E97D26E9AB93005F7E3B /* PCNameSetRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3377E97C26E9AB93005F7E3B /* PCNameSetRequest.m */; };
 		337AD6AA26737150009EA2D1 /* PCChatListRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 337AD6A926737150009EA2D1 /* PCChatListRequest.m */; };
 		337AD6AE267376D4009EA2D1 /* PCChatList.m in Sources */ = {isa = PBXBuildFile; fileRef = 337AD6AD267376D4009EA2D1 /* PCChatList.m */; };
@@ -256,6 +258,9 @@
 		33669FFE2553E18C00AEC598 /* PCComicDetailRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCComicDetailRequest.m; sourceTree = "<group>"; };
 		336886C627ACF0F200474151 /* PCComicCollectionRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PCComicCollectionRequest.m; sourceTree = "<group>"; };
 		336886C727ACF0F200474151 /* PCComicCollectionRequest.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PCComicCollectionRequest.h; sourceTree = "<group>"; };
+		336886CC27AD24EE00474151 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
+		336886CE27AD24FD00474151 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
+		336886CF27AD251D00474151 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		3377E97B26E9AB93005F7E3B /* PCNameSetRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCNameSetRequest.h; sourceTree = "<group>"; };
 		3377E97C26E9AB93005F7E3B /* PCNameSetRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCNameSetRequest.m; sourceTree = "<group>"; };
 		337AD6A826737150009EA2D1 /* PCChatListRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCChatListRequest.h; sourceTree = "<group>"; };
@@ -392,6 +397,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				336886CD27AD24EE00474151 /* CoreTelephony.framework in Frameworks */,
+				336886D027AD251D00474151 /* SystemConfiguration.framework in Frameworks */,
 				18A63853EA145CFC6CE2DE1A /* Pods_Pica.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -402,6 +409,9 @@
 		006226C3E7F11E6AFA787CF1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				336886CF27AD251D00474151 /* SystemConfiguration.framework */,
+				336886CE27AD24FD00474151 /* libz.tbd */,
+				336886CC27AD24EE00474151 /* CoreTelephony.framework */,
 				29E5451C1009385AB025F91F /* Pods_Pica.framework */,
 			);
 			name = Frameworks;
