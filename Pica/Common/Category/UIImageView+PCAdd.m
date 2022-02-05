@@ -12,16 +12,6 @@
 
 @implementation UIImageView (PCAdd)
 
-static char kAssociatedObjectKey_PC_noFadeAnimation;
-
-- (void)setPc_noFadeAnimation:(BOOL)pc_noFadeAnimation {
-    objc_setAssociatedObject(self, &kAssociatedObjectKey_PC_noFadeAnimation, @(pc_noFadeAnimation), OBJC_ASSOCIATION_ASSIGN);
-}
-
-- (BOOL)pc_noFadeAnimation {
-    return [objc_getAssociatedObject(self, &kAssociatedObjectKey_PC_noFadeAnimation) boolValue];
-}
-
 - (void)pc_setImageWithURL:(NSString *)url {
     [self pc_setImageWithURL:url
             placeholderImage:[UIImage qmui_imageWithColor:PCColorPink]
@@ -78,7 +68,10 @@ static char kAssociatedObjectKey_PC_noFadeAnimation;
 //    }
     
     NSURL *imageUrl = [NSURL URLWithString:url];
-
+    
+    if (!self.sd_imageTransition) {
+        self.sd_imageTransition = [SDWebImageTransition fadeTransition];
+    }
     [self sd_setImageWithURL:imageUrl
             placeholderImage:placeholderImage
                      options:options
@@ -90,18 +83,6 @@ static char kAssociatedObjectKey_PC_noFadeAnimation;
         }
     
         !completed ? : completed(image, error);
-        if (image && !self.pc_noFadeAnimation) {
-            BOOL showed = [image qmui_getBoundObjectForKey:@"kFadeAnimation"];
-            if (!showed) {
-                CATransition *animation       = [CATransition animation];
-                animation.duration            = 0.5;
-                animation.timingFunction      = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseInEaseOut];
-                animation.type                = kCATransitionFade;
-                animation.removedOnCompletion = YES;
-                [self.layer addAnimation:animation forKey:kCATransition];
-                [image qmui_bindBOOL:YES forKey:@"kFadeAnimation"];
-            }
-        }
     }];
 }
 

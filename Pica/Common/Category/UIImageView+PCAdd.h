@@ -13,8 +13,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UIImageView (PCAdd)
 
-@property (nonatomic, assign) BOOL pc_noFadeAnimation;
-
 - (void)pc_setImageWithURL:(NSString *)url;
 
 - (void)pc_setImageWithURL:(NSString *)url
