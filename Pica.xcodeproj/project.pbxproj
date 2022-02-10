@@ -68,6 +68,7 @@
 		336886C827ACF0F200474151 /* PCComicCollectionRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 336886C627ACF0F200474151 /* PCComicCollectionRequest.m */; };
 		336886CD27AD24EE00474151 /* CoreTelephony.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 336886CC27AD24EE00474151 /* CoreTelephony.framework */; };
 		336886D027AD251D00474151 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 336886CF27AD251D00474151 /* SystemConfiguration.framework */; };
+		3368872327B4F6C300474151 /* PCOrderListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3368872227B4F6C300474151 /* PCOrderListController.m */; };
 		3377E97D26E9AB93005F7E3B /* PCNameSetRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3377E97C26E9AB93005F7E3B /* PCNameSetRequest.m */; };
 		337AD6AA26737150009EA2D1 /* PCChatListRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 337AD6A926737150009EA2D1 /* PCChatListRequest.m */; };
 		337AD6AE267376D4009EA2D1 /* PCChatList.m in Sources */ = {isa = PBXBuildFile; fileRef = 337AD6AD267376D4009EA2D1 /* PCChatList.m */; };
@@ -261,6 +262,8 @@
 		336886CC27AD24EE00474151 /* CoreTelephony.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreTelephony.framework; path = System/Library/Frameworks/CoreTelephony.framework; sourceTree = SDKROOT; };
 		336886CE27AD24FD00474151 /* libz.tbd */ = {isa = PBXFileReference; lastKnownFileType = "sourcecode.text-based-dylib-definition"; name = libz.tbd; path = usr/lib/libz.tbd; sourceTree = SDKROOT; };
 		336886CF27AD251D00474151 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
+		3368872127B4F6C300474151 /* PCOrderListController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCOrderListController.h; sourceTree = "<group>"; };
+		3368872227B4F6C300474151 /* PCOrderListController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCOrderListController.m; sourceTree = "<group>"; };
 		3377E97B26E9AB93005F7E3B /* PCNameSetRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCNameSetRequest.h; sourceTree = "<group>"; };
 		3377E97C26E9AB93005F7E3B /* PCNameSetRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCNameSetRequest.m; sourceTree = "<group>"; };
 		337AD6A826737150009EA2D1 /* PCChatListRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCChatListRequest.h; sourceTree = "<group>"; };
@@ -618,6 +621,8 @@
 				337AD6C0267854DC009EA2D1 /* PCChatViewController.m */,
 				3392771D27229819000021A3 /* PCChatSettingController.h */,
 				3392771E27229819000021A3 /* PCChatSettingController.m */,
+				3368872127B4F6C300474151 /* PCOrderListController.h */,
+				3368872227B4F6C300474151 /* PCOrderListController.m */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1195,6 +1200,7 @@
 				330B10DC269E871A0075A9A0 /* PCColorGridView.m in Sources */,
 				337AD6AE267376D4009EA2D1 /* PCChatList.m in Sources */,
 				33B78ECA26B8FFD7000CA73E /* PCSourceRequest.m in Sources */,
+				3368872327B4F6C300474151 /* PCOrderListController.m in Sources */,
 				3306A462266DDCCC00FC397A /* PCComicHistory.m in Sources */,
 				33E0FC3426B164360030BF21 /* PCCommentReportRequest.m in Sources */,
 				33AD93F9255019760079DFAE /* PCTableViewController.m in Sources */,
