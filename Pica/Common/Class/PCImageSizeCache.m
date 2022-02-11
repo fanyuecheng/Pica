@@ -8,6 +8,7 @@
 
 #import "PCImageSizeCache.h"
 #import "PCVendorHeader.h"
+#import "PCDefineHeader.h"
 #import "NSData+PCAdd.h"
 
 @interface PCImageSizeCache ()
@@ -35,7 +36,7 @@
 - (instancetype)init {
     if (self = [super init]) {
         self.cache = [[NSCache alloc] init];
-        self.fileManager = [NSFileManager defaultManager];
+        self.fileManager = kDefaultFileManager;
         [self creatSizeCacheDirectory];
     }
     return self;

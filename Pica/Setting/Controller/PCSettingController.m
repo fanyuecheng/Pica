@@ -64,8 +64,8 @@
         __block long long fileSize = 0;
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
             fileSize += [[SDImageCache sharedImageCache] totalDiskSize];
-            fileSize += [[[[NSFileManager defaultManager] attributesOfItemAtPath:[PCChatMessage dbPath] error:nil] objectForKey:NSFileSize] integerValue];
-            fileSize += [[[[NSFileManager defaultManager] attributesOfItemAtPath:[self networkCachePath] error:nil] objectForKey:NSFileSize] integerValue];
+            fileSize += [[[kDefaultFileManager attributesOfItemAtPath:[PCChatMessage dbPath] error:nil] objectForKey:NSFileSize] integerValue];
+            fileSize += [[[kDefaultFileManager attributesOfItemAtPath:[self networkCachePath] error:nil] objectForKey:NSFileSize] integerValue];
             dispatch_async(dispatch_get_main_queue(), ^{
                 cell.detailTextLabel.text = [NSByteCountFormatter stringFromByteCount:fileSize countStyle:NSByteCountFormatterCountStyleFile];
             });
@@ -80,7 +80,7 @@
         cell.detailTextLabel.text = nil;
     }
     
-    if (indexPath.section == 1 && (indexPath.row == 4 || indexPath.row == 5 || indexPath.row == 6)) {
+    if (indexPath.section == 1 && (indexPath.row == 4 || indexPath.row == 5 || indexPath.row == 6 || indexPath.row == 7)) {
         if (![cell.accessoryView isKindOfClass:[UISwitch class]]) {
             UISwitch *switchView = [[UISwitch alloc] init];
             [switchView addTarget:self action:@selector(switchAction:) forControlEvents:UIControlEventValueChanged];
@@ -96,6 +96,9 @@
                 break;
             case 6:
                 key = PC_LOCAL_AUTHORIZATION;
+                break;
+            case 7:
+                key = PC_NSFW_ON;
                 break;
             default:
                 break;
@@ -147,7 +150,7 @@
     QMUIAlertAction *action1 = [QMUIAlertAction actionWithTitle:@"确定" style:QMUIAlertActionStyleDefault handler:^(__kindof QMUIAlertController *aAlertController, QMUIAlertAction *action) {
         [[SDImageCache sharedImageCache] clearDiskOnCompletion:^{
             [PCChatMessage deleteObjectsWhere:nil arguments:nil];
-            [[NSFileManager defaultManager] removeItemAtPath:[self networkCachePath] error:nil];
+            [kDefaultFileManager removeItemAtPath:[self networkCachePath] error:nil];
 //            [kPCUserDefaults removeObjectForKey:PC_LOCAL_ACCOUNT];
             [self.tableView reloadData];
         }];
@@ -259,10 +262,13 @@
     } else if (indexPath.row == 5) {
         [kPCUserDefaults setBool:sender.isOn forKey:PC_TAB_GAME_HIDDEN];
         
-        PCTabBarViewController *tabBarViewController = (PCTabBarViewController *)[UIApplication sharedApplication].keyWindow.rootViewController;
+        PCTabBarViewController *tabBarViewController = (PCTabBarViewController *)[UIApplication sharedApplication].delegate.window.rootViewController;
         [tabBarViewController reloadViewControllers];
     } else if (indexPath.row == 6) {
         [kPCUserDefaults setBool:sender.isOn forKey:PC_LOCAL_AUTHORIZATION];
+    } else if (indexPath.row == 7) {
+        [kPCUserDefaults setBool:sender.isOn forKey:PC_NSFW_ON];
+        [[NSNotificationCenter defaultCenter] postNotificationName:PC_NSFW_ON object:@(sender.isOn)];
     }
 }
 
@@ -304,7 +310,7 @@
 #pragma mark - Get
 - (NSArray *)dataSource {
     if (!_dataSource) {
-        _dataSource = @[@[@"聊天设置"], @[@"修改密码", @"清除缓存", @"修改ID", @"分流", @"简体中文", @"隐藏游戏区", @"安全锁"], @[@"关于Pica"]];
+        _dataSource = @[@[@"聊天设置"], @[@"修改密码", @"清除缓存", @"修改ID", @"分流", @"简体中文", @"隐藏游戏区", @"安全锁", @"NSFW"], @[@"关于Pica"]];
     }
     return _dataSource;
 }

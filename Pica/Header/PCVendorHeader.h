@@ -16,5 +16,6 @@
 #import <YTKNetwork/YTKNetwork.h>
 #import <JXPagingView/JXPagerView.h>
 #import <SocketRocket/SocketRocket.h>
+#import <SDWebImageVideoCoder/SDWebImageVideoCoder.h>
 
 #endif /* PCVendorHeader_h */

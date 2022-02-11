@@ -27,6 +27,8 @@
     
     [self configUMeng];
     
+    [self configImageCoder];
+    
     return YES;
 }
 
@@ -48,6 +50,10 @@
     [UMConfigure setLogEnabled:YES];
 #endif
     [UMConfigure initWithAppkey:PC_UMENG_APP_KEY channel:@"App Store"];
+}
+
+- (void)configImageCoder {
+    [SDImageCodersManager.sharedManager addCoder:SDImageVideoCoder.sharedCoder];
 }
  
 - (void)setRootViewControllerToLogin {

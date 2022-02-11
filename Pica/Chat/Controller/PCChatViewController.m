@@ -491,8 +491,8 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
                                    nil];
 
     NSString *cachePath = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"PC_AUDIO"];
-    if (![[NSFileManager defaultManager] fileExistsAtPath:cachePath]) {
-        [[NSFileManager defaultManager] createDirectoryAtPath:cachePath withIntermediateDirectories:YES attributes:nil error:nil];
+    if (![kDefaultFileManager fileExistsAtPath:cachePath]) {
+        [kDefaultFileManager createDirectoryAtPath:cachePath withIntermediateDirectories:YES attributes:nil error:nil];
     }
     
     NSString *path = [cachePath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.m4a", @([[NSDate date] timeIntervalSince1970])]];
@@ -556,8 +556,8 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
         [_recorder stop];
     }
     NSString *path = _recorder.url.path;
-    if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
-        [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
+    if ([kDefaultFileManager fileExistsAtPath:path]) {
+        [kDefaultFileManager removeItemAtPath:path error:nil];
     }
 }
 

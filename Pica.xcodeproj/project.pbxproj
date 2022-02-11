@@ -132,6 +132,13 @@
 		33C170FA2689B0BA00431213 /* PCContentCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 33C170F92689B0BA00431213 /* PCContentCell.m */; };
 		33D41111279AA9200017957E /* PCLocalAuthentication.m in Sources */ = {isa = PBXBuildFile; fileRef = 33D41110279AA9200017957E /* PCLocalAuthentication.m */; };
 		33D41114279AABBB0017957E /* PCAuthenticationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33D41113279AABBB0017957E /* PCAuthenticationController.m */; };
+		33DC428727B621F200D8A105 /* UIViewController+PCAdd.m in Sources */ = {isa = PBXBuildFile; fileRef = 33DC428627B621F200D8A105 /* UIViewController+PCAdd.m */; };
+		33DC428C27B62E8100D8A105 /* NSFWFile.m in Sources */ = {isa = PBXBuildFile; fileRef = 33DC428B27B62E8100D8A105 /* NSFWFile.m */; };
+		33DC428F27B62EC500D8A105 /* NSFWImage.m in Sources */ = {isa = PBXBuildFile; fileRef = 33DC428E27B62EC500D8A105 /* NSFWImage.m */; };
+		33DC429727B630AC00D8A105 /* NSFWSourceRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 33DC429627B630AC00D8A105 /* NSFWSourceRequest.m */; };
+		33DC429B27B6328300D8A105 /* NSFWViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33DC429A27B6328300D8A105 /* NSFWViewController.m */; };
+		33DC429E27B632AD00D8A105 /* NSFWBrowerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33DC429D27B632AD00D8A105 /* NSFWBrowerViewController.m */; };
+		33DC42A127B6390300D8A105 /* NSFWImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33DC42A027B6390300D8A105 /* NSFWImageViewController.m */; };
 		33E0FC3426B164360030BF21 /* PCCommentReportRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 33E0FC3326B164360030BF21 /* PCCommentReportRequest.m */; };
 		33E6497126945B48001E98EA /* PCPopupContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 33E6497026945B48001E98EA /* PCPopupContainerView.m */; };
 /* End PBXBuildFile section */
@@ -388,6 +395,20 @@
 		33D41110279AA9200017957E /* PCLocalAuthentication.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCLocalAuthentication.m; sourceTree = "<group>"; };
 		33D41112279AABBB0017957E /* PCAuthenticationController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCAuthenticationController.h; sourceTree = "<group>"; };
 		33D41113279AABBB0017957E /* PCAuthenticationController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCAuthenticationController.m; sourceTree = "<group>"; };
+		33DC428527B621F200D8A105 /* UIViewController+PCAdd.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIViewController+PCAdd.h"; sourceTree = "<group>"; };
+		33DC428627B621F200D8A105 /* UIViewController+PCAdd.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+PCAdd.m"; sourceTree = "<group>"; };
+		33DC428A27B62E8100D8A105 /* NSFWFile.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSFWFile.h; sourceTree = "<group>"; };
+		33DC428B27B62E8100D8A105 /* NSFWFile.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSFWFile.m; sourceTree = "<group>"; };
+		33DC428D27B62EC500D8A105 /* NSFWImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSFWImage.h; sourceTree = "<group>"; };
+		33DC428E27B62EC500D8A105 /* NSFWImage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSFWImage.m; sourceTree = "<group>"; };
+		33DC429527B630AC00D8A105 /* NSFWSourceRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSFWSourceRequest.h; sourceTree = "<group>"; };
+		33DC429627B630AC00D8A105 /* NSFWSourceRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSFWSourceRequest.m; sourceTree = "<group>"; };
+		33DC429927B6328300D8A105 /* NSFWViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSFWViewController.h; sourceTree = "<group>"; };
+		33DC429A27B6328300D8A105 /* NSFWViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSFWViewController.m; sourceTree = "<group>"; };
+		33DC429C27B632AD00D8A105 /* NSFWBrowerViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSFWBrowerViewController.h; sourceTree = "<group>"; };
+		33DC429D27B632AD00D8A105 /* NSFWBrowerViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSFWBrowerViewController.m; sourceTree = "<group>"; };
+		33DC429F27B6390300D8A105 /* NSFWImageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = NSFWImageViewController.h; sourceTree = "<group>"; };
+		33DC42A027B6390300D8A105 /* NSFWImageViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = NSFWImageViewController.m; sourceTree = "<group>"; };
 		33E0FC3226B164360030BF21 /* PCCommentReportRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCCommentReportRequest.h; sourceTree = "<group>"; };
 		33E0FC3326B164360030BF21 /* PCCommentReportRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCCommentReportRequest.m; sourceTree = "<group>"; };
 		33E6496F26945B48001E98EA /* PCPopupContainerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCPopupContainerView.h; sourceTree = "<group>"; };
@@ -685,6 +706,7 @@
 				33AD93EF255018FA0079DFAE /* Header */,
 				334EAD8F255A6D6600B0231C /* Resource */,
 				33AD93EE255018EE0079DFAE /* Common */,
+				33DC428827B62E3000D8A105 /* NSFW */,
 				33C170D72685E56500431213 /* Game */,
 				337AD6A62673710B009EA2D1 /* Chat */,
 				3358C8CB2660BC740000D17F /* Setting */,
@@ -794,6 +816,8 @@
 				334EAD9B255A746000B0231C /* NSDate+PCAdd.m */,
 				334EADDB255A8A8500B0231C /* UIView+PCAdd.h */,
 				334EADDC255A8A8500B0231C /* UIView+PCAdd.m */,
+				33DC428527B621F200D8A105 /* UIViewController+PCAdd.h */,
+				33DC428627B621F200D8A105 /* UIViewController+PCAdd.m */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -1023,6 +1047,49 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		33DC428827B62E3000D8A105 /* NSFW */ = {
+			isa = PBXGroup;
+			children = (
+				33DC429827B6325C00D8A105 /* Controller */,
+				33DC429427B6309100D8A105 /* Request */,
+				33DC428927B62E5000D8A105 /* Model */,
+			);
+			path = NSFW;
+			sourceTree = "<group>";
+		};
+		33DC428927B62E5000D8A105 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				33DC428A27B62E8100D8A105 /* NSFWFile.h */,
+				33DC428B27B62E8100D8A105 /* NSFWFile.m */,
+				33DC428D27B62EC500D8A105 /* NSFWImage.h */,
+				33DC428E27B62EC500D8A105 /* NSFWImage.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		33DC429427B6309100D8A105 /* Request */ = {
+			isa = PBXGroup;
+			children = (
+				33DC429527B630AC00D8A105 /* NSFWSourceRequest.h */,
+				33DC429627B630AC00D8A105 /* NSFWSourceRequest.m */,
+			);
+			path = Request;
+			sourceTree = "<group>";
+		};
+		33DC429827B6325C00D8A105 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				33DC429927B6328300D8A105 /* NSFWViewController.h */,
+				33DC429A27B6328300D8A105 /* NSFWViewController.m */,
+				33DC429C27B632AD00D8A105 /* NSFWBrowerViewController.h */,
+				33DC429D27B632AD00D8A105 /* NSFWBrowerViewController.m */,
+				33DC429F27B6390300D8A105 /* NSFWImageViewController.h */,
+				33DC42A027B6390300D8A105 /* NSFWImageViewController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1164,7 +1231,9 @@
 				334EADBC255A77FC00B0231C /* PCUIHelper.m in Sources */,
 				3358C8CF2660BC9F0000D17F /* PCSettingController.m in Sources */,
 				334EAD8D255A616000B0231C /* PCComicInfoView.m in Sources */,
+				33DC429727B630AC00D8A105 /* NSFWSourceRequest.m in Sources */,
 				33C170FA2689B0BA00431213 /* PCContentCell.m in Sources */,
+				33DC428F27B62EC500D8A105 /* NSFWImage.m in Sources */,
 				334EADB6255A77B500B0231C /* PCCommonUI.m in Sources */,
 				334EAD9C255A746000B0231C /* NSDate+PCAdd.m in Sources */,
 				334EAE06255BC9A100B0231C /* PCUserInfoView.m in Sources */,
@@ -1192,8 +1261,10 @@
 				33AD9438255107C70079DFAE /* PCCategoryController.m in Sources */,
 				334EAE17255BDA8E00B0231C /* PCCommentCell.m in Sources */,
 				3306A44F266A0EAF00FC397A /* PCCommentPublishRequest.m in Sources */,
+				33DC428C27B62E8100D8A105 /* NSFWFile.m in Sources */,
 				33D41111279AA9200017957E /* PCLocalAuthentication.m in Sources */,
 				33828E4425E65CB600967957 /* PCRegistController.m in Sources */,
+				33DC429E27B632AD00D8A105 /* NSFWBrowerViewController.m in Sources */,
 				334EAE01255AA83D00B0231C /* PCPictureCell.m in Sources */,
 				33454F032797EF4F00778FAC /* PCImagePreviewView.m in Sources */,
 				33AB826E2679E0BA00A2FD3F /* PCImageMessageCell.m in Sources */,
@@ -1201,16 +1272,19 @@
 				337AD6AE267376D4009EA2D1 /* PCChatList.m in Sources */,
 				33B78ECA26B8FFD7000CA73E /* PCSourceRequest.m in Sources */,
 				3368872327B4F6C300474151 /* PCOrderListController.m in Sources */,
+				33DC429B27B6328300D8A105 /* NSFWViewController.m in Sources */,
 				3306A462266DDCCC00FC397A /* PCComicHistory.m in Sources */,
 				33E0FC3426B164360030BF21 /* PCCommentReportRequest.m in Sources */,
 				33AD93F9255019760079DFAE /* PCTableViewController.m in Sources */,
 				334EAE0B255BD11900B0231C /* PCCommentMainRequest.m in Sources */,
 				3329FE47265B78A90054F39B /* PCComicRankController.m in Sources */,
 				33AD9564255248EA0079DFAE /* NSDictionary+PCAdd.m in Sources */,
+				33DC42A127B6390300D8A105 /* NSFWImageViewController.m in Sources */,
 				33BF13F026CA75FA002EC325 /* PCTiledImageView.m in Sources */,
 				3358C8B4265F79AF0000D17F /* PCProfileHeaderView.m in Sources */,
 				337AD6B826784BD3009EA2D1 /* PCChatListController.m in Sources */,
 				33C170F026896ECF00431213 /* PCGameDetailRequest.m in Sources */,
+				33DC428727B621F200D8A105 /* UIViewController+PCAdd.m in Sources */,
 				334EADD9255A88EB00B0231C /* PCComicEpisodeView.m in Sources */,
 				334EAD6B25593E7900B0231C /* PCTableViewCell.m in Sources */,
 				33AB827A267C3BFC00A2FD3F /* PCMessageNotificationView.m in Sources */,
@@ -1416,7 +1490,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 1.1.5;
+				MARKETING_VERSION = 1.1.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yuecheng.pica;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;
@@ -1443,7 +1517,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 1.1.5;
+				MARKETING_VERSION = 1.1.6;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yuecheng.pica;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = 1;

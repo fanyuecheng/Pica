@@ -312,7 +312,10 @@ PODS:
   - SDWebImage (5.12.2):
     - SDWebImage/Core (= 5.12.2)
   - SDWebImage/Core (5.12.2)
+  - SDWebImageVideoCoder (0.2.0):
+    - SDWebImage (~> 5.10)
   - SocketRocket (0.6.0)
+  - SSZipArchive (2.4.2)
   - UMCommon (7.3.6):
     - UMDevice
   - UMDevice (2.2.1)
@@ -327,7 +330,9 @@ DEPENDENCIES:
   - MJRefresh (~> 3.7.5)
   - QMUIKit (~> 4.4.3)
   - SDWebImage (~> 5.12.2)
+  - SDWebImageVideoCoder (~> 0.2.0)
   - SocketRocket (~> 0.6.0)
+  - SSZipArchive (~> 2.4.2)
   - UMCommon (~> 7.3.6)
   - UMDevice (~> 2.2.1)
   - YTKNetwork (~> 3.0.6)
@@ -342,7 +347,9 @@ SPEC REPOS:
     - MJRefresh
     - QMUIKit
     - SDWebImage
+    - SDWebImageVideoCoder
     - SocketRocket
+    - SSZipArchive
     - UMCommon
     - UMDevice
     - YTKNetwork
@@ -356,12 +363,14 @@ SPEC CHECKSUMS:
   MJRefresh: fdf5e979eb406a0341468932d1dfc8b7f9fce961
   QMUIKit: 5da6e59d5d312681ee45706af42fd3af7b4f55eb
   SDWebImage: 240e5c12b592fb1268c1d03b8c90d90e8c2ffe82
+  SDWebImageVideoCoder: 977388b65f0f508161ccf17597db147c26076cec
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
+  SSZipArchive: e7b4f3d9e780c2acc1764cd88fbf2de28f26e5b2
   UMCommon: c61df8457c275afd4f8a2fca10c7446d66220ac0
   UMDevice: 053478c4b4d7292f31f0a275c227d3c4007a5571
   YTKNetwork: c16be90b06be003de9e9cd0d3b187cc8eaf35c04
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: 38829bca17d17f39ecdc5ed9bed41722e76213a3
+PODFILE CHECKSUM: 9e18b44c732114a2d61b80af2e1900454487145a
 
 COCOAPODS: 1.11.2

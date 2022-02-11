@@ -335,7 +335,7 @@
     [super didReceiveMemoryWarning];
     
     [[SDImageCache sharedImageCache] clearMemory];
-    NSLog(@"⚠️内存警告⚠️");
+    NSLog(@"⚠️内存警告⚠️ %@", self);
 }
 
 @end

@@ -154,7 +154,7 @@
         @strongify(self)
         self.playButton.alpha = 1;
         if (result.final) {
-            [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
+            [kDefaultFileManager removeItemAtPath:path error:nil];
             [self.loadView stopAnimating];
             self.message.audioString = result.bestTranscription.formattedString;
             [tableView reloadData];
@@ -198,7 +198,7 @@
 
 - (UIActivityIndicatorView *)loadView {
     if (!_loadView) {
-        _loadView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray size:CGSizeMake(30, 30)];
+        _loadView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium size:CGSizeMake(30, 30)];
         _loadView.hidesWhenStopped = YES;
         _loadView.hidden = YES;
     }
