@@ -65,7 +65,9 @@
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
             fileSize += [[SDImageCache sharedImageCache] totalDiskSize];
             fileSize += [[[kDefaultFileManager attributesOfItemAtPath:[PCChatMessage dbPath] error:nil] objectForKey:NSFileSize] integerValue];
-            fileSize += [[[kDefaultFileManager attributesOfItemAtPath:[self networkCachePath] error:nil] objectForKey:NSFileSize] integerValue];
+            fileSize += [self folderSizeAtPath:[self networkCachePath]];
+            fileSize += [self folderSizeAtPath:[self nsfwCachePath]];
+            
             dispatch_async(dispatch_get_main_queue(), ^{
                 cell.detailTextLabel.text = [NSByteCountFormatter stringFromByteCount:fileSize countStyle:NSByteCountFormatterCountStyleFile];
             });
@@ -151,6 +153,7 @@
         [[SDImageCache sharedImageCache] clearDiskOnCompletion:^{
             [PCChatMessage deleteObjectsWhere:nil arguments:nil];
             [kDefaultFileManager removeItemAtPath:[self networkCachePath] error:nil];
+            [kDefaultFileManager removeItemAtPath:[self nsfwCachePath] error:nil];
 //            [kPCUserDefaults removeObjectForKey:PC_LOCAL_ACCOUNT];
             [self.tableView reloadData];
         }];
@@ -233,6 +236,13 @@
     return path;
 }
 
+- (NSString *)nsfwCachePath {
+    NSString *pathOfLibrary = [NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) firstObject];
+    NSString *path = [pathOfLibrary stringByAppendingPathComponent:@"NSFWSource"];
+    
+    return path;
+}
+
 - (void)selectChannel {
     NSInteger channel = [[kPCUserDefaults stringForKey:PC_API_CHANNEL] integerValue];
     channel ++;
@@ -247,6 +257,25 @@
 - (void)chatSetting {
     PCChatSettingController *chatSetting = [[PCChatSettingController alloc] initWithStyle:UITableViewStyleGrouped];
     [self.navigationController pushViewController:chatSetting animated:YES];
+}
+
+- (long long)fileSizeAtPath:(NSString *)filePath {
+    if ([kDefaultFileManager fileExistsAtPath:filePath]){
+        return [[kDefaultFileManager attributesOfItemAtPath:filePath error:nil] fileSize];
+    }
+    return 0;
+}
+
+- (long long)folderSizeAtPath:(NSString *)folderPath {
+    if (![kDefaultFileManager fileExistsAtPath:folderPath]) return 0;
+    NSEnumerator *childFilesEnumerator = [[kDefaultFileManager subpathsAtPath:folderPath] objectEnumerator];
+    NSString *fileName;
+    long long folderSize = 0;
+    while ((fileName = [childFilesEnumerator nextObject]) != nil) {
+        NSString* fileAbsolutePath = [folderPath stringByAppendingPathComponent:fileName];
+        folderSize += [self fileSizeAtPath:fileAbsolutePath];
+    }
+    return folderSize;
 }
 
 #pragma mark - Action

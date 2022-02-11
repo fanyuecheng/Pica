@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface NSFWSourceRequest : YTKRequest
 
+@property (nonatomic, copy) void (^progressBlock)(NSProgress *progress);
+
 - (BOOL)downloaded;
 - (NSString *)rootDirectory;
 

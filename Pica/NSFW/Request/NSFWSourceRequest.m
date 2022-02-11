@@ -22,6 +22,17 @@
 
 @implementation NSFWSourceRequest
 
+- (instancetype)init {
+    if (self = [super init]) {
+        @weakify(self)
+        self.resumableDownloadProgressBlock = ^(NSProgress *progress) {
+            @strongify(self)
+            !self.progressBlock ? : self.progressBlock(progress);
+        };
+    }
+    return self;
+}
+
 - (NSString *)resumableDownloadPath {
     return self.zipPath;
 }
@@ -31,7 +42,8 @@
 }
 
 #pragma mark - Method
-- (void)startWithCompletionBlockWithSuccess:(YTKRequestCompletionBlock)success failure:(YTKRequestCompletionBlock)failure {
+
+- (void)startWithCompletionBlockWithSuccess:(nullable YTKRequestCompletionBlock)success failure:(nullable YTKRequestCompletionBlock)failure { 
     [super startWithCompletionBlockWithSuccess:^(__kindof YTKBaseRequest * _Nonnull request) {
         [self unzip];
         !success ? : success(request);

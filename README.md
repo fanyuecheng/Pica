@@ -9,7 +9,7 @@ API来自 [picacomic-api](https://github.com/czp3009/picacomic-api)
 #### 更新日志  
 **v1.1.6**   
 *  聊天室增加快捷指令输入   
-*  增加NSFW模块，默认关闭设，置中开启
+*  增加NSFW模块，默认关闭，设置中开启
 
 **v1.1.5**   
 *  增加本子魔/神/妹/母等推荐  

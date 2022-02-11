@@ -80,9 +80,8 @@
     if (!_request) {
         _request = [[NSFWSourceRequest alloc] init];
         @weakify(self)
-        _request.resumableDownloadProgressBlock = ^(NSProgress *progress) {
+        _request.progressBlock = ^(NSProgress *progress) {
             @strongify(self)
-            NSLog(@"%@", [NSThread currentThread]);
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (progress.fractionCompleted >= 1) {
                     [self showEmptyViewWithLoading:YES image:nil text:@"解压文件中..." detailText:nil buttonTitle:nil buttonAction:NULL];
