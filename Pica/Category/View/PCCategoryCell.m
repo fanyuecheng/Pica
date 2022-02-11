@@ -50,6 +50,9 @@
     if (category.thumb) {
         self.iconLabel.text = nil;
         [self.imageView pc_setImageWithURL:category.thumb.imageURL];
+    } else if (category.customThumb) {
+        self.iconLabel.text = nil;
+        self.imageView.image = category.customThumb;
     } else {
         self.iconLabel.text = category.desc;
         self.imageView.image = nil;
@@ -62,6 +65,7 @@
 - (SDAnimatedImageView *)imageView {
     if (!_imageView) {
         _imageView = [[SDAnimatedImageView alloc] init];
+        _imageView.contentMode = UIViewContentModeScaleAspectFit;
         _imageView.layer.cornerRadius = 4;
         _imageView.layer.masksToBounds = YES;
         _imageView.layer.borderWidth = .5;

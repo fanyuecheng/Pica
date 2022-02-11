@@ -16,6 +16,7 @@
 #import "PCUser.h"
 #import "PCChatMessage.h"
 #import "UIImage+PCAdd.h"
+#import "PCOrderListController.h"
 #import <AVFoundation/AVFoundation.h>
 
 static CGFloat const kChatBarTextViewBottomOffset = 10;
@@ -47,6 +48,8 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
 @property (nonatomic, assign) CGFloat        keyboardHeight;
 @property (nonatomic, strong) NSMutableArray *messageArray;
 @property (nonatomic, strong) NSMutableArray *localMessageArray;
+
+@property (nonatomic, strong) QMUIModalPresentationViewController *modalController;
 
 @end
 
@@ -84,6 +87,12 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
     [self.toolbarView addSubview:self.textView];
     [self.toolbarView addSubview:self.recordButton];
     [self.toolbarView addSubview:self.imageButton];
+}
+
+- (void)setupNavigationItems {
+    [super setupNavigationItems];
+    self.titleView.style = QMUINavigationTitleViewStyleSubTitleVertical;
+    self.navigationItem.rightBarButtonItem = [UIBarButtonItem qmui_itemWithTitle:@"指令" target:self action:@selector(orderAction:)];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -176,6 +185,52 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
 }
 
 #pragma mark - Action
+- (void)orderAction:(id)sender {
+    PCOrderListController *orderList = [[PCOrderListController alloc] init];
+    @weakify(self)
+    orderList.orderBlock = ^(NSString * _Nonnull order) {
+        @strongify(self)
+        self.textView.text = order;
+        [self.modalController hideWithAnimated:YES completion:nil];
+    };
+    
+    QMUIModalPresentationViewController *modalController = [[QMUIModalPresentationViewController alloc] init];
+    modalController.contentViewController = orderList;
+    modalController.contentViewMargins = UIEdgeInsetsZero;
+    modalController.maximumContentViewWidth = SCREEN_WIDTH;
+    
+    @weakify(modalController)
+    modalController.layoutBlock = ^(CGRect containerBounds, CGFloat keyboardHeight, CGRect contentViewDefaultFrame) {
+        @strongify(modalController)
+        modalController.contentView.qmui_frameApplyTransform = CGRectSetY(contentViewDefaultFrame, CGRectGetHeight(containerBounds) - modalController.contentViewMargins.bottom - CGRectGetHeight(contentViewDefaultFrame) - (keyboardHeight ? 0 : modalController.view.safeAreaInsets.bottom) - keyboardHeight);
+    };
+    
+    modalController.showingAnimation = ^(UIView *dimmingView, CGRect containerBounds, CGFloat keyboardHeight, CGRect contentViewFrame, void(^completion)(BOOL finished)) {
+        @strongify(modalController)
+        dimmingView.alpha = 0;
+        modalController.contentView.frame = CGRectSetY(contentViewFrame, CGRectGetHeight(containerBounds));
+        [UIView animateWithDuration:.25 delay:0.0 options:QMUIViewAnimationOptionsCurveOut animations:^(void) {
+            dimmingView.alpha = 1;
+            modalController.contentView.frame = CGRectSetY(contentViewFrame, contentViewFrame.origin.y - keyboardHeight);
+        } completion:^(BOOL finished) {
+            !completion ? : completion(finished);
+        }];
+    };
+    
+    modalController.hidingAnimation = ^(UIView *dimmingView, CGRect containerBounds, CGFloat keyboardHeight, void(^completion)(BOOL finished)) {
+        @strongify(modalController)
+        [UIView animateWithDuration:.25 delay:0.0 options:QMUIViewAnimationOptionsCurveOut animations:^(void) {
+            dimmingView.alpha = 0;
+            modalController.contentView.frame = CGRectSetY(modalController.contentView.frame, CGRectGetHeight(containerBounds));
+        } completion:^(BOOL finished) {
+            !completion ? : completion(finished);
+        }];
+    };
+
+    [modalController showWithAnimated:YES completion:nil];
+    self.modalController = modalController;
+}
+
 - (void)pictureAction:(QMUIButton *)sender {
     [self.textView endEditing:YES];
     
@@ -436,8 +491,8 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
                                    nil];
 
     NSString *cachePath = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"PC_AUDIO"];
-    if (![[NSFileManager defaultManager] fileExistsAtPath:cachePath]) {
-        [[NSFileManager defaultManager] createDirectoryAtPath:cachePath withIntermediateDirectories:YES attributes:nil error:nil];
+    if (![kDefaultFileManager fileExistsAtPath:cachePath]) {
+        [kDefaultFileManager createDirectoryAtPath:cachePath withIntermediateDirectories:YES attributes:nil error:nil];
     }
     
     NSString *path = [cachePath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.m4a", @([[NSDate date] timeIntervalSince1970])]];
@@ -501,8 +556,8 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
         [_recorder stop];
     }
     NSString *path = _recorder.url.path;
-    if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
-        [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
+    if ([kDefaultFileManager fileExistsAtPath:path]) {
+        [kDefaultFileManager removeItemAtPath:path error:nil];
     }
 }
 
@@ -628,8 +683,7 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
                     message.messageType == PCChatMessageTypeAudio) {
                     [self insertMessage:message scrollToBottom:YES];
                 } else if (message.messageType == PCChatMessageTypeConnectionCount && self.navigationController.topViewController == self) { 
-                    self.navigationItem.rightBarButtonItem = [UIBarButtonItem qmui_itemWithTitle:[NSString stringWithFormat:@"在线人数:%@", @(message.connections)] target:nil action:NULL];
-                    self.navigationItem.rightBarButtonItem.enabled = NO;
+                    self.titleView.subtitle = [NSString stringWithFormat:@"在线人数:%@", @(message.connections)];
                 } else if (message.messageType == PCChatMessageTypeNotification && self.navigationController.topViewController == self) {
                     [PCMessageNotificationView showWithMessage:message.message animated:YES];
                 }

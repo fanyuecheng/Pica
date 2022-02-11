@@ -9,6 +9,8 @@
 #ifndef PCDefineHeader_h
 #define PCDefineHeader_h
  
+#define kDefaultFileManager  [NSFileManager defaultManager]
+
 #ifndef weakify
     #if DEBUG
         #if __has_feature(objc_arc)

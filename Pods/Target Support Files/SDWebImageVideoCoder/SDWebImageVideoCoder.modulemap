@@ -1,0 +1,6 @@
+framework module SDWebImageVideoCoder {
+  umbrella header "SDWebImageVideoCoder-umbrella.h"
+
+  export *
+  module * { export * }
+}

@@ -23,6 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
          "link": "https://donate.woyeahgo.cf"
        }
  */
+
+@class UIImage;
 @interface PCCategory : NSObject
 
 @property (nonatomic, copy)   NSString *categoryId;//_id
@@ -35,12 +37,14 @@ NS_ASSUME_NONNULL_BEGIN
 
 //custom
 @property (nonatomic, assign) BOOL isCustom;
+@property (nonatomic, strong) UIImage  *customThumb;
 @property (nonatomic, copy)   NSString *controllerClass;
 
 + (PCCategory *)rankCategory;
 + (PCCategory *)randomCategory;
 + (PCCategory *)commentCategory;
 + (PCCategory *)recommendCategory;
++ (PCCategory *)nsfwCategory;
 + (PCCategory *)aiCategory;//iOS 专有
 
 @end

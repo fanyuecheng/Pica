@@ -16,6 +16,7 @@
 #import "PCUserInfoView.h"
 #import "PCCommentController.h"
 #import "PCCommentReportRequest.h"
+#import "UIViewController+PCAdd.h"
 
 @interface PCCommentCell ()
 
@@ -118,17 +119,9 @@
 }
 
 - (void)moreAction:(QMUIButton *)sender {
-    QMUIAlertAction *action1 = [QMUIAlertAction actionWithTitle:@"举报" style:QMUIAlertActionStyleDefault handler:^(__kindof QMUIAlertController *aAlertController, QMUIAlertAction *action) {
+    [UIViewController pc_actionSheetWithTitle:nil message:nil confirmTitle:@"举报" confirm:^{
         [self report];
-    }];
-    
-    QMUIAlertAction *action3 = [QMUIAlertAction actionWithTitle:@"取消" style:QMUIAlertActionStyleCancel handler:nil];
-    
-    QMUIAlertController *alertController = [QMUIAlertController alertControllerWithTitle:nil message:nil preferredStyle:QMUIAlertControllerStyleActionSheet];
-    
-    [alertController addAction:action1];
-    [alertController addAction:action3];
-    [alertController showWithAnimated:YES];
+    } cancelTitle:@"取消" cancel:nil];
 }
  
 - (void)childAction:(QMUIButton *)sender {

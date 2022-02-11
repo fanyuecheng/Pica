@@ -36,6 +36,10 @@
 
 @implementation PCCategoryController
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
     
@@ -52,6 +56,7 @@
         navigation.modalPresentationStyle = UIModalPresentationFullScreen;
         [self presentViewController:navigation animated:YES completion:nil];
     }
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(nsfwChange:) name:PC_NSFW_ON object:nil];
 }
 
 - (void)initSubviews {
@@ -75,6 +80,22 @@
     }
 }
 
+#pragma mark - Notification
+- (void)nsfwChange:(NSNotification *)noti {
+    if (!self.categoryArray.count) {
+        return;
+    }
+    BOOL on = [noti.object boolValue];
+    NSMutableArray *categoryArray = [self.categoryArray mutableCopy];
+    if (on) {
+        [categoryArray insertObject:[PCCategory nsfwCategory] atIndex:0];
+    } else {
+        [categoryArray removeObjectAtIndex:0];
+    }
+    self.categoryArray = categoryArray;
+    [self.collectionView reloadData];
+}
+
 #pragma mark - Request
 - (void)requestKeyword {
     [self showEmptyViewWithLoading];
@@ -92,6 +113,9 @@
     [request sendRequest:^(NSArray *responseArray) {
         [self hideEmptyView];
         NSMutableArray *categoryArray = [NSMutableArray array];
+        if ([kPCUserDefaults boolForKey:PC_NSFW_ON]) {
+            [categoryArray addObject:[PCCategory nsfwCategory]];
+        }
         [categoryArray addObject:[PCCategory rankCategory]];
         [categoryArray addObject:[PCCategory randomCategory]];
         [categoryArray addObject:[PCCategory recommendCategory]];
@@ -206,6 +230,8 @@
                 PCCommentController *comment = [[PCCommentController alloc] initWithComicId:PC_COMMENT_BOARD_ID];
                 comment.commentType = PCCommentTypeComic;
                 controller = comment;
+            } else if ([category.controllerClass isEqualToString:@"NSFWViewController"]) {
+                controller = [[NSClassFromString(category.controllerClass) alloc] init];
             }
         } else {
             PCComicListController *list = [[PCComicListController alloc] initWithType:PCComicListTypeCategory];

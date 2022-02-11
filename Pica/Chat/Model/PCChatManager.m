@@ -78,7 +78,7 @@
     if (data) {
         PCChatMessage *message = [PCChatMessage voiceMessageDataWithData:data];
         [self sendData:message.messageData];
-        [[NSFileManager defaultManager] removeItemAtPath:path error:nil];
+        [kDefaultFileManager removeItemAtPath:path error:nil];
         return message;
     } else {
         return nil;

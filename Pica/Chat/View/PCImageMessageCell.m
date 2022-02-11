@@ -10,6 +10,7 @@
 #import "PCVendorHeader.h"
 #import "PCChatMessage.h"
 #import "PCMessageBubbleView.h"
+#import "UIViewController+PCAdd.h"
 
 @interface PCImageMessageCell () <QMUIImagePreviewViewDelegate>
 
@@ -109,21 +110,13 @@
     if (zoomImageView.image == nil) {
         return;
     }
-    QMUIAlertAction *action1 = [QMUIAlertAction actionWithTitle:@"确定" style:QMUIAlertActionStyleDefault handler:^(__kindof QMUIAlertController *aAlertController, QMUIAlertAction *action) {
+    [UIViewController pc_actionSheetWithTitle:@"保存图片到相册" message:nil confirm:^{
         QMUIImageWriteToSavedPhotosAlbumWithAlbumAssetsGroup(zoomImageView.image, nil, ^(QMUIAsset *asset, NSError *error) {
             if (asset) {
                 [QMUITips showSucceed:@"已保存到相册"];
             }
         });
-    }];
-  
-    QMUIAlertAction *action2 = [QMUIAlertAction actionWithTitle:@"取消" style:QMUIAlertActionStyleCancel handler:nil];
-    
-    QMUIAlertController *alertController = [QMUIAlertController alertControllerWithTitle:@"保存图片到相册" message:nil preferredStyle:QMUIAlertControllerStyleActionSheet];
-    
-    [alertController addAction:action1];
-    [alertController addAction:action2];
-    [alertController showWithAnimated:YES];
+    } cancel:nil];
 }
 
 @end
