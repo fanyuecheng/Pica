@@ -50,6 +50,7 @@
     [UMConfigure setLogEnabled:YES];
 #endif
     [UMConfigure initWithAppkey:PC_UMENG_APP_KEY channel:@"App Store"];
+    [MobClick setAutoPageEnabled:YES];
 }
 
 - (void)configImageCoder {
