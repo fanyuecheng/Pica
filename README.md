@@ -7,6 +7,10 @@
 API来自 [picacomic-api](https://github.com/czp3009/picacomic-api) 
 
 #### 更新日志  
+**v1.2.1**      
+*  增加iOS庇护所分类  
+*  图片详情页支持导出本子单话html  
+
 **v1.2.0**      
 *  增加Waifu2x模块，入口在长按大图菜单  
 

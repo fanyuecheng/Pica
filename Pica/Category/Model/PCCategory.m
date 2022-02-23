@@ -75,6 +75,16 @@
     return category;
 }
 
++ (PCCategory *)sanctuaryCategory {
+    PCCategory *category = [[PCCategory alloc] init];
+    category.title = @"iOS庇护所";
+    category.active = YES;
+    category.isWeb = YES;
+    category.link = @"https://ios.bb10.xyz/";
+    category.desc = ICON_IOS;
+    return category;
+}
+
 + (PCCategory *)aiCategory {
     PCCategory *category = [[PCCategory alloc] init];
     category.title = @"嗶咔AI推薦";

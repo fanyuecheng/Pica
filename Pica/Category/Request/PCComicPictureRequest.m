@@ -27,7 +27,7 @@
 
 - (void)sendRequest:(void (^)(id response))success
             failure:(void (^)(NSError *error))failure {
-    [super sendRequest:success failure:failure];
+//    [super sendRequest:success failure:failure];
     
     [self startWithCompletionBlockWithSuccess:^(__kindof YTKBaseRequest * _Nonnull request) {
         PCEpisodePicture *picture = [PCEpisodePicture yy_modelWithJSON:request.responseJSONObject[@"data"][@"pages"]];

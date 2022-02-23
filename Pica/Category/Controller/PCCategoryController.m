@@ -120,6 +120,7 @@
         [categoryArray addObject:[PCCategory randomCategory]];
         [categoryArray addObject:[PCCategory recommendCategory]];
         [categoryArray addObject:[PCCategory commentCategory]];
+        [categoryArray addObject:[PCCategory sanctuaryCategory]];
         [categoryArray addObjectsFromArray:responseArray];
         self.categoryArray = categoryArray;
     } failure:^(NSError * _Nonnull error) {
