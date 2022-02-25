@@ -1480,7 +1480,6 @@
 				DEVELOPMENT_TEAM = WX7HG5RLRC;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Pica/TencentOpenApi",
 					"$(PROJECT_DIR)/Pica",
 				);
 				INFOPLIST_FILE = Pica/Info.plist;
@@ -1507,7 +1506,6 @@
 				DEVELOPMENT_TEAM = WX7HG5RLRC;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Pica/TencentOpenApi",
 					"$(PROJECT_DIR)/Pica",
 				);
 				INFOPLIST_FILE = Pica/Info.plist;
