@@ -177,6 +177,7 @@
 		3329FE4F265B83F60054F39B /* PCComicRankCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCComicRankCell.m; sourceTree = "<group>"; };
 		3329FE51265B90C40054F39B /* PCKnightRankCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCKnightRankCell.h; sourceTree = "<group>"; };
 		3329FE52265B90C40054F39B /* PCKnightRankCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCKnightRankCell.m; sourceTree = "<group>"; };
+		332F292427CC6BA30003F642 /* PCStatisticHeader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCStatisticHeader.h; sourceTree = "<group>"; };
 		33454F012797EF4F00778FAC /* PCImagePreviewView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCImagePreviewView.h; sourceTree = "<group>"; };
 		33454F022797EF4F00778FAC /* PCImagePreviewView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCImagePreviewView.m; sourceTree = "<group>"; };
 		334EAD6525593BB400B0231C /* PCComic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCComic.h; sourceTree = "<group>"; };
@@ -764,6 +765,7 @@
 				334EAD752559409A00B0231C /* PCDefineHeader.h */,
 				334EAD94255A6DCC00B0231C /* PCIconHeader.h */,
 				330B10F626A193470075A9A0 /* PCLocalKeyHeader.h */,
+				332F292427CC6BA30003F642 /* PCStatisticHeader.h */,
 			);
 			path = Header;
 			sourceTree = "<group>";

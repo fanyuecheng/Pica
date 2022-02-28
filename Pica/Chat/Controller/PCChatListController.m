@@ -68,6 +68,7 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     PCChatList *list = self.listArray[indexPath.row];
+    [MobClick event:PC_EVENT_CHATROOM_CLICK attributes:@{@"title" : list.title}];
     PCChatViewController *chat = [[PCChatViewController alloc] initWithURL:list.socketUrl];
     chat.title = list.title;
     [self.navigationController pushViewController:chat animated:YES];

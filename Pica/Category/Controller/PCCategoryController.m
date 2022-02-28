@@ -240,6 +240,7 @@
             controller = list;
         }
         if (controller) {
+            [MobClick event:PC_EVENT_CATEGORY_CLICK attributes:@{@"title" : category.title}];
             [self.navigationController pushViewController:controller animated:YES];
         }
     }

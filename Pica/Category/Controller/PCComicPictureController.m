@@ -144,6 +144,7 @@
         NSString *localPath = [[NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES) firstObject] stringByAppendingPathComponent:@"comic_temp.html"];
         BOOL success = [html writeToFile:localPath atomically:YES encoding:NSUTF8StringEncoding error:nil];
         if (success) {
+            [MobClick event:PC_EVENT_COMIC_EXPORT];
             NSMutableArray *activityItems = [NSMutableArray array];
             [activityItems addObject:[NSURL fileURLWithPath:localPath]];
       

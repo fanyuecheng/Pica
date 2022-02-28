@@ -229,6 +229,7 @@
 }
 
 - (void)publishComment {
+    [MobClick event:PC_EVENT_COMMENT];
     QMUITips *loading = [QMUITips showLoadingInView:DefaultTipsParentView];
     
     [self.publishRequest sendRequest:^(PCComment *comment) {
