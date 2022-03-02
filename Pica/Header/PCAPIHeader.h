@@ -51,6 +51,8 @@
 #define PC_API_COMICS_COMMENTS_LIKE  @"comments/%@/like"
 //评论举报
 #define PC_API_COMICS_COMMENTS_REPORT @"comments/%@/report"
+//相关漫画
+#define PC_API_COMICS_RECOMMENDATION  @"comics/%@/recommendation"
 //个人信息
 #define PC_API_USERS_PROFILE_ME @"users/profile"
 #define PC_API_USERS_PROFILE    @"users/%@/profile"

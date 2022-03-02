@@ -9,17 +9,22 @@
 #import "PCComicDetailController.h"
 #import "PCComicDetailRequest.h"
 #import "PCComicEpisodeRequest.h"
+#import "PCComicSimilarRequest.h"
 #import "PCComicInfoView.h"
 #import "PCComicEpisodeView.h"
 #import "PCComicHistory.h"
 #import "PCComicPictureController.h"
+#import "PCComicRecommendView.h"
 
 @interface PCComicDetailController ()
 
+@property (nonatomic, strong) PCComicRecommendView *recommendView;
 @property (nonatomic, copy)   NSString *comicId;
 @property (nonatomic, strong) PCComic *comic;
 @property (nonatomic, strong) PCComicEpisodeRequest *episodeRequest;
+@property (nonatomic, strong) PCComicSimilarRequest *similarRequest;
 @property (nonatomic, strong) NSMutableArray <PCComicEpisode *> *episodeArray;
+@property (nonatomic, copy)   NSArray <PCComic *> *similarArray;
 
 @property (nonatomic, assign) BOOL continueReadTag;
  
@@ -45,6 +50,7 @@
      
     [self requestComicDetail];
     [self requestComicEpisode];
+    [self requestComicSimilar];
 }
 
 - (void)initTableView {
@@ -93,6 +99,14 @@
     }];
 }
 
+- (void)requestComicSimilar {
+    [self.similarRequest sendRequest:^(NSArray <PCComic *>* response) {
+        self.similarArray = response;
+    } failure:^(NSError * _Nonnull error) {
+        
+    }];
+}
+
 #pragma mark - Action
 - (void)continuReadAction:(QMUIButton *)sender {
     PCComic *comic = [kPCComicHistory comicWithId:self.comicId];
@@ -130,11 +144,11 @@
 
 #pragma mark - TableView
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.episodeArray.count;
+    return section == 0 ? self.episodeArray.count : 0;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -161,25 +175,33 @@
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section {
-    PCComic *comic = [kPCComicHistory comicWithId:self.comicId];
-    return (comic.historyEpisodeTitle &&
-            comic.historyEpisodeId) ? 44 : 0;
+    if (section == 0) {
+        PCComic *comic = [kPCComicHistory comicWithId:self.comicId];
+        return (comic.historyEpisodeTitle &&
+                comic.historyEpisodeId) ? 44 : 0;
+    } else {
+        return self.similarArray.count ? self.recommendView.qmui_height : CGFLOAT_MIN;
+    }
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
-    PCComic *comic = [kPCComicHistory comicWithId:self.comicId];
-    if ((comic.historyEpisodeTitle &&
-         comic.historyEpisodeId)) {
-        QMUIButton *button = [[QMUIButton alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 44)];
-        button.backgroundColor = UIColorWhite;
-        [button setTitle:[NSString stringWithFormat:@"续看 %@", comic.historyEpisodeTitle] forState:UIControlStateNormal];
-        button.titleLabel.font = UIFontMake(14);
-        button.titleEdgeInsets = UIEdgeInsetsMake(0, 15, 0, 0);
-        button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
-        [button addTarget:self action:@selector(continuReadAction:) forControlEvents:UIControlEventTouchUpInside];
-        return button;
+    if (section == 0) {
+        PCComic *comic = [kPCComicHistory comicWithId:self.comicId];
+        if ((comic.historyEpisodeTitle &&
+             comic.historyEpisodeId)) {
+            QMUIButton *button = [[QMUIButton alloc] initWithFrame:CGRectMake(0, 0, SCREEN_WIDTH, 44)];
+            button.backgroundColor = UIColorWhite;
+            [button setTitle:[NSString stringWithFormat:@"续看 %@", comic.historyEpisodeTitle] forState:UIControlStateNormal];
+            button.titleLabel.font = UIFontMake(14);
+            button.titleEdgeInsets = UIEdgeInsetsMake(0, 15, 0, 0);
+            button.contentHorizontalAlignment = UIControlContentHorizontalAlignmentLeft;
+            [button addTarget:self action:@selector(continuReadAction:) forControlEvents:UIControlEventTouchUpInside];
+            return button;
+        } else {
+            return nil;
+        }
     } else {
-        return nil;
+        return self.similarArray.count ? self.recommendView : nil;
     }
 }
 
@@ -210,6 +232,20 @@
     return _episodeRequest;
 }
 
+- (PCComicSimilarRequest *)similarRequest {
+    if (!_similarRequest) {
+        _similarRequest = [[PCComicSimilarRequest alloc] initWithComicId:self.comicId];
+    }
+    return _similarRequest;
+}
+
+- (PCComicRecommendView *)recommendView {
+    if (!_recommendView) {
+        _recommendView = [[PCComicRecommendView alloc] init];
+    }
+    return _recommendView;
+}
+
 #pragma mark - Set
 - (void)setComic:(PCComic *)comic {
     _comic = comic;
@@ -217,5 +253,13 @@
     self.title = comic.title;
     self.tableView.tableHeaderView = [self tableHeaderView]; 
 }
+
+- (void)setSimilarArray:(NSArray<PCComic *> *)similarArray {
+    _similarArray = similarArray;
+    self.recommendView.comicArray = similarArray;
+    [self.recommendView sizeToFit];
+    [self.tableView reloadData];
+}
+
 
 @end
