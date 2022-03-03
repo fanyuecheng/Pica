@@ -46,7 +46,8 @@
         case PCComicListTypeHistory:
             self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemTrash target:self action:@selector(deleteAction:)];
             break;
-        case PCComicListTypeRecommend:
+        case PCComicListTypeSearch:
+            [MobClick event:PC_EVENT_SEARCH attributes:@{@"keyword" : self.keyword}];
             break;
         default:
             self.navigationItem.rightBarButtonItem = [UIBarButtonItem qmui_itemWithTitle:@"新到旧" target:self action:@selector(sortAction:)];
