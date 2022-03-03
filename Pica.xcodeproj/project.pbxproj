@@ -25,6 +25,8 @@
 		3329FE53265B90C40054F39B /* PCKnightRankCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3329FE52265B90C40054F39B /* PCKnightRankCell.m */; };
 		332F292827CDF1E90003F642 /* PCComicSimilarRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 332F292727CDF1E90003F642 /* PCComicSimilarRequest.m */; };
 		332F294527CF7DB70003F642 /* PCComicRecommendView.m in Sources */ = {isa = PBXBuildFile; fileRef = 332F294427CF7DB70003F642 /* PCComicRecommendView.m */; };
+		332F294827D063960003F642 /* PCVersionCheckRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 332F294727D063960003F642 /* PCVersionCheckRequest.m */; };
+		332F294B27D06AFD0003F642 /* PCVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 332F294A27D06AFD0003F642 /* PCVersion.m */; };
 		33454F032797EF4F00778FAC /* PCImagePreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 33454F022797EF4F00778FAC /* PCImagePreviewView.m */; };
 		334EAD6725593BB400B0231C /* PCComic.m in Sources */ = {isa = PBXBuildFile; fileRef = 334EAD6625593BB400B0231C /* PCComic.m */; };
 		334EAD6B25593E7900B0231C /* PCTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 334EAD6A25593E7900B0231C /* PCTableViewCell.m */; };
@@ -184,6 +186,10 @@
 		332F292727CDF1E90003F642 /* PCComicSimilarRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCComicSimilarRequest.m; sourceTree = "<group>"; };
 		332F294327CF7DB70003F642 /* PCComicRecommendView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCComicRecommendView.h; sourceTree = "<group>"; };
 		332F294427CF7DB70003F642 /* PCComicRecommendView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCComicRecommendView.m; sourceTree = "<group>"; };
+		332F294627D063960003F642 /* PCVersionCheckRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCVersionCheckRequest.h; sourceTree = "<group>"; };
+		332F294727D063960003F642 /* PCVersionCheckRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCVersionCheckRequest.m; sourceTree = "<group>"; };
+		332F294927D06AFD0003F642 /* PCVersion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCVersion.h; sourceTree = "<group>"; };
+		332F294A27D06AFD0003F642 /* PCVersion.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCVersion.m; sourceTree = "<group>"; };
 		33454F012797EF4F00778FAC /* PCImagePreviewView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCImagePreviewView.h; sourceTree = "<group>"; };
 		33454F022797EF4F00778FAC /* PCImagePreviewView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCImagePreviewView.m; sourceTree = "<group>"; };
 		334EAD6525593BB400B0231C /* PCComic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCComic.h; sourceTree = "<group>"; };
@@ -920,6 +926,8 @@
 				334EADEB255A939B00B0231C /* PCPicture.m */,
 				334EAE11255BD39000B0231C /* PCComment.h */,
 				334EAE12255BD39000B0231C /* PCComment.m */,
+				332F294927D06AFD0003F642 /* PCVersion.h */,
+				332F294A27D06AFD0003F642 /* PCVersion.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -965,6 +973,8 @@
 				336886C627ACF0F200474151 /* PCComicCollectionRequest.m */,
 				332F292627CDF1E90003F642 /* PCComicSimilarRequest.h */,
 				332F292727CDF1E90003F642 /* PCComicSimilarRequest.m */,
+				332F294627D063960003F642 /* PCVersionCheckRequest.h */,
+				332F294727D063960003F642 /* PCVersionCheckRequest.m */,
 			);
 			path = Request;
 			sourceTree = "<group>";
@@ -1327,6 +1337,7 @@
 				33AB827F267C4A9600A2FD3F /* PCRecordView.m in Sources */,
 				3358C8AC265F6E2F0000D17F /* PCProfileController.m in Sources */,
 				3358C8CA2660ABCF0000D17F /* PCUserCommentRequest.m in Sources */,
+				332F294827D063960003F642 /* PCVersionCheckRequest.m in Sources */,
 				334EAE0F255BD1AA00B0231C /* PCCommentController.m in Sources */,
 				334EAD89255A545200B0231C /* PCUser.m in Sources */,
 				334EAD85255A522700B0231C /* PCComicDetailController.m in Sources */,
@@ -1343,6 +1354,7 @@
 				3358C8B0265F75440000D17F /* PCProfileRequest.m in Sources */,
 				3329FE4D265B7BAA0054F39B /* PCKnightRankRequest.m in Sources */,
 				334EADF4255A948400B0231C /* PCComicPictureController.m in Sources */,
+				332F294B27D06AFD0003F642 /* PCVersion.m in Sources */,
 				33AD944125510C430079DFAE /* PCCategoryCell.m in Sources */,
 				33AD93FE255019950079DFAE /* PCViewController.m in Sources */,
 				3358C8A7265F50090000D17F /* PCRandomRequest.m in Sources */,
