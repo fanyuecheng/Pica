@@ -7,6 +7,9 @@
 API来自 [picacomic-api](https://github.com/czp3009/picacomic-api) 
 
 #### 更新日志  
+**v1.2.2**      
+*  增加“看了这个本子的人也在看”
+
 **v1.2.1**      
 *  增加iOS庇护所分类  
 *  图片详情页支持导出本子单话html  
