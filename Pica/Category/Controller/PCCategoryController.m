@@ -7,6 +7,7 @@
 //
 
 #import "PCCategoryController.h"
+#import "PCVersionCheckRequest.h"
 #import "PCCategoryRequest.h"
 #import "PCKeywordRequest.h"
 #import "PCCategoryCell.h"
@@ -31,6 +32,7 @@
 @property (nonatomic, strong) PCSearchRecordView *recordView;
 @property (nonatomic, strong) UICollectionView *collectionView;
 @property (nonatomic, strong) QMUITextField    *textField;
+@property (nonatomic, strong) QMUIButton       *versionButton;
 
 @end
 
@@ -51,6 +53,8 @@
     
     [self requestKeyword];
     
+    [self requestVersion];
+    
     if ([kPCUserDefaults boolForKey:PC_LOCAL_AUTHORIZATION]) {
         PCNavigationController *navigation = [[PCNavigationController alloc] initWithRootViewController:[[PCAuthenticationController alloc] init]];
         navigation.modalPresentationStyle = UIModalPresentationFullScreen;
@@ -62,6 +66,7 @@
 - (void)initSubviews {
     [super initSubviews];
     
+    [self.view addSubview:self.versionButton];
     [self.view addSubview:self.collectionView];
 }
 
@@ -74,7 +79,17 @@
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     
-    self.collectionView.frame = CGRectMake(0, self.qmui_navigationBarMaxYInViewCoordinator, SCREEN_WIDTH, SCREEN_HEIGHT - self.qmui_navigationBarMaxYInViewCoordinator - self.qmui_tabBarSpacingInViewCoordinator);
+    CGFloat width = self.view.qmui_width;
+    CGFloat height = self.view.qmui_height;
+    
+    if (self.versionButton.hidden) {
+        self.versionButton.frame = CGRectZero;
+        self.collectionView.frame = CGRectMake(0, self.qmui_navigationBarMaxYInViewCoordinator, width, height - self.qmui_navigationBarMaxYInViewCoordinator - self.qmui_tabBarSpacingInViewCoordinator);
+    } else {
+        self.versionButton.frame = CGRectMake(0, self.qmui_navigationBarMaxYInViewCoordinator, width, 30);
+        self.collectionView.frame = CGRectMake(0, self.versionButton.qmui_bottom, width, height  - self.versionButton.qmui_bottom - self.qmui_tabBarSpacingInViewCoordinator);
+    }
+     
     if (self.recordView.superview) {
         self.recordView.frame = CGRectMake(0, self.qmui_navigationBarMaxYInViewCoordinator, SCREEN_WIDTH, SCREEN_HEIGHT - self.qmui_navigationBarMaxYInViewCoordinator - [QMUIKeyboardManager visibleKeyboardHeight]);
     }
@@ -128,12 +143,31 @@
     }];
 }
 
+- (void)requestVersion {
+    PCVersionCheckRequest *request = [[PCVersionCheckRequest alloc] init];
+    [request sendRequest:^(PCVersion *version) {
+        if (version && version.isNewVersion) {
+            [self.versionButton setTitle:[NSString stringWithFormat:@"Pica有新版本：%@ 点击查看", version.version] forState:UIControlStateNormal];
+            self.versionButton.hidden = NO;
+            [self.view setNeedsLayout];
+            [self.view layoutIfNeeded];
+        }
+    } failure:^(NSError * _Nonnull error) {
+        
+    }];
+}
+
 #pragma mark - Action
 - (void)categoryAction:(QMUIButton *)sender {
     BOOL hidden = [kPCUserDefaults boolForKey:PC_CATEGORY_WEB_HIDDEN];
     [kPCUserDefaults setBool:!hidden forKey:PC_CATEGORY_WEB_HIDDEN];
     [kPCUserDefaults synchronize];
     [self.collectionView reloadData];
+}
+
+- (void)newVersionAction:(QMUIButton *)sender {
+    SFSafariViewController *safari = [[SFSafariViewController alloc] initWithURL:[NSURL URLWithString:@"https://github.com/fanyuecheng/Pica/releases"]];
+    [self presentViewController:safari animated:YES completion:nil];
 }
 
 #pragma mark - CollectionView
@@ -336,4 +370,21 @@
     return _recordView;
 }
 
+- (QMUIButton *)versionButton {
+    if (!_versionButton) {
+        _versionButton = [[QMUIButton alloc] init];
+        _versionButton.titleLabel.font = UIFontMake(12);
+        _versionButton.imagePosition = QMUIButtonImagePositionRight;
+        _versionButton.contentHorizontalAlignment = UIControlContentHorizontalAlignmentFill;
+        _versionButton.titleEdgeInsets = UIEdgeInsetsMake(0, 15, 0, 0);
+        _versionButton.imageEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 15);
+        [_versionButton setTitleColor:UIColorWhite forState:UIControlStateNormal];
+        [_versionButton setImage:[UIImage qmui_imageWithShape:QMUIImageShapeDisclosureIndicator size:CGSizeMake(7, 13) tintColor:UIColorWhite] forState:UIControlStateNormal];
+        _versionButton.backgroundColor = PCColorLightPink;
+        _versionButton.hidden = YES;
+        [_versionButton addTarget:self action:@selector(newVersionAction:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _versionButton;
+}
+ 
 @end
