@@ -23,15 +23,13 @@
 #define PC_BUILD_VERSION_ANDROID  @"45"
 #define PC_PLATFORM_IOS           @"ios"
 #define PC_PLATFORM_ANDROID       @"android"
- 
-//cb69a7aa-b9a8-3320-8cf1-74347e9ee970
-//cb69a7aa-b9a8-3320-8cf1-74347e9ee979
-//1A8BF3E5-0358-42D5-9814-7C79A24B6ACC
-#define PC_APP_UUID               @"cb69a7aa-b9a8-3320-8cf1-74347e9ee970"
+
 //original","low","medium","high"
 #define PC_APP_IMAGE_QUALITY      @"original"
 #define PC_USER_AGENT_IOS         @"sora/1 CFNetwork/1128.0.1 Darwin/19.6.0"
 #define PC_USER_AGENT_ANDROID     @"okhttp/3.8.1"
+
+static NSString *appuuid;
 
 @implementation PCRequest
   
@@ -45,7 +43,9 @@
         channel = @"1";
         [kPCUserDefaults setObject:@"1" forKey:PC_API_CHANNEL];
     }
-    
+    if (appuuid.length == 0) {
+        appuuid = [NSUUID UUID].UUIDString.lowercaseString;
+    }
     NSMutableDictionary *header = @{
                             @"api-key"           : PC_API_KEY_ANDROID,
                             @"accept"            : @"application/vnd.picacomic.com.v1+json",
@@ -54,7 +54,7 @@
                             @"nonce"             : uuid,
                             @"signature"         : @"",
                             @"app-version"       : PC_VERSION_ANDROID,
-                            @"app-uuid"          : PC_APP_UUID,
+                            @"app-uuid"          : appuuid,
                             @"app-platform"      : PC_PLATFORM_ANDROID,
                             @"app-build-version" : PC_BUILD_VERSION_ANDROID,
                             @"Content-Type"      : @"application/json; charset=UTF-8",
