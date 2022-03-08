@@ -722,7 +722,7 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
             if (self.localMessageArray.count) {
                 NSArray *msgArray = nil;
                 if (self.localMessageArray.count > 20) {
-                    msgArray = [self.localMessageArray subarrayWithRange:NSMakeRange(self.localMessageArray.count - 21, 20)];
+                    msgArray = [self.localMessageArray subarrayWithRange:NSMakeRange(self.localMessageArray.count - 20, 20)];
                     [self.localMessageArray removeObjectsInArray:msgArray];
                 } else {
                     msgArray = self.localMessageArray.copy;
