@@ -309,9 +309,9 @@ PODS:
     - QMUIKit/QMUILog
   - QMUIKit/QMUIResources (4.4.3)
   - QMUIKit/QMUIWeakObjectContainer (4.4.3)
-  - SDWebImage (5.12.2):
-    - SDWebImage/Core (= 5.12.2)
-  - SDWebImage/Core (5.12.2)
+  - SDWebImage (5.12.4):
+    - SDWebImage/Core (= 5.12.4)
+  - SDWebImage/Core (5.12.4)
   - SDWebImageVideoCoder (0.2.0):
     - SDWebImage (~> 5.10)
   - SocketRocket (0.6.0)
@@ -329,7 +329,7 @@ DEPENDENCIES:
   - JXPagingView/Pager (~> 2.1.2)
   - MJRefresh (~> 3.7.5)
   - QMUIKit (~> 4.4.3)
-  - SDWebImage (~> 5.12.2)
+  - SDWebImage (~> 5.12.4)
   - SDWebImageVideoCoder (~> 0.2.0)
   - SocketRocket (~> 0.6.0)
   - SSZipArchive (~> 2.4.2)
@@ -362,7 +362,7 @@ SPEC CHECKSUMS:
   JXPagingView: 90924b364a2ff7e94db534fad1fa50925ff69ee4
   MJRefresh: fdf5e979eb406a0341468932d1dfc8b7f9fce961
   QMUIKit: 5da6e59d5d312681ee45706af42fd3af7b4f55eb
-  SDWebImage: 240e5c12b592fb1268c1d03b8c90d90e8c2ffe82
+  SDWebImage: 631cf572cc93dfdfe54162e556410a61f1141928
   SDWebImageVideoCoder: 977388b65f0f508161ccf17597db147c26076cec
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
   SSZipArchive: e7b4f3d9e780c2acc1764cd88fbf2de28f26e5b2
@@ -371,6 +371,6 @@ SPEC CHECKSUMS:
   YTKNetwork: c16be90b06be003de9e9cd0d3b187cc8eaf35c04
   YYModel: 2a7fdd96aaa4b86a824e26d0c517de8928c04b30
 
-PODFILE CHECKSUM: 9e18b44c732114a2d61b80af2e1900454487145a
+PODFILE CHECKSUM: 3705a8e0f7dce5c7f140efa62c640ca298049870
 
 COCOAPODS: 1.11.2
