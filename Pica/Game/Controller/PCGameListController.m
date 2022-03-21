@@ -31,7 +31,7 @@
 - (void)setupNavigationItems {
     [super setupNavigationItems];
     
-    self.title = @"游戏区";
+    self.title = @"游戏";
 }
 
 - (void)initSubviews {
