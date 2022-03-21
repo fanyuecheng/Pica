@@ -119,9 +119,7 @@
 }
 
 - (void)moreAction:(QMUIButton *)sender {
-    [UIViewController pc_actionSheetWithTitle:nil message:nil confirmTitle:@"举报" confirm:^{
-        [self report];
-    } cancelTitle:@"取消" cancel:nil];
+    [self report];
 }
  
 - (void)childAction:(QMUIButton *)sender {

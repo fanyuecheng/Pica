@@ -149,6 +149,12 @@
             [activityItems addObject:[NSURL fileURLWithPath:localPath]];
       
             UIActivityViewController *activity = [[UIActivityViewController alloc] initWithActivityItems:activityItems applicationActivities:nil];
+            if (IS_IPAD) {
+                activity.popoverPresentationController.sourceView = self.view;
+                activity.popoverPresentationController.sourceRect = CGRectMake(self.view.qmui_width * 0.5, self.view.qmui_height * 0.5, 1, 1);
+                activity.popoverPresentationController.permittedArrowDirections = UIPopoverArrowDirectionUp;
+            }
+            
             [[QMUIHelper visibleViewController] presentViewController:activity animated:YES completion:nil];
         }
     };

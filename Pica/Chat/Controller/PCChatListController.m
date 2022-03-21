@@ -37,7 +37,7 @@
 - (void)setupNavigationItems {
     [super setupNavigationItems];
     
-    self.title = @"聊天室";
+    self.title = @"聊天";
 }
 
 #pragma mark - Net
