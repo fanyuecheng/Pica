@@ -49,6 +49,9 @@
         case PCComicListTypeSearch:
             [MobClick event:PC_EVENT_SEARCH attributes:@{@"keyword" : self.keyword}];
             break;
+        case PCComicListTypeRecommend:
+        case PCComicListTypeRandom:
+            break;
         default:
             self.navigationItem.rightBarButtonItem = [UIBarButtonItem qmui_itemWithTitle:@"新到旧" target:self action:@selector(sortAction:)];
             break;
@@ -146,6 +149,10 @@
         case PCComicListTypeSearch:
             sort = self.searchRequest.sort;
             break;
+        case PCComicListTypeTag:
+        case PCComicListTypeTranslate:
+        case PCComicListTypeCreator:
+        case PCComicListTypeAuthor:
         case PCComicListTypeCategory:
             sort = self.categoryRequest.s;
             break;
@@ -172,6 +179,10 @@
                 self.searchRequest.sort = value;
                 self.searchRequest.page = 1;
                 break;
+            case PCComicListTypeTag:
+            case PCComicListTypeTranslate:
+            case PCComicListTypeCreator:
+            case PCComicListTypeAuthor:
             case PCComicListTypeCategory:
                 self.categoryRequest.s = value;
                 self.categoryRequest.page = 1;
@@ -313,6 +324,10 @@
                 [self.comicArray removeAllObjects];
             }
             break;
+        case PCComicListTypeTag:
+        case PCComicListTypeTranslate:
+        case PCComicListTypeCreator:
+        case PCComicListTypeAuthor:
         case PCComicListTypeCategory:
             if (self.categoryRequest.page == 1) {
                 [self.comicArray removeAllObjects];
@@ -340,6 +355,10 @@
         case PCComicListTypeSearch:
             sel = @selector(searchRequest);
             break;
+        case PCComicListTypeTag:
+        case PCComicListTypeTranslate:
+        case PCComicListTypeCreator:
+        case PCComicListTypeAuthor:
         case PCComicListTypeCategory:
             sel = @selector(requestCategoryComics);
             break;
