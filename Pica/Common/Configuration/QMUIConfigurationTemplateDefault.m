@@ -127,8 +127,8 @@ static UIImage *disclosureIndicatorImageDark;
     QMUICMI.tabBarBarTintColor = nil;                                           // TabBarBarTintColor : UITabBar 的 barTintColor，如果需要看到磨砂效果则应该提供半透明的色值
     QMUICMI.tabBarShadowImageColor = UIColorSeparator;                          // TabBarShadowImageColor : UITabBar 的 shadowImage 的颜色，会自动创建一张 1px 高的图片
     QMUICMI.tabBarStyle = UIBarStyleDefault;                                    // TabBarStyle : UITabBar 的 barStyle
-    QMUICMI.tabBarItemTitleFont = UIFontMake(13);                                          // TabBarItemTitleFont : UITabBarItem 的标题字体
-    QMUICMI.tabBarItemTitleFontSelected = UIFontMake(13); // TabBarItemTitleFontSelected : 选中的 UITabBarItem 的标题字体
+    QMUICMI.tabBarItemTitleFont = IS_IPAD ? UIFontMake(13) : UIFontMake(12);                                          // TabBarItemTitleFont : UITabBarItem 的标题字体
+    QMUICMI.tabBarItemTitleFontSelected = IS_IPAD ? UIFontMake(13) : UIFontMake(12);  // TabBarItemTitleFontSelected : 选中的 UITabBarItem 的标题字体
     QMUICMI.tabBarItemTitleColor = UIColor.pc_descriptionTextColor;             // TabBarItemTitleColor : 未选中的 UITabBarItem 的标题颜色
     QMUICMI.tabBarItemTitleColorSelected = UIColor.pc_tintColor;                // TabBarItemTitleColorSelected : 选中的 UITabBarItem 的标题颜色
     QMUICMI.tabBarItemImageColor = TabBarItemTitleColor;                        // TabBarItemImageColor : UITabBarItem 未选中时的图片颜色

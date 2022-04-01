@@ -93,6 +93,10 @@
                     case PCComicListTypeSearch:
                         self.searchRequest.page ++;
                         break;
+                    case PCComicListTypeTag:
+                    case PCComicListTypeTranslate:
+                    case PCComicListTypeCreator:
+                    case PCComicListTypeAuthor:
                     case PCComicListTypeCategory:
                         self.categoryRequest.page ++;
                         break;
