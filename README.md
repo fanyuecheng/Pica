@@ -4,6 +4,9 @@
 API来自 [picacomic-api](https://github.com/czp3009/picacomic-api) 
 
 #### 更新日志  
+**v1.2.5**      
+*  tag/translate/creator/author 搜索漫画列表页数bug fix
+
 **v1.2.4**      
 *  简单适配iPad 
 
