@@ -16,7 +16,9 @@
 #import "PCUser.h"
 #import "PCChatMessage.h"
 #import "UIImage+PCAdd.h"
+#import "PCSpeechSynthesizer.h"
 #import "PCOrderListController.h"
+#import "PCChatSettingController.h"
 #import <AVFoundation/AVFoundation.h>
 
 static CGFloat const kChatBarTextViewBottomOffset = 10;
@@ -92,7 +94,7 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
 - (void)setupNavigationItems {
     [super setupNavigationItems];
     self.titleView.style = QMUINavigationTitleViewStyleSubTitleVertical;
-    self.navigationItem.rightBarButtonItem = [UIBarButtonItem qmui_itemWithTitle:@"指令" target:self action:@selector(orderAction:)];
+    self.navigationItem.rightBarButtonItems = @[[UIBarButtonItem qmui_itemWithTitle:@"指令" target:self action:@selector(orderAction:)], [UIBarButtonItem qmui_itemWithTitle:@"设置" target:self action:@selector(settingAction:)]];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -185,6 +187,11 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
 }
 
 #pragma mark - Action
+- (void)settingAction:(id)sender {
+    PCChatSettingController *setting = [[PCChatSettingController alloc] initWithStyle:UITableViewStyleGrouped];
+    [self.navigationController pushViewController:setting animated:YES];
+}
+
 - (void)orderAction:(id)sender {
     PCOrderListController *orderList = [[PCOrderListController alloc] init];
     @weakify(self)
@@ -469,6 +476,25 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
     return user;
 }
 
+- (void)broadcastMessage:(PCChatMessage *)message {
+    NSString *string = nil;
+    
+    if (message.messageType == PCChatMessageTypeDefault) {
+        if (message.reply_name.length) {
+            string = [NSString stringWithFormat:@"%@回复%@说：%@", message.name, message.reply_name, message.message];
+        } else {
+            string = [NSString stringWithFormat:@"%@说：%@", message.name, message.message];
+        }
+    } else if (message.messageType == PCChatMessageTypeImage) {
+        string = [NSString stringWithFormat:@"%@发了一张图片", message.name];
+    } else if (message.messageType == PCChatMessageTypeAudio) {
+        string = [NSString stringWithFormat:@"%@发了一条语音", message.name];
+    }
+    if (string) {
+        [[PCSpeechSynthesizer sharedInstance] speakText:string];
+    }
+}
+
 #pragma mark - Record
 - (void)startRecord {
     AVAudioSession *session = [AVAudioSession sharedInstance];
@@ -681,6 +707,9 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
             if (message) {
                 if (message.messageType == PCChatMessageTypeDefault || message.messageType == PCChatMessageTypeImage ||
                     message.messageType == PCChatMessageTypeAudio) {
+                    if ([kPCUserDefaults boolForKey:PC_CHAT_SPEAK_ON]) {
+                        [self broadcastMessage:message];
+                    }
                     [self insertMessage:message scrollToBottom:YES];
                 } else if (message.messageType == PCChatMessageTypeConnectionCount && self.navigationController.topViewController == self) { 
                     self.titleView.subtitle = [NSString stringWithFormat:@"在线人数:%@", @(message.connections)];

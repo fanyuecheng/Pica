@@ -88,6 +88,7 @@
 		33828E4025E6577C00967957 /* PCRegistRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 33828E3F25E6577C00967957 /* PCRegistRequest.m */; };
 		33828E4425E65CB600967957 /* PCRegistController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33828E4325E65CB600967957 /* PCRegistController.m */; };
 		3392771F27229819000021A3 /* PCChatSettingController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3392771E27229819000021A3 /* PCChatSettingController.m */; };
+		339E4A7C2806A8C3009730CB /* PCSpeechSynthesizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 339E4A7B2806A8C3009730CB /* PCSpeechSynthesizer.m */; };
 		33A56880278D26A30059E076 /* PCImageSizeCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 33A5687F278D26A30059E076 /* PCImageSizeCache.m */; };
 		33AB826E2679E0BA00A2FD3F /* PCImageMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AB826D2679E0BA00A2FD3F /* PCImageMessageCell.m */; };
 		33AB8276267B377300A2FD3F /* PCVoiceMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AB8275267B377300A2FD3F /* PCVoiceMessageCell.m */; };
@@ -314,6 +315,8 @@
 		33828E4325E65CB600967957 /* PCRegistController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCRegistController.m; sourceTree = "<group>"; };
 		3392771D27229819000021A3 /* PCChatSettingController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCChatSettingController.h; sourceTree = "<group>"; };
 		3392771E27229819000021A3 /* PCChatSettingController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCChatSettingController.m; sourceTree = "<group>"; };
+		339E4A7A2806A8C3009730CB /* PCSpeechSynthesizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCSpeechSynthesizer.h; sourceTree = "<group>"; };
+		339E4A7B2806A8C3009730CB /* PCSpeechSynthesizer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCSpeechSynthesizer.m; sourceTree = "<group>"; };
 		33A5687E278D26A30059E076 /* PCImageSizeCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCImageSizeCache.h; sourceTree = "<group>"; };
 		33A5687F278D26A30059E076 /* PCImageSizeCache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCImageSizeCache.m; sourceTree = "<group>"; };
 		33AB826C2679E0BA00A2FD3F /* PCImageMessageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCImageMessageCell.h; sourceTree = "<group>"; };
@@ -472,6 +475,8 @@
 				33A5687F278D26A30059E076 /* PCImageSizeCache.m */,
 				33D4110F279AA9200017957E /* PCLocalAuthentication.h */,
 				33D41110279AA9200017957E /* PCLocalAuthentication.m */,
+				339E4A7A2806A8C3009730CB /* PCSpeechSynthesizer.h */,
+				339E4A7B2806A8C3009730CB /* PCSpeechSynthesizer.m */,
 			);
 			path = Class;
 			sourceTree = "<group>";
@@ -1342,6 +1347,7 @@
 				334EAD89255A545200B0231C /* PCUser.m in Sources */,
 				334EAD85255A522700B0231C /* PCComicDetailController.m in Sources */,
 				3329FE53265B90C40054F39B /* PCKnightRankCell.m in Sources */,
+				339E4A7C2806A8C3009730CB /* PCSpeechSynthesizer.m in Sources */,
 				3306A455266A1C8C00FC397A /* PCCommentChildRequest.m in Sources */,
 				334EAD6F25593E8800B0231C /* PCComicListCell.m in Sources */,
 				33828E4025E6577C00967957 /* PCRegistRequest.m in Sources */,

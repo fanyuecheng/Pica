@@ -11,6 +11,7 @@
 #import "PCColorPickerViewController.h"
 #import "PCAvatarDecorateController.h"
 #import "PCUser.h"
+#import "PCSpeechSynthesizer.h"
 
 @interface PCChatSetting : NSObject
 
@@ -56,6 +57,15 @@
     setting.value = [kPCUserDefaults stringForKey:PC_CHAT_LV];
     setting.on = [kPCUserDefaults boolForKey:PC_CHAT_LV_ON];
     setting.key = PC_CHAT_LV;
+    return setting;
+}
+
++ (PCChatSetting *)chatSpeak {
+    PCChatSetting *setting = [[PCChatSetting alloc] init];
+    setting.title = @"聊天语音播放";
+    setting.value = [kPCUserDefaults stringForKey:PC_CHAT_SPEAK];
+    setting.on = [kPCUserDefaults boolForKey:PC_CHAT_SPEAK_ON];
+    setting.key = PC_CHAT_SPEAK;
     return setting;
 }
 
@@ -203,6 +213,9 @@
     PCChatSetting *setting = self.dataSource[indexPath.section];
     setting.on = !setting.on;
     [kPCUserDefaults setBool:setting.on forKey:[NSString stringWithFormat:@"%@_ON", setting.key]];
+    if ([setting.key isEqualToString:PC_CHAT_SPEAK] && !setting.on) {
+        [[PCSpeechSynthesizer sharedInstance] stopSpeak];
+    }
     [self.tableView reloadData];
 }
  
@@ -212,7 +225,8 @@
         _dataSource = @[[PCChatSetting chatLV],
                         [PCChatSetting chatTitle],
                         [PCChatSetting chatTextColor],
-                        [PCChatSetting chatAvatarDecorate]];
+                        [PCChatSetting chatAvatarDecorate],
+                        [PCChatSetting chatSpeak]];
     }
     return _dataSource;
 }
