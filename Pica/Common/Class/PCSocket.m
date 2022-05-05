@@ -220,7 +220,11 @@ NSString * const kWebSocketDidCloseNotification = @"kWebSocketDidCloseNotificati
 
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean {
     [[NSNotificationCenter defaultCenter] postNotificationName:kWebSocketDidCloseNotification object:@(code)];
-    [self closeSocket];
+    if (code == SRStatusCodeNormal || wasClean) {
+        [self closeSocket];
+    } else {
+        [self reconnect];
+    }
     QMUILogInfo(@"SOCKET_连接关闭", @"code:%ld reason:%@, wasClean:%d", (long)code, reason, wasClean);
 }
 
