@@ -19,5 +19,5 @@ target 'Pica' do
     pod 'UMCommon', '~> 7.3.6'
     pod 'UMDevice', '~> 2.2.1'
     pod 'SDWebImageVideoCoder', '~> 0.2.0' 
-    pod 'SSZipArchive', '~> 2.4.2'
+    pod 'SSZipArchive', '~> 2.4.3'
 end
