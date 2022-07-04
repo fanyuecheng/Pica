@@ -70,7 +70,7 @@
 
 - (QMUILabel *)detailLabel {
     if (!_detailLabel) {
-        _detailLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(13) textColor:UIColorGray];
+        _detailLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(11) textColor:UIColorGray];
         _detailLabel.numberOfLines = 0;
     }
     return _detailLabel;

@@ -1,6 +1,6 @@
 CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = NO
 CONFIGURATION_BUILD_DIR = ${PODS_CONFIGURATION_BUILD_DIR}/UMCommon
-FRAMEWORK_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/UMCommon/UMCommon_7.3.6" "${PODS_ROOT}/UMDevice/UMDevice_2.2.1"
+FRAMEWORK_SEARCH_PATHS = $(inherited) "${PODS_ROOT}/UMCommon/UMCommon_7.3.7" "${PODS_ROOT}/UMDevice/UMDevice_2.2.1"
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
 OTHER_LDFLAGS = $(inherited) -l"sqlite3" -l"z" -framework "CoreTelephony" -framework "SystemConfiguration"
 PODS_BUILD_DIR = ${BUILD_DIR}
