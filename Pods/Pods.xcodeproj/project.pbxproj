@@ -1188,6 +1188,7 @@
 		63DE28CBC6B4F5AF41A01DE61D9FB9F3 /* mz_strm_buf.c */ = {isa = PBXFileReference; includeInIndex = 1; name = mz_strm_buf.c; path = SSZipArchive/minizip/mz_strm_buf.c; sourceTree = "<group>"; };
 		63E08FA9F10972E78067C2D12FFBF1B5 /* JXPagerSmoothView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = JXPagerSmoothView.m; path = Sources/JXPagerView/JXPagerSmoothView.m; sourceTree = "<group>"; };
 		63F40B11F1A00646078824CAA0389650 /* QMUIConsoleToolbar.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = QMUIConsoleToolbar.h; path = QMUIKit/QMUIComponents/QMUIConsole/QMUIConsoleToolbar.h; sourceTree = "<group>"; };
+		64AFC530679E67644038FBE74A7AF553 /* UMCommon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UMCommon.framework; path = UMCommon_7.3.7/UMCommon.framework; sourceTree = "<group>"; };
 		64B6B4C8BC152C8183BA520C04913780 /* UITableViewHeaderFooterView+QMUI.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UITableViewHeaderFooterView+QMUI.h"; path = "QMUIKit/UIKitExtensions/UITableViewHeaderFooterView+QMUI.h"; sourceTree = "<group>"; };
 		64DF96CE47FED1D2F7A8EEF18DC283DD /* SDWebImageCacheSerializer.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDWebImageCacheSerializer.h; path = SDWebImage/Core/SDWebImageCacheSerializer.h; sourceTree = "<group>"; };
 		66777D28B20F6C4589B8C5318243855D /* NSNumber+QMUI.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSNumber+QMUI.h"; path = "QMUIKit/UIKitExtensions/NSNumber+QMUI.h"; sourceTree = "<group>"; };
@@ -1251,7 +1252,6 @@
 		787A5D5A7173CFFCBCDC48E60EB076F4 /* SDImageTransformer.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDImageTransformer.m; path = SDWebImage/Core/SDImageTransformer.m; sourceTree = "<group>"; };
 		7886A035953765023A13539B122F89D4 /* SDWebImageCacheKeyFilter.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = SDWebImageCacheKeyFilter.h; path = SDWebImage/Core/SDWebImageCacheKeyFilter.h; sourceTree = "<group>"; };
 		78BA05888313B9B77ACC7274335E39E2 /* AFNetworking.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = AFNetworking.debug.xcconfig; sourceTree = "<group>"; };
-		79201A63DF7C0CFCFC68581DD101BCF3 /* UMCommon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UMCommon.framework; path = UMCommon_7.3.6/UMCommon.framework; sourceTree = "<group>"; };
 		79C166CD65E1CE48BE637F5340BCDACE /* QMUILogger+QMUIConfigurationTemplate.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "QMUILogger+QMUIConfigurationTemplate.m"; path = "QMUIKit/QMUIComponents/QMUILogger+QMUIConfigurationTemplate.m"; sourceTree = "<group>"; };
 		7A01BF5C579AD4959ACEBA97E10B66BE /* JXPagerListContainerView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = JXPagerListContainerView.h; path = Sources/JXPagerView/JXPagerListContainerView.h; sourceTree = "<group>"; };
 		7A5806294A2E7C1F140782A98C0BE1E8 /* SDImageCoderHelper.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SDImageCoderHelper.m; path = SDWebImage/Core/SDImageCoderHelper.m; sourceTree = "<group>"; };
@@ -2119,6 +2119,14 @@
 				15A8E811E1BFC9022AC8F010DF46C336 /* QMUILogManagerViewController.m */,
 			);
 			name = QMUILogManagerViewController;
+			sourceTree = "<group>";
+		};
+		4701D5F6838F638BABFB30E26C808D9B /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				64AFC530679E67644038FBE74A7AF553 /* UMCommon.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		48E30C18D66511E34A92B007E42961F9 /* QMUINavigationButton */ = {
@@ -3067,7 +3075,7 @@
 		D8B1AF6E03ADCCEAC4085CFB85C25E30 /* UMCommon */ = {
 			isa = PBXGroup;
 			children = (
-				E89CD44577055F3780E3714EC4D080D7 /* Frameworks */,
+				4701D5F6838F638BABFB30E26C808D9B /* Frameworks */,
 				F6E399E387E20B337008531D9666AB8C /* Support Files */,
 			);
 			name = UMCommon;
@@ -3142,14 +3150,6 @@
 				569CF2713A7FE6488C382C21AE5F6374 /* QMUIPopupContainerView.m */,
 			);
 			name = QMUIPopupContainerView;
-			sourceTree = "<group>";
-		};
-		E89CD44577055F3780E3714EC4D080D7 /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				79201A63DF7C0CFCFC68581DD101BCF3 /* UMCommon.framework */,
-			);
-			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		EB66014B62E2C838BE810AA6F22F06D3 /* QMUIOrderedDictionary */ = {

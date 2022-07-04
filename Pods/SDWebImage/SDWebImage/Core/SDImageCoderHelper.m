@@ -325,10 +325,60 @@ static const CGFloat kDestSeemOverlap = 2.0f;   // the numbers of pixels to over
     return outputImage;
 }
 
++ (CGSize)scaledSizeWithImageSize:(CGSize)imageSize scaleSize:(CGSize)scaleSize preserveAspectRatio:(BOOL)preserveAspectRatio shouldScaleUp:(BOOL)shouldScaleUp {
+    CGFloat width = imageSize.width;
+    CGFloat height = imageSize.height;
+    CGFloat resultWidth;
+    CGFloat resultHeight;
+    
+    if (width <= 0 || height <= 0 || scaleSize.width <= 0 || scaleSize.height <= 0) {
+        // Protect
+        resultWidth = width;
+        resultHeight = height;
+    } else {
+        // Scale to fit
+        if (preserveAspectRatio) {
+            CGFloat pixelRatio = width / height;
+            CGFloat scaleRatio = scaleSize.width / scaleSize.height;
+            if (pixelRatio > scaleRatio) {
+                resultWidth = scaleSize.width;
+                resultHeight = ceil(scaleSize.width / pixelRatio);
+            } else {
+                resultHeight = scaleSize.height;
+                resultWidth = ceil(scaleSize.height * pixelRatio);
+            }
+        } else {
+            // Stretch
+            resultWidth = scaleSize.width;
+            resultHeight = scaleSize.height;
+        }
+        if (!shouldScaleUp) {
+            // Scale down only
+            resultWidth = MIN(width, resultWidth);
+            resultHeight = MIN(height, resultHeight);
+        }
+    }
+    
+    return CGSizeMake(resultWidth, resultHeight);
+}
+
 + (UIImage *)decodedImageWithImage:(UIImage *)image {
     if (![self shouldDecodeImage:image]) {
         return image;
     }
+    
+#if SD_UIKIT
+    // See: https://developer.apple.com/documentation/uikit/uiimage/3750834-imagebypreparingfordisplay
+    // Need CGImage-based
+    if (@available(iOS 15, tvOS 15, *)) {
+        UIImage *decodedImage = [image imageByPreparingForDisplay];
+        if (decodedImage) {
+            SDImageCopyAssociatedObject(image, decodedImage);
+            decodedImage.sd_isDecoded = YES;
+            return decodedImage;
+        }
+    }
+#endif
     
     CGImageRef imageRef = image.CGImage;
     if (!imageRef) {
@@ -355,36 +405,54 @@ static const CGFloat kDestSeemOverlap = 2.0f;   // the numbers of pixels to over
         return image;
     }
     
-    if (![self shouldScaleDownImage:image limitBytes:bytes]) {
-        return [self decodedImageWithImage:image];
-    }
-    
     CGFloat destTotalPixels;
     CGFloat tileTotalPixels;
     if (bytes == 0) {
-        bytes = kDestImageLimitBytes;
+        bytes = [self defaultScaleDownLimitBytes];
     }
+    bytes = MAX(bytes, kBytesPerPixel);
     destTotalPixels = bytes / kBytesPerPixel;
     tileTotalPixels = destTotalPixels / 3;
+    
+    CGImageRef sourceImageRef = image.CGImage;
+    CGSize sourceResolution = CGSizeZero;
+    sourceResolution.width = CGImageGetWidth(sourceImageRef);
+    sourceResolution.height = CGImageGetHeight(sourceImageRef);
+    
+    if (![self shouldScaleDownImagePixelSize:sourceResolution limitBytes:bytes]) {
+        return [self decodedImageWithImage:image];
+    }
+    
+    CGFloat sourceTotalPixels = sourceResolution.width * sourceResolution.height;
+    // Determine the scale ratio to apply to the input image
+    // that results in an output image of the defined size.
+    // see kDestImageSizeMB, and how it relates to destTotalPixels.
+    CGFloat imageScale = sqrt(destTotalPixels / sourceTotalPixels);
+    CGSize destResolution = CGSizeZero;
+    destResolution.width = MAX(1, (int)(sourceResolution.width * imageScale));
+    destResolution.height = MAX(1, (int)(sourceResolution.height * imageScale));
+    
+#if SD_UIKIT
+    // See: https://developer.apple.com/documentation/uikit/uiimage/3750835-imagebypreparingthumbnailofsize
+    // Need CGImage-based
+    if (@available(iOS 15, tvOS 15, *)) {
+        // Calculate thumbnail point size
+        CGFloat scale = image.scale ?: 1;
+        CGSize thumbnailSize = CGSizeMake(destResolution.width / scale, destResolution.height / scale);
+        UIImage *decodedImage = [image imageByPreparingThumbnailOfSize:thumbnailSize];
+        if (decodedImage) {
+            SDImageCopyAssociatedObject(image, decodedImage);
+            decodedImage.sd_isDecoded = YES;
+            return decodedImage;
+        }
+    }
+#endif
+    
     CGContextRef destContext = NULL;
     
     // autorelease the bitmap context and all vars to help system to free memory when there are memory warning.
     // on iOS7, do not forget to call [[SDImageCache sharedImageCache] clearMemory];
     @autoreleasepool {
-        CGImageRef sourceImageRef = image.CGImage;
-        
-        CGSize sourceResolution = CGSizeZero;
-        sourceResolution.width = CGImageGetWidth(sourceImageRef);
-        sourceResolution.height = CGImageGetHeight(sourceImageRef);
-        CGFloat sourceTotalPixels = sourceResolution.width * sourceResolution.height;
-        // Determine the scale ratio to apply to the input image
-        // that results in an output image of the defined size.
-        // see kDestImageSizeMB, and how it relates to destTotalPixels.
-        CGFloat imageScale = sqrt(destTotalPixels / sourceTotalPixels);
-        CGSize destResolution = CGSizeZero;
-        destResolution.width = MAX(1, (int)(sourceResolution.width * imageScale));
-        destResolution.height = MAX(1, (int)(sourceResolution.height * imageScale));
-        
         // device color space
         CGColorSpaceRef colorspaceRef = [self colorSpaceGetDeviceRGB];
         BOOL hasAlpha = [self CGImageContainsAlpha:sourceImageRef];
@@ -592,14 +660,10 @@ static const CGFloat kDestSeemOverlap = 2.0f;   // the numbers of pixels to over
     return YES;
 }
 
-+ (BOOL)shouldScaleDownImage:(nonnull UIImage *)image limitBytes:(NSUInteger)bytes {
++ (BOOL)shouldScaleDownImagePixelSize:(CGSize)sourceResolution limitBytes:(NSUInteger)bytes {
     BOOL shouldScaleDown = YES;
     
-    CGImageRef sourceImageRef = image.CGImage;
-    CGSize sourceResolution = CGSizeZero;
-    sourceResolution.width = CGImageGetWidth(sourceImageRef);
-    sourceResolution.height = CGImageGetHeight(sourceImageRef);
-    float sourceTotalPixels = sourceResolution.width * sourceResolution.height;
+    CGFloat sourceTotalPixels = sourceResolution.width * sourceResolution.height;
     if (sourceTotalPixels <= 0) {
         return NO;
     }
@@ -609,7 +673,7 @@ static const CGFloat kDestSeemOverlap = 2.0f;   // the numbers of pixels to over
     }
     bytes = MAX(bytes, kBytesPerPixel);
     destTotalPixels = bytes / kBytesPerPixel;
-    float imageScale = destTotalPixels / sourceTotalPixels;
+    CGFloat imageScale = destTotalPixels / sourceTotalPixels;
     if (imageScale < 1) {
         shouldScaleDown = YES;
     } else {
