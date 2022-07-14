@@ -10,13 +10,13 @@
 #import "PCDefineHeader.h"
 #import "PCVendorHeader.h"
 #import "PCImageSizeCache.h"
-#import "PCImagePreviewView.h"
+#import "PCZoomImageView.h"
 #import "UIViewController+PCAdd.h"
 
-@interface PCPictureCell ()
+@interface PCPictureCell () <PCZoomImageViewDelegate>
 
-@property (nonatomic, strong) QMUILabel          *titleLabel;
-@property (nonatomic, strong) PCImagePreviewView *imageView;
+@property (nonatomic, strong) QMUILabel       *titleLabel;
+@property (nonatomic, strong) PCZoomImageView *imageView;
 
 @end
 
@@ -25,9 +25,8 @@
 - (void)prepareForReuse {
     [super prepareForReuse];
     self.titleLabel.text = nil;
-    [self.picture cancelLoadImage];
-    self.imageView.imageView.image = nil;
-    [self.imageView recover];
+    self.imageView.image = nil;
+    [self.imageView revertZooming];
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -52,16 +51,16 @@
     
     if (picture.image) {
         self.titleLabel.text = nil;
-        self.imageView.imageView.image = picture.image;
+        self.imageView.image = picture.image;
     } else {
         self.titleLabel.text = picture.media.originalName;
-        self.imageView.imageView.image = nil;
+        self.imageView.image = nil;
         @weakify(self)
         [picture loadImage:^(UIImage * _Nonnull image, NSError * _Nonnull error) {
             @strongify(self)
             if (image) {
                 self.titleLabel.text = nil;
-                self.imageView.imageView.image = image;
+                self.imageView.image = image;
             }
             if (needReload) {
                 !self.loadBlock ? : self.loadBlock(picture);
@@ -88,6 +87,16 @@
         }
     } cancel:nil];
 }
+
+#pragma mark - PCZoomImageViewDelegate
+- (void)singleTouchInZoomingImageView:(PCZoomImageView *)imageView
+                             location:(CGPoint)location {
+    !self.clickBlock ? : self.clickBlock();
+}
+
+- (void)longPressInZoomingImageView:(PCZoomImageView *)imageView {
+    [self showSaveAlert];
+}
  
 #pragma mark - Get
 - (QMUILabel *)titleLabel {
@@ -98,18 +107,10 @@
     return _titleLabel;
 }
 
-- (PCImagePreviewView *)imageView {
+- (PCZoomImageView *)imageView {
     if (!_imageView) {
-        _imageView = [[PCImagePreviewView alloc] init];
-        @weakify(self)
-        _imageView.tapBlock = ^{
-            @strongify(self)
-            !self.clickBlock ? : self.clickBlock();
-        };
-        _imageView.longPressBlock = ^{
-            @strongify(self)
-            [self showSaveAlert];
-        };
+        _imageView = [[PCZoomImageView alloc] init];
+        _imageView.delegate = self;
     }
     return _imageView;
 }
