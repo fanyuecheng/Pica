@@ -13,10 +13,10 @@
 #import "PCZoomImageView.h"
 #import "UIViewController+PCAdd.h"
 
-@interface PCPictureCell () <PCZoomImageViewDelegate>
+@interface PCPictureCell () <QMUIZoomImageViewDelegate>
 
-@property (nonatomic, strong) QMUILabel       *titleLabel;
-@property (nonatomic, strong) PCZoomImageView *imageView;
+@property (nonatomic, strong) QMUILabel         *titleLabel;
+@property (nonatomic, strong) QMUIZoomImageView *imageView;
 
 @end
 
@@ -88,13 +88,13 @@
     } cancel:nil];
 }
 
-#pragma mark - PCZoomImageViewDelegate
-- (void)singleTouchInZoomingImageView:(PCZoomImageView *)imageView
+#pragma mark - QMUIZoomImageViewDelegate
+- (void)singleTouchInZoomingImageView:(QMUIZoomImageView *)imageView
                              location:(CGPoint)location {
     !self.clickBlock ? : self.clickBlock();
 }
 
-- (void)longPressInZoomingImageView:(PCZoomImageView *)imageView {
+- (void)longPressInZoomingImageView:(QMUIZoomImageView *)imageView {
     [self showSaveAlert];
 }
  
@@ -107,9 +107,9 @@
     return _titleLabel;
 }
 
-- (PCZoomImageView *)imageView {
+- (QMUIZoomImageView *)imageView {
     if (!_imageView) {
-        _imageView = [[PCZoomImageView alloc] init];
+        _imageView = [[QMUIZoomImageView alloc] init];
         _imageView.delegate = self;
     }
     return _imageView;

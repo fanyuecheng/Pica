@@ -89,7 +89,6 @@
 		3392771F27229819000021A3 /* PCChatSettingController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3392771E27229819000021A3 /* PCChatSettingController.m */; };
 		339E4A7C2806A8C3009730CB /* PCSpeechSynthesizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 339E4A7B2806A8C3009730CB /* PCSpeechSynthesizer.m */; };
 		33A56880278D26A30059E076 /* PCImageSizeCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 33A5687F278D26A30059E076 /* PCImageSizeCache.m */; };
-		33AB2AAF2880231B00F55335 /* PCZoomImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AB2AAE2880231B00F55335 /* PCZoomImageView.m */; };
 		33AB826E2679E0BA00A2FD3F /* PCImageMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AB826D2679E0BA00A2FD3F /* PCImageMessageCell.m */; };
 		33AB8276267B377300A2FD3F /* PCVoiceMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AB8275267B377300A2FD3F /* PCVoiceMessageCell.m */; };
 		33AB827A267C3BFC00A2FD3F /* PCMessageNotificationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AB8279267C3BFC00A2FD3F /* PCMessageNotificationView.m */; };
@@ -317,8 +316,6 @@
 		339E4A7B2806A8C3009730CB /* PCSpeechSynthesizer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCSpeechSynthesizer.m; sourceTree = "<group>"; };
 		33A5687E278D26A30059E076 /* PCImageSizeCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCImageSizeCache.h; sourceTree = "<group>"; };
 		33A5687F278D26A30059E076 /* PCImageSizeCache.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCImageSizeCache.m; sourceTree = "<group>"; };
-		33AB2AAD2880231B00F55335 /* PCZoomImageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCZoomImageView.h; sourceTree = "<group>"; };
-		33AB2AAE2880231B00F55335 /* PCZoomImageView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCZoomImageView.m; sourceTree = "<group>"; };
 		33AB826C2679E0BA00A2FD3F /* PCImageMessageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCImageMessageCell.h; sourceTree = "<group>"; };
 		33AB826D2679E0BA00A2FD3F /* PCImageMessageCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCImageMessageCell.m; sourceTree = "<group>"; };
 		33AB8274267B377300A2FD3F /* PCVoiceMessageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCVoiceMessageCell.h; sourceTree = "<group>"; };
@@ -999,8 +996,6 @@
 				334EADD8255A88EB00B0231C /* PCComicEpisodeView.m */,
 				334EADFF255AA83D00B0231C /* PCPictureCell.h */,
 				334EAE00255AA83D00B0231C /* PCPictureCell.m */,
-				33AB2AAD2880231B00F55335 /* PCZoomImageView.h */,
-				33AB2AAE2880231B00F55335 /* PCZoomImageView.m */,
 				334EAE04255BC9A100B0231C /* PCUserInfoView.h */,
 				334EAE05255BC9A100B0231C /* PCUserInfoView.m */,
 				334EAE15255BDA8E00B0231C /* PCCommentCell.h */,
@@ -1299,7 +1294,6 @@
 				337AD6AE267376D4009EA2D1 /* PCChatList.m in Sources */,
 				33B78ECA26B8FFD7000CA73E /* PCSourceRequest.m in Sources */,
 				3368872327B4F6C300474151 /* PCOrderListController.m in Sources */,
-				33AB2AAF2880231B00F55335 /* PCZoomImageView.m in Sources */,
 				33DC429B27B6328300D8A105 /* NSFWViewController.m in Sources */,
 				3306A462266DDCCC00FC397A /* PCComicHistory.m in Sources */,
 				33E0FC3426B164360030BF21 /* PCCommentReportRequest.m in Sources */,
