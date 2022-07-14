@@ -10,7 +10,6 @@
 #import "PCDefineHeader.h"
 #import "PCVendorHeader.h"
 #import "PCImageSizeCache.h"
-#import "PCZoomImageView.h"
 #import "UIViewController+PCAdd.h"
 
 @interface PCPictureCell () <QMUIZoomImageViewDelegate>
