@@ -24,7 +24,7 @@
 - (void)prepareForReuse {
     [super prepareForReuse];
     self.titleLabel.text = nil;
-    self.imageView.image = nil;
+    self.imageView.imageView.image = nil;
     [self.imageView revertZooming];
 }
 
