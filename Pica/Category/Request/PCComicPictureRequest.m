@@ -34,9 +34,14 @@
         PCEpisodePicture *picture = [PCEpisodePicture yy_modelWithJSON:request.responseJSONObject[@"data"][@"pages"]];
         picture.ep = [PCEpisode yy_modelWithJSON:request.responseJSONObject[@"data"][@"ep"]];
         !success ? : success(picture);
+        NSMutableArray *URLs = [NSMutableArray array];
         [picture.docs enumerateObjectsUsingBlock:^(PCPicture * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-            [[SDWebImageManager sharedManager] loadImageWithURL:[NSURL URLWithString:obj.media.imageURL] options:kNilOptions progress:nil completed:nil];
+            NSURL *url = [NSURL URLWithString:obj.media.imageURL];
+            if (url) {
+                [URLs addObject:url];
+            }
         }];
+        [[SDWebImagePrefetcher sharedImagePrefetcher] prefetchURLs:URLs];
     } failure:^(__kindof YTKBaseRequest * _Nonnull request) {
         !failure ? : failure(request.error);
     }];
