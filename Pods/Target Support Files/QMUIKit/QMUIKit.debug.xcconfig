@@ -1,5 +1,8 @@
 CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = NO
+CODE_SIGNING_ALLOWED = NO
+CODE_SIGNING_REQUIRED = NO
 CONFIGURATION_BUILD_DIR = ${PODS_CONFIGURATION_BUILD_DIR}/QMUIKit
+EXPANDED_CODE_SIGN_IDENTITY =
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
 OTHER_LDFLAGS = $(inherited) -framework "AVFoundation" -framework "CoreGraphics" -framework "CoreImage" -framework "CoreMedia" -framework "CoreServices" -framework "Foundation" -framework "ImageIO" -framework "Photos" -framework "PhotosUI" -framework "QuartzCore" -framework "UIKit"
 PODS_BUILD_DIR = ${BUILD_DIR}

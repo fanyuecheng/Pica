@@ -382,6 +382,11 @@ static id<SDImageLoader> _defaultImageLoader;
                               cacheType:(SDImageCacheType)cacheType
                                progress:(nullable SDImageLoaderProgressBlock)progressBlock
                               completed:(nullable SDInternalCompletionBlock)completedBlock {
+    // Mark the cache operation end
+    @synchronized (operation) {
+        operation.cacheOperation = nil;
+    }
+    
     // Grab the image loader to use
     id<SDImageLoader> imageLoader;
     if ([context[SDWebImageContextImageLoader] conformsToProtocol:@protocol(SDImageLoader)]) {
@@ -552,11 +557,6 @@ static id<SDImageLoader> _defaultImageLoader;
                                cacheType:(SDImageCacheType)cacheType
                                 finished:(BOOL)finished
                                completed:(nullable SDInternalCompletionBlock)completedBlock {
-    // the target image store cache type
-    SDImageCacheType storeCacheType = SDImageCacheTypeAll;
-    if (context[SDWebImageContextStoreCacheType]) {
-        storeCacheType = [context[SDWebImageContextStoreCacheType] integerValue];
-    }
     id<SDImageTransformer> transformer = context[SDWebImageContextImageTransformer];
     if (![transformer conformsToProtocol:@protocol(SDImageTransformer)]) {
         transformer = nil;
@@ -661,7 +661,7 @@ static id<SDImageLoader> _defaultImageLoader;
     BOOL shouldThumbnailImage = context[SDWebImageContextImageThumbnailPixelSize] != nil || image.sd_decodeOptions[SDImageCoderDecodeThumbnailPixelSize] != nil;
     
     // Store the transformed/thumbnail image into the cache
-    if (transformed || shouldThumbnailImage) {
+    if (image && (transformed || shouldThumbnailImage)) {
         NSData *cacheData;
         // pass nil if the image was transformed/thumbnailed, so we can recalculate the data from the image
         if (cacheSerializer && (storeCacheType == SDImageCacheTypeDisk || storeCacheType == SDImageCacheTypeAll)) {
