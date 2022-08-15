@@ -27,7 +27,6 @@
 		332F294527CF7DB70003F642 /* PCComicRecommendView.m in Sources */ = {isa = PBXBuildFile; fileRef = 332F294427CF7DB70003F642 /* PCComicRecommendView.m */; };
 		332F294827D063960003F642 /* PCVersionCheckRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 332F294727D063960003F642 /* PCVersionCheckRequest.m */; };
 		332F294B27D06AFD0003F642 /* PCVersion.m in Sources */ = {isa = PBXBuildFile; fileRef = 332F294A27D06AFD0003F642 /* PCVersion.m */; };
-		33454F032797EF4F00778FAC /* PCImagePreviewView.m in Sources */ = {isa = PBXBuildFile; fileRef = 33454F022797EF4F00778FAC /* PCImagePreviewView.m */; };
 		334EAD6725593BB400B0231C /* PCComic.m in Sources */ = {isa = PBXBuildFile; fileRef = 334EAD6625593BB400B0231C /* PCComic.m */; };
 		334EAD6B25593E7900B0231C /* PCTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 334EAD6A25593E7900B0231C /* PCTableViewCell.m */; };
 		334EAD6F25593E8800B0231C /* PCComicListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 334EAD6E25593E8800B0231C /* PCComicListCell.m */; };
@@ -191,8 +190,6 @@
 		332F294727D063960003F642 /* PCVersionCheckRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCVersionCheckRequest.m; sourceTree = "<group>"; };
 		332F294927D06AFD0003F642 /* PCVersion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCVersion.h; sourceTree = "<group>"; };
 		332F294A27D06AFD0003F642 /* PCVersion.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCVersion.m; sourceTree = "<group>"; };
-		33454F012797EF4F00778FAC /* PCImagePreviewView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCImagePreviewView.h; sourceTree = "<group>"; };
-		33454F022797EF4F00778FAC /* PCImagePreviewView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCImagePreviewView.m; sourceTree = "<group>"; };
 		334EAD6525593BB400B0231C /* PCComic.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCComic.h; sourceTree = "<group>"; };
 		334EAD6625593BB400B0231C /* PCComic.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCComic.m; sourceTree = "<group>"; };
 		334EAD6925593E7900B0231C /* PCTableViewCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCTableViewCell.h; sourceTree = "<group>"; };
@@ -999,8 +996,6 @@
 				334EADD8255A88EB00B0231C /* PCComicEpisodeView.m */,
 				334EADFF255AA83D00B0231C /* PCPictureCell.h */,
 				334EAE00255AA83D00B0231C /* PCPictureCell.m */,
-				33454F012797EF4F00778FAC /* PCImagePreviewView.h */,
-				33454F022797EF4F00778FAC /* PCImagePreviewView.m */,
 				334EAE04255BC9A100B0231C /* PCUserInfoView.h */,
 				334EAE05255BC9A100B0231C /* PCUserInfoView.m */,
 				334EAE15255BDA8E00B0231C /* PCCommentCell.h */,
@@ -1294,7 +1289,6 @@
 				33828E4425E65CB600967957 /* PCRegistController.m in Sources */,
 				33DC429E27B632AD00D8A105 /* NSFWBrowerViewController.m in Sources */,
 				334EAE01255AA83D00B0231C /* PCPictureCell.m in Sources */,
-				33454F032797EF4F00778FAC /* PCImagePreviewView.m in Sources */,
 				33AB826E2679E0BA00A2FD3F /* PCImageMessageCell.m in Sources */,
 				330B10DC269E871A0075A9A0 /* PCColorGridView.m in Sources */,
 				337AD6AE267376D4009EA2D1 /* PCChatList.m in Sources */,
@@ -1521,7 +1515,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 1.3.1;
+				MARKETING_VERSION = 1.3.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yuecheng.pica;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1547,7 +1541,7 @@
 					"@executable_path/Frameworks",
 				);
 				LIBRARY_SEARCH_PATHS = "$(inherited)";
-				MARKETING_VERSION = 1.3.1;
+				MARKETING_VERSION = 1.3.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.yuecheng.pica;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TARGETED_DEVICE_FAMILY = "1,2";

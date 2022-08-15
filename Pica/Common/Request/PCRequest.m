@@ -170,4 +170,8 @@ static NSString *appuuid;
     return YES;
 }
 
+- (NSTimeInterval)requestTimeoutInterval {
+    return 30;
+}
+
 @end
