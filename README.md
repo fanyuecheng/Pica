@@ -3,8 +3,11 @@
 一个**PicAcg**客户端  
 API来自 [picacomic-api](https://github.com/czp3009/picacomic-api)  
 
+#### 相关推荐
+一个简约的 [clicli](https://github.com/fanyuecheng/CliCli) iOS APP
+
 #### 软件截图  
-[![md.jpg](https://z3.ax1x.com/2021/06/28/RNHakQ.md.jpg)](https://imgtu.com/i/RNHakQ)  
+[![Screen-Shot.png](https://i.postimg.cc/8cv82HYY/Screen-Shot.png)](https://postimg.cc/V0zHMjm9)  
 
 #### 软件功能  
 * [x] 登录注册
