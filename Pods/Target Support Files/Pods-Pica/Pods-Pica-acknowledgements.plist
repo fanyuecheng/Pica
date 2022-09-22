@@ -321,6 +321,17 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</string>
 		</dict>
 		<dict>
 			<key>FooterText</key>
+			<string>Copyright 2011 - 2020 umeng.com. All rights reserved.
+</string>
+			<key>License</key>
+			<string>Copyright</string>
+			<key>Title</key>
+			<string>UMAPM</string>
+			<key>Type</key>
+			<string>PSGroupSpecifier</string>
+		</dict>
+		<dict>
+			<key>FooterText</key>
 			<string>Copyright 2011 - 2021 umeng.com. All rights reserved.
 </string>
 			<key>License</key>
