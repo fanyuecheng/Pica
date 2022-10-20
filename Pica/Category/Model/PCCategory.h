@@ -45,6 +45,7 @@ NS_ASSUME_NONNULL_BEGIN
 + (PCCategory *)commentCategory;
 + (PCCategory *)recommendCategory;
 + (PCCategory *)nsfwCategory;
++ (PCCategory *)webCategory;
 + (PCCategory *)sanctuaryCategory;
 + (PCCategory *)aiCategory;//iOS 专有
 
