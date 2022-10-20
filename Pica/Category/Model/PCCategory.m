@@ -85,6 +85,27 @@
     return category;
 }
 
++ (PCCategory *)webCategory {
+    PCCategory *category = [[PCCategory alloc] init];
+    category.title = @"网页版";
+    category.active = YES;
+    category.isWeb = YES;
+    category.link = @"https://manhuabika.com";
+    CGFloat width = floorf((SCREEN_WIDTH - 40) / 3);
+    UIView *customThumb = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, width)];
+    customThumb.backgroundColor = UIColorWhite;
+    QMUILabel *label = [[QMUILabel alloc] initWithFrame:CGRectMake(0, 0, 38, 34)];
+    label.layer.borderWidth = 2.5;
+    label.layer.borderColor = PCColorPink.CGColor;
+    label.layer.cornerRadius = 4;
+    label.textAlignment = NSTextAlignmentCenter;
+    label.attributedText = [[NSAttributedString alloc] initWithString:@"Web" attributes:@{NSFontAttributeName : UIFontBoldMake(18), NSForegroundColorAttributeName : PCColorPink}];
+    label.center = customThumb.center;
+    [customThumb addSubview:label];
+    category.customThumb = [UIImage qmui_imageWithView:customThumb];
+    return category;
+}
+
 + (PCCategory *)aiCategory {
     PCCategory *category = [[PCCategory alloc] init];
     category.title = @"嗶咔AI推薦";

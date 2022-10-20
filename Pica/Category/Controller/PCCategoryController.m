@@ -136,6 +136,7 @@
         [categoryArray addObject:[PCCategory recommendCategory]];
         [categoryArray addObject:[PCCategory commentCategory]];
         [categoryArray addObject:[PCCategory sanctuaryCategory]];
+        [categoryArray addObject:[PCCategory webCategory]];
         [categoryArray addObjectsFromArray:responseArray];
         self.categoryArray = categoryArray;
     } failure:^(NSError * _Nonnull error) {
