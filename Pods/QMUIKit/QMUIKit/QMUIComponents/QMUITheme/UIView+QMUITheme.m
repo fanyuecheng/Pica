@@ -140,19 +140,6 @@ QMUISynthesizeIdCopyProperty(qmui_themeDidChangeBlock, setQmui_themeDidChangeBlo
         BOOL isValidatedEffect = [value isKindOfClass:QMUIThemeVisualEffect.class] && (!manager || [((QMUIThemeVisualEffect *)value).managerName isEqual:manager.name]);
         BOOL isOtherObject = ![value isKindOfClass:UIColor.class] && ![value isKindOfClass:UIImage.class] && ![value isKindOfClass:UIVisualEffect.class];// 支持所有非 color、image、effect 的其他对象，例如 NSAttributedString
         if (isOtherObject || isValidatedColor || isValidatedImage || isValidatedEffect) {
-            
-            // 修复 iOS 12 及以下版本，QMUIThemeImage 在搭配 resizable 使用的情况下可能无法跟随主题刷新的 bug
-            // https://github.com/Tencent/QMUI_iOS/issues/971
-            if (@available(iOS 13.0, *)) {
-            } else {
-                if (isValidatedImage) {
-                    QMUIThemeImage *image = (QMUIThemeImage *)value;
-                    if (image.qmui_resizable) {
-                        value = image.copy;
-                    }
-                }
-            }
-            
             [self performSelector:setter withObject:value];
         }
         EndIgnorePerformSelectorLeaksWarning
@@ -160,13 +147,22 @@ QMUISynthesizeIdCopyProperty(qmui_themeDidChangeBlock, setQmui_themeDidChangeBlo
     
     // 特殊的 view 特殊处理
     // iOS 10-11 里当 UILabel.attributedText 的文字颜色都相同时，也无法使用 setNeedsDisplay 刷新样式，但只要某个 range 颜色不同就没问题，iOS 9、12-13 也没问题，这个通过 UILabel (QMUIThemeCompatibility) 兼容。
-    static NSArray<Class> *needsDisplayClasses = nil;
-    if (!needsDisplayClasses) needsDisplayClasses = @[UILabel.class, UITextView.class];
-    [needsDisplayClasses enumerateObjectsUsingBlock:^(Class  _Nonnull class, NSUInteger idx, BOOL * _Nonnull stop) {
-        if ([self isKindOfClass:class]) {
+    if ([self isKindOfClass:UILabel.class]) {
+        [self setNeedsDisplay];
+    }
+    
+    if ([self isKindOfClass:UITextView.class]) {
+        UITextView *textView = (UITextView *)self;
+        if (@available(iOS 16.0, *)) {
+            // iOS 16 里无法通过 setNeedsDisplay 去刷新文本颜色了，所以只能重新把 textColor 设置一遍
+            // 测过 textColor 和 typingAttributes[NSForegroundColorAttributeName] 是互通的，所以只操作任意一个即可
+            if (textView.textColor.qmui_isQMUIDynamicColor) {
+                textView.textColor = textView.textColor;
+            }
+        } else {
             [self setNeedsDisplay];
         }
-    }];
+    }
     
     // 输入框、搜索框的键盘跟随主题变化
     if (QMUICMIActivated) {

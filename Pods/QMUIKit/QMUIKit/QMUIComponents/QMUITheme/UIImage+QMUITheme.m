@@ -147,13 +147,16 @@ static IMP qmui_getMsgForwardIMP(NSObject *self, SEL selector) {
 // 让 QMUIThemeImage 支持 NSCopying 是为了修复 iOS 12 及以下版本，QMUIThemeImage 在搭配 resizable 使用的情况下可能无法跟随主题刷新的 bug，使用的地方在 UIView+QMUITheme qmui_themeDidChangeByManager:identifier:theme 内。
 // https://github.com/Tencent/QMUI_iOS/issues/971
 - (id)copyWithZone:(NSZone *)zone {
-    QMUIThemeImage *image = (QMUIThemeImage *)[UIImage qmui_imageWithThemeManagerName:self.managerName provider:self.themeProvider];
+    QMUIThemeImage *image = [[self.class allocWithZone:zone] init];
     image.cachedRawImages = self.cachedRawImages;
+    image.name = self.name;
+    image.managerName = self.managerName;
+    image.themeProvider = self.themeProvider;
     return image;
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"<%@: %p>, rawImage is %@", NSStringFromClass(self.class), self, self.qmui_rawImage.description];
+    return [NSString stringWithFormat:@"<%@: %p>,%@rawImage is %@", NSStringFromClass(self.class), self, self.name.length ? [NSString stringWithFormat:@" name = %@, ", self.name] : @" ", self.qmui_rawImage.description];
 }
 
 - (instancetype)init {
@@ -336,10 +339,14 @@ static IMP qmui_getMsgForwardIMP(NSObject *self, SEL selector) {
 
 #pragma mark - <QMUIDynamicImageProtocol>
 
+- (NSString *)qmui_name {
+    return self.name;
+}
+
 - (UIImage *)qmui_rawImage {
     if (!_themeProvider) return nil;
     QMUIThemeManager *manager = [QMUIThemeManagerCenter themeManagerWithName:self.managerName];
-    NSString *cacheKey = [NSString stringWithFormat:@"%@_%@",manager.name, manager.currentThemeIdentifier];
+    NSString *cacheKey = [NSString stringWithFormat:@"%@%@_%@", self.name ? [NSString stringWithFormat:@"%@_", self.name] : @"", manager.name, manager.currentThemeIdentifier];
     UIImage *rawImage = [self.cachedRawImages objectForKey:cacheKey];
     if (!rawImage) {
         rawImage = self.themeProvider(manager, manager.currentThemeIdentifier, manager.currentTheme).qmui_rawImage;
@@ -455,55 +462,63 @@ static BOOL generatorSupportsDynamicColor = NO;
                 return result;
             };
         });
-        if (@available(iOS 13.0, *)) {
-            // 如果一个静态的 UIImage 通过 imageWithTintColor: 传入一个动态的颜色，那么这个 UIImage 也会变成动态的，但这个动态图片是 iOS 13 系统原生的动态图片，无法响应 QMUITheme，所以这里需要为 QMUIThemeImage 做特殊处理。
-            // 注意，系统的 imageWithTintColor: 不会调用 imageWithTintColor:renderingMode:，所以要分开重写两个方法
-            OverrideImplementation([UIImage class], @selector(imageWithTintColor:), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
-                return ^UIImage *(UIImage *selfObject, UIColor *tintColor) {
-                    
-                    UIImage *result = [UIImage qmui_dynamicImageWithOriginalImage:selfObject tintColor:tintColor originalActionBlock:^UIImage *(UIImage *aImage, UIColor *aTintColor) {
-                        aImage.qmui_shouldUseSystemIMP = YES;
-                        return [aImage imageWithTintColor:aTintColor];
-                    }];
-                    if (!result) {
-                        // call super
-                        UIImage *(*originSelectorIMP)(id, SEL, UIColor *);
-                        originSelectorIMP = (UIImage * (*)(id, SEL, UIColor *))originalIMPProvider();
-                        result = originSelectorIMP(selfObject, originCMD, tintColor);
-                    }
-                    return result;
-                };
-            });
-            OverrideImplementation([UIImage class], @selector(imageWithTintColor:renderingMode:), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
-                return ^UIImage *(UIImage *selfObject, UIColor *tintColor, UIImageRenderingMode renderingMode) {
-                    
-                    UIImage *result = [UIImage qmui_dynamicImageWithOriginalImage:selfObject tintColor:tintColor originalActionBlock:^UIImage *(UIImage *aImage, UIColor *aTintColor) {
-                        aImage.qmui_shouldUseSystemIMP = YES;
-                        return [aImage imageWithTintColor:aTintColor renderingMode:renderingMode];
-                    }];
-                    if (!result) {
-                        // call super
-                        UIImage *(*originSelectorIMP)(id, SEL, UIColor *, UIImageRenderingMode);
-                        originSelectorIMP = (UIImage * (*)(id, SEL, UIColor *, UIImageRenderingMode))originalIMPProvider();
-                        result = originSelectorIMP(selfObject, originCMD, tintColor, renderingMode);
-                    }
-                    return result;
-                };
-            });
-        }
+        
+        // 如果一个静态的 UIImage 通过 imageWithTintColor: 传入一个动态的颜色，那么这个 UIImage 也会变成动态的，但这个动态图片是 iOS 13 系统原生的动态图片，无法响应 QMUITheme，所以这里需要为 QMUIThemeImage 做特殊处理。
+        // 注意，系统的 imageWithTintColor: 不会调用 imageWithTintColor:renderingMode:，所以要分开重写两个方法
+        OverrideImplementation([UIImage class], @selector(imageWithTintColor:), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
+            return ^UIImage *(UIImage *selfObject, UIColor *tintColor) {
+                
+                UIImage *result = [UIImage qmui_dynamicImageWithOriginalImage:selfObject tintColor:tintColor originalActionBlock:^UIImage *(UIImage *aImage, UIColor *aTintColor) {
+                    aImage.qmui_shouldUseSystemIMP = YES;
+                    return [aImage imageWithTintColor:aTintColor];
+                }];
+                if (!result) {
+                    // call super
+                    UIImage *(*originSelectorIMP)(id, SEL, UIColor *);
+                    originSelectorIMP = (UIImage * (*)(id, SEL, UIColor *))originalIMPProvider();
+                    result = originSelectorIMP(selfObject, originCMD, tintColor);
+                }
+                return result;
+            };
+        });
+        OverrideImplementation([UIImage class], @selector(imageWithTintColor:renderingMode:), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
+            return ^UIImage *(UIImage *selfObject, UIColor *tintColor, UIImageRenderingMode renderingMode) {
+                
+                UIImage *result = [UIImage qmui_dynamicImageWithOriginalImage:selfObject tintColor:tintColor originalActionBlock:^UIImage *(UIImage *aImage, UIColor *aTintColor) {
+                    aImage.qmui_shouldUseSystemIMP = YES;
+                    return [aImage imageWithTintColor:aTintColor renderingMode:renderingMode];
+                }];
+                if (!result) {
+                    // call super
+                    UIImage *(*originSelectorIMP)(id, SEL, UIColor *, UIImageRenderingMode);
+                    originSelectorIMP = (UIImage * (*)(id, SEL, UIColor *, UIImageRenderingMode))originalIMPProvider();
+                    result = originSelectorIMP(selfObject, originCMD, tintColor, renderingMode);
+                }
+                return result;
+            };
+        });
         
         generatorSupportsDynamicColor = YES;
     });
 }
 
 + (UIImage *)qmui_imageWithThemeProvider:(UIImage * _Nonnull (^)(__kindof QMUIThemeManager * _Nonnull, __kindof NSObject<NSCopying> * _Nullable, __kindof NSObject * _Nullable))provider {
-    return [UIImage qmui_imageWithThemeManagerName:QMUIThemeManagerNameDefault provider:provider];
+    return [self qmui_imageWithName:nil themeManagerName:QMUIThemeManagerNameDefault provider:provider];
 }
 
-+ (UIImage *)qmui_imageWithThemeManagerName:(__kindof NSObject<NSCopying> *)name provider:(UIImage * _Nonnull (^)(__kindof QMUIThemeManager * _Nonnull, __kindof NSObject<NSCopying> * _Nullable, __kindof NSObject * _Nullable))provider {
++ (UIImage *)qmui_imageWithName:(NSString *)name themeProvider:(UIImage * _Nonnull (^)(__kindof QMUIThemeManager * _Nonnull, __kindof NSObject<NSCopying> * _Nullable, __kindof NSObject * _Nullable))provider {
+    return [self qmui_imageWithName:name themeManagerName:QMUIThemeManagerNameDefault provider:provider];
+}
+
++ (UIImage *)qmui_imageWithThemeManagerName:(__kindof NSObject<NSCopying> *)managerName provider:(UIImage * _Nonnull (^)(__kindof QMUIThemeManager * _Nonnull, __kindof NSObject<NSCopying> * _Nullable, __kindof NSObject * _Nullable))provider {
+    return [self qmui_imageWithName:nil themeManagerName:managerName provider:provider];
+}
+
++ (UIImage *)qmui_imageWithName:(NSString *)name themeManagerName:(__kindof NSObject<NSCopying> *)managerName provider:(UIImage * _Nonnull (^)(__kindof QMUIThemeManager * _Nonnull, __kindof NSObject<NSCopying> * _Nullable, __kindof NSObject * _Nullable))provider {
     QMUIThemeImage *image = [[QMUIThemeImage alloc] init];
     image.cachedRawImages = [[QMUIThemeImageCache alloc] init];
-    image.managerName = name;
+    image.name = name;
+    image.managerName = managerName;
     image.themeProvider = provider;
     return (UIImage *)image;
 }
@@ -532,6 +547,10 @@ static BOOL generatorSupportsDynamicColor = NO;
 }
 
 #pragma mark - <QMUIDynamicImageProtocol>
+
+- (NSString *)qmui_name {
+    return nil;
+}
 
 - (UIImage *)qmui_rawImage {
     return self;

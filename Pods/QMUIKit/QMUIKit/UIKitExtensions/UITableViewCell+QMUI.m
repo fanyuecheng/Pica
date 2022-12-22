@@ -53,9 +53,7 @@ QMUISynthesizeIdCopyProperty(qmui_setSelectedBlock, setQmui_setSelectedBlock)
                 // 系统虽然有私有 API - (UITableViewCellStyle)style; 可以用，但该方法在 init 内得到的永远是 0，只有 init 执行完成后才可以得到正确的值，所以这里只能自己记录
                 result.qmui_style = firstArgv;
                 
-                if (@available(iOS 13.0, *)) {
-                    [selfObject qmuiTbc_callAddToTableViewBlockIfCan];
-                }
+                [selfObject qmuiTbc_callAddToTableViewBlockIfCan];
                 
                 return result;
             };
@@ -74,18 +72,16 @@ QMUISynthesizeIdCopyProperty(qmui_setSelectedBlock, setQmui_setSelectedBlock)
         
         // 修复 iOS 13.0 UIButton 作为 cell.accessoryView 时布局错误的问题
         // https://github.com/Tencent/QMUI_iOS/issues/693
-        if (@available(iOS 13.0, *)) {
-            if (@available(iOS 13.1, *)) {
-            } else {
-                ExtendImplementationOfVoidMethodWithoutArguments([UITableViewCell class], @selector(layoutSubviews), ^(UITableViewCell *selfObject) {
-                    if ([selfObject.accessoryView isKindOfClass:[UIButton class]]) {
-                        CGFloat defaultRightMargin = 15 + SafeAreaInsetsConstantForDeviceWithNotch.right;
-                        selfObject.accessoryView.qmui_left = selfObject.qmui_width - defaultRightMargin - selfObject.accessoryView.qmui_width;
-                        selfObject.accessoryView.qmui_top = CGRectGetMinYVerticallyCenterInParentRect(selfObject.frame, selfObject.accessoryView.frame);;
-                        selfObject.contentView.qmui_right = selfObject.accessoryView.qmui_left;
-                    }
-                });
-            }
+        if (@available(iOS 13.1, *)) {
+        } else {
+            ExtendImplementationOfVoidMethodWithoutArguments([UITableViewCell class], @selector(layoutSubviews), ^(UITableViewCell *selfObject) {
+                if ([selfObject.accessoryView isKindOfClass:[UIButton class]]) {
+                    CGFloat defaultRightMargin = 15 + SafeAreaInsetsConstantForDeviceWithNotch.right;
+                    selfObject.accessoryView.qmui_left = selfObject.qmui_width - defaultRightMargin - selfObject.accessoryView.qmui_width;
+                    selfObject.accessoryView.qmui_top = CGRectGetMinYVerticallyCenterInParentRect(selfObject.frame, selfObject.accessoryView.frame);;
+                    selfObject.contentView.qmui_right = selfObject.accessoryView.qmui_left;
+                }
+            });
         }
         
         OverrideImplementation([UITableViewCell class], NSSelectorFromString(@"_setTableView:"), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
@@ -224,7 +220,7 @@ static char kAssociatedObjectKey_selectedBackgroundColor;
     objc_setAssociatedObject(self, &kAssociatedObjectKey_selectedBackgroundColor, qmui_selectedBackgroundColor, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     if (qmui_selectedBackgroundColor) {
         // 系统默认的 selectedBackgroundView 是 UITableViewCellSelectedBackground，无法修改自定义背景色，所以改为用普通的 UIView
-        if ([NSStringFromClass(self.selectedBackgroundView.class) hasPrefix:@"UITableViewCell"]) {
+        if (!self.selectedBackgroundView || [NSStringFromClass(self.selectedBackgroundView.class) hasPrefix:@"UITableViewCell"]) {
             self.selectedBackgroundView = [[UIView alloc] init];
         }
         self.selectedBackgroundView.backgroundColor = qmui_selectedBackgroundColor;
@@ -247,24 +243,157 @@ static char kAssociatedObjectKey_selectedBackgroundColor;
     }
     
     // UITableViewCellAccessoryDetailDisclosureButton 在 iOS 13 及以上是分开的两个 accessoryView，以 NSSet 的形式存在这个私有接口里。而 iOS 12 及以下是以一个 UITableViewCellDetailDisclosureView 的 UIControl 存在。
-    if (@available(iOS 13.0, *)) {
-        NSSet<UIView *> *accessoryViews = [self qmui_valueForKey:@"_existingSystemAccessoryViews"];
-        if ([accessoryViews isKindOfClass:NSSet.class] && accessoryViews.count) {
-            UIView *leftView = nil;
-            for (UIView *accessoryView in accessoryViews) {
-                if (!leftView) {
-                    leftView = accessoryView;
-                    continue;
-                }
-                if (CGRectGetMinX(accessoryView.frame) < CGRectGetMinX(leftView.frame)) {
-                    leftView = accessoryView;
-                }
+    NSSet<UIView *> *accessoryViews = [self qmui_valueForKey:@"_existingSystemAccessoryViews"];
+    if ([accessoryViews isKindOfClass:NSSet.class] && accessoryViews.count) {
+        UIView *leftView = nil;
+        for (UIView *accessoryView in accessoryViews) {
+            if (!leftView) {
+                leftView = accessoryView;
+                continue;
             }
-            return leftView;
+            if (CGRectGetMinX(accessoryView.frame) < CGRectGetMinX(leftView.frame)) {
+                leftView = accessoryView;
+            }
         }
-        return nil;
+        return leftView;
     }
-    return [self qmui_valueForKey:@"_accessoryView"];
+    return nil;
+}
+
+static char kAssociatedObjectKey_configureReorderingStyleBlock;
+- (void)setQmui_configureReorderingStyleBlock:(void (^)(__kindof UITableView * _Nonnull, __kindof UITableViewCell * _Nonnull, BOOL))configureReorderingStyleBlock {
+    objc_setAssociatedObject(self, &kAssociatedObjectKey_configureReorderingStyleBlock, configureReorderingStyleBlock, OBJC_ASSOCIATION_COPY_NONATOMIC);
+    if (configureReorderingStyleBlock) {
+        
+        static NSString *kCellKey = @"QMUI_configureCell";
+        
+        [QMUIHelper executeBlock:^{
+            // - [UITableViewCell _setReordering:]
+            // - (void) _setReordering:(BOOL)arg1; (0x1177b462a)
+            OverrideImplementation([UITableViewCell class], NSSelectorFromString([NSString qmui_stringByConcat:@"_", @"set", @"Reordering", @":", nil]), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
+                return ^(UITableViewCell *selfObject, BOOL firstArgv) {
+                    
+                    // call super
+                    void (*originSelectorIMP)(id, SEL, BOOL);
+                    originSelectorIMP = (void (*)(id, SEL, BOOL))originalIMPProvider();
+                    originSelectorIMP(selfObject, originCMD, firstArgv);
+                    
+                    if (selfObject.qmui_configureReorderingStyleBlock) {
+                        selfObject.qmui_configureReorderingStyleBlock(selfObject.qmui_tableView, selfObject, firstArgv);
+                    }
+                };
+            });
+            
+            // - [UITableViewCell _shouldMaskToBoundsWhileAnimating]
+            OverrideImplementation([UITableViewCell class], NSSelectorFromString([NSString qmui_stringByConcat:@"_", @"should", @"MaskToBounds", @"WhileAnimating", nil]), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
+                return ^BOOL(UITableViewCell *selfObject) {
+                    // call super
+                    BOOL (*originSelectorIMP)(id, SEL);
+                    originSelectorIMP = (BOOL (*)(id, SEL))originalIMPProvider();
+                    BOOL result = originSelectorIMP(selfObject, originCMD);
+                    
+                    // 系统默认在做 move 动作时 cell 是 clip 的，会导致 cell.layer.shadow 不可用，所以强制取消 clip
+                    if (selfObject.qmui_configureReorderingStyleBlock) {
+                        return NO;
+                    }
+                    
+                    return result;
+                };
+            });
+            
+            Class constants = NSClassFromString([NSString qmui_stringByConcat:@"UITable", @"Constants", @"_", @"IOS"]);
+            if (@available(iOS 14.0, *)) {
+                
+                // - [UITableViewCell _setConstants:]
+                // - (void) _setConstants:(id)arg1; (0x10c36d360)
+                OverrideImplementation([UITableViewCell class], NSSelectorFromString([NSString qmui_stringByConcat:@"_", @"set", @"Constants", @":", nil]), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
+                    return ^(UITableViewCell *selfObject, NSObject *firstArgv) {
+                        
+                        [firstArgv qmui_bindObjectWeakly:selfObject forKey:kCellKey];
+                        
+                        // call super
+                        void (*originSelectorIMP)(id, SEL, NSObject *);
+                        originSelectorIMP = (void (*)(id, SEL, NSObject *))originalIMPProvider();
+                        originSelectorIMP(selfObject, originCMD, firstArgv);
+                    };
+                });
+                
+                // - [UITableConstants_IOS defaultAlphaForReorderingCell]
+                OverrideImplementation(constants, NSSelectorFromString([NSString qmui_stringByConcat:@"default", @"Alpha", @"ForReorderingCell", nil]), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
+                    return ^CGFloat(NSObject *selfObject) {
+                        // call super
+                        CGFloat (*originSelectorIMP)(id, SEL);
+                        originSelectorIMP = (CGFloat (*)(id, SEL))originalIMPProvider();
+                        CGFloat result = originSelectorIMP(selfObject, originCMD);
+                        
+                        UITableViewCell *cell = [selfObject qmui_getBoundObjectForKey:kCellKey];
+                        if (cell.qmui_configureReorderingStyleBlock) {
+                            return 1;
+                        }
+                        return result;
+                    };
+                });
+                
+                // - (BOOL) reorderingCellWantsShadows; (0x109f44dbc)
+                OverrideImplementation(constants, NSSelectorFromString([NSString qmui_stringByConcat:@"reordering", @"Cell", @"WantsShadows", nil]), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
+                    return ^BOOL(NSObject *selfObject) {
+                        // call super
+                        BOOL (*originSelectorIMP)(id, SEL);
+                        originSelectorIMP = (BOOL (*)(id, SEL))originalIMPProvider();
+                        BOOL result = originSelectorIMP(selfObject, originCMD);
+                        
+                        UITableViewCell *cell = [selfObject qmui_getBoundObjectForKey:kCellKey];
+                        if (cell.qmui_configureReorderingStyleBlock) {
+                            return NO;
+                        }
+                        return result;
+                    };
+                });
+                
+            } else {
+                
+                // - (double) defaultAlphaForReorderingCell:(id)arg1 inTableView:(id)arg2; (0x1174286d7)
+                OverrideImplementation(constants, NSSelectorFromString([NSString qmui_stringByConcat:@"default", @"Alpha", @"ForReorderingCell:", @"inTableView:", nil]), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
+                    return ^CGFloat(NSObject *selfObject, UITableViewCell *cell, UITableView *tableView) {
+                        
+                        // call super
+                        CGFloat (*originSelectorIMP)(id, SEL, UITableViewCell *, UITableView *);
+                        originSelectorIMP = (CGFloat (*)(id, SEL, UITableViewCell *, UITableView *))originalIMPProvider();
+                        CGFloat result = originSelectorIMP(selfObject, originCMD, cell, tableView);
+                        
+                        if (cell.qmui_configureReorderingStyleBlock) {
+                            return 1;
+                        }
+                        
+                        return result;
+                    };
+                });
+                
+                // - (BOOL) reorderingCellWantsShadows:(id)arg1 inTableView:(id)arg2; (0x1155d86e5)
+                OverrideImplementation(constants, NSSelectorFromString([NSString qmui_stringByConcat:@"reordering", @"Cell", @"WantsShadows:", @"inTableView:", nil]), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
+                    return ^BOOL(NSObject *selfObject, UITableViewCell *cell, UITableView *tableView) {
+                        
+                        // call super
+                        BOOL (*originSelectorIMP)(id, SEL, UITableViewCell *, UITableView *);
+                        originSelectorIMP = (BOOL (*)(id, SEL, UITableViewCell *, UITableView *))originalIMPProvider();
+                        BOOL result = originSelectorIMP(selfObject, originCMD, cell, tableView);
+                        
+                        if (cell.qmui_configureReorderingStyleBlock) {
+                            return NO;
+                        }
+                        
+                        return result;
+                    };
+                });
+            }
+            
+            
+        } oncePerIdentifier:@"QMUI_configureReordering"];
+    }
+}
+
+- (void (^)(__kindof UITableView * _Nonnull, __kindof UITableViewCell * _Nonnull, BOOL))qmui_configureReorderingStyleBlock {
+    return (void (^)(__kindof UITableView * _Nonnull, __kindof UITableViewCell * _Nonnull, BOOL))objc_getAssociatedObject(self, &kAssociatedObjectKey_configureReorderingStyleBlock);
 }
 
 @end
@@ -300,23 +429,23 @@ static char kAssociatedObjectKey_selectedBackgroundColor;
 }
 
 - (UIColor *)qmui_styledTextLabelColor {
-    return PreferredValueForTableViewStyle(self.qmui_tableView.qmui_style, TableViewCellTitleLabelColor, TableViewGroupedCellTitleLabelColor, TableViewInsetGroupedCellTitleLabelColor);
+    return PreferredValueForTableViewStyle(self.qmui_tableView.style, TableViewCellTitleLabelColor, TableViewGroupedCellTitleLabelColor, TableViewInsetGroupedCellTitleLabelColor);
 }
 
 - (UIColor *)qmui_styledDetailTextLabelColor {
-    return PreferredValueForTableViewStyle(self.qmui_tableView.qmui_style, TableViewCellDetailLabelColor, TableViewGroupedCellDetailLabelColor, TableViewInsetGroupedCellDetailLabelColor);
+    return PreferredValueForTableViewStyle(self.qmui_tableView.style, TableViewCellDetailLabelColor, TableViewGroupedCellDetailLabelColor, TableViewInsetGroupedCellDetailLabelColor);
 }
 
 - (UIColor *)qmui_styledBackgroundColor {
-    return PreferredValueForTableViewStyle(self.qmui_tableView.qmui_style, TableViewCellBackgroundColor, TableViewGroupedCellBackgroundColor, TableViewInsetGroupedCellBackgroundColor);
+    return PreferredValueForTableViewStyle(self.qmui_tableView.style, TableViewCellBackgroundColor, TableViewGroupedCellBackgroundColor, TableViewInsetGroupedCellBackgroundColor);
 }
 
 - (UIColor *)qmui_styledSelectedBackgroundColor {
-    return PreferredValueForTableViewStyle(self.qmui_tableView.qmui_style, TableViewCellSelectedBackgroundColor, TableViewGroupedCellSelectedBackgroundColor, TableViewInsetGroupedCellSelectedBackgroundColor);
+    return PreferredValueForTableViewStyle(self.qmui_tableView.style, TableViewCellSelectedBackgroundColor, TableViewGroupedCellSelectedBackgroundColor, TableViewInsetGroupedCellSelectedBackgroundColor);
 }
 
 - (UIColor *)qmui_styledWarningBackgroundColor {
-    return PreferredValueForTableViewStyle(self.qmui_tableView.qmui_style, TableViewCellWarningBackgroundColor, TableViewGroupedCellWarningBackgroundColor, TableViewInsetGroupedCellWarningBackgroundColor);
+    return PreferredValueForTableViewStyle(self.qmui_tableView.style, TableViewCellWarningBackgroundColor, TableViewGroupedCellWarningBackgroundColor, TableViewInsetGroupedCellWarningBackgroundColor);
 }
 
 @end
@@ -334,14 +463,6 @@ static char kAssociatedObjectKey_selectedBackgroundColor;
                     return CGRectZero;
                 }
                 
-                // iOS 13 自己会控制好 InsetGrouped 时不同 cellPosition 的分隔线显隐，iOS 12 及以下要全部手动处理
-                if (@available(iOS 13.0, *)) {
-                } else {
-                    if (selfObject.qmui_tableView && selfObject.qmui_tableView.qmui_style == QMUITableViewStyleInsetGrouped && (selfObject.qmui_cellPosition & QMUITableViewCellPositionLastInSection) == QMUITableViewCellPositionLastInSection) {
-                        return CGRectZero;
-                    }
-                }
-                
                 // call super
                 CGRect (*originSelectorIMP)(id, SEL);
                 originSelectorIMP = (CGRect (*)(id, SEL))originalIMPProvider();
@@ -357,73 +478,10 @@ static char kAssociatedObjectKey_selectedBackgroundColor;
                     return CGRectZero;
                 }
                 
-                if (@available(iOS 13.0, *)) {
-                } else {
-                    // iOS 13 系统在 InsetGrouped 时默认就会隐藏顶部分隔线，所以这里只对 iOS 12 及以下处理
-                    if (selfObject.qmui_tableView && selfObject.qmui_tableView.qmui_style == QMUITableViewStyleInsetGrouped) {
-                        return CGRectZero;
-                    }
-                }
-                
-                
                 // call super
                 CGRect (*originSelectorIMP)(id, SEL);
                 originSelectorIMP = (CGRect (*)(id, SEL))originalIMPProvider();
                 CGRect result = originSelectorIMP(selfObject, originCMD);
-                return result;
-            };
-        });
-        
-        // 下方的功能，iOS 13 都交给系统的 InsetGrouped 处理
-        if (@available(iOS 13.0, *)) return;
-        
-        OverrideImplementation([UITableViewCell class], @selector(setFrame:), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
-            return ^(UITableViewCell *selfObject, CGRect firstArgv) {
-                
-                UITableView *tableView = selfObject.qmui_tableView;
-                if (tableView && tableView.qmui_style == QMUITableViewStyleInsetGrouped) {
-                    // 以下的宽度不基于 firstArgv 来改，而是直接获取 tableView 的内容宽度，是因为 iOS 12 及以下的系统，在 cell 拖拽排序时，frame 会基于上一个 frame 计算，导致宽度不断减小，所以这里每次都用 tableView 的内容宽度来算
-                    // https://github.com/Tencent/QMUI_iOS/issues/1216
-                    firstArgv = CGRectMake(tableView.safeAreaInsets.left + tableView.qmui_insetGroupedHorizontalInset, CGRectGetMinY(firstArgv), tableView.qmui_validContentWidth, CGRectGetHeight(firstArgv));
-                }
-                
-                // call super
-                void (*originSelectorIMP)(id, SEL, CGRect);
-                originSelectorIMP = (void (*)(id, SEL, CGRect))originalIMPProvider();
-                originSelectorIMP(selfObject, originCMD, firstArgv);
-            };
-        });
-        
-        // 将缩进后的宽度传给 cell 的 sizeThatFits:，注意 sizeThatFits: 只有在 tableView 开启 self-sizing 的情况下才会被调用（也即高度被指定为 UITableViewAutomaticDimension）
-        // TODO: molice 系统的 UITableViewCell 第一次布局总是得到错误的高度，不知道为什么
-        OverrideImplementation([UITableViewCell class], @selector(systemLayoutSizeFittingSize:withHorizontalFittingPriority:verticalFittingPriority:), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
-            return ^CGSize(UITableViewCell *selfObject, CGSize targetSize, UILayoutPriority horizontalFittingPriority, UILayoutPriority verticalFittingPriority) {
-                
-                UITableView *tableView = selfObject.qmui_tableView;
-                if (tableView && tableView.qmui_style == QMUITableViewStyleInsetGrouped) {
-                    [QMUIHelper executeBlock:^{
-                        OverrideImplementation(selfObject.class, @selector(sizeThatFits:), ^id(__unsafe_unretained Class originClass, SEL cellOriginCMD, IMP (^cellOriginalIMPProvider)(void)) {
-                            return ^CGSize(UITableViewCell *cell, CGSize firstArgv) {
-                                
-                                UITableView *tableView = cell.qmui_tableView;
-                                if (tableView && tableView.qmui_style == QMUITableViewStyleInsetGrouped) {
-                                    firstArgv.width = firstArgv.width - UIEdgeInsetsGetHorizontalValue(tableView.safeAreaInsets) - tableView.qmui_insetGroupedHorizontalInset * 2;
-                                }
-                                
-                                // call super
-                                CGSize (*originSelectorIMP)(id, SEL, CGSize);
-                                originSelectorIMP = (CGSize (*)(id, SEL, CGSize))cellOriginalIMPProvider();
-                                CGSize result = originSelectorIMP(cell, cellOriginCMD, firstArgv);
-                                return result;
-                            };
-                        });
-                    } oncePerIdentifier:[NSString stringWithFormat:@"InsetGroupedCell %@-%@", NSStringFromClass(selfObject.class), NSStringFromSelector(@selector(sizeThatFits:))]];
-                }
-                
-                // call super
-                CGSize (*originSelectorIMP)(id, SEL, CGSize, UILayoutPriority, UILayoutPriority);
-                originSelectorIMP = (CGSize (*)(id, SEL, CGSize, UILayoutPriority, UILayoutPriority))originalIMPProvider();
-                CGSize result = originSelectorIMP(selfObject, originCMD, targetSize, horizontalFittingPriority, verticalFittingPriority);
                 return result;
             };
         });

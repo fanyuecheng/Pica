@@ -35,10 +35,6 @@
     });
 }
 
-+ (void)forceInterfaceOrientationPortrait {
-    [QMUIHelper rotateToDeviceOrientation:UIDeviceOrientationPortrait];
-}
-
 @end
 
 

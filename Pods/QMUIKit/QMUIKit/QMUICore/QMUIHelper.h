@@ -166,7 +166,10 @@ extern const CGPoint QMUIBadgeInvalidateOffset;
 /// @NEW_DEVICE_CHECKER
 @property(class, nonatomic, readonly) BOOL isRegularScreen;
 
-/// iPhone 12 Pro Max
+/// iPhone 14 Pro Max
+@property(class, nonatomic, readonly) BOOL is67InchScreenAndiPhone14Later;
+
+/// iPhone 14 Plus / 13 Pro Max / 12 Pro Max
 @property(class, nonatomic, readonly) BOOL is67InchScreen;
 
 /// iPhone XS Max / 11 Pro Max
@@ -196,6 +199,7 @@ extern const CGPoint QMUIBadgeInvalidateOffset;
 /// iPhone 4
 @property(class, nonatomic, readonly) BOOL is35InchScreen;
 
+@property(class, nonatomic, readonly) CGSize screenSizeFor67InchAndiPhone14Later;
 @property(class, nonatomic, readonly) CGSize screenSizeFor67Inch;
 @property(class, nonatomic, readonly) CGSize screenSizeFor65Inch;
 @property(class, nonatomic, readonly) CGSize screenSizeFor61InchAndiPhone12Later;
@@ -226,6 +230,11 @@ extern const CGPoint QMUIBadgeInvalidateOffset;
  */
 @property(class, nonatomic, readonly) CGSize applicationSize;
 
+/**
+ 静态的导航栏高度，在导航栏不可见时也会根据机型返回导航栏的固定高度
+ */
+@property(class, nonatomic, readonly) CGFloat statusBarHeightConstant;
+
 @end
 
 @interface QMUIHelper (UIApplication)
@@ -239,13 +248,6 @@ extern const CGPoint QMUIBadgeInvalidateOffset;
  * 恢复对App的主要window的置灰操作，与`dimmedApplicationWindow`成对调用
  */
 + (void)resetDimmedApplicationWindow;
-
-/**
- * 黑色的 StatusBarStyle，用于亮色背景
- * @note 在 iOS 13 以前  UIStatusBarStyleDefault 状态栏内容的颜色固定是黑色的，而在 iOS 13 UIStatusBarStyleDefault 会根据 user interface style 来决定状态栏的颜色，如果你需要一直黑色可以用 QMUIStatusBarStyleDarkContent 来代替以前 UIStatusBarStyleDefault 的写法
- * @return 在 iOS 13 以上返回 UIStatusBarStyleDarkContent，在 iOS 12 及以下返回 UIStatusBarStyleDefault
-*/
-@property(class, nonatomic, readonly) UIStatusBarStyle statusBarStyleDarkContent;
 
 /**
  在非 UIApplicationStateActive 的时机去设置 UIAppearance 可能引发第三方输入法 crash，因此提供这个方法判断当前是否可以更新 UIAppearance。

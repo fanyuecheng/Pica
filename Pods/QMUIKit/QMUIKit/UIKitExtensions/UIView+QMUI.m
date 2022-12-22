@@ -168,7 +168,7 @@ static char kAssociatedObjectKey_tintColorDidChangeBlock;
 }
 
 static char kAssociatedObjectKey_hitTestBlock;
-- (void)setQmui_hitTestBlock:(__kindof UIView * _Nonnull (^)(CGPoint, UIEvent * _Nonnull, __kindof UIView * _Nonnull))qmui_hitTestBlock {
+- (void)setQmui_hitTestBlock:(__kindof UIView * _Nullable (^)(CGPoint, UIEvent * _Nullable, __kindof UIView * _Nullable))qmui_hitTestBlock {
     objc_setAssociatedObject(self, &kAssociatedObjectKey_hitTestBlock, qmui_hitTestBlock, OBJC_ASSOCIATION_COPY_NONATOMIC);
     [QMUIHelper executeBlock:^{
         ExtendImplementationOfNonVoidMethodWithTwoArguments([UIView class], @selector(hitTest:withEvent:), CGPoint, UIEvent *, UIView *, ^UIView *(UIView *selfObject, CGPoint point, UIEvent *event, UIView *originReturnValue) {
@@ -290,11 +290,7 @@ QMUISynthesizeBOOLProperty(qmui_isControllerRootView, setQmui_isControllerRootVi
         return YES;
     }
     if ([self isKindOfClass:UIWindow.class]) {
-        if (@available(iOS 13.0, *)) {
-            return !!((UIWindow *)self).windowScene;
-        } else {
-            return YES;
-        }
+        return !!((UIWindow *)self).windowScene;
     }
     UIViewController *viewController = self.qmui_viewController;
     return viewController.qmui_visibleState >= QMUIViewControllerWillAppear && viewController.qmui_visibleState < QMUIViewControllerWillDisappear;

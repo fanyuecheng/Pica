@@ -36,7 +36,7 @@ const CGFloat PCButtonSpacingHeight = 72;
                     if ([QMUIThemeManagerCenter.defaultThemeManager.currentThemeIdentifier isEqual:PCThemeIdentifierDark]) {
                         return UIStatusBarStyleLightContent;
                     }
-                    return QMUIStatusBarStyleDarkContent;
+                    return UIStatusBarStyleDarkContent;
                 };
                 return result;
             };

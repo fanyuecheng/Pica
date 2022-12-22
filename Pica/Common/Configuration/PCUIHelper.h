@@ -10,9 +10,7 @@
 #import <QMUIKit/QMUIKit.h>
 
 @interface PCUIHelper : NSObject
-
-+ (void)forceInterfaceOrientationPortrait;
-
+ 
 @end
 
 

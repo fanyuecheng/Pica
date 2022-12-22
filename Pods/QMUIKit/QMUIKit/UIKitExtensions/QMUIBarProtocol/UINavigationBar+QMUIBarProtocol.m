@@ -1,9 +1,15 @@
+/**
+ * Tencent is pleased to support the open source community by making QMUI_iOS available.
+ * Copyright (C) 2016-2021 THL A29 Limited, a Tencent company. All rights reserved.
+ * Licensed under the MIT License (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+ * http://opensource.org/licenses/MIT
+ * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+ */
 //
 //  UINavigationBar+QMUIBarProtocol.m
 //  QMUIKit
 //
 //  Created by molice on 2022/5/18.
-//  Copyright © 2022 QMUI Team. All rights reserved.
 //
 
 #import "UINavigationBar+QMUIBarProtocol.h"
@@ -51,11 +57,7 @@ EndIgnoreClangWarning
 
 - (UIImageView *)qmui_shadowImageView {
     // bar 在 init 完就可以获取到 backgroundView 和 shadowView，无需关心调用时机的问题
-    if (@available(iOS 13, *)) {
-        return [self.qmui_backgroundView qmui_valueForKey:@"_shadowView1"];
-    }
-    // iOS 10 及以后，在 bar 初始化之后就能获取到 backgroundView 和 shadowView 了
-    return [self.qmui_backgroundView qmui_valueForKey:@"_shadowView"];
+    return [self.qmui_backgroundView qmui_valueForKey:@"_shadowView1"];
 }
 
 - (UIVisualEffectView *)qmui_effectView {
@@ -68,20 +70,13 @@ EndIgnoreClangWarning
 - (NSArray<UIVisualEffectView *> *)qmui_effectViews {
     UIView *backgroundView = self.qmui_backgroundView;
     NSMutableArray<UIVisualEffectView *> *result = NSMutableArray.new;
-    if (@available(iOS 13.0, *)) {
-        UIVisualEffectView *backgroundEffectView1 = [backgroundView valueForKey:@"_effectView1"];
-        UIVisualEffectView *backgroundEffectView2 = [backgroundView valueForKey:@"_effectView2"];
-        if (backgroundEffectView1) {
-            [result addObject:backgroundEffectView1];
-        }
-        if (backgroundEffectView2) {
-            [result addObject:backgroundEffectView2];
-        }
-    } else {
-        UIVisualEffectView *backgroundEffectView = [backgroundView qmui_valueForKey:@"_backgroundEffectView"];
-        if (backgroundEffectView) {
-            [result addObject:backgroundEffectView];
-        }
+    UIVisualEffectView *backgroundEffectView1 = [backgroundView valueForKey:@"_effectView1"];
+    UIVisualEffectView *backgroundEffectView2 = [backgroundView valueForKey:@"_effectView2"];
+    if (backgroundEffectView1) {
+        [result addObject:backgroundEffectView1];
+    }
+    if (backgroundEffectView2) {
+        [result addObject:backgroundEffectView2];
     }
     return result.count > 0 ? result : nil;
 }

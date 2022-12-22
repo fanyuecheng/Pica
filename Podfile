@@ -1,5 +1,5 @@
 # Uncomment the next line to define a global platform for your project
-platform :ios, '12.0'
+platform :ios, '13.0'
 
 target 'Pica' do
   # Comment the next line if you don't want to use dynamic frameworks
@@ -9,8 +9,8 @@ target 'Pica' do
 
     pod 'YTKNetwork', '~> 3.0.6'
     pod 'YYModel', '~> 1.0.4' 
-    pod 'SDWebImage', '~> 5.13.4'
-    pod 'QMUIKit', '~> 4.5.1'  
+    pod 'SDWebImage', '~> 5.14.2'
+    pod 'QMUIKit', '~> 4.6.3'  
     pod 'MJRefresh', '~> 3.7.5'
     pod 'JXPagingView/Pager', '~> 2.1.2'
     pod 'SocketRocket', '~> 0.6.0'
