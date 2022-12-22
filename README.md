@@ -1,4 +1,7 @@
 # Pica 仅供学习&个人使用  
+
+简体中文 | [English](./README_en.md)
+
 ---  
 一个**PicAcg**客户端  
 API来自 [picacomic-api](https://github.com/czp3009/picacomic-api)  
@@ -27,6 +30,12 @@ API来自 [picacomic-api](https://github.com/czp3009/picacomic-api)
 * [x] 聊天室接收发送图片，文字，声音
 * [x] 游戏区
 * [ ] 下载本子  
+
+#### 安装
+- 开发人员直接下载，xcode选择开发账号，修改bundleid，选择真机运行
+- 非开发人员，下载release里面的ipa包后
+	1.  trollstore [官网](https://trollstore.app/) [github](https://github.com/opa334/TrollStore)
+	2.  altstore [官网](https://altstore.io/)
 
 #### 更新日志  
 **v1.3.0**      
