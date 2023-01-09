@@ -77,9 +77,10 @@
     [super setupToolbarItems];
     
     UIBarButtonItem *flexibleItem = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace target:nil action:NULL];
-    
-    UIBarButtonItem *item1 = [QMUIToolbarButton barButtonItemWithType:QMUIToolbarButtonTypeNormal title:@"上一话" target:self action:@selector(lastEpisode:)];
-    UIBarButtonItem *item2 = [QMUIToolbarButton barButtonItemWithType:QMUIToolbarButtonTypeNormal title:@"下一话" target:self action:@selector(nextEpisode:)];
+    UIBarButtonItem *item1 = [QMUIToolbarButton barButtonItemWithImage:[UIImage systemImageNamed:@"arrow.left"] target:self action:@selector(lastEpisode:)];
+    UIBarButtonItem *item2 = [QMUIToolbarButton barButtonItemWithImage:[UIImage systemImageNamed:@"arrow.right"] target:self action:@selector(nextEpisode:)];
+    item1.tintColor = UIColorBlack;
+    item2.tintColor = UIColorBlack;
     self.toolbarItems = @[item1, flexibleItem, item2];
 }
 

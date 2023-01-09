@@ -28,13 +28,8 @@ static NSMutableArray <NSString *> *PCCharacterImageArray = nil;
     //https://www.picacomic.com or https://pica-pica.wikawika.xyz
     if (!PCCharacterImageArray) {
         PCCharacterImageArray = [[NSMutableArray alloc] init];
-        [PCCharacterImageArray addObjectsFromArray:@[ @"https://pica-pica.wikawika.xyz/characters/frame_knight_9.png", @"https://pica-pica.wikawika.xyz/characters/frame_knight_100_249.png", @"https://pica-pica.wikawika.xyz/characters/frame_knight_1000.png", @"https://pica-pica.wikawika.xyz/characters/frame_knight_500_999.png", @"https://pica-pica.wikawika.xyz/characters/verified.png", @"https://pica-pica.wikawika.xyz/images/monster.jpg", @"https://pica-pica.wikawika.xyz/images/halloween_bot.png", @"https://pica-pica.wikawika.xyz/images/halloween_f.png", @"https://pica-pica.wikawika.xyz/images/halloween_m.png",
-            @"https://pica-pica.wikawika.xyz/special/frame-dirty.png"]];
-        for (NSInteger i = 1; i < 10; i++) {
-            [PCCharacterImageArray addObject:[NSString stringWithFormat:@"https://pica-pica.wikawika.xyz/special/hat-%@.png", @(i)]];
-        }
-        for (NSInteger i = 1; i < 491; i++) {
-            [PCCharacterImageArray addObject:[NSString stringWithFormat:@"https://pica-pica.wikawika.xyz/special/frame-%@.png", @(i)]];
+        for (NSInteger i = 1; i < 636; i++) {
+            [PCCharacterImageArray addObject:[NSString stringWithFormat:@"https://bidobido.xyz/special/frame-%@.png", @(i)]];
         }
     }
     return [PCCharacterImageArray copy];

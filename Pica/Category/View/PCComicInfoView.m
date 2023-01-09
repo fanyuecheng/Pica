@@ -18,12 +18,12 @@
 #import "PCUserInfoView.h"
 #import "PCCommonUI.h"
 
-@interface PCComicInfoView ()
+@interface PCComicInfoView () <QMUIImagePreviewViewDelegate>
 
 @property (nonatomic, strong) UIImageView *coverView;
 @property (nonatomic, strong) QMUILabel   *titleLabel;
-@property (nonatomic, strong) QMUIButton  *authorButton;
-@property (nonatomic, strong) QMUIButton  *sinicizationButton;
+@property (nonatomic, strong) QMUILabel   *authorLabel;
+@property (nonatomic, strong) QMUILabel   *sinicizationLabel;
 @property (nonatomic, strong) QMUILabel   *viewLabel;
 @property (nonatomic, strong) QMUILabel   *categoryLabel;
 @property (nonatomic, strong) QMUILabel   *descLabel;
@@ -34,6 +34,8 @@
 @property (nonatomic, strong) UIImageView *avatarView;
 @property (nonatomic, strong) QMUILabel   *nameLabel;
 @property (nonatomic, strong) QMUILabel   *timeLabel;
+
+@property (nonatomic, strong) QMUIImagePreviewViewController *previewViewController;
 
 @end
 
@@ -56,8 +58,8 @@
 - (void)didInitialize {  
     [self addSubview:self.coverView];
     [self addSubview:self.titleLabel];
-    [self addSubview:self.authorButton];
-    [self addSubview:self.sinicizationButton];
+    [self addSubview:self.authorLabel];
+    [self addSubview:self.sinicizationLabel];
     [self addSubview:self.viewLabel];
     [self addSubview:self.categoryLabel];
     [self addSubview:self.descLabel];
@@ -79,11 +81,11 @@
     
     self.coverView.frame = CGRectMake(15, 10, 90, 130);
     self.titleLabel.frame = CGRectMake(115, 10, self.qmui_width - 120, QMUIViewSelfSizingHeight);
-    [self.authorButton sizeToFit];
-    self.authorButton.frame = CGRectSetXY(self.authorButton.frame, 115, self.titleLabel.qmui_bottom + 5);
-    [self.sinicizationButton sizeToFit];
-    self.sinicizationButton.frame = CGRectSetXY(self.sinicizationButton.frame, 115, self.  authorButton.qmui_bottom + 5);
-    self.viewLabel.frame = CGRectMake(115, self.sinicizationButton.qmui_bottom + 5, self.qmui_width - 120, QMUIViewSelfSizingHeight);
+    [self.authorLabel sizeToFit];
+    self.authorLabel.frame = CGRectSetXY(self.authorLabel.frame, 115, self.titleLabel.qmui_bottom + 5);
+    [self.sinicizationLabel sizeToFit];
+    self.sinicizationLabel.frame = CGRectSetXY(self.sinicizationLabel.frame, 115, self.  authorLabel.qmui_bottom + 5);
+    self.viewLabel.frame = CGRectMake(115, self.sinicizationLabel.qmui_bottom + 5, self.qmui_width - 120, QMUIViewSelfSizingHeight);
     self.categoryLabel.frame = CGRectMake(115, self.viewLabel.qmui_bottom + 5, self.qmui_width - 120, QMUIViewSelfSizingHeight);
     self.tagView.frame = CGRectMake(15, self.coverView.qmui_bottom + 10, self.qmui_width - 30, QMUIViewSelfSizingHeight);
     self.descLabel.frame = CGRectMake(15, self.comic.tags.count ? self.tagView.qmui_bottom + 10 : self.tagView.qmui_bottom, self.qmui_width - 30, QMUIViewSelfSizingHeight);
@@ -132,26 +134,39 @@
     [[QMUIHelper visibleViewController].navigationController pushViewController:list animated:YES];
 }
  
-- (void)authorAction:(QMUIButton *)sender {
+- (void)authorAction:(UITapGestureRecognizer *)sender {
     PCComicListController *list = [[PCComicListController alloc] initWithType:PCComicListTypeAuthor];
-    list.keyword = sender.currentTitle;
+    list.keyword = self.authorLabel.text;
     [[QMUIHelper visibleViewController].navigationController pushViewController:list animated:YES];
 }
 
-- (void)sinicizationAction:(QMUIButton *)sender {
+- (void)sinicizationAction:(UITapGestureRecognizer *)sender {
     PCComicListController *list = [[PCComicListController alloc] initWithType:PCComicListTypeTranslate];
-    list.keyword = sender.currentTitle;
+    list.keyword = self.sinicizationLabel.text;
     [[QMUIHelper visibleViewController].navigationController pushViewController:list animated:YES];
 }
 
 - (void)avatarAction:(UIGestureRecognizer *)sender {
-    if (self.comic.chineseTeam.length && ![self.comic.chineseTeam isEqualToString:@"无"] && [self.comic.chineseTeam isEqualToString:@"不明"]) {
+    if (self.comic.chineseTeam.length && ![self.comic.chineseTeam isEqualToString:@"无"] && ![self.comic.chineseTeam isEqualToString:@"不明"]) {
         QMUIModalPresentationViewController *controller = [[QMUIModalPresentationViewController alloc] init];
         PCUserInfoView *infoView = [[PCUserInfoView alloc] init];
         infoView.user = self.comic.creator;
         controller.contentView = infoView;
         [controller showWithAnimated:YES completion:nil];
     }
+}
+
+- (void)coverAction:(UIGestureRecognizer *)sender {
+    if (!self.previewViewController) {
+        self.previewViewController = [[QMUIImagePreviewViewController alloc] init];
+        self.previewViewController.presentingStyle = QMUIImagePreviewViewControllerTransitioningStyleZoom;
+        self.previewViewController.imagePreviewView.delegate = self;
+    }
+    self.previewViewController.sourceImageView = ^UIView *{
+        return sender.view;
+    };
+    
+    [[QMUIHelper visibleViewController] presentViewController:self.previewViewController animated:YES completion:nil];
 }
 
 - (void)commentAction {
@@ -180,6 +195,30 @@
     }];
 }
 
+#pragma mark - QMUIImagePreviewViewDelegate
+- (NSUInteger)numberOfImagesInImagePreviewView:(QMUIImagePreviewView *)imagePreviewView {
+    return 1;
+}
+
+- (void)imagePreviewView:(QMUIImagePreviewView *)imagePreviewView renderZoomImageView:(QMUIZoomImageView *)zoomImageView atIndex:(NSUInteger)index {
+    [[SDWebImageManager sharedManager] loadImageWithURL:[NSURL URLWithString:self.comic.thumb.imageURL]
+                                                options:kNilOptions
+                                               progress:nil
+                                              completed:^(UIImage * _Nullable image, NSData * _Nullable data, NSError * _Nullable error, SDImageCacheType cacheType, BOOL finished, NSURL * _Nullable imageURL) {
+        if (image) {
+            zoomImageView.image = image;
+        }
+    }];
+}
+
+- (QMUIImagePreviewMediaType)imagePreviewView:(QMUIImagePreviewView *)imagePreviewView assetTypeAtIndex:(NSUInteger)index {
+    return QMUIImagePreviewMediaTypeImage;
+}
+
+- (void)singleTouchInZoomingImageView:(QMUIZoomImageView *)zoomImageView location:(CGPoint)location {
+    [self.previewViewController dismissViewControllerAnimated:YES completion:nil];
+}
+
 #pragma mark - Get
 - (UIImageView *)coverView {
     if (!_coverView) {
@@ -188,6 +227,8 @@
         _coverView.clipsToBounds = YES;
         _coverView.layer.cornerRadius = 4;
         _coverView.layer.masksToBounds = YES;
+        _coverView.userInteractionEnabled = YES;
+        [_coverView addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(coverAction:)]];
     }
     return _coverView;
 }
@@ -196,28 +237,27 @@
     if (!_titleLabel) {
         _titleLabel = [[QMUILabel alloc] init];
         _titleLabel.numberOfLines = 2;
+        _titleLabel.canPerformCopyAction = YES;
     }
     return _titleLabel;
 }
 
-- (QMUIButton *)authorButton {
-    if (!_authorButton) {
-        _authorButton = [[QMUIButton alloc] init];
-        _authorButton.titleLabel.font = UIFontMake(13);
-        [_authorButton setTitleColor:PCColorHotPink forState:UIControlStateNormal];
-        [_authorButton addTarget:self action:@selector(authorAction:) forControlEvents:UIControlEventTouchUpInside];
+- (QMUILabel *)authorLabel {
+    if (!_authorLabel) {
+        _authorLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(13) textColor:PCColorHotPink];
+        _authorLabel.canPerformCopyAction = YES;
+        [_authorLabel addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(authorAction:)]];
     }
-    return _authorButton;
+    return _authorLabel;
 }
 
-- (QMUIButton *)sinicizationButton {
-    if (!_sinicizationButton) {
-        _sinicizationButton = [[QMUIButton alloc] init];
-        _sinicizationButton.titleLabel.font = UIFontMake(13);
-        [_sinicizationButton setTitleColor:UIColorGrayLighten forState:UIControlStateNormal];
-        [_sinicizationButton addTarget:self action:@selector(sinicizationAction:) forControlEvents:UIControlEventTouchUpInside];
+- (QMUILabel *)sinicizationLabel {
+    if (!_sinicizationLabel) {
+        _sinicizationLabel = [[QMUILabel alloc] qmui_initWithFont:UIFontMake(13) textColor:UIColorGrayLighten];
+        _sinicizationLabel.canPerformCopyAction = YES;
+        [_sinicizationLabel addGestureRecognizer:[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(sinicizationAction:)]];
     }
-    return _sinicizationButton;
+    return _sinicizationLabel;
 }
 
 - (QMUILabel *)categoryLabel {
@@ -320,8 +360,8 @@
     
     [self.coverView pc_setImageWithURL:comic.thumb.imageURL];
     self.titleLabel.text = comic.title;
-    [self.authorButton setTitle:comic.author forState:UIControlStateNormal];
-    [self.sinicizationButton setTitle:comic.chineseTeam forState:UIControlStateNormal];
+    self.authorLabel.text = comic.author;
+    self.sinicizationLabel.text = comic.chineseTeam;
     self.viewLabel.text = [NSString stringWithFormat:@"绅士指名次数：%@ %@", @(comic.viewsCount), comic.finished ? @"(已完结)" : @""];
     NSMutableString *category = [NSMutableString stringWithString:@"分类 "];
     [comic.categories enumerateObjectsUsingBlock:^(NSString * _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
