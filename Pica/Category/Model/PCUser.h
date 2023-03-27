@@ -47,6 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) NSInteger level;
 @property (nonatomic, copy)   NSArray   <NSString *> *characters;
 @property (nonatomic, strong) PCThumb   *avatar;
+@property (nonatomic, copy)   NSString  *avatarUrl;
 
 //排行
 @property (nonatomic, assign) NSInteger comicsUploaded;

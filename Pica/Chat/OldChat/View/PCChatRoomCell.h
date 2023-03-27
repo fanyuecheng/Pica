@@ -1,5 +1,5 @@
 //
-//  PCChatListCell.h
+//  PCChatRoomCell.h
 //  Pica
 //
 //  Created by Fancy on 2021/6/15.
@@ -10,10 +10,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@class PCChatList;
-@interface PCChatListCell : PCTableViewCell
+@class PCChatRoom;
+@interface PCChatRoomCell : PCTableViewCell
 
-@property (nonatomic, strong) PCChatList *list;
+@property (nonatomic, strong) PCChatRoom *room;
 
 @end
 

@@ -1,14 +1,14 @@
 //
-//  PCChatList.m
+//  PCChatRoom.m 
 //  Pica
 //
 //  Created by Fancy on 2021/6/11.
 //  Copyright © 2021 fancy. All rights reserved.
 //
 
-#import "PCChatList.h"
+#import "PCChatRoom.h"
 
-@implementation PCChatList
+@implementation PCChatRoom
 
 + (NSDictionary *)modelCustomPropertyMapper {
     return @{@"desc" : @"description"};

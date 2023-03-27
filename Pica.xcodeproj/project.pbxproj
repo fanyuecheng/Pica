@@ -74,10 +74,10 @@
 		3368872327B4F6C300474151 /* PCOrderListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3368872227B4F6C300474151 /* PCOrderListController.m */; };
 		3377E97D26E9AB93005F7E3B /* PCNameSetRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 3377E97C26E9AB93005F7E3B /* PCNameSetRequest.m */; };
 		337AD6AA26737150009EA2D1 /* PCChatListRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 337AD6A926737150009EA2D1 /* PCChatListRequest.m */; };
-		337AD6AE267376D4009EA2D1 /* PCChatList.m in Sources */ = {isa = PBXBuildFile; fileRef = 337AD6AD267376D4009EA2D1 /* PCChatList.m */; };
+		337AD6AE267376D4009EA2D1 /* PCChatRoom.m in Sources */ = {isa = PBXBuildFile; fileRef = 337AD6AD267376D4009EA2D1 /* PCChatRoom.m */; };
 		337AD6B126737878009EA2D1 /* PCChatMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 337AD6B026737878009EA2D1 /* PCChatMessage.m */; };
 		337AD6B826784BD3009EA2D1 /* PCChatListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 337AD6B726784BD3009EA2D1 /* PCChatListController.m */; };
-		337AD6BB26784E52009EA2D1 /* PCChatListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 337AD6BA26784E52009EA2D1 /* PCChatListCell.m */; };
+		337AD6BB26784E52009EA2D1 /* PCChatRoomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 337AD6BA26784E52009EA2D1 /* PCChatRoomCell.m */; };
 		337AD6BE26785199009EA2D1 /* PCSocket.m in Sources */ = {isa = PBXBuildFile; fileRef = 337AD6BD26785199009EA2D1 /* PCSocket.m */; };
 		337AD6C1267854DC009EA2D1 /* PCChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 337AD6C0267854DC009EA2D1 /* PCChatViewController.m */; };
 		337AD6CB2678A1E7009EA2D1 /* PCChatManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 337AD6CA2678A1E7009EA2D1 /* PCChatManager.m */; };
@@ -87,6 +87,14 @@
 		33828E4025E6577C00967957 /* PCRegistRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 33828E3F25E6577C00967957 /* PCRegistRequest.m */; };
 		33828E4425E65CB600967957 /* PCRegistController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33828E4325E65CB600967957 /* PCRegistController.m */; };
 		3392771F27229819000021A3 /* PCChatSettingController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3392771E27229819000021A3 /* PCChatSettingController.m */; };
+		339A339B29D143F900113005 /* PCNewChatMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 339A339A29D143F900113005 /* PCNewChatMessage.m */; };
+		339A339E29D147E600113005 /* PCNewChatManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 339A339D29D147E600113005 /* PCNewChatManager.m */; };
+		339A33A129D1584100113005 /* PCNewChatMessageBubbleView.m in Sources */ = {isa = PBXBuildFile; fileRef = 339A33A029D1584100113005 /* PCNewChatMessageBubbleView.m */; };
+		339A33A429D158F400113005 /* PCNewChatMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 339A33A329D158F400113005 /* PCNewChatMessageCell.m */; };
+		339A33A729D1615B00113005 /* PCNewChatTextMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 339A33A629D1615B00113005 /* PCNewChatTextMessageCell.m */; };
+		339A33AA29D1640400113005 /* PCNewChatImageMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 339A33A929D1640400113005 /* PCNewChatImageMessageCell.m */; };
+		339A33AD29D17ACE00113005 /* PCNewChatSendRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 339A33AC29D17ACE00113005 /* PCNewChatSendRequest.m */; };
+		339A33B129D18D2A00113005 /* PCNewChatMentionView.m in Sources */ = {isa = PBXBuildFile; fileRef = 339A33B029D18D2A00113005 /* PCNewChatMentionView.m */; };
 		339E4A7C2806A8C3009730CB /* PCSpeechSynthesizer.m in Sources */ = {isa = PBXBuildFile; fileRef = 339E4A7B2806A8C3009730CB /* PCSpeechSynthesizer.m */; };
 		33A56880278D26A30059E076 /* PCImageSizeCache.m in Sources */ = {isa = PBXBuildFile; fileRef = 33A5687F278D26A30059E076 /* PCImageSizeCache.m */; };
 		33AB826E2679E0BA00A2FD3F /* PCImageMessageCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AB826D2679E0BA00A2FD3F /* PCImageMessageCell.m */; };
@@ -121,6 +129,13 @@
 		33AD9560255248C30079DFAE /* NSArray+PCAdd.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AD955F255248C30079DFAE /* NSArray+PCAdd.m */; };
 		33AD9564255248EA0079DFAE /* NSDictionary+PCAdd.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AD9563255248EA0079DFAE /* NSDictionary+PCAdd.m */; };
 		33AD956825524A000079DFAE /* PCSearchRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 33AD956725524A000079DFAE /* PCSearchRequest.m */; };
+		33B1256B29CC326D0042A569 /* PCNewChatBaseRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 33B1256A29CC326D0042A569 /* PCNewChatBaseRequest.m */; };
+		33B1256E29CC34E40042A569 /* PCNewChatLoginRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 33B1256D29CC34E40042A569 /* PCNewChatLoginRequest.m */; };
+		33B1257429CC36520042A569 /* PCNewChatListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33B1257329CC36520042A569 /* PCNewChatListController.m */; };
+		33B1257729CC3AB30042A569 /* PCNewChatRoomRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 33B1257629CC3AB30042A569 /* PCNewChatRoomRequest.m */; };
+		33B1257B29CC3B8C0042A569 /* PCNewChatRoom.m in Sources */ = {isa = PBXBuildFile; fileRef = 33B1257A29CC3B8C0042A569 /* PCNewChatRoom.m */; };
+		33B1257F29CC41030042A569 /* PCNewChatRoomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 33B1257E29CC41030042A569 /* PCNewChatRoomCell.m */; };
+		33B1258229CC44A40042A569 /* PCNewChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33B1258129CC44A40042A569 /* PCNewChatViewController.m */; };
 		33B78EC726B8FC7F000CA73E /* PCForgotPasswordRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 33B78EC626B8FC7F000CA73E /* PCForgotPasswordRequest.m */; };
 		33B78ECA26B8FFD7000CA73E /* PCSourceRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 33B78EC926B8FFD7000CA73E /* PCSourceRequest.m */; };
 		33B78ECD26B900A6000CA73E /* PCInitRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 33B78ECC26B900A6000CA73E /* PCInitRequest.m */; };
@@ -286,14 +301,14 @@
 		3377E97C26E9AB93005F7E3B /* PCNameSetRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCNameSetRequest.m; sourceTree = "<group>"; };
 		337AD6A826737150009EA2D1 /* PCChatListRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCChatListRequest.h; sourceTree = "<group>"; };
 		337AD6A926737150009EA2D1 /* PCChatListRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCChatListRequest.m; sourceTree = "<group>"; };
-		337AD6AC267376D4009EA2D1 /* PCChatList.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCChatList.h; sourceTree = "<group>"; };
-		337AD6AD267376D4009EA2D1 /* PCChatList.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCChatList.m; sourceTree = "<group>"; };
+		337AD6AC267376D4009EA2D1 /* PCChatRoom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCChatRoom.h; sourceTree = "<group>"; };
+		337AD6AD267376D4009EA2D1 /* PCChatRoom.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCChatRoom.m; sourceTree = "<group>"; };
 		337AD6AF26737878009EA2D1 /* PCChatMessage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCChatMessage.h; sourceTree = "<group>"; };
 		337AD6B026737878009EA2D1 /* PCChatMessage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCChatMessage.m; sourceTree = "<group>"; };
 		337AD6B626784BD3009EA2D1 /* PCChatListController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCChatListController.h; sourceTree = "<group>"; };
 		337AD6B726784BD3009EA2D1 /* PCChatListController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCChatListController.m; sourceTree = "<group>"; };
-		337AD6B926784E52009EA2D1 /* PCChatListCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCChatListCell.h; sourceTree = "<group>"; };
-		337AD6BA26784E52009EA2D1 /* PCChatListCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCChatListCell.m; sourceTree = "<group>"; };
+		337AD6B926784E52009EA2D1 /* PCChatRoomCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCChatRoomCell.h; sourceTree = "<group>"; };
+		337AD6BA26784E52009EA2D1 /* PCChatRoomCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCChatRoomCell.m; sourceTree = "<group>"; };
 		337AD6BC26785199009EA2D1 /* PCSocket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCSocket.h; sourceTree = "<group>"; };
 		337AD6BD26785199009EA2D1 /* PCSocket.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCSocket.m; sourceTree = "<group>"; };
 		337AD6BF267854DC009EA2D1 /* PCChatViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCChatViewController.h; sourceTree = "<group>"; };
@@ -312,6 +327,22 @@
 		33828E4325E65CB600967957 /* PCRegistController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCRegistController.m; sourceTree = "<group>"; };
 		3392771D27229819000021A3 /* PCChatSettingController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCChatSettingController.h; sourceTree = "<group>"; };
 		3392771E27229819000021A3 /* PCChatSettingController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCChatSettingController.m; sourceTree = "<group>"; };
+		339A339929D143F900113005 /* PCNewChatMessage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCNewChatMessage.h; sourceTree = "<group>"; };
+		339A339A29D143F900113005 /* PCNewChatMessage.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCNewChatMessage.m; sourceTree = "<group>"; };
+		339A339C29D147E600113005 /* PCNewChatManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCNewChatManager.h; sourceTree = "<group>"; };
+		339A339D29D147E600113005 /* PCNewChatManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCNewChatManager.m; sourceTree = "<group>"; };
+		339A339F29D1584100113005 /* PCNewChatMessageBubbleView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCNewChatMessageBubbleView.h; sourceTree = "<group>"; };
+		339A33A029D1584100113005 /* PCNewChatMessageBubbleView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCNewChatMessageBubbleView.m; sourceTree = "<group>"; };
+		339A33A229D158F400113005 /* PCNewChatMessageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCNewChatMessageCell.h; sourceTree = "<group>"; };
+		339A33A329D158F400113005 /* PCNewChatMessageCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCNewChatMessageCell.m; sourceTree = "<group>"; };
+		339A33A529D1615B00113005 /* PCNewChatTextMessageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCNewChatTextMessageCell.h; sourceTree = "<group>"; };
+		339A33A629D1615B00113005 /* PCNewChatTextMessageCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCNewChatTextMessageCell.m; sourceTree = "<group>"; };
+		339A33A829D1640400113005 /* PCNewChatImageMessageCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCNewChatImageMessageCell.h; sourceTree = "<group>"; };
+		339A33A929D1640400113005 /* PCNewChatImageMessageCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCNewChatImageMessageCell.m; sourceTree = "<group>"; };
+		339A33AB29D17ACE00113005 /* PCNewChatSendRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCNewChatSendRequest.h; sourceTree = "<group>"; };
+		339A33AC29D17ACE00113005 /* PCNewChatSendRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCNewChatSendRequest.m; sourceTree = "<group>"; };
+		339A33AF29D18D2A00113005 /* PCNewChatMentionView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCNewChatMentionView.h; sourceTree = "<group>"; };
+		339A33B029D18D2A00113005 /* PCNewChatMentionView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCNewChatMentionView.m; sourceTree = "<group>"; };
 		339E4A7A2806A8C3009730CB /* PCSpeechSynthesizer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCSpeechSynthesizer.h; sourceTree = "<group>"; };
 		339E4A7B2806A8C3009730CB /* PCSpeechSynthesizer.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCSpeechSynthesizer.m; sourceTree = "<group>"; };
 		33A5687E278D26A30059E076 /* PCImageSizeCache.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCImageSizeCache.h; sourceTree = "<group>"; };
@@ -379,6 +410,20 @@
 		33AD9563255248EA0079DFAE /* NSDictionary+PCAdd.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSDictionary+PCAdd.m"; sourceTree = "<group>"; };
 		33AD956625524A000079DFAE /* PCSearchRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCSearchRequest.h; sourceTree = "<group>"; };
 		33AD956725524A000079DFAE /* PCSearchRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCSearchRequest.m; sourceTree = "<group>"; };
+		33B1256929CC326D0042A569 /* PCNewChatBaseRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCNewChatBaseRequest.h; sourceTree = "<group>"; };
+		33B1256A29CC326D0042A569 /* PCNewChatBaseRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCNewChatBaseRequest.m; sourceTree = "<group>"; };
+		33B1256C29CC34E40042A569 /* PCNewChatLoginRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCNewChatLoginRequest.h; sourceTree = "<group>"; };
+		33B1256D29CC34E40042A569 /* PCNewChatLoginRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCNewChatLoginRequest.m; sourceTree = "<group>"; };
+		33B1257229CC36520042A569 /* PCNewChatListController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCNewChatListController.h; sourceTree = "<group>"; };
+		33B1257329CC36520042A569 /* PCNewChatListController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCNewChatListController.m; sourceTree = "<group>"; };
+		33B1257529CC3AB30042A569 /* PCNewChatRoomRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCNewChatRoomRequest.h; sourceTree = "<group>"; };
+		33B1257629CC3AB30042A569 /* PCNewChatRoomRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCNewChatRoomRequest.m; sourceTree = "<group>"; };
+		33B1257929CC3B8C0042A569 /* PCNewChatRoom.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCNewChatRoom.h; sourceTree = "<group>"; };
+		33B1257A29CC3B8C0042A569 /* PCNewChatRoom.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCNewChatRoom.m; sourceTree = "<group>"; };
+		33B1257D29CC41030042A569 /* PCNewChatRoomCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCNewChatRoomCell.h; sourceTree = "<group>"; };
+		33B1257E29CC41030042A569 /* PCNewChatRoomCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCNewChatRoomCell.m; sourceTree = "<group>"; };
+		33B1258029CC44A40042A569 /* PCNewChatViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCNewChatViewController.h; sourceTree = "<group>"; };
+		33B1258129CC44A40042A569 /* PCNewChatViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCNewChatViewController.m; sourceTree = "<group>"; };
 		33B78EC526B8FC7F000CA73E /* PCForgotPasswordRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCForgotPasswordRequest.h; sourceTree = "<group>"; };
 		33B78EC626B8FC7F000CA73E /* PCForgotPasswordRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCForgotPasswordRequest.m; sourceTree = "<group>"; };
 		33B78EC826B8FFD7000CA73E /* PCSourceRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCSourceRequest.h; sourceTree = "<group>"; };
@@ -618,10 +663,8 @@
 		337AD6A62673710B009EA2D1 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
-				337AD6B526784BBC009EA2D1 /* View */,
-				337AD6B426784BB5009EA2D1 /* Controller */,
-				337AD6AB26737246009EA2D1 /* Model */,
-				337AD6A726737118009EA2D1 /* Request */,
+				339A33B229D19B7B00113005 /* OldChat */,
+				33B1256F29CC35BF0042A569 /* NewChat */,
 			);
 			path = Chat;
 			sourceTree = "<group>";
@@ -638,8 +681,8 @@
 		337AD6AB26737246009EA2D1 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				337AD6AC267376D4009EA2D1 /* PCChatList.h */,
-				337AD6AD267376D4009EA2D1 /* PCChatList.m */,
+				337AD6AC267376D4009EA2D1 /* PCChatRoom.h */,
+				337AD6AD267376D4009EA2D1 /* PCChatRoom.m */,
 				337AD6AF26737878009EA2D1 /* PCChatMessage.h */,
 				337AD6B026737878009EA2D1 /* PCChatMessage.m */,
 				337AD6C92678A1E7009EA2D1 /* PCChatManager.h */,
@@ -668,8 +711,8 @@
 			children = (
 				33AB827D267C4A9600A2FD3F /* PCRecordView.h */,
 				33AB827E267C4A9600A2FD3F /* PCRecordView.m */,
-				337AD6B926784E52009EA2D1 /* PCChatListCell.h */,
-				337AD6BA26784E52009EA2D1 /* PCChatListCell.m */,
+				337AD6B926784E52009EA2D1 /* PCChatRoomCell.h */,
+				337AD6BA26784E52009EA2D1 /* PCChatRoomCell.m */,
 				337AD6CC2678B45E009EA2D1 /* PCMessageBubbleView.h */,
 				337AD6CD2678B45E009EA2D1 /* PCMessageBubbleView.m */,
 				337AD6CF2678B539009EA2D1 /* PCChatMessageCell.h */,
@@ -686,6 +729,17 @@
 				33E6497026945B48001E98EA /* PCPopupContainerView.m */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		339A33B229D19B7B00113005 /* OldChat */ = {
+			isa = PBXGroup;
+			children = (
+				337AD6B526784BBC009EA2D1 /* View */,
+				337AD6B426784BB5009EA2D1 /* Controller */,
+				337AD6AB26737246009EA2D1 /* Model */,
+				337AD6A726737118009EA2D1 /* Request */,
+			);
+			path = OldChat;
 			sourceTree = "<group>";
 		};
 		33AB8284267C4F8700A2FD3F /* image */ = {
@@ -1014,6 +1068,75 @@
 			path = View;
 			sourceTree = "<group>";
 		};
+		33B1256F29CC35BF0042A569 /* NewChat */ = {
+			isa = PBXGroup;
+			children = (
+				33B1257C29CC40E70042A569 /* View */,
+				33B1257829CC3B6D0042A569 /* Model */,
+				33B1257129CC35DC0042A569 /* Controller */,
+				33B1257029CC35CE0042A569 /* Request */,
+			);
+			path = NewChat;
+			sourceTree = "<group>";
+		};
+		33B1257029CC35CE0042A569 /* Request */ = {
+			isa = PBXGroup;
+			children = (
+				33B1256929CC326D0042A569 /* PCNewChatBaseRequest.h */,
+				33B1256A29CC326D0042A569 /* PCNewChatBaseRequest.m */,
+				33B1256C29CC34E40042A569 /* PCNewChatLoginRequest.h */,
+				33B1256D29CC34E40042A569 /* PCNewChatLoginRequest.m */,
+				33B1257529CC3AB30042A569 /* PCNewChatRoomRequest.h */,
+				33B1257629CC3AB30042A569 /* PCNewChatRoomRequest.m */,
+				339A33AB29D17ACE00113005 /* PCNewChatSendRequest.h */,
+				339A33AC29D17ACE00113005 /* PCNewChatSendRequest.m */,
+			);
+			path = Request;
+			sourceTree = "<group>";
+		};
+		33B1257129CC35DC0042A569 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				33B1257229CC36520042A569 /* PCNewChatListController.h */,
+				33B1257329CC36520042A569 /* PCNewChatListController.m */,
+				33B1258029CC44A40042A569 /* PCNewChatViewController.h */,
+				33B1258129CC44A40042A569 /* PCNewChatViewController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		33B1257829CC3B6D0042A569 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				33B1257929CC3B8C0042A569 /* PCNewChatRoom.h */,
+				33B1257A29CC3B8C0042A569 /* PCNewChatRoom.m */,
+				339A339929D143F900113005 /* PCNewChatMessage.h */,
+				339A339A29D143F900113005 /* PCNewChatMessage.m */,
+				339A339C29D147E600113005 /* PCNewChatManager.h */,
+				339A339D29D147E600113005 /* PCNewChatManager.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		33B1257C29CC40E70042A569 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				33B1257D29CC41030042A569 /* PCNewChatRoomCell.h */,
+				33B1257E29CC41030042A569 /* PCNewChatRoomCell.m */,
+				339A339F29D1584100113005 /* PCNewChatMessageBubbleView.h */,
+				339A33A029D1584100113005 /* PCNewChatMessageBubbleView.m */,
+				339A33AF29D18D2A00113005 /* PCNewChatMentionView.h */,
+				339A33B029D18D2A00113005 /* PCNewChatMentionView.m */,
+				339A33A229D158F400113005 /* PCNewChatMessageCell.h */,
+				339A33A329D158F400113005 /* PCNewChatMessageCell.m */,
+				339A33A529D1615B00113005 /* PCNewChatTextMessageCell.h */,
+				339A33A629D1615B00113005 /* PCNewChatTextMessageCell.m */,
+				339A33A829D1640400113005 /* PCNewChatImageMessageCell.h */,
+				339A33A929D1640400113005 /* PCNewChatImageMessageCell.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		33C170D72685E56500431213 /* Game */ = {
 			isa = PBXGroup;
 			children = (
@@ -1245,18 +1368,23 @@
 				337AD6AA26737150009EA2D1 /* PCChatListRequest.m in Sources */,
 				334EADAE255A775D00B0231C /* PCThemeManager.m in Sources */,
 				334EADE5255A8F5300B0231C /* PCComicFavouriteRequest.m in Sources */,
+				339A339B29D143F900113005 /* PCNewChatMessage.m in Sources */,
 				334EADEC255A939B00B0231C /* PCPicture.m in Sources */,
 				3329FE4A265B7AC70054F39B /* PCRankListController.m in Sources */,
 				33C170E72685E9A500431213 /* PCGame.m in Sources */,
 				3329FE44265B58110054F39B /* PCComicRankRequest.m in Sources */,
+				339A339E29D147E600113005 /* PCNewChatManager.m in Sources */,
 				3392771F27229819000021A3 /* PCChatSettingController.m in Sources */,
 				334EADBC255A77FC00B0231C /* PCUIHelper.m in Sources */,
 				3358C8CF2660BC9F0000D17F /* PCSettingController.m in Sources */,
 				334EAD8D255A616000B0231C /* PCComicInfoView.m in Sources */,
 				33DC429727B630AC00D8A105 /* NSFWSourceRequest.m in Sources */,
+				33B1256E29CC34E40042A569 /* PCNewChatLoginRequest.m in Sources */,
+				33B1257B29CC3B8C0042A569 /* PCNewChatRoom.m in Sources */,
 				33C170FA2689B0BA00431213 /* PCContentCell.m in Sources */,
 				33DC428F27B62EC500D8A105 /* NSFWImage.m in Sources */,
 				334EADB6255A77B500B0231C /* PCCommonUI.m in Sources */,
+				339A33A429D158F400113005 /* PCNewChatMessageCell.m in Sources */,
 				334EAD9C255A746000B0231C /* NSDate+PCAdd.m in Sources */,
 				334EAE06255BC9A100B0231C /* PCUserInfoView.m in Sources */,
 				33AD941C25501CA60079DFAE /* NSData+PCAdd.m in Sources */,
@@ -1269,12 +1397,13 @@
 				334EADE1255A8D8500B0231C /* PCLikeRequest.m in Sources */,
 				33AD955C25516C120079DFAE /* PCComicListController.m in Sources */,
 				33AD956825524A000079DFAE /* PCSearchRequest.m in Sources */,
-				337AD6BB26784E52009EA2D1 /* PCChatListCell.m in Sources */,
+				337AD6BB26784E52009EA2D1 /* PCChatRoomCell.m in Sources */,
 				330B10F526A18B800075A9A0 /* PCAvatarDecorateController.m in Sources */,
 				330FA71B2664CFF000C146BE /* PCSearchRecordView.m in Sources */,
 				334EADB1255A775D00B0231C /* QMUIConfigurationTemplateDefault.m in Sources */,
 				33AD942F255106D80079DFAE /* PCCategory.m in Sources */,
 				33AD941325501C1F0079DFAE /* PCRequest.m in Sources */,
+				339A33B129D18D2A00113005 /* PCNewChatMentionView.m in Sources */,
 				33E6497126945B48001E98EA /* PCPopupContainerView.m in Sources */,
 				334EADD5255A873D00B0231C /* PCEpisode.m in Sources */,
 				33AD9408255019B70079DFAE /* PCTabBarViewController.m in Sources */,
@@ -1283,6 +1412,7 @@
 				33AD9438255107C70079DFAE /* PCCategoryController.m in Sources */,
 				334EAE17255BDA8E00B0231C /* PCCommentCell.m in Sources */,
 				332F292827CDF1E90003F642 /* PCComicSimilarRequest.m in Sources */,
+				33B1257F29CC41030042A569 /* PCNewChatRoomCell.m in Sources */,
 				3306A44F266A0EAF00FC397A /* PCCommentPublishRequest.m in Sources */,
 				33DC428C27B62E8100D8A105 /* NSFWFile.m in Sources */,
 				33D41111279AA9200017957E /* PCLocalAuthentication.m in Sources */,
@@ -1291,10 +1421,12 @@
 				334EAE01255AA83D00B0231C /* PCPictureCell.m in Sources */,
 				33AB826E2679E0BA00A2FD3F /* PCImageMessageCell.m in Sources */,
 				330B10DC269E871A0075A9A0 /* PCColorGridView.m in Sources */,
-				337AD6AE267376D4009EA2D1 /* PCChatList.m in Sources */,
+				339A33AA29D1640400113005 /* PCNewChatImageMessageCell.m in Sources */,
+				337AD6AE267376D4009EA2D1 /* PCChatRoom.m in Sources */,
 				33B78ECA26B8FFD7000CA73E /* PCSourceRequest.m in Sources */,
 				3368872327B4F6C300474151 /* PCOrderListController.m in Sources */,
 				33DC429B27B6328300D8A105 /* NSFWViewController.m in Sources */,
+				33B1256B29CC326D0042A569 /* PCNewChatBaseRequest.m in Sources */,
 				3306A462266DDCCC00FC397A /* PCComicHistory.m in Sources */,
 				33E0FC3426B164360030BF21 /* PCCommentReportRequest.m in Sources */,
 				33AD93F9255019760079DFAE /* PCTableViewController.m in Sources */,
@@ -1318,6 +1450,7 @@
 				33A56880278D26A30059E076 /* PCImageSizeCache.m in Sources */,
 				33AD93C7255017160079DFAE /* AppDelegate.m in Sources */,
 				33AD942A2551057D0079DFAE /* PCCategoryRequest.m in Sources */,
+				339A33AD29D17ACE00113005 /* PCNewChatSendRequest.m in Sources */,
 				3358C8C1265FB1DE0000D17F /* PCSloganSetRequest.m in Sources */,
 				3358C8C426608D530000D17F /* PCProfileInfoController.m in Sources */,
 				33B78ECD26B900A6000CA73E /* PCInitRequest.m in Sources */,
@@ -1327,6 +1460,7 @@
 				330B10E6269E97480075A9A0 /* PCColorSlider.m in Sources */,
 				334EADDD255A8A8500B0231C /* UIView+PCAdd.m in Sources */,
 				33AD93D8255017170079DFAE /* main.m in Sources */,
+				339A33A129D1584100113005 /* PCNewChatMessageBubbleView.m in Sources */,
 				3358C8B7265F88F30000D17F /* PCPunchInRequest.m in Sources */,
 				332F294527CF7DB70003F642 /* PCComicRecommendView.m in Sources */,
 				33D41114279AABBB0017957E /* PCAuthenticationController.m in Sources */,
@@ -1339,8 +1473,10 @@
 				332F294827D063960003F642 /* PCVersionCheckRequest.m in Sources */,
 				334EAE0F255BD1AA00B0231C /* PCCommentController.m in Sources */,
 				334EAD89255A545200B0231C /* PCUser.m in Sources */,
+				339A33A729D1615B00113005 /* PCNewChatTextMessageCell.m in Sources */,
 				334EAD85255A522700B0231C /* PCComicDetailController.m in Sources */,
 				3329FE53265B90C40054F39B /* PCKnightRankCell.m in Sources */,
+				33B1257729CC3AB30042A569 /* PCNewChatRoomRequest.m in Sources */,
 				339E4A7C2806A8C3009730CB /* PCSpeechSynthesizer.m in Sources */,
 				3306A455266A1C8C00FC397A /* PCCommentChildRequest.m in Sources */,
 				334EAD6F25593E8800B0231C /* PCComicListCell.m in Sources */,
@@ -1348,8 +1484,10 @@
 				33AD9404255019A80079DFAE /* PCNavigationController.m in Sources */,
 				33AD944F255123D20079DFAE /* PCKeywordCell.m in Sources */,
 				337AD6D12678B539009EA2D1 /* PCChatMessageCell.m in Sources */,
+				33B1257429CC36520042A569 /* PCNewChatListController.m in Sources */,
 				337AD6C1267854DC009EA2D1 /* PCChatViewController.m in Sources */,
 				33AD940D255019DC0079DFAE /* PCLoginController.m in Sources */,
+				33B1258229CC44A40042A569 /* PCNewChatViewController.m in Sources */,
 				334EAE13255BD39000B0231C /* PCComment.m in Sources */,
 				3358C8B0265F75440000D17F /* PCProfileRequest.m in Sources */,
 				3329FE4D265B7BAA0054F39B /* PCKnightRankRequest.m in Sources */,

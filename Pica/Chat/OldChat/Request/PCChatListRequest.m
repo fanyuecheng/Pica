@@ -7,7 +7,7 @@
 //
 
 #import "PCChatListRequest.h"
-#import "PCChatList.h"
+#import "PCChatRoom.h"
 #import <YYModel/YYModel.h>
 
 @implementation PCChatListRequest
@@ -17,7 +17,7 @@
     [super sendRequest:success failure:failure];
     
     [self startWithCompletionBlockWithSuccess:^(__kindof YTKBaseRequest * _Nonnull request) {
-        NSArray *list = [NSArray yy_modelArrayWithClass:[PCChatList class] json:request.responseJSONObject[@"data"][@"chatList"]];
+        NSArray *list = [NSArray yy_modelArrayWithClass:[PCChatRoom class] json:request.responseJSONObject[@"data"][@"chatList"]];
         !success ? : success(list);
     } failure:^(__kindof YTKBaseRequest * _Nonnull request) {
         !failure ? : failure(request.error);
