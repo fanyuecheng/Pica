@@ -90,6 +90,7 @@
     if (!_fetchQueue) {
         _fetchQueue = [[NSOperationQueue alloc] init];
         _fetchQueue.maxConcurrentOperationCount = 1;
+        _fetchQueue.name = @"com.hackemist.SDAnimatedImagePlayer.fetchQueue";
     }
     return _fetchQueue;
 }
@@ -248,9 +249,9 @@
     } else if (self.playbackMode == SDAnimatedImagePlaybackModeBounce ||
                self.playbackMode == SDAnimatedImagePlaybackModeReversedBounce) {
         if (currentFrameIndex == 0) {
-            self.shouldReverse = false;
+            self.shouldReverse = NO;
         } else if (currentFrameIndex == totalFrameCount - 1) {
-            self.shouldReverse = true;
+            self.shouldReverse = YES;
         }
         nextFrameIndex = self.shouldReverse ? (currentFrameIndex - 1) : (currentFrameIndex + 1);
         nextFrameIndex %= totalFrameCount;

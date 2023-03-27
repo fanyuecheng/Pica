@@ -198,6 +198,9 @@ NSString * const kWebSocketDidCloseNotification = @"kWebSocketDidCloseNotificati
 }
  
 - (void)ping {
+    if (self.avoidPing) {
+        return;
+    }
     //[self.socket sendPing:<#(NSData *)#>] 必须为字符串 data 会断开
     [self sendData:@"2"];
 }
@@ -220,7 +223,7 @@ NSString * const kWebSocketDidCloseNotification = @"kWebSocketDidCloseNotificati
 
 - (void)webSocket:(SRWebSocket *)webSocket didCloseWithCode:(NSInteger)code reason:(NSString *)reason wasClean:(BOOL)wasClean {
     [[NSNotificationCenter defaultCenter] postNotificationName:kWebSocketDidCloseNotification object:@(code)];
-    if (code == SRStatusCodeNormal || wasClean) {
+    if (code == SRStatusCodeNormal || code == SRStatusCodeGoingAway || wasClean) {
         [self closeSocket];
     } else {
         [self reconnect];

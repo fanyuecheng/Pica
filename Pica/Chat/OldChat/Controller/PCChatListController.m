@@ -8,14 +8,14 @@
 
 #import "PCChatListController.h"
 #import "PCChatListRequest.h"
-#import "PCChatList.h"
-#import "PCChatListCell.h"
+#import "PCChatRoom.h"
+#import "PCChatRoomCell.h"
 #import "PCChatViewController.h"
 
 @interface PCChatListController ()
 
 @property (nonatomic, strong) PCChatListRequest *request;
-@property (nonatomic, copy)   NSArray *listArray;
+@property (nonatomic, copy)   NSArray *roomArray;
 
 @end
 
@@ -30,7 +30,7 @@
 - (void)initTableView {
     [super initTableView];
     
-    [self.tableView registerClass:[PCChatListCell class] forCellReuseIdentifier:@"PCChatListCell"];
+    [self.tableView registerClass:[PCChatRoomCell class] forCellReuseIdentifier:@"PCChatRoomCell"];
     self.tableView.rowHeight = 100;
 }
 
@@ -44,9 +44,9 @@
 - (void)requestList {
     [self showEmptyViewWithLoading];
     
-    [self.request sendRequest:^(NSArray <PCChatList *>* listArray) {
+    [self.request sendRequest:^(NSArray <PCChatRoom *>* roomArray) {
         [self hideEmptyView];
-        self.listArray = listArray;
+        self.roomArray = roomArray;
     } failure:^(NSError * _Nonnull error) {
         [self showEmptyViewWithText:@"网络错误" detailText:nil buttonTitle:@"重新请求" buttonAction:@selector(requestList)];
     }];
@@ -54,12 +54,12 @@
  
 #pragma mark - Table
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.listArray.count;
+    return self.roomArray.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    PCChatListCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PCChatListCell" forIndexPath:indexPath];
-    cell.list = self.listArray[indexPath.row];
+    PCChatRoomCell *cell = [tableView dequeueReusableCellWithIdentifier:@"PCChatRoomCell" forIndexPath:indexPath];
+    cell.room = self.roomArray[indexPath.row];
     
     return cell;
 }
@@ -67,10 +67,10 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    PCChatList *list = self.listArray[indexPath.row];
-    [MobClick event:PC_EVENT_CHATROOM_CLICK attributes:@{@"title" : list.title}];
-    PCChatViewController *chat = [[PCChatViewController alloc] initWithURL:list.socketUrl];
-    chat.title = list.title;
+    PCChatRoom *room = self.roomArray[indexPath.row];
+    [MobClick event:PC_EVENT_CHATROOM_CLICK attributes:@{@"title" : room.title}];
+    PCChatViewController *chat = [[PCChatViewController alloc] initWithURL:room.socketUrl];
+    chat.title = room.title;
     [self.navigationController pushViewController:chat animated:YES];
 }
 
@@ -83,8 +83,8 @@
 }
 
 #pragma mark - Set
-- (void)setListArray:(NSArray *)listArray {
-    _listArray = listArray;
+- (void)setRoomArray:(NSArray *)roomArray {
+    _roomArray = roomArray;
     
     [self.tableView reloadData];
 }

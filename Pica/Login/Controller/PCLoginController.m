@@ -71,14 +71,25 @@
     
     if (account.length && password.length) {
         QMUITips *loading = [QMUITips showLoadingInView:DefaultTipsParentView];
-        PCLoginRequest *request = [[PCLoginRequest alloc] initWithAccount:account password:password];
-        [request sendRequest:^(id  _Nonnull response) {
-            [loading hideAnimated:NO];
-            AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
-            [appDelegate setRootViewControllerToTab];
-        } failure:^(NSError * _Nonnull error) {
-            [loading hideAnimated:NO];
-        }];
+        if (self.isNewChatLogin) {
+            PCNewChatLoginRequest *request = [[PCNewChatLoginRequest alloc] initWithAccount:account password:password];
+            [request sendRequest:^(id  _Nonnull response) {
+                [loading hideAnimated:NO];
+                !self.loginBlock ? : self.loginBlock(YES);
+            } failure:^(NSError * _Nonnull error) {
+                [loading hideAnimated:NO];
+            }];
+        } else {
+            PCLoginRequest *request = [[PCLoginRequest alloc] initWithAccount:account password:password];
+            [request sendRequest:^(id  _Nonnull response) {
+                [loading hideAnimated:NO];
+                AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+                [appDelegate setRootViewControllerToTab];
+                !self.loginBlock ? : self.loginBlock(NO);
+            } failure:^(NSError * _Nonnull error) {
+                [loading hideAnimated:NO];
+            }];
+        }
     } else {
         [QMUITips showError:@"请输入账号或者密码"];
     }
@@ -173,4 +184,11 @@
     return _inputAccountView;
 }
  
+#pragma mark - Set
+- (void)setIsNewChatLogin:(BOOL)isNewChatLogin {
+    _isNewChatLogin = isNewChatLogin;
+    
+    self.registButton.hidden = isNewChatLogin;
+}
+
 @end

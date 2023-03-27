@@ -1,5 +1,5 @@
 //
-//  PCChatList.h
+//  PCChatRoom.h
 //  Pica
 //
 //  Created by Fancy on 2021/6/11.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface PCChatList : NSObject
+@interface PCChatRoom : NSObject
 
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, copy) NSString *desc;

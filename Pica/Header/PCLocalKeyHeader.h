@@ -35,5 +35,6 @@
 #define PC_NSFW_INVALID_URL    @"PC_NSFW_INVALID_URL"
 #define PC_NSFW_ON             @"PC_NSFW_ON"
 #define PC_UMENG_APP_KEY       @"61fce5dfe0f9bb492bf30a2c"
+#define PC_NEW_CHAT_AUTHORIZATION_TOKEN @"PC_NEW_CHAT_AUTHORIZATION_TOKEN"
 
 #endif /* PCLocalKeyHeader_h */

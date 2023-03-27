@@ -70,7 +70,7 @@
     _user = user;
     
     self.levelLabel.text = [NSString stringWithFormat:@"Lv.%@", @(user.level)];
-    [self.avatarView pc_setImageWithURL:user.avatar.imageURL];
+    [self.avatarView pc_setImageWithURL:user.avatar ? user.avatar.imageURL : user.avatarUrl];
     [self.characterView pc_setImageWithURL:user.character placeholderImage:nil];
     self.nameLabel.text = user.name;
     self.titleLabel.text = [NSString stringWithFormat:@"%@(%@)", user.title, [user.gender isEqualToString:@"m"] ? @"绅士" : @"淑女"];

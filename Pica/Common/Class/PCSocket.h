@@ -26,6 +26,7 @@ extern NSString * const kWebSocketDidCloseNotification;
 + (instancetype)sharedInstance;
 /** 获取连接状态 */
 @property (nonatomic, assign, readonly) SRReadyState socketReadyState;
+@property (nonatomic, assign) BOOL avoidPing;
 
 /** 开始连接 */
 - (void)openSocketWithURL:(NSString *)url;

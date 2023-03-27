@@ -10,17 +10,17 @@
 #import "PCNavigationController.h"
 #import "PCCategoryController.h"
 #import "PCProfileController.h"
-#import "PCChatListController.h"
+#import "PCNewChatListController.h"
 #import "PCGameListController.h"
 #import "UIImage+PCAdd.h"
 #import "PCLocalKeyHeader.h"
 
 @interface PCTabBarViewController ()
 
-@property (nonatomic, strong) PCCategoryController *categoryController;
-@property (nonatomic, strong) PCChatListController *chatController;
-@property (nonatomic, strong) PCGameListController *gameController;
-@property (nonatomic, strong) PCProfileController  *profileController;
+@property (nonatomic, strong) PCCategoryController    *categoryController;
+@property (nonatomic, strong) PCNewChatListController *chatController;
+@property (nonatomic, strong) PCGameListController    *gameController;
+@property (nonatomic, strong) PCProfileController     *profileController;
 @property (nonatomic, copy)   NSArray *controllerArray;
 
 @end
@@ -101,9 +101,9 @@
     return _profileController;
 }
 
-- (PCChatListController *)chatController {
+- (PCNewChatListController *)chatController {
     if (!_chatController) {
-        _chatController = [[PCChatListController alloc] init];
+        _chatController = [[PCNewChatListController alloc] init];
         _chatController.hidesBottomBarWhenPushed = NO;
     }
     return _chatController;

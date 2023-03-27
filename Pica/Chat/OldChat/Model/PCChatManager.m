@@ -40,6 +40,7 @@
 
 #pragma mark - Public Method
 - (void)connect {
+    self.socket.avoidPing = NO;
     [self.socket openSocketWithURL:self.url];
 }
 

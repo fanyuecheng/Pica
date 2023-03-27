@@ -1,20 +1,16 @@
 //
-//  PCChatListCell.m
+//  PCNewChatRoomCell.m
 //  Pica
 //
-//  Created by Fancy on 2021/6/15.
-//  Copyright © 2021 fancy. All rights reserved.
+//  Created by 米画师 on 2023/3/23.
+//  Copyright © 2023 fancy. All rights reserved.
 //
 
-#import "PCChatListCell.h"
-#import "PCVendorHeader.h"
+#import "PCNewChatRoomCell.h"
+#import "PCNewChatRoom.h"
 #import "UIImageView+PCAdd.h"
-#import "NSDate+PCAdd.h"
-#import "NSString+PCAdd.h"
-#import "PCCommonUI.h"
-#import "PCChatList.h"
 
-@interface PCChatListCell ()
+@interface PCNewChatRoomCell ()
 
 @property (nonatomic, strong) UIImageView *coverView;
 @property (nonatomic, strong) QMUILabel   *titleLabel;
@@ -22,7 +18,7 @@
 
 @end
 
-@implementation PCChatListCell
+@implementation PCNewChatRoomCell
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
@@ -41,12 +37,10 @@
     self.detailLabel.frame = CGRectMake(self.coverView.qmui_right + 10, self.titleLabel.qmui_bottom + 5, self.qmui_width - self.coverView.qmui_right - 20, QMUIViewSelfSizingHeight);
 }
 
-- (void)setList:(PCChatList *)list {
-    _list = list;
-    
-    [self.coverView pc_setImageWithURL:list.avatar];
-    self.titleLabel.text = list.title;
-    self.detailLabel.text = list.desc;
+- (void)setRoom:(PCNewChatRoom *)room {
+    [self.coverView pc_setImageWithURL:room.icon];
+    self.titleLabel.text = room.title;
+    self.detailLabel.text = [NSString stringWithFormat:@"%@\n等级限制：%@   注册日数限制：%@", room.desc, @(room.minLevel), @(room.minRegisterDays)];
 }
 
 #pragma mark - Get
