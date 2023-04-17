@@ -13,8 +13,9 @@
 #define PC_API_NEW_CHAT_SIGNIN    @"auth/signin"
 #define PC_API_NEW_CHAT_PROFILE   @"user/profile"
 #define PC_API_NEW_CHAT_ROOM      @"room/list"
-#define PC_API_NEW_CHAT_SEND_TXT  @"room/send-message"
-#define PC_API_NEW_CHAT_SEND_IMG  @"room/send-image"
+#define PC_API_NEW_CHAT_SEND_TXT  @"message/send-message"
+#define PC_API_NEW_CHAT_SEND_IMG  @"message/send-image"
+#define PC_API_NEW_CHAT_RECORD    @"message/old-messages"
 
 NS_ASSUME_NONNULL_BEGIN
 

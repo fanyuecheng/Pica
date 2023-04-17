@@ -14,16 +14,18 @@
     return @{
             @"messageId" : @"id",
             @"replyImage" : @"data.reply.image",
-            @"replyMessage" : @"data.reply.message",
+            @"replyMessage" : @"data.reply.data.message",
             @"replyMessageId" : @"data.reply.id",
             @"replyMessageType" : @"data.reply.type",
-            @"replyUserName" : @"data.reply.name",
+            @"replyUserId" : @"data.reply.userId",
+            @"replyUserName" : @"data.reply.data.name",
             @"date" : @"data.message.date",
-            @"message" : @"data.message.message",
-            @"caption" : @"data.message.caption",
-            @"medias" : @"data.message.medias",
+            @"message" : @"data.message",
+            @"caption" : @"data.caption",
+            @"medias" : @"data.medias",
             @"userMentions" : @"data.userMentions",
-            @"profile" : @"data.profile", 
+            @"profile" : @"data.profile",
+            @"extra" : @"data.extra",
             };
 }
 

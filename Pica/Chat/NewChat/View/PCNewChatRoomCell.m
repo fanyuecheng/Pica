@@ -40,7 +40,7 @@
 - (void)setRoom:(PCNewChatRoom *)room {
     [self.coverView pc_setImageWithURL:room.icon];
     self.titleLabel.text = room.title;
-    self.detailLabel.text = [NSString stringWithFormat:@"%@\n等级限制：%@   注册日数限制：%@", room.desc, @(room.minLevel), @(room.minRegisterDays)];
+    self.detailLabel.text = [NSString stringWithFormat:@"等级限制：%@   注册日数限制：%@",   @(room.minLevel), @(room.minRegisterDays)];
 }
 
 #pragma mark - Get

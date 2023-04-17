@@ -95,9 +95,18 @@
     NSString *jsonString = noti.object;
     NSData *jsonData = [jsonString dataUsingEncoding:NSUTF8StringEncoding];
     NSDictionary *jsonObject = [NSJSONSerialization JSONObjectWithData:jsonData options:NSJSONReadingAllowFragments error:nil];
-    if ([jsonObject[@"type"] isEqualToString:@"CONNECTED"]) {
+    if ([jsonObject[@"type"] isEqualToString:@"CONNECTED"] ||
+        [jsonObject[@"type"] isEqualToString:@"SYSTEM_MESSAGE"]) {
         //链接成功
         //{"type":"CONNECTED","data":{"data":"2023-03-27T04:12:42+00:00"}}
+        //{"type":"INITIAL_MESSAGES","data":{"data":{total，subTotal,messages}}}
+        return;
+    }
+    if ([jsonObject[@"type"] isEqualToString:@"INITIAL_MESSAGES"]) {
+        NSArray *messages = [NSArray yy_modelArrayWithClass:PCNewChatMessage.class json:jsonObject[@"data"][@"messages"]];
+        for (PCNewChatMessage *message in messages) {
+            !self.messageBlock ? : self.messageBlock(message);
+        }
         return;
     }
     PCNewChatMessage *message = [PCNewChatMessage yy_modelWithJSON:jsonObject];

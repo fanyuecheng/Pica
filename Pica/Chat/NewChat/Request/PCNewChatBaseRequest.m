@@ -101,7 +101,7 @@
 - (NSDictionary<NSString *,NSString *> *)requestHeaderFieldValueDictionary {
     return @{@"user-agent" : @"Dart/2.19 (dart:io)",
              @"accept-encoding" : @"gzip",
-             @"api-version" : @"1.0.2",
+             @"api-version" : @"1.0.3",
              @"content-type" : @"application/json; charset=UTF-8"};
 }
 

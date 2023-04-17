@@ -121,7 +121,7 @@
     NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
     [formatter setDateFormat:@"HH:mm:ss"];
     [formatter setLocale:[NSLocale currentLocale]];
-    self.timeLabel.text = [NSString stringWithFormat:@"%@", [formatter stringFromDate:message.date]];
+    self.timeLabel.text = [NSString stringWithFormat:@"%@", [formatter stringFromDate:message.createdAt]];
 }
 
 #pragma mark - Action

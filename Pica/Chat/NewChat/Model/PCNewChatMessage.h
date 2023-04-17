@@ -19,6 +19,7 @@ typedef NS_ENUM(NSUInteger, PCNewChatMessageType) {
 
 @interface PCNewChatMessage : NSObject
 
+@property (nonatomic, copy)   NSString *roomId;
 @property (nonatomic, copy)   NSString *messageId;
 @property (nonatomic, copy)   NSString *referenceId;
 @property (nonatomic, copy)   NSString *type;
@@ -29,10 +30,11 @@ typedef NS_ENUM(NSUInteger, PCNewChatMessageType) {
 @property (nonatomic, copy)   NSString *replyMessage;
 @property (nonatomic, copy)   NSString *replyMessageId;
 @property (nonatomic, copy)   NSString *replyMessageType;
+@property (nonatomic, copy)   NSString *replyUserId;
 @property (nonatomic, copy)   NSString *replyUserName;
 
 //message
-@property (nonatomic, strong) NSDate   *date;
+@property (nonatomic, strong) NSDate   *createdAt;
 @property (nonatomic, copy)   NSString *message;
 @property (nonatomic, copy)   NSString *caption;
 @property (nonatomic, copy)   NSArray  *medias;
@@ -42,6 +44,8 @@ typedef NS_ENUM(NSUInteger, PCNewChatMessageType) {
 
 //sender
 @property (nonatomic, strong) PCUser *profile;
+
+@property (nonatomic, strong) id extra;
 
 //custom
 @property (nonatomic, strong) UIImage  *image;

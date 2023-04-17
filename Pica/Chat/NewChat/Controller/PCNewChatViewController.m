@@ -12,6 +12,7 @@
 #import "PCNewChatTextMessageCell.h"
 #import "PCNewChatImageMessageCell.h"
 #import "UIImage+PCAdd.h"
+#import "PCNewChatRecordRequest.h"
 
 static CGFloat const kChatBarTextViewBottomOffset = 10;
 static CGFloat const kChatBarTextViewMinHeight = 37.f;
@@ -35,7 +36,6 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
 @property (nonatomic, assign) CGFloat          textViewHeight;
 @property (nonatomic, assign) CGFloat          keyboardHeight;
 @property (nonatomic, strong) NSMutableArray   *messageArray;
-@property (nonatomic, strong) NSMutableArray   *localMessageArray;
 
 @property (nonatomic, strong) QMUIModalPresentationViewController *modalController;
 
@@ -59,9 +59,6 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
     [super viewDidLoad];
  
     [self connect];
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-        [self localMessageArray];
-    });
 }
 
 - (void)initSubviews {
@@ -97,6 +94,24 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
 - (void)connect {
     [self showEmptyViewWithLoading];
     [self.manager connect];
+}
+
+- (void)requestRecord {
+    PCNewChatMessage *message = self.messageArray.firstObject;
+    if (message) {
+        PCNewChatRecordRequest *request = [[PCNewChatRecordRequest alloc] initWithRoomId:self.roomId messageId:message.messageId];
+        [request sendRequest:^(NSArray *response) {
+            [self.tableView.mj_header endRefreshing];
+            if (response.count) {
+                NSMutableArray *messageArray = [NSMutableArray arrayWithArray:response];
+                [messageArray addObjectsFromArray:self.messageArray];
+                self.messageArray = messageArray;
+                [self.tableView reloadData];
+            }
+        } failure:^(NSError * _Nonnull error) {
+            [self.tableView.mj_header endRefreshing];
+        }];
+    }
 }
  
 #pragma mark - Table
@@ -484,20 +499,7 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
         @weakify(self);
         _tableView.mj_header = [MJRefreshStateHeader headerWithRefreshingBlock:^{
             @strongify(self);
-            if (self.localMessageArray.count) {
-                NSArray *msgArray = nil;
-                if (self.localMessageArray.count > 20) {
-                    msgArray = [self.localMessageArray subarrayWithRange:NSMakeRange(self.localMessageArray.count - 20, 20)];
-                    [self.localMessageArray removeObjectsInArray:msgArray];
-                } else {
-                    msgArray = self.localMessageArray.copy;
-                    [self.localMessageArray removeAllObjects];
-                }
-                NSIndexSet *indexes = [NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [msgArray count])];
-                [self.messageArray insertObjects:msgArray atIndexes:indexes];
-                [self.tableView reloadData];
-            }
-            [self.tableView.mj_header endRefreshing];
+            [self requestRecord];
         }];
     }
     return _tableView;
@@ -515,23 +517,6 @@ static CGFloat const kChatBarTextViewMaxHeight = 102.f;
         _messageArray = [NSMutableArray array];
     }
     return _messageArray;
-}
-
-- (NSInteger)chatRecordNum {
-    return 0;
-//    return [[PCChatMessage aggregate:@"count(*)" where:nil arguments:nil] integerValue];
-}
-
-- (NSMutableArray *)localMessageArray {
-    return nil;
-//    if (!_localMessageArray) {
-//        NSInteger chatRecordNum = [self chatRecordNum];
-//        if (chatRecordNum > 10000) {
-//            chatRecordNum = 10000;
-//        }
-//        _localMessageArray = [[PCChatMessage objectsWhere:@"ORDER BY time LIMIT 0,?" arguments:@[@(chatRecordNum)]] mutableCopy];
-//    }
-//    return _localMessageArray;
 }
 
 - (UIView *)toolbarView {
