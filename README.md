@@ -38,6 +38,9 @@ API来自 [picacomic-api](https://github.com/czp3009/picacomic-api)
 	2.  altstore [官网](https://altstore.io/)
 
 #### 更新日志  
+**v1.4.1**      
+*  新版聊天室
+
 **v1.3.0**      
 *  聊天室增加消息语音播放  
 
