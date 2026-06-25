@@ -10,6 +10,7 @@
 #import "NSImage+Compatibility.h"
 #import "SDInternalMacros.h"
 #import "objc/runtime.h"
+#import "SDImageCoderHelper.h"
 
 @implementation UIImage (Metadata)
 
@@ -143,6 +144,7 @@
 
 - (BOOL)sd_isVector {
     NSRect imageRect = NSMakeRect(0, 0, self.size.width, self.size.height);
+    // This may returns a NSProxy, so don't use `class` to check
     NSImageRep *imageRep = [self bestRepresentationForRect:imageRect context:nil hints:nil];
     if ([imageRep isKindOfClass:[NSPDFImageRep class]]) {
         return YES;
@@ -150,7 +152,8 @@
     if ([imageRep isKindOfClass:[NSEPSImageRep class]]) {
         return YES;
     }
-    if ([NSStringFromClass(imageRep.class) hasSuffix:@"NSSVGImageRep"]) {
+    Class NSSVGImageRepClass = NSClassFromString([NSString stringWithFormat:@"_%@", SD_NSSTRING(NSSVGImageRep)]);
+    if ([imageRep isKindOfClass:NSSVGImageRepClass]) {
         return YES;
     }
     return NO;
@@ -216,6 +219,18 @@
         return value;
     }
     return nil;
+}
+
+- (BOOL)sd_isHighDynamicRange {
+#if SD_MAC
+    return [SDImageCoderHelper CGImageIsHDR:self.CGImage];
+#else
+    if (@available(iOS 17, tvOS 17, watchOS 10, *)) {
+        return self.isHighDynamicRange;
+    } else {
+        return [SDImageCoderHelper CGImageIsHDR:self.CGImage];
+    }
+#endif
 }
 
 @end

@@ -198,7 +198,8 @@
 
 - (UIActivityIndicatorView *)loadView {
     if (!_loadView) {
-        _loadView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium size:CGSizeMake(30, 30)];
+        _loadView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleMedium];
+        _loadView.bounds = CGRectMake(0, 0, 30, 30);
         _loadView.hidesWhenStopped = YES;
         _loadView.hidden = YES;
     }

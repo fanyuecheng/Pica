@@ -218,7 +218,7 @@ static id<SDImageLoader> _defaultImageLoader;
     // Preprocess the options and context arg to decide the final the result for manager
     SDWebImageOptionsResult *result = [self processedResultForURL:url options:options context:context];
 
-    if (url.absoluteString.length == 0 || (!(options & SDWebImageRetryFailed) && isFailedUrl)) {
+    if (url.absoluteString.length == 0 || (!(result.options & SDWebImageRetryFailed) && isFailedUrl)) {
         NSString *description = isFailedUrl ? @"Image url is blacklisted" : @"Image url is nil";
         NSInteger code = isFailedUrl ? SDWebImageErrorBlackListed : SDWebImageErrorInvalidURL;
         [self callCompletionBlockForOperation:operation completion:completedBlock error:[NSError errorWithDomain:SDWebImageErrorDomain code:code userInfo:@{NSLocalizedDescriptionKey : description}] queue:result.context[SDWebImageContextCallbackQueue] url:url];
@@ -300,10 +300,10 @@ static id<SDImageLoader> _defaultImageLoader;
     // Check whether we should query cache
     BOOL shouldQueryCache = !SD_OPTIONS_CONTAINS(options, SDWebImageFromLoaderOnly);
     if (shouldQueryCache) {
-        // transformed cache key
+        // maybe thumbnail/transformed cache key
         NSString *key = [self cacheKeyForURL:url context:context];
         @weakify(operation);
-        operation.cacheOperation = [imageCache queryImageForKey:key options:options context:context cacheType:queryCacheType completion:^(UIImage * _Nullable cachedImage, NSData * _Nullable cachedData, SDImageCacheType cacheType) {
+        id<SDWebImageOperation> cacheOperation = [imageCache queryImageForKey:key options:options context:context cacheType:queryCacheType completion:^(UIImage * _Nullable cachedImage, NSData * _Nullable cachedData, SDImageCacheType cacheType) {
             @strongify(operation);
             if (!operation || operation.isCancelled) {
                 // Image combined operation cancelled by user
@@ -319,10 +319,19 @@ static id<SDImageLoader> _defaultImageLoader;
                     [self callOriginalCacheProcessForOperation:operation url:url options:options context:context progress:progressBlock completed:completedBlock];
                     return;
                 }
+            } else {
+                // Write back the disk image into memory cache, with the correct key
+                if (cacheType == SDImageCacheTypeDisk) {
+                    // Sync
+                    [imageCache storeImage:cachedImage imageData:nil forKey:key cacheType:SDImageCacheTypeMemory completion:nil];
+                }
             }
             // Continue download process
             [self callDownloadProcessForOperation:operation url:url options:options context:context cachedImage:cachedImage cachedData:cachedData cacheType:cacheType progress:progressBlock completed:completedBlock];
         }];
+        @synchronized (operation) {
+            operation.cacheOperation = cacheOperation;
+        }
     } else {
         // Continue download process
         [self callDownloadProcessForOperation:operation url:url options:options context:context cachedImage:nil cachedData:nil cacheType:SDImageCacheTypeNone progress:progressBlock completed:completedBlock];
@@ -357,7 +366,7 @@ static id<SDImageLoader> _defaultImageLoader;
         // Get original cache key generation without transformer
         NSString *key = [self originalCacheKeyForURL:url context:context];
         @weakify(operation);
-        operation.cacheOperation = [imageCache queryImageForKey:key options:options context:context cacheType:originalQueryCacheType completion:^(UIImage * _Nullable cachedImage, NSData * _Nullable cachedData, SDImageCacheType cacheType) {
+        id<SDWebImageOperation> cacheOperation = [imageCache queryImageForKey:key options:options context:context cacheType:originalQueryCacheType completion:^(UIImage * _Nullable cachedImage, NSData * _Nullable cachedData, SDImageCacheType cacheType) {
             @strongify(operation);
             if (!operation || operation.isCancelled) {
                 // Image combined operation cancelled by user
@@ -368,6 +377,12 @@ static id<SDImageLoader> _defaultImageLoader;
                 // Original image cache miss. Continue download process
                 [self callDownloadProcessForOperation:operation url:url options:options context:context cachedImage:nil cachedData:nil cacheType:SDImageCacheTypeNone progress:progressBlock completed:completedBlock];
                 return;
+            } else {
+                // Write back the disk image into memory cache, with the correct key
+                if (cacheType == SDImageCacheTypeDisk) {
+                    // Sync
+                    [imageCache storeImage:cachedImage imageData:nil forKey:key cacheType:SDImageCacheTypeMemory completion:nil];
+                }
             }
                         
             // Skip downloading and continue transform process, and ignore .refreshCached option for now
@@ -375,6 +390,9 @@ static id<SDImageLoader> _defaultImageLoader;
             
             [self safelyRemoveOperationFromRunning:operation];
         }];
+        @synchronized (operation) {
+            operation.cacheOperation = cacheOperation;
+        }
     } else {
         // Continue download process
         [self callDownloadProcessForOperation:operation url:url options:options context:context cachedImage:nil cachedData:nil cacheType:SDImageCacheTypeNone progress:progressBlock completed:completedBlock];
@@ -428,7 +446,7 @@ static id<SDImageLoader> _defaultImageLoader;
         }
         
         @weakify(operation);
-        operation.loaderOperation = [imageLoader requestImageWithURL:url options:options context:context progress:progressBlock completed:^(UIImage *downloadedImage, NSData *downloadedData, NSError *error, BOOL finished) {
+        id<SDWebImageOperation> loaderOperation = [imageLoader requestImageWithURL:url options:options context:context progress:progressBlock completed:^(UIImage *downloadedImage, NSData *downloadedData, NSError *error, BOOL finished) {
             @strongify(operation);
             if (!operation || operation.isCancelled) {
                 // Image combined operation cancelled by user
@@ -461,6 +479,9 @@ static id<SDImageLoader> _defaultImageLoader;
                 [self safelyRemoveOperationFromRunning:operation];
             }
         }];
+        @synchronized (operation) {
+            operation.loaderOperation = loaderOperation;
+        }
     } else if (cachedImage) {
         [self callCompletionBlockForOperation:operation completion:completedBlock image:cachedImage data:cachedData error:nil cacheType:cacheType finished:YES queue:context[SDWebImageContextCallbackQueue] url:url];
         [self safelyRemoveOperationFromRunning:operation];
@@ -505,6 +526,17 @@ static id<SDImageLoader> _defaultImageLoader;
             // Case that transformer on thumbnail, which this time need full pixel image
             UIImage *transformedImage = [transformer transformedImageWithImage:cacheImage forKey:key];
             if (transformedImage) {
+                // We need keep some metadata from the full size image when needed
+                // Because most of our transformer does not care about these information
+                // So we add a **post-process** logic here, not a good design :(
+                BOOL preserveImageMetadata = YES;
+                if ([transformer respondsToSelector:@selector(preserveImageMetadata)]) {
+                    preserveImageMetadata = transformer.preserveImageMetadata;
+                }
+                if (preserveImageMetadata) {
+                    SDImageCopyAssociatedObject(cacheImage, transformedImage);
+                }
+                // Mark the transformed
                 transformedImage.sd_isTransformed = YES;
                 [self callStoreOriginCacheProcessForOperation:operation url:url options:options context:context originalImage:originalImage cacheImage:transformedImage originalData:originalData cacheData:nil cacheType:cacheType finished:finished completed:completedBlock];
             } else {

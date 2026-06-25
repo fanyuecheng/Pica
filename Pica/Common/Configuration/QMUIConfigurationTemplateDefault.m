@@ -272,19 +272,13 @@ static UIImage *disclosureIndicatorImageDark;
     QMUICMI.badgeContentEdgeInsets = UIEdgeInsetsMake(2, 4, 2, 4);              // BadgeContentEdgeInsets : QMUIBadge 上的未读数与圆圈之间的 padding
     QMUICMI.badgeOffset = CGPointMake(-9, 11);                                  // BadgeOffset : QMUIBadge 上的未读数相对于目标 view 右上角的偏移
     QMUICMI.badgeOffsetLandscape = CGPointMake(-9, 6);                          // BadgeOffsetLandscape : QMUIBadge 上的未读数在横屏下相对于目标 view 右上角的偏移
-    BeginIgnoreDeprecatedWarning
-    QMUICMI.badgeCenterOffset = CGPointMake(14, -10);                           // BadgeCenterOffset : QMUIBadge 未读数相对于目标 view 中心的偏移
-    QMUICMI.badgeCenterOffsetLandscape = CGPointMake(16, -7);                   // BadgeCenterOffsetLandscape : QMUIBadge 未读数在横屏下相对于目标 view 中心的偏移
-    EndIgnoreDeprecatedWarning
+    
     
     QMUICMI.updatesIndicatorColor = UIColorRed;                                 // UpdatesIndicatorColor : QMUIBadge 上的未读红点的颜色
     QMUICMI.updatesIndicatorSize = CGSizeMake(7, 7);                            // UpdatesIndicatorSize : QMUIBadge 上的未读红点的大小
     QMUICMI.updatesIndicatorOffset = CGPointMake(4, UpdatesIndicatorSize.height);// UpdatesIndicatorOffset : QMUIBadge 未读红点相对于目标 view 右上角的偏移
     QMUICMI.updatesIndicatorOffsetLandscape = UpdatesIndicatorOffset;           // UpdatesIndicatorOffsetLandscape : QMUIBadge 未读红点在横屏下相对于目标 view 右上角的偏移
-    BeginIgnoreDeprecatedWarning
-    QMUICMI.updatesIndicatorCenterOffset = CGPointMake(14, -10);                // UpdatesIndicatorCenterOffset : QMUIBadge 未读红点相对于目标 view 中心的偏移
-    QMUICMI.updatesIndicatorCenterOffsetLandscape = CGPointMake(14, -10);       // UpdatesIndicatorCenterOffsetLandscape : QMUIBadge 未读红点在横屏下相对于目标 view 中心点的偏移
-    EndIgnoreDeprecatedWarning
+    
     
 #pragma mark - Others
     
@@ -298,7 +292,6 @@ static UIImage *disclosureIndicatorImageDark;
     QMUICMI.navigationBarHiddenInitially = NO;                                  // NavigationBarHiddenInitially : QMUINavigationControllerDelegate preferredNavigationBarHidden 的初始值，默认为NO
     QMUICMI.shouldFixTabBarSafeAreaInsetsBug = YES;                             // ShouldFixTabBarSafeAreaInsetsBug : 是否要对 iOS 11 及以后的版本修复当存在 UITabBar 时，UIScrollView 的 inset.bottom 可能错误的 bug（issue #218 #934），默认为 YES
     QMUICMI.shouldFixSearchBarMaskViewLayoutBug = YES;                          // ShouldFixSearchBarMaskViewLayoutBug : 是否自动修复 UISearchController.searchBar 被当作 tableHeaderView 使用时可能出现的布局 bug(issue #950)
-    QMUICMI.sendAnalyticsToQMUITeam = NO;                                      // SendAnalyticsToQMUITeam : 是否允许在 DEBUG 模式下上报 Bundle Identifier 和 Display Name 给 QMUI 统计用
     QMUICMI.dynamicPreferredValueForIPad = NO;                                  // DynamicPreferredValueForIPad : 当 iPad 处于 Slide Over 或 Split View 分屏模式下，宏 `PreferredValueForXXX` 是否把 iPad 视为某种屏幕宽度近似的 iPhone 来取值。
     QMUICMI.navBarContainerClasses = nil; // NavBarContainerClasses : NavigationBar 系列开关被用于 UIAppearance 时的生效范围（默认情况下除了用于 UIAppearance 外，还用于实现了 QMUINavigationControllerAppearanceDelegate 的 UIViewController），默认为 nil。当赋值为 nil 或者空数组时等效于 @[UINavigationController.class]，也即对所有 UINavigationBar 生效，包括系统的通讯录（ContactsUI.framework)、打印等。当值不为空时，获取 UINavigationBar 的 appearance 请使用 UINavigationBar.qmui_appearanceConfigured 方法代替系统的 UINavigationBar.appearance。请保证这个配置项先于其他任意 NavBar 配置项执行。
     QMUICMI.tabBarContainerClasses = nil; // TabBarContainerClasses : TabBar 系列开关的生效范围，默认为 nil，当赋值为 nil 或者空数组时等效于 @[UITabBarController.class]，也即对所有 UITabBar 生效。当值不为空时，获取 UITabBar 的 appearance 请使用 UITabBar.qmui_appearanceConfigured 方法代替系统的 UITabBar.appearance。请保证这个配置项先于其他任意 TabBar 配置项执行。

@@ -9,6 +9,7 @@
 #import "SDWebImageCompat.h"
 
 typedef void(^SDWebImageNoParamsBlock)(void);
+/// Image Loading context option
 typedef NSString * SDWebImageContextOption NS_EXTENSIBLE_STRING_ENUM;
 typedef NSDictionary<SDWebImageContextOption, id> SDWebImageContext;
 typedef NSMutableDictionary<SDWebImageContextOption, id> SDWebImageMutableContext;
@@ -107,6 +108,7 @@ typedef NS_OPTIONS(NSUInteger, SDWebImageOptions) {
      * of the placeholder image until after the image has finished loading.
      * @note This is used to treate placeholder as an **Error Placeholder** but not **Loading Placeholder** by defaults. if the image loading is cancelled or error, the placeholder will be always set.
      * @note Therefore, if you want both **Error Placeholder** and **Loading Placeholder** exist, use `SDWebImageAvoidAutoSetImage` to manually set the two placeholders and final loaded image by your hand depends on loading result.
+     * @note This options is UI level options, has no usage on ImageManager or other components.
      */
     SDWebImageDelayPlaceholder = 1 << 8,
     
@@ -120,6 +122,7 @@ typedef NS_OPTIONS(NSUInteger, SDWebImageOptions) {
      * By default, image is added to the imageView after download. But in some cases, we want to
      * have the hand before setting the image (apply a filter or add it with cross-fade animation for instance)
      * Use this flag if you want to manually set the image in the completion when success
+     * @note This options is UI level options, has no usage on ImageManager or other components.
      */
     SDWebImageAvoidAutoSetImage = 1 << 10,
     
@@ -127,9 +130,10 @@ typedef NS_OPTIONS(NSUInteger, SDWebImageOptions) {
      * By default, images are decoded respecting their original size.
      * This flag will scale down the images to a size compatible with the constrained memory of devices.
      * To control the limit memory bytes, check `SDImageCoderHelper.defaultScaleDownLimitBytes` (Defaults to 60MB on iOS)
-     * This will actually translate to use context option `.imageThumbnailPixelSize` from v5.5.0 (Defaults to (3966, 3966) on iOS). Previously does not.
-     * This flags effect the progressive and animated images as well from v5.5.0. Previously does not.
-     * @note If you need detail controls, it's better to use context option `imageThumbnailPixelSize` and `imagePreserveAspectRatio` instead.
+     * (from 5.16.0) This will actually translate to use context option `SDWebImageContextImageScaleDownLimitBytes`, which check and calculate the thumbnail pixel size occupied small than limit bytes (including animated image)
+     * (from 5.5.0) This flags effect the progressive and animated images as well
+     * @note If you need detail controls, it's better to use context option `imageScaleDownBytes` instead.
+     * @warning This does not effect the cache key. So which means, this will effect the global cache even next time you query without this option. Pay attention when you use this on global options (It's always recommended to use request-level option for different pipeline)
      */
     SDWebImageScaleDownLargeImages = 1 << 11,
     
@@ -164,6 +168,7 @@ typedef NS_OPTIONS(NSUInteger, SDWebImageOptions) {
     /**
      * By default, when you use `SDWebImageTransition` to do some view transition after the image load finished, this transition is only applied for image when the callback from manager is asynchronous (from network, or disk cache query)
      * This mask can force to apply view transition for any cases, like memory cache query, or sync disk cache query.
+     * @note This options is UI level options, has no usage on ImageManager or other components.
      */
     SDWebImageForceTransition = 1 << 17,
     
@@ -171,8 +176,9 @@ typedef NS_OPTIONS(NSUInteger, SDWebImageOptions) {
      * By default, we will decode the image in the background during cache query and download from the network. This can help to improve performance because when rendering image on the screen, it need to be firstly decoded. But this happen on the main queue by Core Animation.
      * However, this process may increase the memory usage as well. If you are experiencing an issue due to excessive memory consumption, This flag can prevent decode the image.
      * @note 5.14.0 introduce `SDImageCoderDecodeUseLazyDecoding`, use that for better control from codec, instead of post-processing. Which acts the similar like this option but works for SDAnimatedImage as well (this one does not)
+     * @deprecated Deprecated in v5.17.0, if you don't want force-decode, pass [.imageForceDecodePolicy] = SDImageForceDecodePolicy.never.rawValue in context option
      */
-    SDWebImageAvoidDecodeImage = 1 << 18,
+    SDWebImageAvoidDecodeImage API_DEPRECATED("Use SDWebImageContextImageForceDecodePolicy instead", macos(10.10, 10.10), ios(8.0, 8.0), tvos(9.0, 9.0), watchos(2.0, 2.0)) = 1 << 18,
     
     /**
      * By default, we decode the animated image. This flag can force decode the first frame only and produce the static image.
@@ -204,7 +210,24 @@ typedef NS_OPTIONS(NSUInteger, SDWebImageOptions) {
      * We usually don't apply transform on vector images, because vector images supports dynamically changing to any size, rasterize to a fixed size will loss details. To modify vector images, you can process the vector data at runtime (such as modifying PDF tag / SVG element).
      * Use this flag to transform them anyway.
      */
-    SDWebImageTransformVectorImage = 1 << 23
+    SDWebImageTransformVectorImage = 1 << 23,
+    
+    /**
+     * By defaults, when you use UI-level category like `sd_setImageWithURL:` on UIImageView, it will cancel the loading image requests.
+     * However, some users may choose to not cancel the loading image requests and always start new pipeline.
+     * Use this flag to disable automatic cancel behavior.
+     * @note This options is UI level options, has no usage on ImageManager or other components.
+     */
+    SDWebImageAvoidAutoCancelImage = 1 << 24,
+    
+    /**
+     * By defaults, for `SDWebImageTransition`, we just submit to UI transition and inmeediatelly callback the final `completedBlock` (`SDExternalCompletionBlock/SDInternalCompletionBlock`).
+     * This may cause un-wanted behavior if you do another transition inside `completedBlock`, because the previous transition is still runnning and un-cancellable, which mass-up the UI status.
+     * For this case, you can pass this option, we will delay the final callback, until your transition end. So when you inside `completedBlock`, no any transition is running on image view and safe to submit new transition.
+     * @note Currently we do not support `pausable/cancellable` transition. But possible in the future by using the https://developer.apple.com/documentation/uikit/uiviewpropertyanimator.
+     * @note If you have complicated transition animation, just use `SDWebImageManager` and do UI state management by yourself, do not use the top-level API (`sd_setImageWithURL:`)
+     */
+    SDWebImageWaitTransition = 1 << 25,
 };
 
 
@@ -255,6 +278,15 @@ FOUNDATION_EXPORT SDWebImageContextOption _Nonnull const SDWebImageContextImageC
  */
 FOUNDATION_EXPORT SDWebImageContextOption _Nonnull const SDWebImageContextImageTransformer;
 
+#pragma mark - Force Decode Options
+
+/**
+ A  NSNumber instance which store the`SDImageForceDecodePolicy` enum. This is used to control how current image loading should force-decode the decoded image (CGImage, typically). See more what's force-decode means in `SDImageForceDecodePolicy` comment.
+ Defaults to `SDImageForceDecodePolicyAutomatic`, which will detect the input CGImage's metadata, and only force-decode if the input CGImage can not directly render on screen (need extra CoreAnimation Copied Image and increase RAM usage).
+ @note If you want to always the force-decode for this image request, pass `SDImageForceDecodePolicyAlways`, for example, some WebP images which does not created by ImageIO.
+ */
+FOUNDATION_EXPORT SDWebImageContextOption _Nonnull const SDWebImageContextImageForceDecodePolicy;
+
 #pragma mark - Image Decoder Context Options
 
 /**
@@ -292,6 +324,26 @@ FOUNDATION_EXPORT SDWebImageContextOption _Nonnull const SDWebImageContextImageT
  @note If you really don't want any hint which effect the image result, pass `NSNull.null` instead
  */
 FOUNDATION_EXPORT SDWebImageContextOption _Nonnull const SDWebImageContextImageTypeIdentifierHint;
+
+/**
+ A NSUInteger value to provide the limit bytes during decoding. This can help to avoid OOM on large frame count animated image or large pixel static image when you don't know how much RAM it occupied before decoding
+ The decoder will do these logic based on limit bytes:
+ 1. Get the total frame count (static image means 1)
+ 2. Calculate the `framePixelSize` width/height to `sqrt(limitBytes / frameCount / bytesPerPixel)`, keeping aspect ratio (at least 1x1)
+ 3. If the `framePixelSize < originalImagePixelSize`, then do thumbnail decoding (see `SDImageCoderDecodeThumbnailPixelSize`) use the `framePixelSize` and `preseveAspectRatio = YES`
+ 4. Else, use the full pixel decoding (small than limit bytes)
+ 5. Whatever result, this does not effect the animated/static behavior of image. So even if you set `limitBytes = 1 && frameCount = 100`, we will stll create animated image with each frame `1x1` pixel size.
+ @note This option has higher priority than `.imageThumbnailPixelSize`
+ @warning This does not effect the cache key. So which means, this will effect the global cache even next time you query without this option. Pay attention when you use this on global options (It's always recommended to use request-level option for different pipeline)
+ */
+FOUNDATION_EXPORT SDWebImageContextOption _Nonnull const SDWebImageContextImageScaleDownLimitBytes;
+
+/**
+ A Boolean value (NSNumber) to provide converting to HDR during decoding. Currently if number is 0, use SDR, else use HDR. But we may extend this option to use `NSUInteger` in the future (means, think this options as int number, but not actual boolean)
+ @note Supported by iOS 17 and above when using ImageIO coder (third-party coder can support lower firmware)
+ Defaults to @(NO), decoder will automatically convert SDR.
+ */
+FOUNDATION_EXPORT SDWebImageContextOption _Nonnull const SDWebImageContextImageDecodeToHDR;
 
 #pragma mark - Cache Context Options
 

@@ -49,10 +49,10 @@
     if (self = [super initWithFrame:frame]) {
         
         self.qmui_useAsNavigationTitleView = YES;
+        self.qmui_outsideEdge = UIEdgeInsetsMake(-10, 0, -10, 0);
         [self addTarget:self action:@selector(handleTouchTitleViewEvent) forControlEvents:UIControlEventTouchUpInside];
         
         _contentView = [[UIView alloc] init];
-        _contentView.userInteractionEnabled = NO;
         [self addSubview:self.contentView];
         
         _titleLabel = [[UILabel alloc] init];
@@ -81,7 +81,8 @@
         self.horizontalTitleFont = QMUINavigationTitleView.appearance.horizontalTitleFont ?: UINavigationBar.qmui_appearanceConfigured.titleTextAttributes[NSFontAttributeName];
         self.horizontalSubtitleFont = QMUINavigationTitleView.appearance.horizontalSubtitleFont ?: self.horizontalTitleFont;
         
-        self.adjustsSubviewsTintColorAutomatically = YES;
+        self.adjustsSubviewsTintColorAutomatically = QMUINavigationTitleView.appearance.adjustsSubviewsTintColorAutomatically;
+        self.adjustsSubviewsWhenHighlighted = QMUINavigationTitleView.appearance.adjustsSubviewsWhenHighlighted;
         self.tintColor = QMUICMIActivated ? NavBarTitleColor : UINavigationBar.qmui_appearanceConfigured.titleTextAttributes[NSForegroundColorAttributeName];
     }
     return self;
@@ -223,7 +224,9 @@
 
 - (CGSize)sizeThatFits:(CGSize)size {
     CGSize resultSize = [self contentSize];
+    resultSize.width += UIEdgeInsetsGetHorizontalValue(self.padding);
     resultSize.width = MIN(resultSize.width, self.maximumWidth);
+    resultSize.height += UIEdgeInsetsGetVerticalValue(self.padding);
     return resultSize;
 }
 
@@ -234,13 +237,13 @@
     
     [super layoutSubviews];
     
-    self.contentView.frame = self.bounds;
+    self.contentView.frame = CGRectInsetEdges(self.bounds, self.padding);
     
     BOOL alignLeft = self.contentHorizontalAlignment == UIControlContentHorizontalAlignmentLeft;
     BOOL alignRight = self.contentHorizontalAlignment == UIControlContentHorizontalAlignmentRight;
     
     // 通过sizeThatFit计算出来的size，如果大于可使用的最大宽度，则会被系统改为最大限制的最大宽度
-    CGSize maxSize = self.bounds.size;
+    CGSize maxSize = self.contentView.bounds.size;
     
     // 实际内容的size，小于等于maxSize
     CGSize contentSize = [self contentSize];
@@ -375,85 +378,135 @@
 #pragma mark - setter / getter
 
 - (void)setMaximumWidth:(CGFloat)maximumWidth {
-    _maximumWidth = maximumWidth;
-    [self refreshLayout];
+    if (_maximumWidth != maximumWidth) {
+        _maximumWidth = maximumWidth;
+        
+        [self refreshLayout];
+    }
+}
+
+- (void)setPadding:(UIEdgeInsets)padding {
+    if (!UIEdgeInsetsEqualToEdgeInsets(_padding, padding)) {
+        _padding = padding;
+        
+        [self refreshLayout];
+    }
 }
 
 - (void)setContentHorizontalAlignment:(UIControlContentHorizontalAlignment)contentHorizontalAlignment {
+    UIControlContentHorizontalAlignment previous = self.contentHorizontalAlignment;
     [super setContentHorizontalAlignment:contentHorizontalAlignment];
-    [self refreshLayout];
+    if (contentHorizontalAlignment != previous) {
+        [self refreshLayout];
+    }
 }
 
 - (void)setNeedsLoadingPlaceholderSpace:(BOOL)needsLoadingPlaceholderSpace {
-    _needsLoadingPlaceholderSpace = needsLoadingPlaceholderSpace;
-    [self refreshLayout];
+    if (_needsLoadingPlaceholderSpace != needsLoadingPlaceholderSpace) {
+        _needsLoadingPlaceholderSpace = needsLoadingPlaceholderSpace;
+        
+        [self refreshLayout];
+    }
 }
 
 - (void)setNeedsAccessoryPlaceholderSpace:(BOOL)needsAccessoryPlaceholderSpace {
-    _needsAccessoryPlaceholderSpace = needsAccessoryPlaceholderSpace;
-    [self refreshLayout];
+    if (_needsAccessoryPlaceholderSpace != needsAccessoryPlaceholderSpace) {
+        _needsAccessoryPlaceholderSpace = needsAccessoryPlaceholderSpace;
+        
+        [self refreshLayout];
+    }
 }
 
 - (void)setAccessoryViewOffset:(CGPoint)accessoryViewOffset {
-    _accessoryViewOffset = accessoryViewOffset;
-    [self refreshLayout];
+    if (!CGPointEqualToPoint(_accessoryViewOffset, accessoryViewOffset)) {
+        _accessoryViewOffset = accessoryViewOffset;
+        
+        [self refreshLayout];
+    }
 }
 
 - (void)setNeedsSubAccessoryPlaceholderSpace:(BOOL)needsSubAccessoryPlaceholderSpace {
-    _needsSubAccessoryPlaceholderSpace = needsSubAccessoryPlaceholderSpace;
-    [self refreshLayout];
+    if (_needsSubAccessoryPlaceholderSpace != needsSubAccessoryPlaceholderSpace) {
+        _needsSubAccessoryPlaceholderSpace = needsSubAccessoryPlaceholderSpace;
+        
+        [self refreshLayout];
+    }
 }
 
 - (void)setSubAccessoryViewOffset:(CGPoint)subAccessoryViewOffset {
-    _subAccessoryViewOffset = subAccessoryViewOffset;
-    [self refreshLayout];
+    if (!CGPointEqualToPoint(_subAccessoryViewOffset, subAccessoryViewOffset)) {
+        _subAccessoryViewOffset = subAccessoryViewOffset;
+        
+        [self refreshLayout];
+    }
 }
 
 - (void)setLoadingViewMarginRight:(CGFloat)loadingViewMarginRight {
-    _loadingViewMarginRight = loadingViewMarginRight;
-    [self refreshLayout];
+    if (_loadingViewMarginRight != loadingViewMarginRight) {
+        _loadingViewMarginRight = loadingViewMarginRight;
+        
+        [self refreshLayout];
+    }
 }
 
 - (void)setHorizontalTitleFont:(UIFont *)horizontalTitleFont {
-    _horizontalTitleFont = horizontalTitleFont;
-    if (self.style == QMUINavigationTitleViewStyleDefault) {
-        self.titleLabel.font = horizontalTitleFont;
-        [self refreshLayout];
+    if (_horizontalTitleFont != horizontalTitleFont) {
+        _horizontalTitleFont = horizontalTitleFont;
+        
+        if (self.style == QMUINavigationTitleViewStyleDefault) {
+            self.titleLabel.font = horizontalTitleFont;
+            [self refreshLayout];
+        }
     }
 }
 
 - (void)setHorizontalSubtitleFont:(UIFont *)horizontalSubtitleFont {
-    _horizontalSubtitleFont = horizontalSubtitleFont;
-    if (self.style == QMUINavigationTitleViewStyleDefault) {
-        self.subtitleLabel.font = horizontalSubtitleFont;
-        [self refreshLayout];
+    if (_horizontalSubtitleFont != horizontalSubtitleFont) {
+        _horizontalSubtitleFont = horizontalSubtitleFont;
+        
+        if (self.style == QMUINavigationTitleViewStyleDefault) {
+            self.subtitleLabel.font = horizontalSubtitleFont;
+            [self refreshLayout];
+        }
     }
 }
 
 - (void)setVerticalTitleFont:(UIFont *)verticalTitleFont {
-    _verticalTitleFont = verticalTitleFont;
-    if (self.style == QMUINavigationTitleViewStyleSubTitleVertical) {
-        self.titleLabel.font = verticalTitleFont;
-        [self refreshLayout];
+    if (_verticalTitleFont != verticalTitleFont) {
+        _verticalTitleFont = verticalTitleFont;
+        
+        if (self.style == QMUINavigationTitleViewStyleSubTitleVertical) {
+            self.titleLabel.font = verticalTitleFont;
+            [self refreshLayout];
+        }
     }
 }
 
 - (void)setVerticalSubtitleFont:(UIFont *)verticalSubtitleFont {
-    _verticalSubtitleFont = verticalSubtitleFont;
-    if (self.style == QMUINavigationTitleViewStyleSubTitleVertical) {
-        self.subtitleLabel.font = verticalSubtitleFont;
-        [self refreshLayout];
+    if (_verticalSubtitleFont != verticalSubtitleFont) {
+        _verticalSubtitleFont = verticalSubtitleFont;
+        
+        if (self.style == QMUINavigationTitleViewStyleSubTitleVertical) {
+            self.subtitleLabel.font = verticalSubtitleFont;
+            [self refreshLayout];
+        }
     }
 }
 
 - (void)setTitleEdgeInsets:(UIEdgeInsets)titleEdgeInsets {
-    _titleEdgeInsets = titleEdgeInsets;
-    [self refreshLayout];
+    if (!UIEdgeInsetsEqualToEdgeInsets(_titleEdgeInsets, titleEdgeInsets)) {
+        _titleEdgeInsets = titleEdgeInsets;
+        
+        [self refreshLayout];
+    }
 }
 
 - (void)setSubtitleEdgeInsets:(UIEdgeInsets)subtitleEdgeInsets {
-    _subtitleEdgeInsets = subtitleEdgeInsets;
-    [self refreshLayout];
+    if (!UIEdgeInsetsEqualToEdgeInsets(_subtitleEdgeInsets, subtitleEdgeInsets)) {
+        _subtitleEdgeInsets = subtitleEdgeInsets;
+        
+        [self refreshLayout];
+    }
 }
 
 - (void)setTitle:(NSString *)title {
@@ -545,7 +598,8 @@
     _needsLoadingView = needsLoadingView;
     if (needsLoadingView) {
         if (!self.loadingView) {
-            _loadingView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:NavBarActivityIndicatorViewStyle size:self.loadingViewSize];
+            _loadingView = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:NavBarActivityIndicatorViewStyle];
+            self.loadingView.qmui_size = self.loadingViewSize;
             self.loadingView.color = self.tintColor;
             [self.loadingView stopAnimating];
             [self.contentView addSubview:self.loadingView];
@@ -569,10 +623,13 @@
 }
 
 - (void)setLoadingViewSize:(CGSize)loadingViewSize {
-    _loadingViewSize = loadingViewSize;
-    if (self.loadingView) {
-        self.loadingView.qmui_size = loadingViewSize;
-        [self refreshLayout];
+    if (!CGSizeEqualToSize(_loadingViewSize, loadingViewSize)) {
+        _loadingViewSize = loadingViewSize;
+        
+        if (self.loadingView) {
+            self.loadingView.qmui_size = loadingViewSize;
+            [self refreshLayout];
+        }
     }
 }
 
@@ -626,7 +683,17 @@
 
 - (void)setHighlighted:(BOOL)highlighted {
     [super setHighlighted:highlighted];
-    self.alpha = highlighted ? UIControlHighlightedAlpha : 1;
+    if (self.adjustsSubviewsWhenHighlighted) {
+        self.alpha = highlighted ? UIControlHighlightedAlpha : 1;
+    }
+}
+
+- (UIView *)hitTest:(CGPoint)point withEvent:(UIEvent *)event {
+    UIView *result = [super hitTest:point withEvent:event];
+    if (result == self.contentView) {
+        return self;
+    }
+    return result;
 }
 
 - (void)handleTouchTitleViewEvent {
@@ -710,6 +777,7 @@
 + (void)setDefaultAppearance {
     QMUINavigationTitleView *appearance = [QMUINavigationTitleView appearance];
     appearance.adjustsSubviewsTintColorAutomatically = YES;
+    appearance.adjustsSubviewsWhenHighlighted = YES;
     appearance.maximumWidth = CGFLOAT_MAX;
     appearance.loadingViewSize = CGSizeMake(18, 18);
     appearance.loadingViewMarginRight = 3;
@@ -778,7 +846,7 @@
         return;
     }
     
-    QMUIAssert(viewController.navigationController == self, @"QMUINavigationTitleView", @"不存在 UINavigationController");
+    if (viewController.navigationController != self) return;
     
     QMUINavigationTitleView *navigationTitleView = (QMUINavigationTitleView *)titleView;
     UIView *largeTitleView = self.navigationBar.qmui_largeTitleView;

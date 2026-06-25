@@ -163,7 +163,7 @@
     if (self.allPictureArray.count) {
         exportBlock();
     } else {
-        QMUITips *loading = [QMUITips showLoadingInView:DefaultTipsParentView];
+        QMUITips *loading = [QMUITips showLoadingInView:PCDefaultTipsParentView];
         [self requestEpPicture:^(NSError *error) {
             [loading hideAnimated:NO];
             if (error) {
@@ -180,7 +180,7 @@
     if (self.request.page < 1) {
         return;
     }
-    QMUITips *loading = [QMUITips showLoadingInView:DefaultTipsParentView];
+    QMUITips *loading = [QMUITips showLoadingInView:PCDefaultTipsParentView];
     self.onRequest = YES;
     [self.request sendRequest:^(PCEpisodePicture *picture) {
         self.onRequest = NO;
@@ -282,8 +282,6 @@
     PCPictureCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"PCPictureCell" forIndexPath:indexPath];
     
     NSArray *pictureArray = self.pictureArray[indexPath.section].docs;
-
-    cell.picture = pictureArray[indexPath.item];
  
     @weakify(self)
     cell.clickBlock = ^{
@@ -298,11 +296,25 @@
     
     cell.loadBlock = ^(PCPicture * _Nonnull picture) {
         @strongify(self)
-        NSIndexPath *reloadIndexPath = [NSIndexPath indexPathForItem:[pictureArray indexOfObject:picture] inSection:indexPath.section];
-        if ([self.navigationController.viewControllers containsObject:self]) {
-            [collectionView reloadItemsAtIndexPaths:@[reloadIndexPath]];
+        if (indexPath.section >= self.pictureArray.count) return;
+        NSArray *currentPictureArray = self.pictureArray[indexPath.section].docs;
+        NSUInteger index = [currentPictureArray indexOfObject:picture];
+        if (index != NSNotFound) {
+            NSInteger numberOfItems = [collectionView numberOfItemsInSection:indexPath.section];
+            if (index < numberOfItems) {
+                if ([self.navigationController.viewControllers containsObject:self]) {
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        @strongify(self)
+                        if (![self.navigationController.viewControllers containsObject:self]) return;
+                        if (collectionView.window == nil) return;
+                        [collectionView.collectionViewLayout invalidateLayout];
+                    });
+                }
+            }
         }
     };
+    
+    cell.picture = pictureArray[indexPath.item];
     
     return cell;
 }

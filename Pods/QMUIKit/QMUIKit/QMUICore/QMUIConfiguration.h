@@ -261,15 +261,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, assign) UIEdgeInsets       badgeContentEdgeInsets;
 @property(nonatomic, assign) CGPoint            badgeOffset;
 @property(nonatomic, assign) CGPoint            badgeOffsetLandscape;
-@property(nonatomic, assign) CGPoint            badgeCenterOffset DEPRECATED_MSG_ATTRIBUTE("请改为使用 badgeOffset");
-@property(nonatomic, assign) CGPoint            badgeCenterOffsetLandscape DEPRECATED_MSG_ATTRIBUTE("请改为使用 badgeOffsetLandscape");
 
 @property(nonatomic, strong, nullable) UIColor  *updatesIndicatorColor;
 @property(nonatomic, assign) CGSize             updatesIndicatorSize;
 @property(nonatomic, assign) CGPoint            updatesIndicatorOffset;
 @property(nonatomic, assign) CGPoint            updatesIndicatorOffsetLandscape;
-@property(nonatomic, assign) CGPoint            updatesIndicatorCenterOffset DEPRECATED_MSG_ATTRIBUTE("请改为使用 updatesIndicatorOffset");
-@property(nonatomic, assign) CGPoint            updatesIndicatorCenterOffsetLandscape DEPRECATED_MSG_ATTRIBUTE("请改为使用 updatesIndicatorOffsetLandscape");
 
 #pragma mark - Others
 
@@ -283,7 +279,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property(nonatomic, assign) BOOL               navigationBarHiddenInitially;
 @property(nonatomic, assign) BOOL               shouldFixTabBarSafeAreaInsetsBug;
 @property(nonatomic, assign) BOOL               shouldFixSearchBarMaskViewLayoutBug;
-@property(nonatomic, assign) BOOL               sendAnalyticsToQMUITeam;
 @property(nonatomic, assign) BOOL               dynamicPreferredValueForIPad;
 @property(nonatomic, assign) BOOL               ignoreKVCAccessProhibited API_AVAILABLE(ios(13.0));
 @property(nonatomic, assign) BOOL               adjustScrollIndicatorInsetsByContentInsetAdjustment API_AVAILABLE(ios(13.0));

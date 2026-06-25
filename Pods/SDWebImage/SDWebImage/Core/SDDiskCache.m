@@ -43,6 +43,8 @@ static NSString * const SDDiskCacheExtendedAttributeName = @"com.hackemist.SDDis
     } else {
         self.fileManager = [NSFileManager new];
     }
+  
+    [self createDirectory];
 }
 
 - (BOOL)containsDataForKey:(NSString *)key {
@@ -62,15 +64,23 @@ static NSString * const SDDiskCacheExtendedAttributeName = @"com.hackemist.SDDis
 - (NSData *)dataForKey:(NSString *)key {
     NSParameterAssert(key);
     NSString *filePath = [self cachePathForKey:key];
+    // if filePath is nil or (null)，framework will crash with this：
+    // Terminating app due to uncaught exception 'NSInvalidArgumentException', reason: '*** -[_NSPlaceholderData initWithContentsOfFile:options:maxLength:error:]: nil file argument'
+    if (filePath == nil || [@"(null)" isEqualToString: filePath]) {
+        return nil;
+    }
     NSData *data = [NSData dataWithContentsOfFile:filePath options:self.config.diskCacheReadingOptions error:nil];
     if (data) {
+        [[NSURL fileURLWithPath:filePath] setResourceValue:[NSDate date] forKey:NSURLContentAccessDateKey error:nil];
         return data;
     }
     
     // fallback because of https://github.com/rs/SDWebImage/pull/976 that added the extension to the disk file name
     // checking the key with and without the extension
-    data = [NSData dataWithContentsOfFile:filePath.stringByDeletingPathExtension options:self.config.diskCacheReadingOptions error:nil];
+    filePath = filePath.stringByDeletingPathExtension;
+    data = [NSData dataWithContentsOfFile:filePath options:self.config.diskCacheReadingOptions error:nil];
     if (data) {
+        [[NSURL fileURLWithPath:filePath] setResourceValue:[NSDate date] forKey:NSURLContentAccessDateKey error:nil];
         return data;
     }
     
@@ -80,9 +90,6 @@ static NSString * const SDDiskCacheExtendedAttributeName = @"com.hackemist.SDDis
 - (void)setData:(NSData *)data forKey:(NSString *)key {
     NSParameterAssert(data);
     NSParameterAssert(key);
-    if (![self.fileManager fileExistsAtPath:self.diskCachePath]) {
-        [self.fileManager createDirectoryAtPath:self.diskCachePath withIntermediateDirectories:YES attributes:nil error:NULL];
-    }
     
     // get cache Path for image key
     NSString *cachePathForKey = [self cachePathForKey:key];
@@ -90,12 +97,6 @@ static NSString * const SDDiskCacheExtendedAttributeName = @"com.hackemist.SDDis
     NSURL *fileURL = [NSURL fileURLWithPath:cachePathForKey isDirectory:NO];
     
     [data writeToURL:fileURL options:self.config.diskCacheWritingOptions error:nil];
-    
-    // disable iCloud backup
-    if (self.config.shouldDisableiCloud) {
-        // ignore iCloud backup resource value error
-        [fileURL setResourceValue:@YES forKey:NSURLIsExcludedFromBackupKey error:nil];
-    }
 }
 
 - (NSData *)extendedDataForKey:(NSString *)key {
@@ -131,21 +132,28 @@ static NSString * const SDDiskCacheExtendedAttributeName = @"com.hackemist.SDDis
 
 - (void)removeAllData {
     [self.fileManager removeItemAtPath:self.diskCachePath error:nil];
-    [self.fileManager createDirectoryAtPath:self.diskCachePath
-            withIntermediateDirectories:YES
-                             attributes:nil
-                                  error:NULL];
+    [self createDirectory];
+}
+
+- (void)createDirectory {
+  [self.fileManager createDirectoryAtPath:self.diskCachePath
+          withIntermediateDirectories:YES
+                           attributes:nil
+                                error:NULL];
+  
+  // disable iCloud backup
+  if (self.config.shouldDisableiCloud) {
+      // ignore iCloud backup resource value error
+      [[NSURL fileURLWithPath:self.diskCachePath isDirectory:YES] setResourceValue:@YES forKey:NSURLIsExcludedFromBackupKey error:nil];
+  }
 }
 
 - (void)removeExpiredData {
     NSURL *diskCacheURL = [NSURL fileURLWithPath:self.diskCachePath isDirectory:YES];
     
     // Compute content date key to be used for tests
-    NSURLResourceKey cacheContentDateKey = NSURLContentModificationDateKey;
+    NSURLResourceKey cacheContentDateKey;
     switch (self.config.diskCacheExpireType) {
-        case SDImageCacheConfigExpireTypeAccessDate:
-            cacheContentDateKey = NSURLContentAccessDateKey;
-            break;
         case SDImageCacheConfigExpireTypeModificationDate:
             cacheContentDateKey = NSURLContentModificationDateKey;
             break;
@@ -155,14 +163,16 @@ static NSString * const SDDiskCacheExtendedAttributeName = @"com.hackemist.SDDis
         case SDImageCacheConfigExpireTypeChangeDate:
             cacheContentDateKey = NSURLAttributeModificationDateKey;
             break;
+        case SDImageCacheConfigExpireTypeAccessDate:
         default:
+            cacheContentDateKey = NSURLContentAccessDateKey;
             break;
     }
     
     NSArray<NSString *> *resourceKeys = @[NSURLIsDirectoryKey, cacheContentDateKey, NSURLTotalFileAllocatedSizeKey];
     
     // This enumerator prefetches useful properties for our cache files.
-    NSDirectoryEnumerator *fileEnumerator = [self.fileManager enumeratorAtURL:diskCacheURL
+    NSDirectoryEnumerator<NSURL *> *fileEnumerator = [self.fileManager enumeratorAtURL:diskCacheURL
                                                includingPropertiesForKeys:resourceKeys
                                                                   options:NSDirectoryEnumerationSkipsHiddenFiles
                                                              errorHandler:NULL];
@@ -177,25 +187,27 @@ static NSString * const SDDiskCacheExtendedAttributeName = @"com.hackemist.SDDis
     //  2. Storing file attributes for the size-based cleanup pass.
     NSMutableArray<NSURL *> *urlsToDelete = [[NSMutableArray alloc] init];
     for (NSURL *fileURL in fileEnumerator) {
-        NSError *error;
-        NSDictionary<NSString *, id> *resourceValues = [fileURL resourceValuesForKeys:resourceKeys error:&error];
-        
-        // Skip directories and errors.
-        if (error || !resourceValues || [resourceValues[NSURLIsDirectoryKey] boolValue]) {
-            continue;
+        @autoreleasepool {
+            NSError *error;
+            NSDictionary<NSString *, id> *resourceValues = [fileURL resourceValuesForKeys:resourceKeys error:&error];
+            
+            // Skip directories and errors.
+            if (error || !resourceValues || [resourceValues[NSURLIsDirectoryKey] boolValue]) {
+                continue;
+            }
+            
+            // Remove files that are older than the expiration date;
+            NSDate *modifiedDate = resourceValues[cacheContentDateKey];
+            if (expirationDate && [[modifiedDate laterDate:expirationDate] isEqualToDate:expirationDate]) {
+                [urlsToDelete addObject:fileURL];
+                continue;
+            }
+            
+            // Store a reference to this file and account for its total size.
+            NSNumber *totalAllocatedSize = resourceValues[NSURLTotalFileAllocatedSizeKey];
+            currentCacheSize += totalAllocatedSize.unsignedIntegerValue;
+            cacheFiles[fileURL] = resourceValues;
         }
-        
-        // Remove files that are older than the expiration date;
-        NSDate *modifiedDate = resourceValues[cacheContentDateKey];
-        if (expirationDate && [[modifiedDate laterDate:expirationDate] isEqualToDate:expirationDate]) {
-            [urlsToDelete addObject:fileURL];
-            continue;
-        }
-        
-        // Store a reference to this file and account for its total size.
-        NSNumber *totalAllocatedSize = resourceValues[NSURLTotalFileAllocatedSizeKey];
-        currentCacheSize += totalAllocatedSize.unsignedIntegerValue;
-        cacheFiles[fileURL] = resourceValues;
     }
     
     for (NSURL *fileURL in urlsToDelete) {
@@ -237,19 +249,37 @@ static NSString * const SDDiskCacheExtendedAttributeName = @"com.hackemist.SDDis
 
 - (NSUInteger)totalSize {
     NSUInteger size = 0;
-    NSDirectoryEnumerator *fileEnumerator = [self.fileManager enumeratorAtPath:self.diskCachePath];
-    for (NSString *fileName in fileEnumerator) {
-        NSString *filePath = [self.diskCachePath stringByAppendingPathComponent:fileName];
-        NSDictionary<NSString *, id> *attrs = [self.fileManager attributesOfItemAtPath:filePath error:nil];
-        size += [attrs fileSize];
+
+    // Use URL-based enumerator instead of Path(NSString *)-based enumerator to reduce
+    // those objects(ex. NSPathStore2/_NSCFString/NSConcreteData) created during traversal.
+    // Even worse, those objects are added into AutoreleasePool, in background threads, 
+    // the time to release those objects is undifined(according to the usage of CPU)
+    // It will truely consumes a lot of VM, up to cause OOMs.
+    @autoreleasepool {
+        NSURL *pathURL = [NSURL fileURLWithPath:self.diskCachePath isDirectory:YES];
+        NSDirectoryEnumerator<NSURL *> *fileEnumerator = [self.fileManager enumeratorAtURL:pathURL
+                                                  includingPropertiesForKeys:@[NSURLFileSizeKey]
+                                                                     options:(NSDirectoryEnumerationOptions)0
+                                                                errorHandler:NULL];
+        
+        for (NSURL *fileURL in fileEnumerator) {
+            @autoreleasepool {
+                NSNumber *fileSize;
+                [fileURL getResourceValue:&fileSize forKey:NSURLFileSizeKey error:NULL];
+                size += fileSize.unsignedIntegerValue;
+            }
+        }
     }
     return size;
 }
 
 - (NSUInteger)totalCount {
     NSUInteger count = 0;
-    NSDirectoryEnumerator *fileEnumerator = [self.fileManager enumeratorAtPath:self.diskCachePath];
-    count = fileEnumerator.allObjects.count;
+    @autoreleasepool {
+        NSURL *diskCacheURL = [NSURL fileURLWithPath:self.diskCachePath isDirectory:YES];
+        NSDirectoryEnumerator<NSURL *> *fileEnumerator = [self.fileManager enumeratorAtURL:diskCacheURL includingPropertiesForKeys:@[] options:(NSDirectoryEnumerationOptions)0 errorHandler:nil];
+        count = fileEnumerator.allObjects.count;
+    }
     return count;
 }
 
@@ -285,19 +315,43 @@ static NSString * const SDDiskCacheExtendedAttributeName = @"com.hackemist.SDDis
         }
         // New directory does not exist, rename directory
         [self.fileManager moveItemAtPath:srcPath toPath:dstPath error:nil];
+        // disable iCloud backup
+        if (self.config.shouldDisableiCloud) {
+            // ignore iCloud backup resource value error
+            [[NSURL fileURLWithPath:dstPath isDirectory:YES] setResourceValue:@YES forKey:NSURLIsExcludedFromBackupKey error:nil];
+        }
     } else {
         // New directory exist, merge the files
-        NSDirectoryEnumerator *dirEnumerator = [self.fileManager enumeratorAtPath:srcPath];
-        NSString *file;
-        while ((file = [dirEnumerator nextObject])) {
-            [self.fileManager moveItemAtPath:[srcPath stringByAppendingPathComponent:file] toPath:[dstPath stringByAppendingPathComponent:file] error:nil];
+        NSURL *srcURL = [NSURL fileURLWithPath:srcPath isDirectory:YES];
+        NSDirectoryEnumerator<NSURL *> *srcDirEnumerator = [self.fileManager enumeratorAtURL:srcURL
+                                                               includingPropertiesForKeys:@[]
+                                                                                  options:(NSDirectoryEnumerationOptions)0
+                                                                             errorHandler:NULL];
+        for (NSURL *url in srcDirEnumerator) {
+            @autoreleasepool {
+                NSString *dstFilePath = [dstPath stringByAppendingPathComponent:url.lastPathComponent];
+                NSURL *dstFileURL = [NSURL fileURLWithPath:dstFilePath isDirectory:NO];
+                [self.fileManager moveItemAtURL:url toURL:dstFileURL error:nil];
+            }
         }
+        
         // Remove the old path
-        [self.fileManager removeItemAtPath:srcPath error:nil];
+        [self.fileManager removeItemAtURL:srcURL error:nil];
     }
 }
 
 #pragma mark - Hash
+
+static inline NSString *SDSanitizeFileNameString(NSString * _Nullable fileName) {
+    if ([fileName length] == 0) {
+        return fileName;
+    }
+    // note: `:` is the only invalid char on Apple file system
+    // but `/` or `\` is valid
+    // \0 is also special case (which cause Foundation API treat the C string as EOF)
+    NSCharacterSet* illegalFileNameCharacters = [NSCharacterSet characterSetWithCharactersInString:@"\0:"];
+    return [[fileName componentsSeparatedByCharactersInSet:illegalFileNameCharacters] componentsJoinedByString:@""];
+}
 
 #define SD_MAX_FILE_EXTENSION_LENGTH (NAME_MAX - CC_MD5_DIGEST_LENGTH * 2 - 1)
 
@@ -310,8 +364,18 @@ static inline NSString * _Nonnull SDDiskCacheFileNameForKey(NSString * _Nullable
     }
     unsigned char r[CC_MD5_DIGEST_LENGTH];
     CC_MD5(str, (CC_LONG)strlen(str), r);
+    NSString *ext;
+    // 1. Use URL path extname if valid
     NSURL *keyURL = [NSURL URLWithString:key];
-    NSString *ext = keyURL ? keyURL.pathExtension : key.pathExtension;
+    if (keyURL) {
+        ext = keyURL.pathExtension;
+    }
+    // 2. Use file extname if valid
+    if (!ext) {
+        ext = key.pathExtension;
+    }
+    // 3. Check if extname valid on file system
+    ext = SDSanitizeFileNameString(ext);
     // File system has file name length limit, we need to check if ext is too long, we don't add it to the filename
     if (ext.length > SD_MAX_FILE_EXTENSION_LENGTH) {
         ext = nil;

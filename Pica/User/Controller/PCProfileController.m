@@ -84,7 +84,7 @@
 
 - (void)updateAvatarWithImage:(UIImage *)avatar {
     self.avatarSetRequest.avatar = avatar;
-    QMUITips *loading = [QMUITips showLoadingInView:DefaultTipsParentView];
+    QMUITips *loading = [QMUITips showLoadingInView:PCDefaultTipsParentView];
     
     [self.avatarSetRequest sendRequest:^(id  _Nonnull response) {
         [loading hideAnimated:YES];
@@ -99,7 +99,7 @@
         return;
     }
     self.sloganSetRequest.slogan = slogan;
-    QMUITips *loading = [QMUITips showLoadingInView:DefaultTipsParentView];
+    QMUITips *loading = [QMUITips showLoadingInView:PCDefaultTipsParentView];
     
     [self.sloganSetRequest sendRequest:^(id  _Nonnull response) {
         [loading hideAnimated:YES];

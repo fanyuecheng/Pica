@@ -11,6 +11,7 @@
 #import <YYModel/YYModel.h>
 #import "NSString+PCAdd.h"
 #import "AppDelegate.h"
+#import "PCDefineHeader.h"
 
 #define PC_API_KEY_IOS       @"2587EFC6F859B4E3A1D8B6D33B272"
 #define PC_API_KEY_ANDROID   @"C69BAF41DA5ABD1FFEDC6D2FEA56B"
@@ -94,7 +95,7 @@ static NSString *appuuid;
             if (request.error) {
                 NSDictionary *response = request.responseJSONObject;
                 [request.error qmui_bindObject:response forKey:PC_ERROR_DATA];
-                [QMUITips showError:[NSString stringWithFormat:@"error:%@\nmessage:%@\ndetail:%@", response[@"error"], response[@"message"], response[@"detail"]] inView:DefaultTipsParentView];
+                [QMUITips showError:[NSString stringWithFormat:@"error:%@\nmessage:%@\ndetail:%@", response[@"error"], response[@"message"], response[@"detail"]] inView:PCDefaultTipsParentView];
                 if ([response[@"error"] isEqualToString:@"1005"] &&
                     [response[@"message"] isEqualToString:@"unauthorized"] &&
                     [response[@"code"] integerValue] == 401) {

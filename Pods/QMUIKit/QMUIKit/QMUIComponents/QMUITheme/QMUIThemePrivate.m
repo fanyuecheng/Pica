@@ -38,7 +38,6 @@
 #import "QMUIImagePreviewView.h"
 #import "QMUILabel.h"
 #import "QMUIPopupContainerView.h"
-#import "QMUIPopupMenuButtonItem.h"
 #import "QMUIPopupMenuView.h"
 #import "QMUITextField.h"
 #import "QMUITextView.h"
@@ -130,10 +129,10 @@
                                                                                                       NSStringFromSelector(@selector(maskViewBackgroundColor)),
                                                                                                       NSStringFromSelector(@selector(borderColor)),
                                                                                                       NSStringFromSelector(@selector(arrowImage)),],
-                                       NSStringFromClass(QMUIPopupMenuButtonItem.class):            @[NSStringFromSelector(@selector(highlightedBackgroundColor)),],
                                        NSStringFromClass(QMUIPopupMenuView.class):                  @[NSStringFromSelector(@selector(itemSeparatorColor)),
                                                                                                       NSStringFromSelector(@selector(sectionSeparatorColor)),
-                                                                                                      NSStringFromSelector(@selector(itemTitleColor))],
+                                                                                                      NSStringFromSelector(@selector(sectionSpacingColor)),],
+                                       NSStringFromClass(QMUIPopupMenuItemView.class):              @[NSStringFromSelector(@selector(highlightedBackgroundColor))],
                                        NSStringFromClass(QMUITextField.class):                      @[NSStringFromSelector(@selector(placeholderColor)),],
                                        NSStringFromClass(QMUITextView.class):                       @[NSStringFromSelector(@selector(placeholderColor)),],
                                        NSStringFromClass(QMUIToastBackgroundView.class):            @[NSStringFromSelector(@selector(styleColor)),],
@@ -365,6 +364,55 @@
 
 @end
 
+@implementation UIActivityIndicatorView (QMUIThemeCompatibility)
+
++ (void)load {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        OverrideImplementation([UIActivityIndicatorView class], @selector(setColor:), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
+            return ^(UIActivityIndicatorView *selfObject, UIColor *color) {
+                
+                if (color.qmui_isQMUIDynamicColor && color == selfObject.color) {
+                    color = color.copy;
+                }
+                
+                // call super
+                void (*originSelectorIMP)(id, SEL, UIColor *);
+                originSelectorIMP = (void (*)(id, SEL, UIColor *))originalIMPProvider();
+                originSelectorIMP(selfObject, originCMD, color);
+            };
+        });
+    });
+}
+
+@end
+
+@implementation UIImageView (QMUIThemeCompatibility)
+
++ (void)load {
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        // https://github.com/Tencent/QMUI_iOS/issues/1507
+        if (@available(iOS 17.0, *)) {
+            OverrideImplementation([UIImageView class], @selector(setImage:), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
+                return ^(UIImageView *selfObject, UIImage *image) {
+                    
+                    if (image.qmui_isDynamicImage && image == selfObject.image) {
+                        image = image.copy;
+                    }
+                    
+                    // call super
+                    void (*originSelectorIMP)(id, SEL, UIImage *);
+                    originSelectorIMP = (void (*)(id, SEL, UIImage *))originalIMPProvider();
+                    originSelectorIMP(selfObject, originCMD, image);
+                };
+            });
+        }
+    });
+}
+
+@end
+
 @interface CALayer ()
 
 @property(nonatomic, strong) UIColor *qcl_originalBackgroundColor;
@@ -398,6 +446,19 @@ QMUISynthesizeIdStrongProperty(qcl_originalShadowColor, setQcl_originalShadowCol
             };
         });
         
+        OverrideImplementation([UIView class], @selector(setBackgroundColor:), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
+            return ^(UIView *selfObject, UIColor *backgroundColor) {
+                
+                /// https://github.com/Tencent/QMUI_iOS/issues/1597
+                selfObject.layer.qcl_originalBackgroundColor = backgroundColor.qmui_isQMUIDynamicColor ? backgroundColor : nil;
+                
+                // call super
+                void (*originSelectorIMP)(id, SEL, UIColor *);
+                originSelectorIMP = (void (*)(id, SEL, UIColor *))originalIMPProvider();
+                originSelectorIMP(selfObject, originCMD, backgroundColor);
+            };
+        });
+       
         OverrideImplementation([CALayer class], @selector(setBorderColor:), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
             return ^(CALayer *selfObject, CGColorRef color) {
                 
@@ -426,9 +487,9 @@ QMUISynthesizeIdStrongProperty(qcl_originalShadowColor, setQcl_originalShadowCol
         
         // iOS 13 下，如果系统的主题发生变化，会自动调用每个 view 的 layoutSubviews，所以我们在这里面自动更新样式
         // 如果是 QMUIThemeManager 引发的主题变化，会在 theme 那边主动调用 qmui_setNeedsUpdateDynamicStyle，就不依赖这里
-        ExtendImplementationOfVoidMethodWithoutArguments([UIView class], @selector(layoutSubviews), ^(UIView *selfObject) {
-            [selfObject.layer qmui_setNeedsUpdateDynamicStyle];
-        });
+//        ExtendImplementationOfVoidMethodWithoutArguments([UIView class], @selector(layoutSubviews), ^(UIView *selfObject) {
+//            [selfObject.layer qmui_setNeedsUpdateDynamicStyle];
+//        });
     });
 }
 

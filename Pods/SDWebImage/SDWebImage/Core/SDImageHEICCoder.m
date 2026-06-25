@@ -75,7 +75,15 @@ static NSString * kSDCGImagePropertyHEICSUnclampedDelayTime = @"UnclampedDelayTi
 }
 
 + (NSString *)imageUTType {
+    // See: https://nokiatech.github.io/heif/technical.html
+    // Actually HEIC has another concept called `non-timed Image Sequence`, which can be encoded using `public.heic`
     return (__bridge NSString *)kSDUTTypeHEIC;
+}
+
++ (NSString *)animatedImageUTType {
+    // See: https://nokiatech.github.io/heif/technical.html
+    // We use `timed Image Sequence`, means, `public.heics` for animated image encoding
+    return (__bridge NSString *)kSDUTTypeHEICS;
 }
 
 + (NSString *)dictionaryProperty {

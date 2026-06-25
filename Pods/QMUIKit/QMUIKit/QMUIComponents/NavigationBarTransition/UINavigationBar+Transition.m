@@ -18,7 +18,9 @@
 #import "UINavigationBar+QMUI.h"
 #import "UINavigationBar+QMUIBarProtocol.h"
 #import "QMUIWeakObjectContainer.h"
+#import "QMUIBarProtocolPrivate.h"
 #import "UIImage+QMUI.h"
+#import "CALayer+QMUI.h"
 
 @implementation UINavigationBar (Transition)
 
@@ -26,32 +28,63 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         
-#ifdef IOS15_SDK_ALLOWED
         if (@available(iOS 15.0, *)) {
-            ExtendImplementationOfVoidMethodWithSingleArgument([UINavigationBar class], @selector(setStandardAppearance:), UINavigationBarAppearance *, ^(UINavigationBar *selfObject, UINavigationBarAppearance *appearance) {
-                if (selfObject.qmuinb_copyStylesToBar) {
-                    selfObject.qmuinb_copyStylesToBar.standardAppearance = appearance;
-                }
+            
+            OverrideImplementation([UINavigationBar class], @selector(setStandardAppearance:), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
+                return ^(UINavigationBar *selfObject, UINavigationBarAppearance *appearance) {
+                    
+                    // call super
+                    void (*originSelectorIMP)(id, SEL, UINavigationBarAppearance *);
+                    originSelectorIMP = (void (*)(id, SEL, UINavigationBarAppearance *))originalIMPProvider();
+                    originSelectorIMP(selfObject, originCMD, appearance);
+                    
+                    if (selfObject.qmuinb_copyStylesToBar) {
+                        selfObject.qmuinb_copyStylesToBar.standardAppearance = appearance;
+                    }
+                };
             });
             
-            ExtendImplementationOfVoidMethodWithSingleArgument([UINavigationBar class], @selector(setScrollEdgeAppearance:), UINavigationBarAppearance *, ^(UINavigationBar *selfObject, UINavigationBarAppearance *appearance) {
-                if (selfObject.qmuinb_copyStylesToBar) {
-                    selfObject.qmuinb_copyStylesToBar.scrollEdgeAppearance = appearance;
-                }
+            OverrideImplementation([UINavigationBar class], @selector(setScrollEdgeAppearance:), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
+                return ^(UINavigationBar *selfObject, UINavigationBarAppearance *appearance) {
+                    
+                    // call super
+                    void (*originSelectorIMP)(id, SEL, UINavigationBarAppearance *);
+                    originSelectorIMP = (void (*)(id, SEL, UINavigationBarAppearance *))originalIMPProvider();
+                    originSelectorIMP(selfObject, originCMD, appearance);
+                    
+                    if (selfObject.qmuinb_copyStylesToBar) {
+                        selfObject.qmuinb_copyStylesToBar.scrollEdgeAppearance = appearance;
+                    }
+                };
             });
         }
-#endif
         
-        ExtendImplementationOfVoidMethodWithSingleArgument([UINavigationBar class], @selector(setBarStyle:), UIBarStyle, ^(UINavigationBar *selfObject, UIBarStyle barStyle) {
-            if (selfObject.qmuinb_copyStylesToBar && selfObject.qmuinb_copyStylesToBar.barStyle != barStyle) {
-                selfObject.qmuinb_copyStylesToBar.barStyle = barStyle;
-            }
+        OverrideImplementation([UINavigationBar class], @selector(setBarStyle:), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
+            return ^(UINavigationBar *selfObject, UIBarStyle barStyle) {
+                
+                // call super
+                void (*originSelectorIMP)(id, SEL, UIBarStyle);
+                originSelectorIMP = (void (*)(id, SEL, UIBarStyle))originalIMPProvider();
+                originSelectorIMP(selfObject, originCMD, barStyle);
+                
+                if (selfObject.qmuinb_copyStylesToBar && selfObject.qmuinb_copyStylesToBar.barStyle != barStyle) {
+                    selfObject.qmuinb_copyStylesToBar.barStyle = barStyle;
+                }
+            };
         });
         
-        ExtendImplementationOfVoidMethodWithSingleArgument([UINavigationBar class], @selector(setBarTintColor:), UIColor *, ^(UINavigationBar *selfObject, UIColor *barTintColor) {
-            if (selfObject.qmuinb_copyStylesToBar && ![selfObject.qmuinb_copyStylesToBar.barTintColor isEqual:barTintColor]) {
-                selfObject.qmuinb_copyStylesToBar.barTintColor = barTintColor;
-            }
+        OverrideImplementation([UINavigationBar class], @selector(setBarTintColor:), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
+            return ^(UINavigationBar *selfObject, UIColor *barTintColor) {
+                
+                // call super
+                void (*originSelectorIMP)(id, SEL, UIColor *);
+                originSelectorIMP = (void (*)(id, SEL, UIColor *))originalIMPProvider();
+                originSelectorIMP(selfObject, originCMD, barTintColor);
+                
+                if (selfObject.qmuinb_copyStylesToBar && ![selfObject.qmuinb_copyStylesToBar.barTintColor isEqual:barTintColor]) {
+                    selfObject.qmuinb_copyStylesToBar.barTintColor = barTintColor;
+                }
+            };
         });
         
         OverrideImplementation([UINavigationBar class], @selector(setBackgroundImage:forBarMetrics:), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
@@ -68,10 +101,18 @@
             };
         });
         
-        ExtendImplementationOfVoidMethodWithSingleArgument([UINavigationBar class], @selector(setShadowImage:), UIImage *, ^(UINavigationBar *selfObject, UIImage *firstArgv) {
-            if (selfObject.qmuinb_copyStylesToBar) {
-                selfObject.qmuinb_copyStylesToBar.shadowImage = firstArgv;
-            }
+        OverrideImplementation([UINavigationBar class], @selector(setShadowImage:), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
+            return ^(UINavigationBar *selfObject, UIImage *shadowImage) {
+                
+                // call super
+                void (*originSelectorIMP)(id, SEL, UIImage *);
+                originSelectorIMP = (void (*)(id, SEL, UIImage *))originalIMPProvider();
+                originSelectorIMP(selfObject, originCMD, shadowImage);
+                
+                if (selfObject.qmuinb_copyStylesToBar) {
+                    selfObject.qmuinb_copyStylesToBar.shadowImage = shadowImage;
+                }
+            };
         });
         
         OverrideImplementation([UINavigationBar class], @selector(setQmui_effect:), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
@@ -183,6 +224,21 @@ static char kAssociatedObjectKey_copyStylesToBar;
             });
         }
         
+        OverrideImplementation(NSClassFromString(@"_UIBarBackground"), @selector(didMoveToWindow), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
+            return ^(UIView *selfObject) {
+                
+                // call super
+                void (*originSelectorIMP)(id, SEL);
+                originSelectorIMP = (void (*)(id, SEL))originalIMPProvider();
+                originSelectorIMP(selfObject, originCMD);
+                
+                _QMUITransitionNavigationBar *navigationBar = (_QMUITransitionNavigationBar *)selfObject.superview;
+                if (selfObject.window != nil && [navigationBar isKindOfClass:_QMUITransitionNavigationBar.class]) {
+                    [navigationBar updateLayout];
+                }
+            };
+        });
+        
 #ifdef IOS15_SDK_ALLOWED
         if (@available(iOS 15.0, *)) {
             // - [UINavigationBar _didMoveFromWindow:toWindow:]
@@ -211,12 +267,17 @@ static char kAssociatedObjectKey_copyStylesToBar;
     // 只复制当前 originBar 的样式，所以复制完立马就清空
     originBar.qmuinb_copyStylesToBar = self;
     originBar.qmuinb_copyStylesToBar = nil;
+    
+    [self updateLayout];
 }
 
 - (void)layoutSubviews {
-    [super layoutSubviews];
-    // 实测 iOS 11 Beta 1-5 里，自己 init 的 navigationBar.backgroundView.height 默认一直是 44，所以才加上这个兼容
-    self.qmui_backgroundView.frame = self.bounds;
+    [CALayer qmui_performWithoutAnimation:^{
+        [super layoutSubviews];
+        // 实测 iOS 11 Beta 1-5 里，自己 init 的 navigationBar.backgroundView.height 默认一直是 44，所以才加上这个兼容
+        self.qmui_backgroundView.frame = self.bounds;
+        [self.qmui_backgroundView layoutIfNeeded];
+    }];
 }
 
 // NavBarRemoveBackgroundEffectAutomatically 在开启了 AutomaticCustomNavigationBarTransitionStyle 时可能对假 bar 无效
@@ -225,6 +286,28 @@ static char kAssociatedObjectKey_copyStylesToBar;
     [super didAddSubview:subview];
     if (subview == self.qmui_backgroundView) {
         [subview qmui_performSelector:NSSelectorFromString(@"updateBackground") withArguments:nil];
+    }
+}
+
+- (void)updateLayout {
+    if ([self.parentViewController isViewLoaded] && self.originalNavigationBar) {
+        [self.parentViewController.view bringSubviewToFront:self];
+        UIView *backgroundView = self.originalNavigationBar.qmui_backgroundView;
+        CGRect rect = [backgroundView.superview convertRect:backgroundView.frame toView:self.parentViewController.view];
+        if (QMUIHelper.isUsedLiquidGlass) {
+            // 不需要处理
+        } else {
+            // Xcode 26.x编译后，灵动岛机型会多出一块，感觉是UIKit的bug🤷‍♂️，暂时这么处理吧
+            if (ceil(CGRectGetMinY(rect)) == -5) {
+                rect.size.height += CGRectGetMinY(rect);
+            }
+        }
+        [CALayer qmui_performWithoutAnimation:^{
+            // push/pop 过程中系统的导航栏转换过来的 x 可能是 112、-112
+            // iOS 26上，y 可能是 -113
+            self.frame = CGRectSetXY(rect, 0, 0);
+            [self layoutIfNeeded];
+        }];
     }
 }
 

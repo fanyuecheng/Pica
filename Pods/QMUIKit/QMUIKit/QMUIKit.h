@@ -13,7 +13,7 @@
 #ifndef QMUIKit_h
 #define QMUIKit_h
 
-static NSString * const QMUI_VERSION = @"4.6.3";
+static NSString * const QMUI_VERSION = @"4.8.0";
 
 #if __has_include("CAAnimation+QMUI.h")
 #import "CAAnimation+QMUI.h"
@@ -39,6 +39,10 @@ static NSString * const QMUI_VERSION = @"4.6.3";
 #import "NSCharacterSet+QMUI.h"
 #endif
 
+#if __has_include("NSDictionary+QMUI.h")
+#import "NSDictionary+QMUI.h"
+#endif
+
 #if __has_include("NSMethodSignature+QMUI.h")
 #import "NSMethodSignature+QMUI.h"
 #endif
@@ -61,6 +65,10 @@ static NSString * const QMUI_VERSION = @"4.6.3";
 
 #if __has_include("NSPointerArray+QMUI.h")
 #import "NSPointerArray+QMUI.h"
+#endif
+
+#if __has_include("NSRegularExpression+QMUI.h")
+#import "NSRegularExpression+QMUI.h"
 #endif
 
 #if __has_include("NSShadow+QMUI.h")
@@ -103,6 +111,10 @@ static NSString * const QMUI_VERSION = @"4.6.3";
 #import "QMUIAssetsManager.h"
 #endif
 
+#if __has_include("QMUIBadgeLabel.h")
+#import "QMUIBadgeLabel.h"
+#endif
+
 #if __has_include("QMUIBadgeProtocol.h")
 #import "QMUIBadgeProtocol.h"
 #endif
@@ -125,6 +137,10 @@ static NSString * const QMUI_VERSION = @"4.6.3";
 
 #if __has_include("QMUICellSizeKeyCache.h")
 #import "QMUICellSizeKeyCache.h"
+#endif
+
+#if __has_include("QMUICheckbox.h")
+#import "QMUICheckbox.h"
 #endif
 
 #if __has_include("QMUICollectionViewPagingLayout.h")
@@ -243,6 +259,22 @@ static NSString * const QMUI_VERSION = @"4.6.3";
 #import "QMUILabel.h"
 #endif
 
+#if __has_include("QMUILayouter.h")
+#import "QMUILayouter.h"
+#endif
+
+#if __has_include("QMUILayouterItem.h")
+#import "QMUILayouterItem.h"
+#endif
+
+#if __has_include("QMUILayouterLinearHorizontal.h")
+#import "QMUILayouterLinearHorizontal.h"
+#endif
+
+#if __has_include("QMUILayouterLinearVertical.h")
+#import "QMUILayouterLinearVertical.h"
+#endif
+
 #if __has_include("QMUILog+QMUIConsole.h")
 #import "QMUILog+QMUIConsole.h"
 #endif
@@ -319,16 +351,16 @@ static NSString * const QMUI_VERSION = @"4.6.3";
 #import "QMUIPopupContainerView.h"
 #endif
 
-#if __has_include("QMUIPopupMenuBaseItem.h")
-#import "QMUIPopupMenuBaseItem.h"
+#if __has_include("QMUIPopupMenuItem.h")
+#import "QMUIPopupMenuItem.h"
 #endif
 
-#if __has_include("QMUIPopupMenuButtonItem.h")
-#import "QMUIPopupMenuButtonItem.h"
+#if __has_include("QMUIPopupMenuItemView.h")
+#import "QMUIPopupMenuItemView.h"
 #endif
 
-#if __has_include("QMUIPopupMenuItemProtocol.h")
-#import "QMUIPopupMenuItemProtocol.h"
+#if __has_include("QMUIPopupMenuItemViewProtocol.h")
+#import "QMUIPopupMenuItemViewProtocol.h"
 #endif
 
 #if __has_include("QMUIPopupMenuView.h")
@@ -353,6 +385,14 @@ static NSString * const QMUI_VERSION = @"4.6.3";
 
 #if __has_include("QMUISegmentedControl.h")
 #import "QMUISegmentedControl.h"
+#endif
+
+#if __has_include("QMUISheetPresentationNavigationBar.h")
+#import "QMUISheetPresentationNavigationBar.h"
+#endif
+
+#if __has_include("QMUISheetPresentationSupports.h")
+#import "QMUISheetPresentationSupports.h"
 #endif
 
 #if __has_include("QMUIStaticTableViewCellData.h")

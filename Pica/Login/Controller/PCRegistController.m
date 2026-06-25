@@ -160,7 +160,7 @@
         return;
     }
     
-    QMUITips *loading = [QMUITips showLoadingInView:DefaultTipsParentView];
+    QMUITips *loading = [QMUITips showLoadingInView:PCDefaultTipsParentView];
     
     PCRegistRequest *request = [[PCRegistRequest alloc] init];
     request.name = name;
@@ -234,7 +234,7 @@
     request.answer2 = [NSString pc_randomTextWithLength:20];
     request.answer3 = [NSString pc_randomTextWithLength:20];
     
-    QMUITips *loading = [QMUITips showLoadingInView:DefaultTipsParentView];
+    QMUITips *loading = [QMUITips showLoadingInView:PCDefaultTipsParentView];
     NSDictionary *arg = [request requestArgument];
 
     [request sendRequest:^(id  _Nonnull response) {
