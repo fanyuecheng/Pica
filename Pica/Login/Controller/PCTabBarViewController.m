@@ -36,25 +36,26 @@
                                               image:[UIImage pc_iconWithText:ICON_MODULAR size:22 color:UIColorGrayLighten]
                                       selectedImage:[UIImage pc_iconWithText:ICON_MODULAR size:22 color:UIColorBlue]
                                                 tag:0];
-     
+     /*
     PCNavigationController *chat = [[PCNavigationController alloc] initWithRootViewController:self.chatController];
     chat.tabBarItem = [self tabBarItemWithTitle:@"聊天"
                                         image:[UIImage pc_iconWithText:ICON_CHAT size:22 color:UIColorGrayLighten]
                                 selectedImage:[UIImage pc_iconWithText:ICON_CHAT size:22 color:UIColorBlue]
                                           tag:1];
+      */
     
     PCNavigationController *game = [[PCNavigationController alloc] initWithRootViewController:self.gameController];
     game.tabBarItem = [self tabBarItemWithTitle:@"游戏"
                                         image:[UIImage pc_iconWithText:ICON_GAME size:22 color:UIColorGrayLighten]
                                 selectedImage:[UIImage pc_iconWithText:ICON_GAME size:22 color:UIColorBlue]
-                                          tag:2];
+                                          tag:1];
     
     PCNavigationController *me = [[PCNavigationController alloc] initWithRootViewController:self.profileController];
     me.tabBarItem = [self tabBarItemWithTitle:@"我的"
                                         image:[UIImage pc_iconWithText:ICON_USER size:22 color:UIColorGrayLighten]
                                 selectedImage:[UIImage pc_iconWithText:ICON_USER size:22 color:UIColorBlue]
-                                          tag:3];
-    self.controllerArray = @[category, chat, game, me];
+                                          tag:2];
+    self.controllerArray = @[category, game, me];
     
     [self reloadViewControllers];
 }

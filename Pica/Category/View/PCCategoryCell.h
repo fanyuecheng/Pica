@@ -17,6 +17,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, strong) SDAnimatedImageView *imageView;
 @property (nonatomic, strong) QMUILabel           *titleLabel;
 @property (nonatomic, strong) QMUILabel           *iconLabel;
+@property (nonatomic, strong) QMUILabel           *badgeLabel;
 @property (nonatomic, strong) PCCategory *category;
 
 @end
