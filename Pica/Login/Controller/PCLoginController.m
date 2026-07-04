@@ -70,7 +70,7 @@
     NSString *password = self.passwordTextField.text;
     
     if (account.length && password.length) {
-        QMUITips *loading = [QMUITips showLoadingInView:DefaultTipsParentView];
+        QMUITips *loading = [QMUITips showLoadingInView:PCDefaultTipsParentView];
         if (self.isNewChatLogin) {
             PCNewChatLoginRequest *request = [[PCNewChatLoginRequest alloc] initWithAccount:account password:password];
             [request sendRequest:^(id  _Nonnull response) {

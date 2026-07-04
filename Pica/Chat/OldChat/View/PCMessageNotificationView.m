@@ -8,6 +8,7 @@
 
 #import "PCMessageNotificationView.h"
 #import "PCVendorHeader.h"
+#import "PCDefineHeader.h"
 
 static NSMutableArray <PCMessageNotificationView *> *kMessageNotificationViewArray = nil;
 
@@ -91,7 +92,7 @@ static NSMutableArray <PCMessageNotificationView *> *kMessageNotificationViewArr
     [self sizeToFit];
     self.frame = CGRectSetXY(self.bounds, 0, -self.qmui_height);
     
-    [DefaultTipsParentView addSubview:self];
+    [PCDefaultTipsParentView addSubview:self];
     
     if (animated) {
          [UIView animateWithDuration:0.25 delay:0.0 options:QMUIViewAnimationOptionsCurveOut|UIViewAnimationOptionBeginFromCurrentState animations:^{

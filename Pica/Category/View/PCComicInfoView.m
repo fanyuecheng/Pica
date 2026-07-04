@@ -378,7 +378,7 @@
         button.layer.borderWidth = .5;
         button.titleLabel.font = UIFontBoldMake(13);
         [button setTitle:obj forState:UIControlStateNormal];
-        button.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 12, 10);
+        button.contentEdgeInsets = UIEdgeInsetsMake(6, 10, 6, 10);
         [button addTarget:self action:@selector(tagAction:) forControlEvents:UIControlEventTouchUpInside];
         [self.tagView addSubview:button];
     }];

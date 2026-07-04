@@ -61,8 +61,10 @@
         button.cornerRadius = QMUIButtonCornerRadiusAdjustsBounds;
         button.layer.borderColor = UIColorBlue.CGColor;
         button.layer.borderWidth = .5;
-        button.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 10, 10);
+        button.titleLabel.font = UIFontBoldMake(13);
         [button setTitle:obj forState:UIControlStateNormal];
+        button.contentEdgeInsets = UIEdgeInsetsZero;
+        button.titleEdgeInsets = UIEdgeInsetsMake(0, 10, 10, 10);
         [button addTarget:self action:@selector(tagAction:) forControlEvents:UIControlEventTouchUpInside];
         [self.contentView addSubview:button];
     }];

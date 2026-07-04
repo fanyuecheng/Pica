@@ -19,6 +19,8 @@
 #import "QMUIAppearance.h"
 #import "QMUIMultipleDelegates.h"
 #import "NSArray+QMUI.h"
+#import "UIView+QMUI.h"
+#import "UIApplication+QMUI.h"
 
 @class QMUIKeyboardViewFrameObserver;
 @protocol QMUIKeyboardViewFrameObserverDelegate <NSObject>
@@ -395,10 +397,10 @@ static char kAssociatedObjectKey_KeyboardViewFrameObserver;
 }
 
 - (UIResponder *)firstResponderInWindows {
-    UIResponder *responder = [UIApplication.sharedApplication.keyWindow qmui_findFirstResponder];
+    UIResponder *responder = [UIApplication.sharedApplication.qmui_keyWindow qmui_findFirstResponder];
     if (!responder) {
-        for (UIWindow *window in UIApplication.sharedApplication.windows) {
-            if (window != UIApplication.sharedApplication.keyWindow) {
+        for (UIWindow *window in UIApplication.sharedApplication.qmui_windows) {
+            if (window != UIApplication.sharedApplication.qmui_keyWindow) {
                 responder = [window qmui_findFirstResponder];
                 if (responder) {
                     return responder;
@@ -708,7 +710,7 @@ static char kAssociatedObjectKey_KeyboardViewFrameObserver;
         keyboardMoveUserInfo.animationOptions = self.lastUserInfo ? self.lastUserInfo.animationOptions : keyboardMoveUserInfo.animationCurve<<16;
         keyboardMoveUserInfo.beginFrame = self.keyboardMoveBeginRect;
         keyboardMoveUserInfo.endFrame = endFrame;
-        keyboardMoveUserInfo.isFloatingKeyboard = keyboardView ? CGRectGetWidth(keyboardView.bounds) < CGRectGetWidth(UIApplication.sharedApplication.delegate.window.bounds) : NO;
+        keyboardMoveUserInfo.isFloatingKeyboard = keyboardView ? CGRectGetWidth(keyboardView.bounds) < CGRectGetWidth(UIApplication.sharedApplication.qmui_delegateWindow.bounds) : NO;
         
         if (self.debug) {
             NSLog(@"keyboardDidMoveNotification - %@\n", self);
@@ -719,7 +721,7 @@ static char kAssociatedObjectKey_KeyboardViewFrameObserver;
         self.keyboardMoveBeginRect = endFrame;
         
         if (self.currentResponder) {
-            UIWindow *mainWindow = UIApplication.sharedApplication.keyWindow ?: UIApplication.sharedApplication.delegate.window;
+            UIWindow *mainWindow = UIApplication.sharedApplication.qmui_keyWindow ?: UIApplication.sharedApplication.qmui_delegateWindow;
             if (mainWindow) {
                 CGRect keyboardRect = keyboardMoveUserInfo.endFrame;
                 CGFloat distanceFromBottom = [QMUIKeyboardManager distanceFromMinYToBottomInView:mainWindow keyboardRect:keyboardRect];
@@ -792,7 +794,7 @@ static char kAssociatedObjectKey_KeyboardViewFrameObserver;
         return rect;
     }
     
-    UIWindow *mainWindow = UIApplication.sharedApplication.keyWindow ?: UIApplication.sharedApplication.delegate.window;
+    UIWindow *mainWindow = UIApplication.sharedApplication.qmui_keyWindow ?: UIApplication.sharedApplication.qmui_delegateWindow;
     if (!mainWindow) {
         if (view) {
             [view convertRect:rect fromView:nil];
@@ -830,38 +832,8 @@ static char kAssociatedObjectKey_KeyboardViewFrameObserver;
     return distance;
 }
 
-+ (UIWindow *)keyboardWindow {
-    for (UIWindow *window in UIApplication.sharedApplication.windows) {
-        if ([self positionedKeyboardViewInWindow:window]) {
-            return window;
-        }
-    }
-    
-    UIWindow *window = [UIApplication.sharedApplication.windows qmui_firstMatchWithBlock:^BOOL(__kindof UIWindow * _Nonnull item) {
-        return [NSStringFromClass(item.class) isEqualToString:@"UIRemoteKeyboardWindow"];
-    }];
-    if (window) {
-        return window;
-    }
-    
-    window = [UIApplication.sharedApplication.windows qmui_firstMatchWithBlock:^BOOL(__kindof UIWindow * _Nonnull item) {
-        return [NSStringFromClass(item.class) isEqualToString:@"UITextEffectsWindow"];
-    }];
-    return window;
-}
-
-+ (UIView *)keyboardView {
-    for (UIWindow *window in UIApplication.sharedApplication.windows) {
-        UIView *view = [self positionedKeyboardViewInWindow:window];
-        if (view) {
-            return view;
-        }
-    }
-    return nil;
-}
-
 /**
- 从给定的 window 里寻找代表键盘当前布局位置的 view。
+ 从所有 window 里寻找代表键盘当前布局位置的 view。
  iOS 15 及以前（包括用 Xcode 13 编译的 App 运行在 iOS 16 上的场景），键盘的 UI 层级是：
  |- UIApplication.windows
     |- UIRemoteKeyboardWindow
@@ -883,28 +855,58 @@ static char kAssociatedObjectKey_KeyboardViewFrameObserver;
  
  所以只要找到 UIInputSetHostView 即可，优先从 UIRemoteKeyboardWindow 找，不存在的话则从 UITextEffectsWindow 找。
  */
-+ (UIView *)positionedKeyboardViewInWindow:(UIWindow *)window {
++ (UIView *)keyboardView {
+    UIView *inputSetHostView = [[UIApplication.sharedApplication.qmui_windows qmui_filterWithBlock:^BOOL(__kindof UIWindow * _Nonnull window) {
+        return [NSStringFromClass(window.class) isEqualToString:@"UIRemoteKeyboardWindow"];
+    }] qmui_compactMapWithBlock:^id _Nullable(__kindof UIWindow * _Nonnull window) {
+        return [self inputSetHostViewInWindow:window];
+    }].firstObject;
     
-    if (!window) return nil;
+    if (inputSetHostView) return inputSetHostView;
     
-    NSString *windowName = NSStringFromClass(window.class);
-    if ([windowName isEqualToString:@"UIRemoteKeyboardWindow"]) {
+    inputSetHostView = [[UIApplication.sharedApplication.qmui_windows qmui_filterWithBlock:^BOOL(__kindof UIWindow * _Nonnull window) {
+        return [NSStringFromClass(window.class) isEqualToString:@"UITextEffectsWindow"];
+    }] qmui_compactMapWithBlock:^id _Nullable(__kindof UIWindow * _Nonnull window) {
+        return [self inputSetHostViewInWindow:window];
+    }].firstObject;
+    
+    return inputSetHostView;
+}
+
++ (UIView *)inputSetHostViewInWindow:(UIWindow *)window {
+    if (QMUIHelper.isUsedLiquidGlass) {
         UIView *result = [[window.subviews qmui_firstMatchWithBlock:^BOOL(__kindof UIView * _Nonnull subview) {
-            return [NSStringFromClass(subview.class) isEqualToString:@"UIInputSetContainerView"];
+            return [NSStringFromClass(subview.class) isEqualToString:@"UITrackingWindowView"];
         }].subviews qmui_firstMatchWithBlock:^BOOL(__kindof UIView * _Nonnull subview) {
-            return [NSStringFromClass(subview.class) isEqualToString:@"UIInputSetHostView"];
+            return [NSStringFromClass(subview.class) isEqualToString:@"UIKeyboardItemContainerView"] && subview.subviews.count;
         }];
-        return result;
+        if (result) {
+            return result;
+        }
     }
-    if ([windowName isEqualToString:@"UITextEffectsWindow"]) {
-        UIView *result = [[window.subviews qmui_firstMatchWithBlock:^BOOL(__kindof UIView * _Nonnull subview) {
-            return [NSStringFromClass(subview.class) isEqualToString:@"UIInputSetContainerView"];
-        }].subviews qmui_firstMatchWithBlock:^BOOL(__kindof UIView * _Nonnull subview) {
-            return [NSStringFromClass(subview.class) isEqualToString:@"UIInputSetHostView"] && subview.subviews.count;
-        }];
-        return result;
+    UIView *result = [[window.subviews qmui_firstMatchWithBlock:^BOOL(__kindof UIView * _Nonnull subview) {
+        return [NSStringFromClass(subview.class) isEqualToString:@"UIInputSetContainerView"];
+    }].subviews qmui_firstMatchWithBlock:^BOOL(__kindof UIView * _Nonnull subview) {
+        return [NSStringFromClass(subview.class) isEqualToString:@"UIInputSetHostView"] && subview.subviews.count;
+    }];
+    return result;
+}
+
++ (UIWindow *)keyboardWindow {
+    UIView *inputSetHostView = [self keyboardView];
+    if (inputSetHostView) return inputSetHostView.window;
+    
+    UIWindow *window = [UIApplication.sharedApplication.qmui_windows qmui_firstMatchWithBlock:^BOOL(__kindof UIWindow * _Nonnull item) {
+        return [NSStringFromClass(item.class) isEqualToString:@"UIRemoteKeyboardWindow"];
+    }];
+    if (window) {
+        return window;
     }
-    return nil;
+    
+    window = [UIApplication.sharedApplication.qmui_windows qmui_firstMatchWithBlock:^BOOL(__kindof UIWindow * _Nonnull item) {
+        return [NSStringFromClass(item.class) isEqualToString:@"UITextEffectsWindow"];
+    }];
+    return window;
 }
 
 + (BOOL)isKeyboardVisible {
@@ -935,7 +937,10 @@ static char kAssociatedObjectKey_KeyboardViewFrameObserver;
 
 + (CGFloat)visibleKeyboardHeight {
     UIView *keyboardView = [self keyboardView];
-    UIWindow *keyboardWindow = keyboardView.window;
+    // iPad“侧拉”模式打开的 App，App Window 和键盘 Window 尺寸不同，如果以键盘 Window 为准则会认为键盘一直在屏幕上，从而出现误判，所以这里改为用 App Window。
+    // iPhone、iPad 全屏/分屏/台前调度，都没这个问题
+//    UIWindow *keyboardWindow = keyboardView.window;
+    UIWindow *keyboardWindow = UIApplication.sharedApplication.qmui_delegateWindow;
     if (!keyboardView || !keyboardWindow) {
         return 0;
     } else {
@@ -945,7 +950,8 @@ static char kAssociatedObjectKey_KeyboardViewFrameObserver;
             return 0;
         }
         
-        CGRect visibleRect = CGRectIntersection(CGRectFlatted(keyboardWindow.bounds), CGRectFlatted(keyboardView.frame));
+        CGRect keyboardFrame = [keyboardWindow qmui_convertRect:keyboardView.bounds fromView:keyboardView];
+        CGRect visibleRect = CGRectIntersection(keyboardWindow.bounds, keyboardFrame);
         if (CGRectIsValidated(visibleRect)) {
             return CGRectGetHeight(visibleRect);
         }

@@ -15,32 +15,32 @@
 
 @end
 
-static void * SDCallbackQueueKey = &SDCallbackQueueKey;
-static void SDReleaseBlock(void *context) {
-    CFRelease(context);
-}
-
-static void inline SDSafeExecute(dispatch_queue_t _Nonnull queue, dispatch_block_t _Nonnull block, BOOL async) {
-    // Special handle for main queue label only (custom queue can have the same label)
-    const char *label = dispatch_queue_get_label(queue);
-    if (label && label == dispatch_queue_get_label(dispatch_get_main_queue())) {
-        const char *currentLabel = dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL);
-        if (label == currentLabel) {
-            block();
-            return;
-        }
-    }
-    // Check specific to detect queue equal
-    void *specific = dispatch_queue_get_specific(queue, SDCallbackQueueKey);
-    void *currentSpecific = dispatch_get_specific(SDCallbackQueueKey);
-    if (specific && currentSpecific && CFGetTypeID(specific) == CFUUIDGetTypeID() && CFGetTypeID(currentSpecific) == CFUUIDGetTypeID() && CFEqual(specific, currentSpecific)) {
+static inline void SDSafeAsyncMainThread(dispatch_block_t _Nonnull block) {
+    if (NSThread.isMainThread) {
         block();
     } else {
-        if (async) {
-            dispatch_async(queue, block);
-        } else {
-            dispatch_sync(queue, block);
-        }
+        dispatch_async(dispatch_get_main_queue(), block);
+    }
+}
+
+static void SDSafeExecute(dispatch_queue_t queue, dispatch_block_t _Nonnull block, BOOL async) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    dispatch_queue_t currentQueue = dispatch_get_current_queue();
+#pragma clang diagnostic pop
+    if (queue == currentQueue) {
+        block();
+        return;
+    }
+    // Special handle for main queue only
+    if (NSThread.isMainThread && queue == dispatch_get_main_queue()) {
+        block();
+        return;
+    }
+    if (async) {
+        dispatch_async(queue, block);
+    } else {
+        dispatch_sync(queue, block);
     }
 }
 
@@ -50,19 +50,15 @@ static void inline SDSafeExecute(dispatch_queue_t _Nonnull queue, dispatch_block
     self = [super init];
     if (self) {
         NSCParameterAssert(queue);
-        CFUUIDRef UUID = CFUUIDCreate(kCFAllocatorDefault);
-        dispatch_queue_set_specific(queue, SDCallbackQueueKey, (void *)UUID, SDReleaseBlock);
         _queue = queue;
+        _policy = SDCallbackPolicySafeExecute;
     }
     return self;
 }
 
 + (SDCallbackQueue *)mainQueue {
-    static dispatch_once_t onceToken;
-    static SDCallbackQueue *queue;
-    dispatch_once(&onceToken, ^{
-        queue = [[SDCallbackQueue alloc] initWithDispatchQueue:dispatch_get_main_queue()];
-    });
+    SDCallbackQueue *queue = [[SDCallbackQueue alloc] initWithDispatchQueue:dispatch_get_main_queue()];
+    queue->_policy = SDCallbackPolicySafeAsyncMainThread;
     return queue;
 }
 
@@ -90,6 +86,12 @@ static void inline SDSafeExecute(dispatch_queue_t _Nonnull queue, dispatch_block
         case SDCallbackPolicyInvoke:
             block();
             break;
+        case SDCallbackPolicySafeAsyncMainThread:
+            SDSafeAsyncMainThread(block);
+            break;
+        default:
+            NSCAssert(NO, @"unexpected policy %tu", self.policy);
+            break;
     }
 }
 
@@ -103,6 +105,12 @@ static void inline SDSafeExecute(dispatch_queue_t _Nonnull queue, dispatch_block
             break;
         case SDCallbackPolicyInvoke:
             block();
+            break;
+        case SDCallbackPolicySafeAsyncMainThread:
+            SDSafeAsyncMainThread(block);
+            break;
+        default:
+            NSCAssert(NO, @"unexpected policy %tu", self.policy);
             break;
     }
 }

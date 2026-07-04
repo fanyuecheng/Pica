@@ -24,6 +24,7 @@
     self.imageView.image = nil;
     self.titleLabel.text = nil;
     self.iconLabel.text = nil;
+    self.badgeLabel.hidden = YES;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -31,6 +32,7 @@
         [self.contentView addSubview:self.imageView];
         [self.contentView addSubview:self.iconLabel];
         [self.contentView addSubview:self.titleLabel];
+        [self.contentView addSubview:self.badgeLabel];
     }
     return self;
 }
@@ -41,6 +43,10 @@
     self.imageView.frame = CGRectMake(0, 0, self.contentView.qmui_width, self.contentView.qmui_width);
     self.iconLabel.frame = CGRectMake(0, 0, self.contentView.qmui_width, self.contentView.qmui_width);
     self.titleLabel.frame = CGRectMake(0, self.contentView.qmui_width, self.contentView.qmui_width, 30);
+    
+    CGFloat badgeWidth = 36;
+    CGFloat badgeHeight = 18;
+    self.badgeLabel.frame = self.badgeLabel.hidden ? CGRectZero : CGRectMake(self.contentView.qmui_width - badgeWidth - 6, 6, badgeWidth, badgeHeight);
 }
 
 #pragma mark - Set
@@ -59,6 +65,9 @@
     }
     
     self.titleLabel.text = category.title;
+    self.badgeLabel.hidden = !category.isWeb;
+    
+    [self setNeedsLayout];
 }
 
 #pragma mark - Get
@@ -88,6 +97,21 @@
         _iconLabel.textAlignment = NSTextAlignmentCenter;
     }
     return _iconLabel;
+}
+
+- (QMUILabel *)badgeLabel {
+    if (!_badgeLabel) {
+        _badgeLabel = [[QMUILabel alloc] init];
+        _badgeLabel.hidden = YES;
+        _badgeLabel.font = UIFontBoldMake(10);
+        _badgeLabel.textColor = UIColorWhite;
+        _badgeLabel.backgroundColor = UIColorMakeWithRGBA(0, 0, 0, 0.52);
+        _badgeLabel.textAlignment = NSTextAlignmentCenter;
+        _badgeLabel.layer.cornerRadius = 9;
+        _badgeLabel.clipsToBounds = YES;
+        _badgeLabel.text = @"网页";
+    }
+    return _badgeLabel;
 }
 
 @end

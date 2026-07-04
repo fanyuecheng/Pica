@@ -45,17 +45,19 @@ QMUISynthesizeIdCopyProperty(qmui_frameDidChangeBlock, setQmui_frameDidChangeBlo
             };
         });
         
+#ifdef DEBUG
         // 这个私有方法在 view 被调用 becomeFirstResponder 并且处于 window 上时，才会被调用，所以比 becomeFirstResponder 更适合用来检测
         ExtendImplementationOfVoidMethodWithSingleArgument([UIView class], NSSelectorFromString(@"_didChangeToFirstResponder:"), id, ^(UIView *selfObject, id firstArgv) {
-            if (selfObject == firstArgv && [selfObject conformsToProtocol:@protocol(UITextInput)]) {
+            if (IS_DEBUG && selfObject == firstArgv && [selfObject conformsToProtocol:@protocol(UITextInput)]) {
                 // 像 QMUIModalPresentationViewController 那种以 window 的形式展示浮层，浮层里的输入框 becomeFirstResponder 的场景，[window makeKeyAndVisible] 被调用后，就会立即走到这里，但此时该 window 尚不是 keyWindow，所以这里延迟到下一个 runloop 里再去判断
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    if (IS_DEBUG && ![selfObject isKindOfClass:[UIWindow class]] && selfObject.window && !selfObject.window.keyWindow) {
+                    if (![selfObject isKindOfClass:[UIWindow class]] && selfObject.window && !selfObject.window.isKeyWindow) {
                         [selfObject QMUISymbolicUIViewBecomeFirstResponderWithoutKeyWindow];
                     }
                 });
             }
         });
+#endif
     });
 }
 
@@ -310,9 +312,14 @@ static char kAssociatedObjectKey_viewController;
 
 - (__kindof UIViewController *)qmui_viewController {
     if (self.qmui_isControllerRootView) {
-        return (__kindof UIViewController *)((QMUIWeakObjectContainer *)objc_getAssociatedObject(self, &kAssociatedObjectKey_viewController)).object;
+        return self.__qmui_associatedViewController;
     }
     return self.superview.qmui_viewController;
+}
+
+- (nullable __kindof UIViewController *)__qmui_associatedViewController {
+    QMUIWeakObjectContainer *weakContainer = objc_getAssociatedObject(self, &kAssociatedObjectKey_viewController);
+    return weakContainer.object;
 }
 
 @end
@@ -326,8 +333,15 @@ static char kAssociatedObjectKey_viewController;
 + (void)load {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
+        ExtendImplementationOfVoidMethodWithSingleArgument([UIViewController class], @selector(setView:), UIView *, ^(UIViewController *selfObject, UIView *view) {
+            if (view.__qmui_associatedViewController != selfObject) {
+                view.qmui_viewController = selfObject;
+            }
+        });
         ExtendImplementationOfVoidMethodWithoutArguments([UIViewController class], @selector(viewDidLoad), ^(UIViewController *selfObject) {
-            selfObject.view.qmui_viewController = selfObject;
+            if (selfObject.view.__qmui_associatedViewController != selfObject) {
+                selfObject.view.qmui_viewController = selfObject;
+            }
         });
     });
 }
@@ -539,6 +553,14 @@ const CGSize QMUIViewFixedSizeNone = {-1, -1};
     self.frame = CGRectSetX(self.frame, right - CGRectGetWidth(self.frame));
 }
 
+- (CGPoint)qmui_origin {
+    return self.frame.origin;
+}
+
+- (void)setQmui_origin:(CGPoint)qmui_origin {
+    self.center = CGPointMake(qmui_origin.x + CGRectGetWidth(self.frame) / 2, qmui_origin.y + CGRectGetHeight(self.frame) / 2);
+}
+
 - (CGFloat)qmui_width {
     return CGRectGetWidth(self.frame);
 }
@@ -575,6 +597,8 @@ static char kAssociatedObjectKey_fixedSize;
             return superResult;
         };
         self.qmui_size = qmui_fixedSize;
+    } else {
+        self.qmui_sizeThatFitsBlock = nil;
     }
 }
 
@@ -682,7 +706,7 @@ static char kAssociatedObjectKey_shouldShowDebugColor;
                     [selfObject renderColorWithSubviews:selfObject.subviews];
                 } else if (objc_getAssociatedObject(selfObject, &kAssociatedObjectKey_shouldShowDebugColor)) {
                     // 设置过 qmui_shouldShowDebugColor，但当前的值为 NO 的情况，则无脑清空所有背景色（可能会把业务自己设置的背景色去掉，由于是调试功能，无所谓）
-                    selfObject.backgroundColor = nil;
+                    selfObject.backgroundColor = UIColor.clearColor;
                     [selfObject renderColorWithSubviews:selfObject.subviews];
                 }
             });
@@ -764,7 +788,7 @@ static char kAssociatedObjectKey_sizeThatFitsBlock;
         if (view.qmui_shouldShowDebugColor) {
             view.backgroundColor = [view debugColor];
         } else {
-            view.backgroundColor = nil;
+            view.backgroundColor = UIColor.clearColor;
         }
     }
 }

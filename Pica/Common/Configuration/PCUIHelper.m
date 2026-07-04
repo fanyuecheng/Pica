@@ -127,7 +127,7 @@
     QMUIPopupMenuView *menuView = QMUIPopupMenuView.appearance;
     menuView.itemSeparatorColor = UIColor.pc_separatorColor;
     menuView.sectionSeparatorColor = UIColor.pc_separatorColor;
-    menuView.itemTitleColor = UIColor.pc_tintColor;
+    menuView.tintColor = UIColor.pc_tintColor;
 }
 
 @end

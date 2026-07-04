@@ -20,6 +20,7 @@
 #import "NSObject+QMUI.h"
 #import "QMUILog.h"
 #import "UIView+QMUI.h"
+#import "UIApplication+QMUI.h"
 
 NSNotificationName const QMUIAppSizeWillChangeNotification = @"QMUIAppSizeWillChangeNotification";
 NSString *const QMUIPrecedingAppSizeUserInfoKey = @"QMUIPrecedingAppSizeUserInfoKey";
@@ -62,7 +63,7 @@ QMUISynthesizeIdCopyProperty(qmui_prefersHomeIndicatorAutoHiddenBlock, setQmui_p
         OverrideImplementation([UIViewController class], @selector(viewWillTransitionToSize:withTransitionCoordinator:), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
             return ^(UIViewController *selfObject, CGSize size, id<UIViewControllerTransitionCoordinator> coordinator) {
                 
-                if (selfObject == UIApplication.sharedApplication.delegate.window.rootViewController) {
+                if (selfObject == UIApplication.sharedApplication.qmui_delegateWindow.rootViewController) {
                     CGSize originalSize = selfObject.view.frame.size;
                     BOOL sizeChanged = !CGSizeEqualToSize(originalSize, size);
                     if (sizeChanged) {
@@ -245,12 +246,24 @@ static char kAssociatedObjectKey_visibleState;
 }
 
 - (UIViewController *)qmui_previousViewController {
+    UIViewController *previousViewController = nil;
     NSArray<UIViewController *> *viewControllers = self.navigationController.viewControllers;
     NSUInteger index = [viewControllers indexOfObject:self];
     if (index != NSNotFound && index > 0) {
-        return viewControllers[index - 1];
+        previousViewController = viewControllers[index - 1];
+        
+        // 系统 UINavigationController 的 popToViewController、popToRootViewController、setViewControllers 三种 pop 的方式都有一个共同的特点，假如此时有3个及以上的 vc 例如 [A,B,C]，从当前界面 pop 到非相邻的界面，例如C到A，执行完 pop 操作后立马访问 UINavigationController.viewControllers 预期应该得到 [A]，实际上会得到 [C,A]，过一会（nav.view layoutIfNeeded 之后）才变成正确的 [A]。同理，[A,B,C,D]时从 D pop 到 B，预期得到[A,B]，实际得到[D,A,B]，也即这种情况它总是会把当前界面塞到 viewControllers 数组里的第一个，这就导致这期间访问基于 viewControllers 数组实现的功能（例如 qmui_rootViewController、qmui_previousViewController），都可能出错，所以这里对上述情况做特殊保护。
+        // 如果 pop 操作时只有2个vc，则没这种问题。
+        if (self.navigationController.qmui_isPopping && self.navigationController.transitionCoordinator) {
+            id<UIViewControllerTransitionCoordinator> transitionCoordinator = self.navigationController.transitionCoordinator;
+            UIViewController *fromVc = [transitionCoordinator viewControllerForKey:UITransitionContextFromViewControllerKey];
+            UIViewController *toVc = [transitionCoordinator viewControllerForKey:UITransitionContextToViewControllerKey];
+            if (self == toVc && previousViewController == fromVc && index == 1) {
+                previousViewController = nil;
+            }
+        }
     }
-    return nil;
+    return previousViewController;
 }
 
 - (NSString *)qmui_previousViewControllerTitle {
@@ -479,11 +492,19 @@ QMUISynthesizeIdCopyProperty(qmui_didAppearAndLoadDataBlock, setQmui_didAppearAn
 + (void)load {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        ExtendImplementationOfVoidMethodWithSingleArgument([UIViewController class], @selector(viewDidAppear:), BOOL, ^(UIViewController *selfObject, BOOL animated) {
-            if (selfObject.qmui_didAppearAndLoadDataBlock && selfObject.qmui_dataLoaded) {
-                selfObject.qmui_didAppearAndLoadDataBlock();
-                selfObject.qmui_didAppearAndLoadDataBlock = nil;
-            }
+        OverrideImplementation([UIViewController class], @selector(viewDidAppear:), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
+            return ^(UIViewController *selfObject, BOOL animated) {
+                
+                // call super
+                void (*originSelectorIMP)(id, SEL, BOOL);
+                originSelectorIMP = (void (*)(id, SEL, BOOL))originalIMPProvider();
+                originSelectorIMP(selfObject, originCMD, animated);
+                
+                if (selfObject.qmui_didAppearAndLoadDataBlock && selfObject.qmui_dataLoaded) {
+                    selfObject.qmui_didAppearAndLoadDataBlock();
+                    selfObject.qmui_didAppearAndLoadDataBlock = nil;
+                }
+            };
         });
     });
 }
@@ -567,7 +588,7 @@ QMUISynthesizeBOOLProperty(qmui_willAppearByInteractivePopGestureRecognizer, set
 @implementation QMUIHelper (ViewController)
 
 + (nullable UIViewController *)visibleViewController {
-    UIViewController *rootViewController = UIApplication.sharedApplication.delegate.window.rootViewController;
+    UIViewController *rootViewController = UIApplication.sharedApplication.qmui_delegateWindow.rootViewController;
     UIViewController *visibleViewController = [rootViewController qmui_visibleViewControllerIfExist];
     return visibleViewController;
 }

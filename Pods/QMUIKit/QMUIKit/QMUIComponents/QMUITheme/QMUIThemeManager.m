@@ -18,6 +18,7 @@
 #import "UIViewController+QMUITheme.h"
 #import "QMUIThemePrivate.h"
 #import "UITraitCollection+QMUI.h"
+#import "UIApplication+QMUI.h"
 
 NSString *const QMUIThemeDidChangeNotification = @"QMUIThemeDidChangeNotification";
 
@@ -58,7 +59,7 @@ NSString *const QMUIThemeDidChangeNotification = @"QMUIThemeDidChangeNotificatio
 - (void)setRespondsSystemStyleAutomatically:(BOOL)respondsSystemStyleAutomatically {
     _respondsSystemStyleAutomatically = respondsSystemStyleAutomatically;
     if (_respondsSystemStyleAutomatically && self.identifierForTrait) {
-         self.currentThemeIdentifier = self.identifierForTrait([UITraitCollection currentTraitCollection]);
+        self.currentThemeIdentifier = self.identifierForTrait(UIScreen.mainScreen.traitCollection);
     }
 }
 
@@ -137,7 +138,7 @@ NSString *const QMUIThemeDidChangeNotification = @"QMUIThemeDidChangeNotificatio
 - (void)notifyThemeChanged {
     [[NSNotificationCenter defaultCenter] postNotificationName:QMUIThemeDidChangeNotification object:self];
     
-    [UIApplication.sharedApplication.windows enumerateObjectsUsingBlock:^(__kindof UIWindow * _Nonnull window, NSUInteger idx, BOOL * _Nonnull stop) {
+    [UIApplication.sharedApplication.qmui_windows enumerateObjectsUsingBlock:^(__kindof UIWindow * _Nonnull window, NSUInteger idx, BOOL * _Nonnull stop) {
         if (!window.hidden && window.alpha > 0.01 && window.rootViewController) {
             [window.rootViewController qmui_themeDidChangeByManager:self identifier:self.currentThemeIdentifier theme:self.currentTheme];
             

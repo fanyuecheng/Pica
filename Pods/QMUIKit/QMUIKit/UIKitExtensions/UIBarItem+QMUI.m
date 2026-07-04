@@ -28,16 +28,34 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         
-        // UIBarButtonItem -setView:
+        // -[UIBarButtonItem setView:]
         // @warning 如果作为 UIToolbar.items 使用，则 customView 的情况下，iOS 10 及以下的版本不会调用 setView:，所以那种情况改为在 setToolbarItems:animated: 时调用，代码见下方
         ExtendImplementationOfVoidMethodWithSingleArgument([UIBarButtonItem class], @selector(setView:), UIView *, ^(UIBarButtonItem *selfObject, UIView *firstArgv) {
             [UIBarItem setView:firstArgv inBarButtonItem:selfObject];
         });
         
-        // UITabBarItem -setView:
-        ExtendImplementationOfVoidMethodWithSingleArgument([UITabBarItem class], @selector(setView:), UIView *, ^(UITabBarItem *selfObject, UIView *firstArgv) {
-            [UIBarItem setView:firstArgv inBarItem:selfObject];
-        });
+        // -[UITabBarItem setView:]
+        if (@available(iOS 18.0, *)) {
+            OverrideImplementation([UITabBar class], @selector(setItems:animated:), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
+                return ^(UITabBar *selfObject, NSArray<UITabBarItem *> *items, BOOL animated) {
+                    
+                    // call super
+                    void (*originSelectorIMP)(id, SEL, NSArray<UITabBarItem *> *, BOOL);
+                    originSelectorIMP = (void (*)(id, SEL, NSArray<UITabBarItem *> *, BOOL))originalIMPProvider();
+                    originSelectorIMP(selfObject, originCMD, items, animated);
+                    
+                    [items enumerateObjectsUsingBlock:^(UITabBarItem *item, NSUInteger idx, BOOL *stop) {
+                        if (item.qmui_view) {
+                            [UIBarItem setView:item.qmui_view inBarItem:item];
+                        }
+                    }];
+                };
+            });
+        } else {
+            ExtendImplementationOfVoidMethodWithSingleArgument([UITabBarItem class], @selector(setView:), UIView *, ^(UITabBarItem *selfObject, UIView *firstArgv) {
+                [UIBarItem setView:firstArgv inBarItem:selfObject];
+            });
+        }
     });
 }
 

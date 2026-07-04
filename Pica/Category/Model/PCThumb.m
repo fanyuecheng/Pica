@@ -11,12 +11,14 @@
 @implementation PCThumb
 
 - (NSString *)imageURL {
-    if ([self.fileServer isEqualToString:@"https://wikawika.xyz/static/"]) {
-        self.fileServer = @"https://storage.wikawika.xyz";
-    }
     if (self.fileServer && self.path) {
-        NSString *urlString = [NSString stringWithFormat:@"%@/static/%@", self.fileServer, self.path];
-        return urlString;
+        if ([self.fileServer containsString:@"static"] || [self.fileServer containsString:@"bidobido"]) {
+            NSString *urlString = [NSString stringWithFormat:@"%@/%@", self.fileServer, self.path];
+            return urlString;
+        } else {
+            NSString *urlString = [NSString stringWithFormat:@"%@/static/%@", self.fileServer, self.path];
+            return urlString;
+        }
     } else {
         return nil;
     }

@@ -10,6 +10,7 @@
 #define PCDefineHeader_h
  
 #define kDefaultFileManager  [NSFileManager defaultManager]
+#define PCDefaultTipsParentView (UIApplication.sharedApplication.qmui_delegateWindow)
 
 #ifndef weakify
     #if DEBUG

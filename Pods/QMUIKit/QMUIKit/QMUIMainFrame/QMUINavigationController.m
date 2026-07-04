@@ -129,6 +129,7 @@ static char kAssociatedObjectKey_qmui_viewWillAppearNotifyDelegate;
 
 - (void)qmui_didInitialize {
     [super qmui_didInitialize];
+    self.qmui_alwaysInvokeAppearanceMethods = YES;
     self.qmui_multipleDelegatesEnabled = YES;
     self.delegator = [[_QMUINavigationControllerDelegator alloc] init];
     self.delegator.navigationController = self;
@@ -313,16 +314,10 @@ static char kAssociatedObjectKey_qmui_viewWillAppearNotifyDelegate;
         animated = NO;
     }
     
-    if (self.isViewLoaded) {
-        if (self.view.window) {
-            // 增加 self.view.window 作为判断条件是因为当 UINavigationController 不可见时（例如上面盖着一个 prenset 起来的 vc，或者 nav 所在的 tabBar 切到别的 tab 去了），pushViewController 会被执行，但 navigationController:didShowViewController:animated: 的 delegate 不会被触发，导致 isViewControllerTransiting 的标志位无法正确恢复，所以做个保护。
-            // https://github.com/Tencent/QMUI_iOS/issues/261
-            if (animated) {
-                self.isViewControllerTransiting = YES;
-            }
-        } else {
-            QMUILogWarn(NSStringFromClass(self.class), @"push 的时候 navigationController 不可见（例如上面盖着一个 prenset vc，或者切到别的 tab，可能导致一些 UINavigationControllerDelegate 不会被调用");
-        }
+    // 增加 self.view.window 作为判断条件是因为当 UINavigationController 不可见时（例如上面盖着一个 present 起来的 vc，或者 nav 所在的 tabBar 切到别的 tab 去了），pushViewController 会被执行，但 navigationController:didShowViewController:animated: 的 delegate 不会被触发，导致 isViewControllerTransiting 的标志位无法正确恢复，所以做个保护。
+    // https://github.com/Tencent/QMUI_iOS/issues/261
+    if (animated && self.isViewLoaded && self.view.window) {
+        self.isViewControllerTransiting = YES;
     }
     
     // 在 push 前先设置好返回按钮的文字
@@ -398,12 +393,12 @@ static char kAssociatedObjectKey_qmui_viewWillAppearNotifyDelegate;
     
     if (state == UIGestureRecognizerStateEnded) {
         if (self.transitionCoordinator.cancelled) {
-            QMUILog(NSStringFromClass(self.class), @"手势返回放弃了");
+            QMUILog(NSStringFromClass(self.class), @"interactivePopGestureRecognizer canceled");
             UIViewController<QMUINavigationControllerTransitionDelegate> *temp = viewControllerWillDisappear;
             viewControllerWillDisappear = viewControllerWillAppear;
             viewControllerWillAppear = temp;
         } else {
-            QMUILog(NSStringFromClass(self.class), @"执行手势返回");
+            QMUILog(NSStringFromClass(self.class), @"interactivePopGestureRecognizer triggered");
         }
     }
     
@@ -635,16 +630,18 @@ QMUISynthesizeIdStrongProperty(qmuibbbt_backItem, setQmuibbbt_backItem);
     dispatch_once(&onceToken, ^{
         // 在先设置了 title 再设置 titleView 时，保证 titleView 的样式能正确。
         OverrideImplementation([UINavigationItem class], @selector(setTitleView:), ^id(__unsafe_unretained Class originClass, SEL originCMD, IMP (^originalIMPProvider)(void)) {
-            return ^(UINavigationItem *selfObject, QMUINavigationTitleView *titleView) {
+            return ^(UINavigationItem *selfObject, UIView *titleView) {
                 
                 // call super
                 void (*originSelectorIMP)(id, SEL, UIView *);
                 originSelectorIMP = (void (*)(id, SEL, UIView *))originalIMPProvider();
                 originSelectorIMP(selfObject, originCMD, titleView);
                 
-                if ([titleView isKindOfClass:QMUINavigationTitleView.class]) {
+                if (titleView.qmui_useAsNavigationTitleView) {
                     if ([selfObject.qmui_viewController respondsToSelector:@selector(qmui_titleViewTintColor)]) {
                         titleView.tintColor = ((id<QMUINavigationControllerDelegate>)selfObject.qmui_viewController).qmui_titleViewTintColor;
+                    } else if (QMUICMIActivated) {
+                        titleView.tintColor = NavBarTitleColor;
                     }
                 }
             };

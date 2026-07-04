@@ -305,7 +305,7 @@
 - (void)updatePassword {
     if (self.passwordSetRequest.passwordOld.length &&
         self.passwordSetRequest.passwordNew.length) {
-        QMUITips *loading = [QMUITips showLoadingInView:DefaultTipsParentView];
+        QMUITips *loading = [QMUITips showLoadingInView:PCDefaultTipsParentView];
         [self.passwordSetRequest sendRequest:^(id  _Nonnull response) {
             [loading hideAnimated:YES];
             [QMUITips showSucceed:@"修改密码成功"];
@@ -318,7 +318,7 @@
 - (void)updateName {
     if (self.nameSetRequest.email.length &&
         self.nameSetRequest.name.length) {
-        QMUITips *loading = [QMUITips showLoadingInView:DefaultTipsParentView];
+        QMUITips *loading = [QMUITips showLoadingInView:PCDefaultTipsParentView];
         [self.nameSetRequest sendRequest:^(id  _Nonnull response) {
             [loading hideAnimated:YES];
             QMUIAlertAction *action1 = [QMUIAlertAction actionWithTitle:@"确定" style:QMUIAlertActionStyleDefault handler:^(__kindof QMUIAlertController *aAlertController, QMUIAlertAction *action) {

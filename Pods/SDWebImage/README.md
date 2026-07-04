@@ -14,7 +14,7 @@
 
 This library provides an async image downloader with cache support. For convenience, we added categories for UI elements like `UIImageView`, `UIButton`, `MKAnnotationView`.
 
-Note: `SD` is the prefix for **Simple Design** (which is the team name in Daily Motion company from the author Olivier Poitrey)
+> 💡NOTE: `SD` is the prefix for **Simple Design** (which is the team name in Daily Motion company from the author Olivier Poitrey)
 
 ## Features
 
@@ -37,12 +37,31 @@ Note: `SD` is the prefix for **Simple Design** (which is the team name in Daily 
 - [x] Modern Objective-C and better Swift support 
 - [x] Performances!
 
+## For Apple visionOS
+
+From 5.19+, SDWebImage supports visionOS on all Package Managers (include CocoaPods/Carthage/SPM). Upgrade the related tools if you're facing issues.
+
+For 5.18+, SDWebImage can be compiled for visionOS platform. However, it's still in beta and may contains issues unlike the stable iOS UIKit support. Welcome to have a try and [report issue](https://github.com/SDWebImage/SDWebImage/issues).
+
+To build on visionOS, currently we only support the standard Xcode integration.
+
+See `Installation with Swift Package Manager` and `Manual Installation Guide` below.
+
 ## Supported Image Formats
 
 - Image formats supported by Apple system (JPEG, PNG, TIFF, BMP, ...), including [GIF](https://github.com/SDWebImage/SDWebImage/wiki/Advanced-Usage#gif-coder)/[APNG](https://github.com/SDWebImage/SDWebImage/wiki/Advanced-Usage#apng-coder) animated image
 - HEIC format from iOS 11/macOS 10.13, including animated HEIC from iOS 13/macOS 10.15 via [SDWebImageHEICCoder](https://github.com/SDWebImage/SDWebImage/wiki/Advanced-Usage#heic-coder). For lower firmware, use coder plugin [SDWebImageHEIFCoder](https://github.com/SDWebImage/SDWebImageHEIFCoder)
 - WebP format from iOS 14/macOS 11.0 via [SDWebImageAWebPCoder](https://github.com/SDWebImage/SDWebImage/wiki/Advanced-Usage#awebp-coder). For lower firmware, use coder plugin [SDWebImageWebPCoder](https://github.com/SDWebImage/SDWebImageWebPCoder)
+- JPEG-XL format from iOS 17/macOS 14.0 built-in. For lower firmware, use coder plugin [SDWebImageJPEGXLCoder](https://github.com/SDWebImage/SDWebImageJPEGXLCoder)
 - Support extendable coder plugins for new image formats like BPG, AVIF. And vector format like PDF, SVG. See all the list in [Image coder plugin List](https://github.com/SDWebImage/SDWebImage/wiki/Coder-Plugin-List)
+
+> 💡NOTE: For new user
+
+SDWebImage use [Coder Plugin System](https://github.com/SDWebImage/SDWebImage/wiki/Coder-Plugin-List) to support both Apple's built-in and external image format. For static image we always use Apple's built-in as fallback, but not for animated image. Currently (updated to 5.19.x version) we only register traditional animated format like GIF/APNG by default, without the modern format like AWebP/HEICS/AVIF, even on the latest firmware.
+
+If you want these animated image format support, simply register by yourself with one-line code, see more in [WebP Coder](https://github.com/SDWebImage/SDWebImage/wiki/Advanced-Usage#awebp-coder) and [HEIC Coder](https://github.com/SDWebImage/SDWebImage/wiki/Advanced-Usage#heic-coder)
+
+In future we will change this behavior by always registering all Apple's built-in animated image format, to make it easy for new user to integrate.
 
 ## Additional modules and Ecosystem
 
@@ -57,8 +76,8 @@ We support SwiftUI by building a brand new framework called [SDWebImageSwiftUI](
 The new framework introduce two View structs `WebImage` and `AnimatedImage` for SwiftUI world, `ImageIndicator` modifier for any View, `ImageManager` observable object for data source. Supports iOS 13+/macOS 10.15+/tvOS 13+/watchOS 6+ and Swift 5.1. Have a nice try and provide feedback!
 
 #### Coders for additional image formats
-- [SDWebImageWebPCoder](https://github.com/SDWebImage/SDWebImageWebPCoder) - coder for WebP format. iOS 8+/macOS 10.10+. Based on [libwebp](https://chromium.googlesource.com/webm/libwebp)
-- [SDWebImageHEIFCoder](https://github.com/SDWebImage/SDWebImageHEIFCoder) - coder for HEIF format, iOS 8+/macOS 10.10+ support. Based on [libheif](https://github.com/strukturag/libheif)
+- [SDWebImageWebPCoder](https://github.com/SDWebImage/SDWebImageWebPCoder) - coder for WebP format. iOS 9+/macOS 10.11+. Based on [libwebp](https://chromium.googlesource.com/webm/libwebp)
+- [SDWebImageHEIFCoder](https://github.com/SDWebImage/SDWebImageHEIFCoder) - coder for HEIF format, iOS 9+/macOS 10.11+ support. Based on [libheif](https://github.com/strukturag/libheif)
 - [SDWebImageBPGCoder](https://github.com/SDWebImage/SDWebImageBPGCoder) - coder for BPG format. Based on [libbpg](https://github.com/mirrorer/libbpg)
 - [SDWebImageFLIFCoder](https://github.com/SDWebImage/SDWebImageFLIFCoder) - coder for FLIF format. Based on [libflif](https://github.com/FLIF-hub/FLIF)
 - [SDWebImageAVIFCoder](https://github.com/SDWebImage/SDWebImageAVIFCoder) - coder for AVIF (AV1-based) format. Based on [libavif](https://github.com/AOMediaCodec/libavif)
@@ -66,6 +85,7 @@ The new framework introduce two View structs `WebImage` and `AnimatedImage` for 
 - [SDWebImageSVGCoder](https://github.com/SDWebImage/SDWebImageSVGCoder) - coder for SVG vector format. Using built-in frameworks
 - [SDWebImageSVGNativeCoder](https://github.com/SDWebImage/SDWebImageSVGNativeCoder) - coder for SVG-Native vector format. Based on [svg-native](https://github.com/adobe/svg-native-viewer)
 - [SDWebImageLottieCoder](https://github.com/SDWebImage/SDWebImageLottieCoder) - coder for Lottie animation format. Based on [rlottie](https://github.com/Samsung/rlottie)
+- [SDWebImageJPEGXLCoder](https://github.com/SDWebImage/SDWebImageJPEGXLCoder) - coder for JPEG-XL format. iOS 9+/macOS 10.11+. Based on [libjxl](https://github.com/libjxl/libjxl)
 - and more from community!
 
 #### Custom Caches
@@ -78,7 +98,7 @@ The new framework introduce two View structs `WebImage` and `AnimatedImage` for 
 
 #### Integration with 3rd party libraries
 - [SDWebImageLottiePlugin](https://github.com/SDWebImage/SDWebImageLottiePlugin) - plugin to support [Lottie-iOS](https://github.com/airbnb/lottie-ios), vector animation rending with remote JSON files
-- [SDWebImageSVGKitPlugin](https://github.com/SDWebImage/SDWebImageSVGKitPlugin) - plugin to support [SVGKit](https://github.com/SVGKit/SVGKit), SVG rendering using Core Animation, iOS 8+/macOS 10.10+ support
+- [SDWebImageSVGKitPlugin](https://github.com/SDWebImage/SDWebImageSVGKitPlugin) - plugin to support [SVGKit](https://github.com/SVGKit/SVGKit), SVG rendering using Core Animation, iOS 9+/macOS 10.11+ support
 - [SDWebImageFLPlugin](https://github.com/SDWebImage/SDWebImageFLPlugin) - plugin to support [FLAnimatedImage](https://github.com/Flipboard/FLAnimatedImage) as the engine for animated GIFs
 - [SDWebImageYYPlugin](https://github.com/SDWebImage/SDWebImageYYPlugin) - plugin to integrate [YYImage](https://github.com/ibireme/YYImage) & [YYCache](https://github.com/ibireme/YYCache) for image rendering & caching
 
@@ -101,7 +121,8 @@ You can use those directly, or create similar components of your own, by using t
 - tvOS 9.0 or later
 - watchOS 2.0 or later
 - macOS 10.11 or later (10.15 for Catalyst)
-- Xcode 11.0 or later
+- visionOS 1.0 or later
+- Xcode 15.0 or later
 
 #### Backwards compatibility
 
@@ -194,10 +215,11 @@ In order to clean up things and make our core project do less things, we decided
 
 ## Installation
 
-There are four ways to use SDWebImage in your project:
+There are 5 ways to use SDWebImage in your project:
 - using CocoaPods
 - using Carthage
 - using Swift Package Manager
+- download binary XCFramework
 - manual install (build frameworks or embed Xcode Project)
 
 ### Installation with CocoaPods
@@ -255,7 +277,13 @@ Make the following entry in your Cartfile: `github "SDWebImage/SDWebImage"`
 Then run `carthage update`
 If this is your first time using Carthage in the project, you'll need to go through some additional steps as explained [over at Carthage](https://github.com/Carthage/Carthage#adding-frameworks-to-an-application).
 
-> NOTE: At this time, Carthage does not provide a way to build only specific repository subcomponents (or equivalent of CocoaPods's subspecs). All components and their dependencies will be built with the above command. However, you don't need to copy frameworks you aren't using into your project. For instance, if you aren't using `SDWebImageMapKit`, feel free to delete that framework from the Carthage Build directory after `carthage update` completes.
+> 💡NOTE: At this time, Carthage does not provide a way to build only specific repository subcomponents (or equivalent of CocoaPods's subspecs). All components and their dependencies will be built with the above command. However, you don't need to copy frameworks you aren't using into your project. For instance, if you aren't using `SDWebImageMapKit`, feel free to delete that framework from the Carthage Build directory after `carthage update` completes.
+
+> 💡NOTE: [Apple requires SDWebImage contains signatures](https://developer.apple.com/support/third-party-SDK-requirements/). So, by default the `carthage build` binary framework does not do codesign, this will cause validation error. You can sign yourself with the Apple Developer Program identity, or using the binary framework:
+
+```
+binary "https://github.com/SDWebImage/SDWebImage/raw/master/SDWebImage.json"
+```
 
 ### Installation with Swift Package Manager (Xcode 11+)
 
@@ -277,9 +305,65 @@ let package = Package(
 )
 ```
 
+### Download binary XCFramework
+
+From 5.19.2, SDWebImage provide the canonical official binary XCFramework on [GitHub release pages](https://github.com/SDWebImage/SDWebImage/releases).
+
++ Download XCFramework
+
+You can choose to download `SDWebImage-dynamic.xcframework.zip` for dynamic linked one, or `SDWebImage-static.xcframework.zip` for static-linked one.
+
++ Integrate to Xcode Project
+
+Drag the unzipped `.xcframework` into your Xcode Project's Framework tab.
+
++ Verify signature of binary XCFramework
+
+From Xcode 15 Apple will verify the signature of binary XCFramework, to avoid supply chain attack.
+
+The fingerprint currently should be `FC 3B 10 13 86 34 4C 50 DB 70 2A 9A D1 01 6F B5 1A 3E CC 8B 9D A9 B7 AE 47 A0 48 D4 D0 63 39 83`
+
+The certificate is stored in the repo [here](https://github.com/SDWebImage/SDWebImage/blob/master/Certificate/SDWebImage%20Signing%20Certificate.cer)
+
+The public key is stored in the repo [here](https://github.com/SDWebImage/SDWebImage/blob/master/Certificate/SDWebImage%20Signing%20Certificate.pem)
+
+See more: [Verifying the origin of your XCFrameworks](https://developer.apple.com/documentation/Xcode/verifying-the-origin-of-your-xcframeworks)
+
+
 ### Manual Installation Guide
 
-See more on [Manual install Guide](https://github.com/SDWebImage/SDWebImage/wiki/Installation-Guide#manual-installation-guide)
++ Check your command line Xcode version
+
+```
+sudo xcode-select -s /path/to/Xcode.app
+```
+
+or
+
+```
+export DEVELOPER_DIR=/path/to/Xcode.app/Contents/Developer
+```
+
++ Run the script to build frameworks
+
+```
+./Scripts/build-frameworks.sh
+```
+
++ Run the script to merge XCFramework
+
+```
+./Scripts/create-xcframework.sh
+```
+
++ Use your own certificate to sign XCFramework
+
+```
+// https://developer.apple.com/support/third-party-SDK-requirements/
+codesign --timestamp -v --sign "your own certificate" SDWebImage.xcframework
+```
+
+See more on wiki: [Manual install Guide](https://github.com/SDWebImage/SDWebImage/wiki/Installation-Guide#manual-installation-guide)
 
 ### Import headers in your source files
 
@@ -301,7 +385,14 @@ At this point your workspace should build without error. If you are having probl
 community can help you solve it.
 
 ## Data Collection Practices
-As required by the [App privacy details on the App Store](https://developer.apple.com/app-store/app-privacy-details/), here's SDWebImage's list of [Data Collection Practices](https://sdwebimage.github.io/DataCollection/index.html).
+
+From Xcode 15, we provide the new `PrivacyInfo.xcprivacy` file for privacy details, see [Describing data use in privacy manifests](https://developer.apple.com/documentation/bundleresources/privacy_manifest_files/describing_data_use_in_privacy_manifests?language=objc)
+
+You can exports the privacy report after archive your App by integrate SDWebImage via SwiftPM/XCFramework or CocoaPods (`use_frameworks` set to true).
+
+For old version or if you're using static ar archive, as required by the [App privacy details on the App Store](https://developer.apple.com/app-store/app-privacy-details/), here's SDWebImage's list of [Data Collection Practices](https://sdwebimage.github.io/DataCollection/index.html).
+
+
 
 ## Author
 - [Olivier Poitrey](https://github.com/rs)

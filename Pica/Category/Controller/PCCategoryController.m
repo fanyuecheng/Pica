@@ -359,6 +359,7 @@
         [leftView sizeToFit];
         _textField.leftView = leftView;
         _textField.leftViewMode = UITextFieldViewModeAlways;
+        _textField.borderStyle = UITextBorderStyleNone;
         _textField.delegate = self;
     }
     return _textField;

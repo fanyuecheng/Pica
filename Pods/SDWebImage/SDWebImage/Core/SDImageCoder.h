@@ -11,11 +11,12 @@
 #import "NSData+ImageContentType.h"
 #import "SDImageFrame.h"
 
+/// Image Decoding/Encoding Options
 typedef NSString * SDImageCoderOption NS_STRING_ENUM;
 typedef NSDictionary<SDImageCoderOption, id> SDImageCoderOptions;
 typedef NSMutableDictionary<SDImageCoderOption, id> SDImageCoderMutableOptions;
 
-#pragma mark - Coder Options
+#pragma mark - Image Decoding Options
 // These options are for image decoding
 /**
  A Boolean value indicating whether to decode the first frame only for animated image during decoding. (NSNumber). If not provide, decode animated image if need.
@@ -75,7 +76,39 @@ FOUNDATION_EXPORT SDImageCoderOption _Nonnull const SDImageCoderDecodeTypeIdenti
  */
 FOUNDATION_EXPORT SDImageCoderOption _Nonnull const SDImageCoderDecodeUseLazyDecoding;
 
-// These options are for image encoding
+/**
+ A NSUInteger value to provide the limit bytes during decoding. This can help to avoid OOM on large frame count animated image or large pixel static image when you don't know how much RAM it occupied before decoding
+ The decoder will do these logic based on limit bytes:
+ 1. Get the total frame count (static image means 1)
+ 2. Calculate the `framePixelSize` width/height to `sqrt(limitBytes / frameCount / bytesPerPixel)`, keeping aspect ratio (at least 1x1)
+ 3. If the `framePixelSize < originalImagePixelSize`, then do thumbnail decoding (see `SDImageCoderDecodeThumbnailPixelSize`) use the `framePixelSize` and `preseveAspectRatio = YES`
+ 4. Else, use the full pixel decoding (small than limit bytes)
+ 5. Whatever result, this does not effect the animated/static behavior of image. So even if you set `limitBytes = 1 && frameCount = 100`, we will stll create animated image with each frame `1x1` pixel size.
+ @note You can use the logic from `+[SDImageCoder scaledSizeWithImageSize:limitBytes:bytesPerPixel:frameCount:]`
+ @note This option has higher priority than `.decodeThumbnailPixelSize`
+ */
+FOUNDATION_EXPORT SDImageCoderOption _Nonnull const SDImageCoderDecodeScaleDownLimitBytes;
+
+/**
+ A Boolean (`SDImageHDRType.rawValue`) value (stored inside NSNumber) to provide converting to HDR during decoding. Currently if number is 0 (`SDImageHDRTypeSDR`), use SDR, else use HDR. But we may extend this option to represent `SDImageHDRType` all cases in the future (means, think this options as uint number, but not actual boolean)
+ @note Supported by iOS 17 and above when using ImageIO coder (third-party coder can support lower firmware)
+ Defaults to @(NO), decoder will automatically convert SDR.
+ @note works for `SDImageCoder`
+ */
+FOUNDATION_EXPORT SDImageCoderOption _Nonnull const SDImageCoderDecodeToHDR;
+
+#pragma mark - Image Encoding Options
+/**
+ A NSUInteger (`SDImageHDRType.rawValue`) value (stored inside NSNumber) to provide converting to HDR during encoding. Read the below carefully to choose the value.
+ @note 0(`SDImageHDRTypeSDR`) means SDR; 1(`SDImageHDRTypeISOHDR`) means ISO HDR (at least using 10 bits per components or above, supported by AVIF/HEIF/JPEG-XL); 2(`SDImageHDRTypeISOGainMap`) means ISO Gain Map HDR (may use 8 bits per components, supported by AVIF/HEIF/JPEG-XL, as well as traditional JPEG)
+ @note Gain Map like a mask image with metadata, which contains the depth/bright information for pixels (1/4 resolution), which used to convert between HDR and SDR.
+ @note If you use CIImage as HDR pipeline, you can export as CGImage for encoding. (But it's also recommanded to use CIImage's `JPEGRepresentationOfImage` or `HEIFRepresentationOfImage`)
+ @note Supported by iOS 18 and above when using ImageIO coder (third-party coder can support lower firmware)
+ Defaults to @(0), encoder will automatically convert SDR.
+ @note works for `SDImageCoder`
+ */
+FOUNDATION_EXPORT SDImageCoderOption _Nonnull const SDImageCoderEncodeToHDR;
+
 /**
  A Boolean value indicating whether to encode the first frame only for animated image during encoding. (NSNumber). If not provide, encode animated image if need.
  @note works for `SDImageCoder`.

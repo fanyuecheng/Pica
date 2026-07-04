@@ -23,6 +23,8 @@
 
 - (void)prepareForReuse {
     [super prepareForReuse];
+    self.loadBlock = nil;
+    self.clickBlock = nil;
     self.titleLabel.text = nil;
     self.imageView.imageView.image = nil;
     [self.imageView revertZooming];
@@ -57,6 +59,9 @@
         @weakify(self)
         [picture loadImage:^(UIImage * _Nonnull image, NSError * _Nonnull error) {
             @strongify(self)
+            if (self.picture != picture) {
+                return;
+            }
             if (image) {
                 self.titleLabel.text = nil;
                 self.imageView.image = image;

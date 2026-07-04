@@ -143,6 +143,12 @@ typedef NS_ENUM(NSUInteger, QMUIModalPresentationAnimationStyle) {
 @property(nullable, nonatomic, strong, readonly) UIWindow *window;
 
 /**
+ 如果 modal 是以 window 形式显示的话，通过这个属性来决定 window 是否需要以 keyWindow 形式存在（keyWindow 一般用于与键盘交互的场景，没输入框可以不用开启它）
+ 默认为 YES。
+ */
+@property(nonatomic, assign) BOOL shouldBecomeKeyWindow;
+
+/**
  如果 modal 是以 window 形式显示的话，控制在 modal 显示时是否要自动把 App 主界面置灰。
  默认为 YES。
  该属性在非 window 形式显示的情况下无意义。
@@ -245,6 +251,14 @@ typedef NS_ENUM(NSUInteger, QMUIModalPresentationAnimationStyle) {
 - (void)showWithAnimated:(BOOL)animated completion:(void (^ _Nullable)(BOOL finished))completion;
 
 /**
+ *  将浮层以 UIWindow 的方式显示出来
+ *  @param window      所在的window，默认为delegate.window
+ *  @param animated    是否以动画的形式显示
+ *  @param completion  显示动画结束后的回调
+ */
+- (void)showInWindow:(nullable UIWindow *)window animated:(BOOL)animated completion:(void (^ _Nullable)(BOOL finished))completion;
+
+/**
  *  将浮层隐藏掉
  *  @param animated    是否以动画的形式隐藏
  *  @param completion  隐藏动画结束后的回调
@@ -308,7 +322,7 @@ typedef NS_ENUM(NSUInteger, QMUIModalPresentationAnimationStyle) {
 
 @end
 
-/// 专用于QMUIModalPresentationViewController的UIWindow，这样才能在`UIApplication.sharedApplication.windows`里方便地区分出来
+/// 专用于QMUIModalPresentationViewController的UIWindow，这样才能在`UIApplication.sharedApplication.qmui_windows`里方便地区分出来
 @interface QMUIModalPresentationWindow : UIWindow
 
 @end
