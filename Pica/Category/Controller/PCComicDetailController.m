@@ -15,6 +15,10 @@
 #import "PCComicHistory.h"
 #import "PCComicPictureController.h"
 #import "PCComicRecommendView.h"
+#import "PCDownloadManager.h"
+#import "PCComicDownload.h"
+#import "PCIconHeader.h"
+#import "UIImage+PCAdd.h"
 
 @interface PCComicDetailController ()
 
@@ -32,12 +36,16 @@
 
 @implementation PCComicDetailController
 
+- (void)dealloc {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (void)viewDidAppear:(BOOL)animated {
     [super viewDidAppear:animated];
-    
+
     [self.tableView reloadData];
 }
- 
+
 - (instancetype)initWithComicId:(NSString *)comicId {
     if (self = [super init]) {
         self.comicId = [comicId copy];
@@ -47,15 +55,21 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-     
+
     [self requestComicDetail];
     [self requestComicEpisode];
     [self requestComicSimilar];
+
+    NSNotificationCenter *nc = [NSNotificationCenter defaultCenter];
+    [nc addObserver:self selector:@selector(downloadStateDidChange:) name:PCDownloadDidChangeStatusNotification object:nil];
+    [nc addObserver:self selector:@selector(downloadStateDidChange:) name:PCDownloadDidCompleteComicNotification object:nil];
+    [nc addObserver:self selector:@selector(downloadStateDidChange:) name:PCDownloadDidDeleteComicNotification object:nil];
+    [nc addObserver:self selector:@selector(downloadStateDidChange:) name:PCDownloadDidEnqueueNotification object:nil];
 }
 
 - (void)initTableView {
     [super initTableView];
-    
+
     [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"UITableViewCell"];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     @weakify(self)
@@ -69,6 +83,63 @@
             [self.tableView.mj_footer endRefreshingWithNoMoreData];
         }
     }];
+}
+
+- (void)setupNavigationItems {
+    [super setupNavigationItems];
+
+    // 详情尚未回来 or 服务端禁止下载：不显示按钮
+    if (!self.comic || !self.comic.allowDownload) {
+        self.navigationItem.rightBarButtonItem = nil;
+        return;
+    }
+
+    PCComicDownload *record = [kPCDownloadManager recordForComicId:self.comicId];
+    if (!record) {
+        // 未下载：图标按钮
+        self.navigationItem.rightBarButtonItem = [UIBarButtonItem qmui_itemWithImage:[UIImage pc_iconWithText:ICON_DOWNLOAD size:20 color:UIColorBlue]
+                                                                              target:self
+                                                                              action:@selector(downloadAction:)];
+        return;
+    }
+
+    NSString *title = nil;
+    switch (record.status) {
+        case PCComicDownloadStatusFinished: title = @"已下载"; break;
+        case PCComicDownloadStatusFailed:   title = @"重试";   break;
+        case PCComicDownloadStatusPaused:   title = @"已暂停"; break;
+        default:                            title = @"下载中"; break;
+    }
+    self.navigationItem.rightBarButtonItem = [UIBarButtonItem qmui_itemWithTitle:title
+                                                                          target:self
+                                                                          action:@selector(downloadAction:)];
+}
+
+#pragma mark - Action
+- (void)downloadAction:(id)sender {
+    if (!self.comic) return;
+
+    PCComicDownload *record = [kPCDownloadManager recordForComicId:self.comicId];
+    if (record) {
+        if (record.status == PCComicDownloadStatusFailed) {
+            [kPCDownloadManager retryComicId:self.comicId];
+            [QMUITips showSucceed:@"已加入重试队列"];
+        } else {
+            [QMUITips showInfo:@"可在「我的 → 下载」查看进度"];
+        }
+        return;
+    }
+    [kPCDownloadManager startDownloadForComic:self.comic];
+    [QMUITips showSucceed:@"已加入下载队列"];
+    [self setupNavigationItems];
+}
+
+- (void)downloadStateDidChange:(NSNotification *)note {
+    NSString *comicId = note.userInfo[PCDownloadNotificationComicIdKey];
+    if (comicId.length && ![comicId isEqualToString:self.comicId]) return;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [self setupNavigationItems];
+    });
 }
 
 #pragma mark - Net
@@ -107,7 +178,7 @@
     }];
 }
 
-#pragma mark - Action
+#pragma mark - Action (Continue Read)
 - (void)continuReadAction:(QMUIButton *)sender {
     PCComic *comic = [kPCComicHistory comicWithId:self.comicId];
     
@@ -249,9 +320,10 @@
 #pragma mark - Set
 - (void)setComic:(PCComic *)comic {
     _comic = comic;
-    
+
     self.title = comic.title;
-    self.tableView.tableHeaderView = [self tableHeaderView]; 
+    self.tableView.tableHeaderView = [self tableHeaderView];
+    [self setupNavigationItems];
 }
 
 - (void)setSimilarArray:(NSArray<PCComic *> *)similarArray {

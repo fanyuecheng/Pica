@@ -16,6 +16,7 @@
 #import "PCProfileInfoController.h"
 #import "UIImage+PCAdd.h"
 #import "PCSettingController.h"
+#import "PCComicDownloadListController.h"
 
 @interface PCProfileController () <UIImagePickerControllerDelegate, UINavigationControllerDelegate, JXPagerViewDelegate, UIScrollViewDelegate>
 
@@ -30,6 +31,7 @@
 @property (nonatomic, strong) UIImagePickerController *imagePickerController;
 @property (nonatomic, strong) PCProfileInfoController *comicController;
 @property (nonatomic, strong) PCProfileInfoController *commentController;
+@property (nonatomic, strong) PCComicDownloadListController *downloadController;
 
 @end
 
@@ -249,11 +251,13 @@
 }
 
 - (NSInteger)numberOfListsInPagerView:(JXPagerView *)pagerView {
-    return 2;
+    return 3;
 }
 
-- (id<JXPagerViewListViewDelegate>)pagerView:(JXPagerView *)pagerView initListAtIndex:(NSInteger)index { 
-    return index == 0 ? self.comicController : self.commentController;
+- (id<JXPagerViewListViewDelegate>)pagerView:(JXPagerView *)pagerView initListAtIndex:(NSInteger)index {
+    if (index == 0) return self.comicController;
+    if (index == 1) return self.commentController;
+    return self.downloadController;
 }
 
 #pragma mark - UIScrollViewDelegate
@@ -328,7 +332,7 @@
 
 - (UISegmentedControl *)segmentedControl {
     if (!_segmentedControl) {
-        _segmentedControl = [[UISegmentedControl alloc] initWithItems:@[@"本子", @"评论"]];
+        _segmentedControl = [[UISegmentedControl alloc] initWithItems:@[@"本子", @"评论", @"下载"]];
         _segmentedControl.selectedSegmentIndex = 0;
         [_segmentedControl addTarget:self action:@selector(segmentedAction:) forControlEvents:UIControlEventValueChanged];
         [_segmentedControl setBackgroundImage:[UIImage qmui_imageWithColor:UIColorClear] forState:UIControlStateNormal barMetrics:UIBarMetricsDefault];
@@ -351,6 +355,13 @@
         _commentController = [[PCProfileInfoController alloc] initWithType:PCProfileInfoTypeComment];
     }
     return _commentController;
+}
+
+- (PCComicDownloadListController *)downloadController {
+    if (!_downloadController) {
+        _downloadController = [[PCComicDownloadListController alloc] init];
+    }
+    return _downloadController;
 }
 
 #pragma mark - Set
