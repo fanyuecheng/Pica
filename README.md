@@ -29,7 +29,7 @@ API来自 [picacomic-api](https://github.com/czp3009/picacomic-api)
 * [x] 留言板
 * [x] 聊天室接收发送图片，文字，声音
 * [x] 游戏区
-* [ ] 下载本子  
+* [x] 下载本子  
 
 #### 安装
 - 开发人员直接下载，xcode选择开发账号，修改bundleid，选择真机运行
@@ -38,6 +38,9 @@ API来自 [picacomic-api](https://github.com/czp3009/picacomic-api)
 	2.  altstore [官网](https://altstore.io/)
 
 #### 更新日志  
+**v1.5.0**      
+*  本子下载 + 离线阅读（详情页一键下载/我的页查看进度/无网阅读）  
+
 **v1.4.1**      
 *  新版聊天室
 
