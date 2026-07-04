@@ -14,6 +14,8 @@
 #import "PCTabBarViewController.h"
 #import "PCChatMessage.h"
 #import "PCChatSettingController.h"
+#import "PCDownloadManager.h"
+#import "PCDownloadPath.h"
 
 @interface PCSettingController ()
 
@@ -67,15 +69,24 @@
             fileSize += [[[kDefaultFileManager attributesOfItemAtPath:[PCChatMessage dbPath] error:nil] objectForKey:NSFileSize] integerValue];
             fileSize += [self folderSizeAtPath:[self networkCachePath]];
             fileSize += [self folderSizeAtPath:[self nsfwCachePath]];
-            
+
             dispatch_async(dispatch_get_main_queue(), ^{
                 cell.detailTextLabel.text = [NSByteCountFormatter stringFromByteCount:fileSize countStyle:NSByteCountFormatterCountStyleFile];
             });
-        }); 
+        });
     } else if (indexPath.section == 1 && indexPath.row == 2) {
         cell.detailTextLabel.text = @"id仅能修改一次！";
     } else if (indexPath.section == 1 && indexPath.row == 3) {
         cell.detailTextLabel.text = [kPCUserDefaults stringForKey:PC_API_CHANNEL];
+    } else if (indexPath.section == 1 && indexPath.row == 8) {
+        // 下载占用（独立于清除缓存，不会被"清除缓存"清掉）
+        cell.detailTextLabel.text = @"计算中...";
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            long long size = [PCDownloadPath totalDownloadFolderSize];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                cell.detailTextLabel.text = [NSByteCountFormatter stringFromByteCount:size countStyle:NSByteCountFormatterCountStyleFile];
+            });
+        });
     } else if (indexPath.section == 2) {
         cell.detailTextLabel.text = [NSString stringWithFormat:@"版本号 %@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
     } else {
@@ -131,6 +142,9 @@
             case 3:
                 [self selectChannel];
                 break;
+            case 9:
+                [self showClearDownloadsAlert];
+                break;
             default:
                 break;
         }
@@ -158,16 +172,32 @@
             [self.tableView reloadData];
         }];
     }];
-    
+
     QMUIAlertAction *action2 = [QMUIAlertAction actionWithTitle:@"取消" style:QMUIAlertActionStyleCancel handler:nil];
-    
+
     QMUIAlertController *alertController = [QMUIAlertController alertControllerWithTitle:@"确认清除缓存?" message:nil preferredStyle:QMUIAlertControllerStyleAlert];
-    
+
     [alertController addAction:action1];
     [alertController addAction:action2];
     [alertController showWithAnimated:YES];
 }
- 
+
+- (void)showClearDownloadsAlert {
+    QMUIAlertAction *confirm = [QMUIAlertAction actionWithTitle:@"确定" style:QMUIAlertActionStyleDestructive handler:^(__kindof QMUIAlertController *aAlertController, QMUIAlertAction *action) {
+        [kPCDownloadManager deleteAll];
+        // 稍等一下让 serialQueue 里的 IO 落定
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.3 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            [self.tableView reloadData];
+            [QMUITips showSucceed:@"下载已全部清空"];
+        });
+    }];
+    QMUIAlertAction *cancel = [QMUIAlertAction actionWithTitle:@"取消" style:QMUIAlertActionStyleCancel handler:nil];
+    QMUIAlertController *alert = [QMUIAlertController alertControllerWithTitle:@"确认清空所有下载?" message:@"所有已下载的漫画文件都会被清除且不可恢复" preferredStyle:QMUIAlertControllerStyleAlert];
+    [alert addAction:confirm];
+    [alert addAction:cancel];
+    [alert showWithAnimated:YES];
+}
+
 
 - (void)showUpdateNameAlert {
     QMUIAlertAction *action1 = [QMUIAlertAction actionWithTitle:@"确定" style:QMUIAlertActionStyleDefault handler:^(__kindof QMUIAlertController *aAlertController, QMUIAlertAction *action) {
@@ -339,7 +369,7 @@
 #pragma mark - Get
 - (NSArray *)dataSource {
     if (!_dataSource) {
-        _dataSource = @[@[@"聊天设置"], @[@"修改密码", @"清除缓存", @"修改ID", @"分流", @"简体中文", @"隐藏游戏区", @"安全锁", @"NSFW"], @[@"关于Pica"]];
+        _dataSource = @[@[@"聊天设置"], @[@"修改密码", @"清除缓存", @"修改ID", @"分流", @"简体中文", @"隐藏游戏区", @"安全锁", @"NSFW", @"下载占用", @"清空所有下载"], @[@"关于Pica"]];
     }
     return _dataSource;
 }
