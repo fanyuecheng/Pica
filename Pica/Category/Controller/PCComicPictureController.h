@@ -8,6 +8,9 @@
 
 #import "PCViewController.h"
 
+@class PCComicDownload;
+@class PCEpisode;
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface PCComicPictureController : PCViewController
@@ -19,6 +22,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, assign) NSInteger historyEpisodePage;//第几页
 
 - (instancetype)initWithComicId:(NSString *)comicId;
+
+/// 离线阅读初始化（从本地磁盘加载，不走网络）
+- (instancetype)initOfflineWithComic:(PCComicDownload *)comic
+                        episodeArray:(NSArray<PCEpisode *> *)episodes
+                               index:(NSInteger)index;
 
 @end
 

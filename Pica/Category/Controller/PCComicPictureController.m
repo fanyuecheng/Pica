@@ -14,6 +14,11 @@
 #import "PCLocalKeyHeader.h"
 #import "PCComicHistory.h"
 #import "PCImageSizeCache.h"
+#import "PCDownloadManager.h"
+#import "PCComicDownload.h"
+#import "PCComicDownloadPicture.h"
+#import "PCDownloadPath.h"
+#import "PCDefineHeader.h"
 #import <WebKit/WebKit.h>
 
 @interface PCComicPictureController () <UICollectionViewDelegate, UICollectionViewDataSource>
@@ -27,6 +32,8 @@
 
 @property (nonatomic, assign) BOOL navigationBarHidden;
 @property (nonatomic, assign) BOOL onRequest;
+@property (nonatomic, assign) BOOL offlineMode;
+@property (nonatomic, strong) PCComicDownload *offlineComic;
 
 @end
 
@@ -34,8 +41,8 @@
 
 - (void)didMoveToParentViewController:(UIViewController *)parent {
     [super didMoveToParentViewController:parent];
-    
-    if (parent == nil) {
+
+    if (parent == nil && !self.offlineMode) {
         NSIndexPath *indexPath = [[self.collectionView indexPathsForVisibleItems] sortedArrayUsingSelector:@selector(compare:)].lastObject;
         PCEpisode *episode = self.episodeArray[self.index];
         PCComic *comic = [kPCComicHistory comicWithId:self.comicId];
@@ -67,10 +74,28 @@
     return self;
 }
 
+- (instancetype)initOfflineWithComic:(PCComicDownload *)comic
+                        episodeArray:(NSArray<PCEpisode *> *)episodes
+                               index:(NSInteger)index {
+    if (self = [super init]) {
+        _comicId = [comic.comicId copy];
+        _offlineComic = comic;
+        _offlineMode = YES;
+        _navigationBarHidden = YES;
+        _episodeArray = [episodes copy];
+        _index = index;
+    }
+    return self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-     
-    [self requestPicture];
+
+    if (self.offlineMode) {
+        [self loadOfflineEpisode];
+    } else {
+        [self requestPicture];
+    }
 }
 
 - (void)setupToolbarItems {
@@ -118,6 +143,11 @@
 }
 
 - (void)exportAction:(UIBarButtonItem *)sender {
+    if (self.offlineMode) {
+        [QMUITips showInfo:@"离线模式暂不支持导出"];
+        return;
+    }
+
     void (^exportBlock)(void) = ^{
         NSString *html = @"\
         <html>\
@@ -244,10 +274,14 @@
         [QMUITips showInfo:@"已经是最后一话啦"];
         return;
     }
-    
-    [self requestNewEpisode];
+
+    if (self.offlineMode) {
+        [self loadOfflineEpisode];
+    } else {
+        [self requestNewEpisode];
+    }
 }
- 
+
 - (void)nextEpisode:(id)sender {
     self.index ++;
     if (self.index >= self.episodeArray.count) {
@@ -255,8 +289,12 @@
         [QMUITips showInfo:@"已经是最新话啦"];
         return;
     }
-    
-    [self requestNewEpisode];
+
+    if (self.offlineMode) {
+        [self loadOfflineEpisode];
+    } else {
+        [self requestNewEpisode];
+    }
 }
 
 - (void)requestNewEpisode {
@@ -267,6 +305,35 @@
     [self.collectionView reloadData];
     [self.collectionView qmui_scrollToTop];
     [self requestPicture];
+}
+
+#pragma mark - Offline
+
+- (void)loadOfflineEpisode {
+    PCEpisode *ep = self.episodeArray[self.index];
+    NSArray<PCComicDownloadPicture *> *pics = (NSArray<PCComicDownloadPicture *> *)[PCComicDownloadPicture
+        objectsWhere:@"WHERE comicId = ? AND episodeOrder = ? ORDER BY pageIndex ASC"
+        arguments:@[self.comicId, @(ep.order)]];
+
+    PCEpisodePicture *epPicture = [[PCEpisodePicture alloc] init];
+    epPicture.page = 1;
+    epPicture.pages = 1;
+    epPicture.total = pics.count;
+    NSMutableArray<PCPicture *> *docs = [NSMutableArray array];
+    for (PCComicDownloadPicture *dp in pics) {
+        PCPicture *p = [[PCPicture alloc] init];
+        p.pictureId = dp.pictureId;
+        if (dp.localPath.length && [kDefaultFileManager fileExistsAtPath:dp.localPath]) {
+            p.image = [UIImage imageWithContentsOfFile:dp.localPath];
+        }
+        [docs addObject:p];
+    }
+    epPicture.docs = docs;
+    epPicture.ep = ep;
+
+    self.pictureArray = [NSMutableArray arrayWithObject:epPicture];
+    [self.collectionView reloadData];
+    [self.collectionView qmui_scrollToTop];
 }
 
 #pragma mark - CollectionView
@@ -323,7 +390,12 @@
     UICollectionViewFlowLayout *layout = (UICollectionViewFlowLayout *)collectionView.collectionViewLayout;
     if (layout.scrollDirection == UICollectionViewScrollDirectionVertical) {
         PCPicture *picture = self.pictureArray[indexPath.section].docs[indexPath.item];
-        CGSize size = [kPCImageSizeCache getImageSizeForKey:picture.media.imageURL];
+        CGSize size = CGSizeZero;
+        if (picture.media.imageURL) {
+            size = [kPCImageSizeCache getImageSizeForKey:picture.media.imageURL];
+        } else if (picture.image) {
+            size = picture.image.size;
+        }
         if (CGSizeIsEmpty(size)) {
             return CGSizeMake(SCREEN_WIDTH, SCREEN_WIDTH);
         } else {
@@ -335,6 +407,7 @@
 }
 
 - (void)scrollViewDidScroll:(UICollectionView *)scrollView {
+    if (self.offlineMode) return;
     if (scrollView.isDragging ||
         scrollView.isTracking ||
         scrollView.isDecelerating) {
