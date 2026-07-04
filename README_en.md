@@ -27,7 +27,7 @@ a simple [clicli](https://github.com/fanyuecheng/CliCli) iOS APP
 * [x] message board
 * [x] The chat room receives and sends pictures, texts, sounds
 * [x] gaming zone
-* [ ] download comics  
+* [x] download comics  
 
 #### install
 - run by Xcode
