@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 51;
+	objectVersion = 54;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -161,6 +161,14 @@
 		33DC42A127B6390300D8A105 /* NSFWImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 33DC42A027B6390300D8A105 /* NSFWImageViewController.m */; };
 		33E0FC3426B164360030BF21 /* PCCommentReportRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 33E0FC3326B164360030BF21 /* PCCommentReportRequest.m */; };
 		33E6497126945B48001E98EA /* PCPopupContainerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 33E6497026945B48001E98EA /* PCPopupContainerView.m */; };
+		812C64C32FF8CF70006653D2 /* PCComicDownload.m in Sources */ = {isa = PBXBuildFile; fileRef = 812C64BB2FF8CF70006653D2 /* PCComicDownload.m */; };
+		812C64C42FF8CF70006653D2 /* PCComicDownloadPicture.m in Sources */ = {isa = PBXBuildFile; fileRef = 812C64BF2FF8CF70006653D2 /* PCComicDownloadPicture.m */; };
+		812C64C52FF8CF70006653D2 /* PCDownloadPath.m in Sources */ = {isa = PBXBuildFile; fileRef = 812C64B72FF8CF70006653D2 /* PCDownloadPath.m */; };
+		812C64C62FF8CF70006653D2 /* PCDownloadManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 812C64B52FF8CF70006653D2 /* PCDownloadManager.m */; };
+		812C64C72FF8CF70006653D2 /* PCComicDownloadEpisode.m in Sources */ = {isa = PBXBuildFile; fileRef = 812C64BD2FF8CF70006653D2 /* PCComicDownloadEpisode.m */; };
+		812C7A052FF8D010006653D2 /* PCDownloadCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 812C7A022FF8D010006653D2 /* PCDownloadCell.m */; };
+		812C7A062FF8D010006653D2 /* PCComicDownloadListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 812C7A042FF8D010006653D2 /* PCComicDownloadListController.m */; };
+		812C7A092FF8D010006653D2 /* PCComicDownloadDetailController.m in Sources */ = {isa = PBXBuildFile; fileRef = 812C7A082FF8D010006653D2 /* PCComicDownloadDetailController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -474,6 +482,22 @@
 		33E0FC3326B164360030BF21 /* PCCommentReportRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCCommentReportRequest.m; sourceTree = "<group>"; };
 		33E6496F26945B48001E98EA /* PCPopupContainerView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCPopupContainerView.h; sourceTree = "<group>"; };
 		33E6497026945B48001E98EA /* PCPopupContainerView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCPopupContainerView.m; sourceTree = "<group>"; };
+		812C64B42FF8CF70006653D2 /* PCDownloadManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCDownloadManager.h; sourceTree = "<group>"; };
+		812C64B52FF8CF70006653D2 /* PCDownloadManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCDownloadManager.m; sourceTree = "<group>"; };
+		812C64B62FF8CF70006653D2 /* PCDownloadPath.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCDownloadPath.h; sourceTree = "<group>"; };
+		812C64B72FF8CF70006653D2 /* PCDownloadPath.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCDownloadPath.m; sourceTree = "<group>"; };
+		812C64BA2FF8CF70006653D2 /* PCComicDownload.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCComicDownload.h; sourceTree = "<group>"; };
+		812C64BB2FF8CF70006653D2 /* PCComicDownload.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCComicDownload.m; sourceTree = "<group>"; };
+		812C64BC2FF8CF70006653D2 /* PCComicDownloadEpisode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCComicDownloadEpisode.h; sourceTree = "<group>"; };
+		812C64BD2FF8CF70006653D2 /* PCComicDownloadEpisode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCComicDownloadEpisode.m; sourceTree = "<group>"; };
+		812C64BE2FF8CF70006653D2 /* PCComicDownloadPicture.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCComicDownloadPicture.h; sourceTree = "<group>"; };
+		812C64BF2FF8CF70006653D2 /* PCComicDownloadPicture.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCComicDownloadPicture.m; sourceTree = "<group>"; };
+		812C7A012FF8D010006653D2 /* PCDownloadCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCDownloadCell.h; sourceTree = "<group>"; };
+		812C7A022FF8D010006653D2 /* PCDownloadCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCDownloadCell.m; sourceTree = "<group>"; };
+		812C7A032FF8D010006653D2 /* PCComicDownloadListController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCComicDownloadListController.h; sourceTree = "<group>"; };
+		812C7A042FF8D010006653D2 /* PCComicDownloadListController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCComicDownloadListController.m; sourceTree = "<group>"; };
+		812C7A072FF8D010006653D2 /* PCComicDownloadDetailController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PCComicDownloadDetailController.h; sourceTree = "<group>"; };
+		812C7A082FF8D010006653D2 /* PCComicDownloadDetailController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = PCComicDownloadDetailController.m; sourceTree = "<group>"; };
 		95C939A3661D2A820DEF2B30 /* Pods-Pica.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Pica.debug.xcconfig"; path = "Target Support Files/Pods-Pica/Pods-Pica.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -846,6 +870,7 @@
 			isa = PBXGroup;
 			children = (
 				33AD93EA255018C00079DFAE /* Application */,
+				812C64C22FF8CF70006653D2 /* Download */,
 				33AD93EF255018FA0079DFAE /* Header */,
 				334EAD8F255A6D6600B0231C /* Resource */,
 				33AD93EE255018EE0079DFAE /* Common */,
@@ -1240,6 +1265,61 @@
 			path = Controller;
 			sourceTree = "<group>";
 		};
+		812C64B82FF8CF70006653D2 /* Class */ = {
+			isa = PBXGroup;
+			children = (
+				812C64B42FF8CF70006653D2 /* PCDownloadManager.h */,
+				812C64B52FF8CF70006653D2 /* PCDownloadManager.m */,
+				812C64B62FF8CF70006653D2 /* PCDownloadPath.h */,
+				812C64B72FF8CF70006653D2 /* PCDownloadPath.m */,
+			);
+			path = Class;
+			sourceTree = "<group>";
+		};
+		812C64B92FF8CF70006653D2 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				812C7A032FF8D010006653D2 /* PCComicDownloadListController.h */,
+				812C7A042FF8D010006653D2 /* PCComicDownloadListController.m */,
+				812C7A072FF8D010006653D2 /* PCComicDownloadDetailController.h */,
+				812C7A082FF8D010006653D2 /* PCComicDownloadDetailController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		812C64C02FF8CF70006653D2 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				812C64BA2FF8CF70006653D2 /* PCComicDownload.h */,
+				812C64BB2FF8CF70006653D2 /* PCComicDownload.m */,
+				812C64BC2FF8CF70006653D2 /* PCComicDownloadEpisode.h */,
+				812C64BD2FF8CF70006653D2 /* PCComicDownloadEpisode.m */,
+				812C64BE2FF8CF70006653D2 /* PCComicDownloadPicture.h */,
+				812C64BF2FF8CF70006653D2 /* PCComicDownloadPicture.m */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		812C64C12FF8CF70006653D2 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				812C7A012FF8D010006653D2 /* PCDownloadCell.h */,
+				812C7A022FF8D010006653D2 /* PCDownloadCell.m */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		812C64C22FF8CF70006653D2 /* Download */ = {
+			isa = PBXGroup;
+			children = (
+				812C64B82FF8CF70006653D2 /* Class */,
+				812C64B92FF8CF70006653D2 /* Controller */,
+				812C64C02FF8CF70006653D2 /* Model */,
+				812C64C12FF8CF70006653D2 /* View */,
+			);
+			path = Download;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -1319,9 +1399,13 @@
 			inputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Pica/Pods-Pica-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
+			inputPaths = (
+			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-Pica/Pods-Pica-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -1361,6 +1445,14 @@
 				3337F83829ECE9CA008046B3 /* PCNewChatLoginRequest.m in Sources */,
 				33AB8276267B377300A2FD3F /* PCVoiceMessageCell.m in Sources */,
 				334EADD1255A865100B0231C /* PCComicEpisodeRequest.m in Sources */,
+				812C64C32FF8CF70006653D2 /* PCComicDownload.m in Sources */,
+				812C64C42FF8CF70006653D2 /* PCComicDownloadPicture.m in Sources */,
+				812C64C52FF8CF70006653D2 /* PCDownloadPath.m in Sources */,
+				812C64C62FF8CF70006653D2 /* PCDownloadManager.m in Sources */,
+				812C64C72FF8CF70006653D2 /* PCComicDownloadEpisode.m in Sources */,
+				812C7A052FF8D010006653D2 /* PCDownloadCell.m in Sources */,
+				812C7A062FF8D010006653D2 /* PCComicDownloadListController.m in Sources */,
+				812C7A092FF8D010006653D2 /* PCComicDownloadDetailController.m in Sources */,
 				33C170F3268972BE00431213 /* PCGameInfoView.m in Sources */,
 				337AD6CE2678B45E009EA2D1 /* PCMessageBubbleView.m in Sources */,
 				337AD6D42678BD42009EA2D1 /* PCTextMessageCell.m in Sources */,
